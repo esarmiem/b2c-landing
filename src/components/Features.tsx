@@ -1,4 +1,3 @@
-import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { FaChevronDown } from 'react-icons/fa';
 

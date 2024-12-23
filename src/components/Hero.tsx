@@ -1,4 +1,3 @@
-import React from 'react';
 import { TravelForm } from './TravelForm';
 
 export const Hero = () => {

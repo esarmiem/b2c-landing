@@ -1,4 +1,3 @@
-import React from 'react';
 import clsx from 'clsx';
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
