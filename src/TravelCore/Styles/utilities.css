@@ -1,0 +1,9 @@
+@tailwind utilities;
+
+.react-datepicker-wrapper {
+  @apply w-full;
+}
+
+.react-datepicker__input-container input {
+  @apply input-field;
+}

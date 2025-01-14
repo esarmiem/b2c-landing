@@ -1,11 +1,11 @@
 
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { Steps } from './components/Steps';
-import { Features } from './components/Features';
-import { Stats } from './components/Stats';
-import { Footer } from './components/Footer';
-import { WhatsAppButton } from './components/WhatsAppButton';
+import { Header } from './TravelCore/Components/Header';
+import { Hero } from './TravelCore/Components/Hero';
+import { Steps } from './TravelCore/Components/Steps';
+import { Features } from './TravelCore/Components/Features';
+import { Stats } from './TravelCore/Components/Stats';
+import { Footer } from './TravelCore/Components/Footer';
+import { WhatsAppButton } from './TravelCore/Components/WhatsAppButton';
 
 function App() {
   return (
