@@ -1,4 +1,4 @@
-import { TravelForm } from './TravelForm';
+import { TravelForm } from './TravelForm.tsx';
 
 export const Hero = () => {
   return (
