@@ -13,10 +13,13 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.9",
     "clsx": "^2.0.0",
+    "i18next": "^24.2.1",
+    "i18next-http-backend": "^3.0.1",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-datepicker": "^4.16.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^15.4.0",
     "react-icons": "^4.10.1",
     "react-router-dom": "^7.1.1"
   },

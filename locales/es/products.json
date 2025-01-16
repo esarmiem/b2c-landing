@@ -1,0 +1,6 @@
+{
+  "title": "Bienvenido a la página de productos. {{branch}}",
+  "paragraph": "Esta es la página donde se muestra el listado de los diferentes productos de {{branch}}.",
+  "label-btn-travel": "Seguro de viaje",
+  "label-btn-comms": "Comunicación"
+}
