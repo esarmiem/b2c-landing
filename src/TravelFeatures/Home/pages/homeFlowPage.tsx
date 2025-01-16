@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+/*import { useEffect } from "react";
 import { Masters } from "../model/masters_entity";
-import { Auth } from "../model/auth_entity";
+import { Auth } from "../model/auth_entity";*/
 
 // Definir tipos para los posibles resultados de las respuestas de autenticación y masters
-interface AuthResponse {
+/*interface AuthResponse {
     data?: any;
     error?: boolean;
 }
@@ -11,10 +11,10 @@ interface AuthResponse {
 interface MastersResponse {
     data?: any;
     error?: boolean;
-}
+}*/
 
 const HomeViewPage: React.FC = () => {
-    useEffect(() => {
+    /*useEffect(() => {
         // Hacer el login fantasma que requiere travelkit para operar
         getAuthentication();
     }, []);
@@ -22,9 +22,9 @@ const HomeViewPage: React.FC = () => {
     useEffect(() => {
         // Traer las listas comunes que usa el front
         getMasters();
-    }, []); // Lo que desencadena estas acciones es el token recuperado al hacer el login fantasma
+    }, []); // Lo que desencadena estas acciones es el token recuperado al hacer el login fantasma*/
 
-    const getAuthentication = async (): Promise<void> => {
+   /* const getAuthentication = async (): Promise<void> => {
         const auth = new Auth();
         const responseLogin: AuthResponse = await auth.login();
         if (responseLogin && responseLogin.data && !responseLogin.error) {
@@ -32,9 +32,9 @@ const HomeViewPage: React.FC = () => {
         } else {
             console.log("falló getAuthentication");
         }
-    };
+    };*/
 
-    const getMasters = async (): Promise<void> => {
+   /* const getMasters = async (): Promise<void> => {
         // TODO: Traer todas las listas del backend usando promesas en paralelo
         const masters = new Masters();
         const responseCountries: MastersResponse = await masters.getCountries();
@@ -43,7 +43,7 @@ const HomeViewPage: React.FC = () => {
         } else {
             console.log("falló getCountries");
         }
-    };
+    };*/
 
     const handleQuote = async (): Promise<void> => {
         console.log("Click Cotizar");
