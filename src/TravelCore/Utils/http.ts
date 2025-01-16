@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { BASE_URL } from "./constants.ts";
 
 interface Session {
@@ -6,7 +6,7 @@ interface Session {
 }
 
 interface AxiosHttpArgs {
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+    method: Method
     path: string
     session?: Session | null
     headers?: Record<string, string>
@@ -35,7 +35,7 @@ export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error
         url: `${BASE_URL}/${args.path}`,
         headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers,
         data: args.data,
-        timeout: args.timeout || 60000,
+        timeout: args.timeout || 60000
     };
 
     try {
