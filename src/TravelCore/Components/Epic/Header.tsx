@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
 
 export const Header: React.FC = () => {
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50 border-b">
+    <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50">
       <div className="flex h-14 items-center justify-between px-4 md:px-20">
         <Link href="/" className="font-extrabold text-xl text-red-700">
           TRAVELKIT
@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
           <div className="items-center hidden md:flex">
             <ShieldPlus className="h-4 w-4 mr-2" />
             <Link
-              href="#"
+              href="/Home"
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
               Asistencia Internacional
