@@ -34,7 +34,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {services.map((service) => (
             <Link key={service.title} href={service.href}>
-              <div className="bg-gray-200 rounded-xl shadow-md p-4 flex flex-row justify-center items-center gap-2 border-2 border-gray-500 hover:bg-gray-50 hover:translate-y-[-0.485rem] transition-all duration-1000 ease-in-out">
+              <div className="bg-gray-200 rounded-xl shadow-md p-4 flex flex-row justify-center items-center gap-2 border-2 border-gray-500 hover:bg-gray-50 hover:translate-y-[-0.485rem] transition-all duration-800 ease-in-out">
                 <service.icon className="h-6 w-6 text-gray-600" />
                 <h4 className="font-semibold text-lg">{service.title}</h4>
               </div>
