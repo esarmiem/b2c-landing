@@ -32,7 +32,8 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
     const config: AxiosRequestConfig = {
         method: args.method,
-        url: `${BASE_URL}/${args.path}`,
+        // url: `${BASE_URL}/${args.path}`,
+        url: `http://127.0.0.1:8888/api${args.path}`,
         headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers,
         data: args.data,
         timeout: args.timeout || 60000

@@ -26,8 +26,9 @@ interface ApiResponse {
 
 export const COUNTRIES_API = {
     getCountries: (isActive = ""): Promise<ApiResponse> => {
+        console.log("getCountries isActive: ", isActive)
         return axiosHttp({
-            path: `${SERVICE_COUNTRIES}${isActive}`,
+            path: `/countries`,
             method: 'GET',
             session: null
         })

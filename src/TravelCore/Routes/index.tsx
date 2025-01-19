@@ -1,15 +1,7 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useRoutes, RouteObject } from 'react-router-dom';
-//import SuspenseLoader from '../Components/Epic/SuspenseLoader';
 import Layout from '../Styles/Layout';
-
-/*const Loader = <P extends object>(Component: React.LazyExoticComponent<ComponentType<P>>) => {
-    return (props: P) => (
-        <Suspense fallback={<SuspenseLoader />}>
-            <Component {...props} />
-        </Suspense>
-    );
-};*/
+import SuspenseLoader from '../Components/Epic/SuspenseLoader';
 
 const ProductsPage = lazy(() => import('../../TravelFeatures/Home/pages/productsPage.tsx'));
 const HomeViewPage = lazy(() => import('../../TravelFeatures/Home/pages/homeFlowPage.tsx'));
@@ -25,15 +17,27 @@ export default function Router(): React.ReactElement | null {
             children: [
                 {
                     index: true,
-                    element: <ProductsPage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <ProductsPage />
+                        </Suspense>
+                    ),
                 },
                 {
                     path: "products",
-                    element: <ProductsPage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <ProductsPage />
+                        </Suspense>
+                    ),
                 },
                 {
                     path: "home",
-                    element: <HomeViewPage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <HomeViewPage />
+                        </Suspense>
+                    ),
                 },
             ],
         },
@@ -43,11 +47,19 @@ export default function Router(): React.ReactElement | null {
             children: [
                 {
                     path: "travel",
-                    element: <TripQuotePage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <TripQuotePage />
+                        </Suspense>
+                    ),
                 },
                 {
                     path: "comms",
-                    element: <CommsQuotePage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <CommsQuotePage />
+                        </Suspense>
+                    ),
                 },
             ],
         },
@@ -57,11 +69,19 @@ export default function Router(): React.ReactElement | null {
             children: [
                 {
                     index: true,
-                    element: <InvoicePage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <InvoicePage />
+                        </Suspense>
+                    ),
                 },
                 {
                     path: "billing",
-                    element: <InvoicePage />,
+                    element: (
+                        <Suspense fallback={<SuspenseLoader />}>
+                            <InvoicePage />
+                        </Suspense>
+                    ),
                 },
             ],
         },
@@ -69,3 +89,75 @@ export default function Router(): React.ReactElement | null {
 
     return useRoutes(routes);
 }
+
+// import React, { lazy } from 'react';
+// import { useRoutes, RouteObject } from 'react-router-dom';
+// //import SuspenseLoader from '../Components/Epic/SuspenseLoader';
+// import Layout from '../Styles/Layout';
+//
+// /*const Loader = <P extends object>(Component: React.LazyExoticComponent<ComponentType<P>>) => {
+//     return (props: P) => (
+//         <Suspense fallback={<SuspenseLoader />}>
+//             <Component {...props} />
+//         </Suspense>
+//     );
+// };*/
+//
+// const ProductsPage = lazy(() => import('../../TravelFeatures/Home/pages/productsPage.tsx'));
+// const HomeViewPage = lazy(() => import('../../TravelFeatures/Home/pages/homeFlowPage.tsx'));
+// const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tripQuotePage.tsx'));
+// const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
+// const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
+//
+// export default function Router(): React.ReactElement | null {
+//     const routes: RouteObject[] = [
+//         {
+//             path: "/",
+//             element: <Layout />,
+//             children: [
+//                 {
+//                     index: true,
+//                     element: <ProductsPage />,
+//                 },
+//                 {
+//                     path: "products",
+//                     element: <ProductsPage />,
+//                 },
+//                 {
+//                     path: "home",
+//                     element: <HomeViewPage />,
+//                 },
+//             ],
+//         },
+//         {
+//             path: "quote",
+//             element: <Layout />,
+//             children: [
+//                 {
+//                     path: "travel",
+//                     element: <TripQuotePage />,
+//                 },
+//                 {
+//                     path: "comms",
+//                     element: <CommsQuotePage />,
+//                 },
+//             ],
+//         },
+//         {
+//             path: "invoice",
+//             element: <Layout />,
+//             children: [
+//                 {
+//                     index: true,
+//                     element: <InvoicePage />,
+//                 },
+//                 {
+//                     path: "billing",
+//                     element: <InvoicePage />,
+//                 },
+//             ],
+//         },
+//     ];
+//
+//     return useRoutes(routes);
+// }
