@@ -42,21 +42,26 @@
 
 // export default ProductsPage;
 
-import { Hero } from '../../../TravelCore/Components/Epic/productsPage/Hero';
-import { ServiceCards } from '../../../TravelCore/Components/Epic/productsPage/ServiceCards';
-import { WhyChooseUs } from '../../../TravelCore/Components/Epic/productsPage/WhyChooseUs';
-import { Certifications } from '../../../TravelCore/Components/Epic/productsPage/Certifications';
+import { Hero } from "../../../TravelCore/Components/Epic/productsPage/Hero";
+import { ServiceCards } from "../../../TravelCore/Components/Epic/productsPage/ServiceCards";
+import { WhyChooseUs } from "../../../TravelCore/Components/Epic/productsPage/WhyChooseUs";
+import { Certifications } from "../../../TravelCore/Components/Epic/productsPage/Certifications";
+import { Features } from "../../../TravelCore/Components/Epic/productsPage/Features";
+import { Testimonials } from "../../../TravelCore/Components/Epic/productsPage/Testimonials";
+import { Stats } from "../../../TravelCore/Components/Epic/productsPage/Stats";
 
 const ProductsPage: React.FC = () => {
-
-    return (
-        <>
-            <Hero />
-            <ServiceCards />
-            <WhyChooseUs />
-            <Certifications />
-        </>
-    );
+  return (
+    <>
+      <Hero />
+      <ServiceCards />
+      <WhyChooseUs />
+      <Certifications />
+      <Features />
+      <Testimonials />
+      <Stats />
+    </>
+  );
 };
 
 export default ProductsPage;
