@@ -45,6 +45,7 @@
 import { Hero } from '../../../TravelCore/Components/Epic/productsPage/Hero';
 import { ServiceCards } from '../../../TravelCore/Components/Epic/productsPage/ServiceCards';
 import { WhyChooseUs } from '../../../TravelCore/Components/Epic/productsPage/WhyChooseUs';
+import { Certifications } from '../../../TravelCore/Components/Epic/productsPage/Certifications';
 
 const ProductsPage: React.FC = () => {
 
@@ -53,6 +54,7 @@ const ProductsPage: React.FC = () => {
             <Hero />
             <ServiceCards />
             <WhyChooseUs />
+            <Certifications />
         </>
     );
 };
