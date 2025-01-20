@@ -47,24 +47,6 @@ const HomeViewPage = () => {
          }
      };*/
 
-    const [countriesList, setCountriesList] = useState<string[]>([]);
-
-        const fetchCountries = async (): Promise<void> => {
-            try {
-                const countries = new Masters();
-                const response = await countries.getCountries();
-                if (response && response.data && !response.error) {
-                    setCountriesList(response.data);
-                    console.log("getCountries recibidas: ", response.data);
-                } else {
-                    console.log("falló getCountries");
-                }
-            } catch (error) {
-                console.error("Error fetching countries: ", error);
-            }
-        };
-
-
     const handleQuote = async (): Promise<void> => {
         console.log("Click Cotizar");
     };
@@ -74,12 +56,6 @@ const HomeViewPage = () => {
             <p>Home formulario para empezar a cotizar</p>
             <button onClick={handleQuote}>Cotizar</button>
             <div>Response</div>
-            <button className={"p-2 bg-grey-600 test-lg"} onClick={fetchCountries}>ensayo</button>
-            <ul>
-                {countriesList.map((country, index) => (
-                    <li key={index}>{country}</li>
-                ))}
-            </ul>
         </>
     );
 };

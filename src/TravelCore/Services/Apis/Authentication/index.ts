@@ -41,7 +41,7 @@ interface Users {
     agencia: string | null
 }
 
-interface AuthData {
+export interface AuthData {
     user: Users
     payload: {
         accessToken: string
@@ -64,7 +64,7 @@ export const AUTH_API = {
         return axiosHttp({
             path: `${SERVICE_AUTHENTICATION}`,
             method: 'POST',
-            data: JSON.stringify(data),
+            data: data,
             session: null
         })
     },

@@ -28,7 +28,7 @@ export const COUNTRIES_API = {
     getCountries: (isActive = ""): Promise<ApiResponse> => {
         console.log("getCountries isActive: ", isActive)
         return axiosHttp({
-            path: `/countries`,
+            path: `${SERVICE_COUNTRIES}`,
             method: 'GET',
             session: null
         })
