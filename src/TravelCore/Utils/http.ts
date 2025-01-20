@@ -23,19 +23,25 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
         //defaultHeaders.apiKey = API_KEY;
     }
 
-    defaultHeaders.Authorization = 'Bearer ' + window.localStorage.getItem('token');
-
     //defaultHeaders['apiKey'] = API_KEY;
-    //defaultHeaders['Content-Type'] = 'application/json';
+    defaultHeaders['Content-Type'] = 'application/json';
 
     return defaultHeaders;
+}
+
+const getHeaders = (): Record<string, string> => {
+    const headers: Record<string, string> = {};
+
+    headers.Authorization = 'Bearer ' + window.localStorage.getItem('token');
+
+    return headers;
 }
 
 export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
     const config: AxiosRequestConfig = {
         method: args.method,
         url: `${BASE_URL}${args.path}`,
-        headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : getDefaultHeaders(),
+        headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : getHeaders(),
         data: args.data,
         timeout: args.timeout || 60000
     };
