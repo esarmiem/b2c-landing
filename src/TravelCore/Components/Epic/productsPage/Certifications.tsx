@@ -31,7 +31,7 @@ const certifications: Certification[] = [
 
 export const Certifications = () => {
   return (
-    <section className="py-16 ">
+    <section className="py-16 px-6">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-12">
           Nuestro respaldo y certificaciones

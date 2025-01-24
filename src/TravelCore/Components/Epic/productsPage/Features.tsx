@@ -36,7 +36,7 @@ export const Features = () => {
   };
 
   return (
-    <section className="py-16 container mx-auto">
+    <section className="py-16 px-6 container mx-auto">
       <div className="grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h2 className="text-3xl font-bold mb-8">
