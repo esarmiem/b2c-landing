@@ -1,5 +1,6 @@
 import { Link } from "../Raw/Link";
-import { Menu, ShieldPlus } from "lucide-react";
+import { Menu, Headset } from "lucide-react";
+import { DropdownHeader } from "../../Components/Raw/DropdownHeader";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "ghost" | "default";
@@ -33,45 +34,42 @@ const Button: React.FC<ButtonProps> = ({
 
 export const Header: React.FC = () => {
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50">
+    <header className="fixed top-0 w-full bg-white z-50">
+      {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
       <div className="flex h-14 items-center justify-between px-4 md:px-20">
         <Link href="/" className="font-extrabold text-xl text-red-700">
           TRAVELKIT
         </Link>
-        <div className="flex items-center gap-4">
-          <div className="items-center hidden md:flex">
-            <ShieldPlus className="h-4 w-4 mr-2" />
+        <div className="flex items-center gap-6">
+          <div className="items-center hidden md:flex ">
+            <Headset className="h-4 w-4 mr-2  text-gray-600 hover:text-gray-900" />
             <Link
               href="/Home"
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
-              Asistencia Internacional
+              Ventas: +57 317 5032 200
             </Link>
           </div>
 
           <div className="items-center hidden md:flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-card-sd"
-            >
-              <path d="M6 22a2 2 0 0 1-2-2V6l4-4h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2Z" />
-              <path d="M8 10V7.5" />
-              <path d="M12 6v4" />
-              <path d="M16 6v4" />
-            </svg>
             <Link
-              href="#"
-              className="text-sm font-medium ml-2 text-gray-600 hover:text-gray-900"
+              href="/Home"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
-              Comunicación Internacional
+              Blogs
+            </Link>
+          </div>
+
+          {/* productos */}
+          <DropdownHeader />
+          {/* productos */}
+
+          <div className="items-center hidden md:flex">
+            <Link
+              href="/Home"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900"
+            >
+              Ingreso Agencias
             </Link>
           </div>
 
