@@ -1,4 +1,4 @@
-import { Phone, Globe, HeadphonesIcon } from 'lucide-react';
+import { Phone, Globe } from 'lucide-react';
 import { Link } from '../../Raw/Link';
 
 interface ServiceCard {
@@ -24,13 +24,14 @@ export const ServiceCards: React.FC<ServiceCardsProps> = () => {
       title2: 'Internacional',
       href: '/comunicacion-internacional',
     },
-    {
-      icon: HeadphonesIcon,
-      title: 'Contacta con',
-      title2: 'un asesor',
-      href: '/contacto-asesor',
-    },
   ];
+
+  // {
+  //   icon: HeadphonesIcon,
+  //   title: 'Contacta con',
+  //   title2: 'un asesor',
+  //   href: '/contacto-asesor',
+  // },
 
   return (
     <section className="py-12">
@@ -44,7 +45,7 @@ export const ServiceCards: React.FC<ServiceCardsProps> = () => {
                 index === 2 ? 'col-span-2 w-1/2 mx-auto lg:w-[300px] lg:mx-0' : ''
               }`}
             >
-              <div className="bg-gray-200 rounded-xl w-full md:w-[300px] shadow-md p-4 flex flex-row justify-center items-center gap-2 border-2 border-gray-500 hover:bg-gray-50 hover:translate-y-[-0.485rem] transition-all duration-800 ease-in-out">
+              <div className="z-10 relative bg-gray-200 rounded-xl w-full mt-[-95px] md:w-[300px] shadow-md p-4 flex flex-row justify-center items-center gap-2 border-2 border-gray-500 hover:bg-gray-50 hover:translate-y-[-0.485rem] transition-all duration-800 ease-in-out">
                 <service.icon className="h-6 w-6 text-gray-600" />
                 <div>
                   <h4 className="font-semibold text-sm md:text-base lg:text-lg xl:text-lg">{service.title}</h4>
