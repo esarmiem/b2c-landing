@@ -33,9 +33,8 @@ export const Footer = () => {
           <div className="text-left sm:text-center">
             <h4 className="font-semibold text-white text-lg mb-4">Productos</h4>
             <ul className="space-y-3">
-              <li><Link href="#" className="hover:text-white transition-colors duration-200">Seguros de viaje</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors duration-200">Asistencia médica</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors duration-200">Cancelación de viaje</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors duration-200">Asistencia en viaje</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors duration-200">Comunicación internacional</Link></li>
             </ul>
           </div>
 
@@ -43,8 +42,8 @@ export const Footer = () => {
             <h4 className="font-semibold text-white text-lg mb-4">Compañía</h4>
             <ul className="space-y-3">
               <li><Link href="#" className="hover:text-white transition-colors duration-200">Sobre nosotros</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors duration-200">Preguntas frecuentes</Link></li>
               <li><Link href="#" className="hover:text-white transition-colors duration-200">Contacto</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors duration-200">Blog</Link></li>
             </ul>
           </div>
 
@@ -53,6 +52,8 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li><Link href="#" className="hover:text-white transition-colors duration-200">Política de privacidad</Link></li>
               <li><Link href="#" className="hover:text-white transition-colors duration-200">Términos y condiciones</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors duration-200">Política de cookies</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors duration-200">Condiciones generales</Link></li>
             </ul>
           </div>
         </div>

@@ -2,7 +2,7 @@ import hero from '../../../../Assets/hero.webp';
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-[500px] h-[60vh] w-full bg-cover bg-center" 
+    <section className="relative min-h-[290px] h-[60vh] w-full bg-cover bg-center" 
     style={{ backgroundImage: `url(${hero})` }}>
       <div className="absolute inset-0 bg-black/50" />
       <div className="container mx-auto px-4 relative h-full flex flex-col items-center justify-center text-center text-white">
