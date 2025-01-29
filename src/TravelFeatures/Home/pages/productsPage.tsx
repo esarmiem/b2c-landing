@@ -42,8 +42,6 @@
 
 // export default ProductsPage;
 
-// import { Hero } from "../../../TravelCore/Components/Epic/productsPage/Hero";
-// import { ServiceCards } from "../../../TravelCore/Components/Epic/productsPage/ServiceCards";
 import { WhyChooseUs } from "../../../TravelCore/Components/Epic/productsPage/WhyChooseUs";
 import { Certifications } from "../../../TravelCore/Components/Epic/productsPage/Certifications";
 import { Features } from "../../../TravelCore/Components/Epic/productsPage/Features";
@@ -55,8 +53,6 @@ import { TravelForm } from "../../../TravelCore/Components/Epic/productsPage/Tra
 const ProductsPage: React.FC = () => {
   return (
     <>
-      {/* <Hero />
-      <ServiceCards /> */}
       <HeroCarousel />
       <TravelForm />
       <WhyChooseUs />
