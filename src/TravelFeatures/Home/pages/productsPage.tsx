@@ -42,17 +42,17 @@
 
 // export default ProductsPage;
 
-import { Hero } from '../../../TravelCore/Components/Epic/productsPage/Hero';
-import { ServiceCards } from '../../../TravelCore/Components/Epic/productsPage/ServiceCards';
+import {Hero} from '../../../TravelCore/Components/Epic/productsPage/Hero';
+import {ServiceCards} from '../../../TravelCore/Components/Epic/productsPage/ServiceCards';
 
-const ProductsPage: React.FC = () => {
+const ProductsPage = () => {
 
-    return (
-        <>
-            <Hero />
-            <ServiceCards />
-        </>
-    );
+  return (
+    <>
+      <Hero/>
+      <ServiceCards/>
+    </>
+  );
 };
 
 export default ProductsPage;

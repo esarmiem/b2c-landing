@@ -1,4 +1,4 @@
-import {B2CPARAMETERS_API} from '../../../TravelCore/Services/Apis/B2CParameters'
+import {B2CPARAMETERS_API} from '../../../TravelCore/Services/Apis/Parameters'
 
 export class Parameters{
     async getParameters(lang: string): Promise<any> {

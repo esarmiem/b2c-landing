@@ -1,12 +1,14 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { BASE_URL } from "./constants.ts";
 
 interface Session {
-    isAuthenticated?: boolean;
+    token?: string
+    role?: any
+    user_id?: number
 }
 
 interface AxiosHttpArgs {
-    method: Method
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE'
     path: string
     session?: Session | null
     headers?: Record<string, string>
@@ -18,8 +20,8 @@ interface AxiosHttpArgs {
 const getDefaultHeaders = (session?: Session): Record<string, string> => {
     const defaultHeaders: Record<string, string> = {};
 
-    if (session && session.isAuthenticated) {
-        defaultHeaders.Authorization = 'Bearer ' + window.localStorage.getItem('token');
+    if (session && session.token) {
+        defaultHeaders.Authorization = 'Bearer ' + session.token;
         //defaultHeaders.apiKey = API_KEY;
     }
 
@@ -29,23 +31,15 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
     return defaultHeaders;
 }
 
-const getHeaders = (): Record<string, string> => {
-    const headers: Record<string, string> = {};
-
-    headers.Authorization = 'Bearer ' + window.localStorage.getItem('token');
-
-    return headers;
-}
-
 export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
     const config: AxiosRequestConfig = {
         method: args.method,
-        url: `${BASE_URL}${args.path}`,
-        headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : getHeaders(),
+        url: `${BASE_URL}/${args.path}`,
+        headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers,
         data: args.data,
-        timeout: args.timeout || 60000
+        timeout: args.timeout || 60000,
     };
-        console.log("header: ", config.headers);
+
     try {
         const response: AxiosResponse = await axios({ ...config, ...args.customConfig });
         return { data: response.data, error: null };

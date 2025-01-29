@@ -1,0 +1,1 @@
+export const GET_TOKEN: string = window.sessionStorage.getItem('token') || ''
