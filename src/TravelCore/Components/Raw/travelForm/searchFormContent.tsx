@@ -6,32 +6,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { TravelersModal } from "./travelersModal"
 import { DateRange } from "react-day-picker"
+import { TravelersModal } from "./travelersModal"
 
 const destinations = ["New York", "Paris", "Tokyo", "London", "Rome", "Barcelona", "Dubai"]
 
-interface CustomDateRange {
-  from: Date;
-  to: Date;
-}
-
 export function SearchFormContent() {
   const [destination, setDestination] = useState("")
-  const [date, setDate] = useState<CustomDateRange | undefined>()
+  const [date, setDate] = useState<DateRange | undefined>()
   const [open, setOpen] = useState(false)
   const [travelers, setTravelers] = useState(1)
-
-  const handleDateSelect = (selectedDateRange: DateRange | undefined) => {
-    if (selectedDateRange?.from && selectedDateRange?.to) {
-      setDate({
-        from: selectedDateRange.from,
-        to: selectedDateRange.to
-      })
-    } else {
-      setDate(undefined)
-    }
-  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -91,11 +75,8 @@ export function SearchFormContent() {
             initialFocus
             mode="range"
             defaultMonth={date?.from}
-            selected={{
-              from: date?.from,
-              to: date?.to
-            }}
-            onSelect={handleDateSelect}
+            selected={date}
+            onSelect={setDate}
             numberOfMonths={2}
           />
         </PopoverContent>
@@ -107,3 +88,4 @@ export function SearchFormContent() {
     </div>
   )
 }
+
