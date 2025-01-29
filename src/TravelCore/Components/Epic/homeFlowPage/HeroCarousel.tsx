@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 // Importar las imágenes
 import slide1 from '../../../../../src/Assets/hero.webp';
-import slide2 from '../../../../../src/Assets/hero.webp';
-import slide3 from '../../../../../src/Assets/hero.webp';
-import slide4 from '../../../../../src/Assets/hero.webp';
+import slide2 from '../../../../../src/Assets/avion.webp';
+import slide3 from '../../../../../src/Assets/cuba.webp';
+import slide4 from '../../../../../src/Assets/lancha.webp';
 import slide5 from '../../../../../src/Assets/hero.webp';
 
 // Definir el tipo para las imágenes importadas
@@ -26,7 +26,7 @@ export const HeroCarousel = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % IMAGES.length);
-    }, 2000);
+    }, 3000);
     return () => clearInterval(timer);
   }, []);
 
@@ -36,7 +36,7 @@ export const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative h-[320px] w-full overflow-hidden">
+    <div className="relative h-[350px] w-full overflow-hidden">
       {IMAGES.map((image, index) => (
         <div
           key={index}
@@ -52,22 +52,22 @@ export const HeroCarousel = () => {
             style={{ position: 'absolute' }}
             loading={index === 0 ? "eager" : "lazy"}
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
       ))}
       <div className="absolute inset-0 flex items-center justify-center text-end">
         <div className="container px-2">
-          <div className="max-w-3xl mx-auto text-white">
+          <div className="px-4 md:px-10 text-white">
             <p className="text-md md:text-md">
             ⭐⭐⭐⭐⭐ 4.99 calificación media
             </p>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               Viajes Protegidos
             </h1>
-            <p className="text-lg md:text-xl">
+            <p className="text-sm md:text-xl">
               Disfruta de soporte ante emergencias médicas, cancelaciones, 
-              pérdida de equipaje y otros imprevistos durante tu aventura.
             </p>
+            <p className="text-sm md:text-xl">pérdida de equipaje y otros imprevistos durante tu aventura.</p>
           </div>
         </div>
       </div>
