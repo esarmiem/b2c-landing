@@ -6,7 +6,7 @@ import { Certifications } from "../../../TravelCore/Components/Epic/productsPage
 import { Features } from "../../../TravelCore/Components/Epic/productsPage/Features";
 import { Testimonials } from "../../../TravelCore/Components/Epic/productsPage/Testimonials";
 import { Stats } from "../../../TravelCore/Components/Epic/productsPage/Stats";
-import { HeroCarousel } from "../../../TravelCore/Components/Epic/homeFlowPage/HeroCarousel";
+import { HeroCarousel } from "../../../TravelCore/Components/Epic/productsPage/HeroCarousel";
 
 // Definir tipos para los posibles resultados de las respuestas de autenticación y masters
 /*interface AuthResponse {
