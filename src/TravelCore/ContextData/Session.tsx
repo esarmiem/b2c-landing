@@ -8,6 +8,7 @@ type SessionState = Record<string, string>;
 interface SessionContextType {
     session: SessionState;
     setSession: Dispatch<SetStateAction<SessionState>>;
+    token?: string;
 }
 
 // Create the context with a default value of undefined

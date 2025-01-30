@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {MasterProvider} from './Masters.tsx';
 import {SessionProvider} from './Session.tsx';
 
@@ -11,7 +11,7 @@ const providers = [
   SessionProvider,
 ]
 
-export const Providers: React.FC<ProviderProps> = ({children}) => {
+export const Providers = ({children}: ProviderProps) => {
   return (
     <>
       {providers.reduce(

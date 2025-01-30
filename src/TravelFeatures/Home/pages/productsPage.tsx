@@ -42,15 +42,15 @@
 
 // export default ProductsPage;
 
-import { WhyChooseUs } from "../../../TravelCore/Components/Epic/productsPage/WhyChooseUs";
-import { Certifications } from "../../../TravelCore/Components/Epic/productsPage/Certifications";
-import { Features } from "../../../TravelCore/Components/Epic/productsPage/Features";
-import { Testimonials } from "../../../TravelCore/Components/Epic/productsPage/Testimonials";
-import { Stats } from "../../../TravelCore/Components/Epic/productsPage/Stats";
-import { HeroCarousel } from "../../../TravelCore/Components/Epic/productsPage/HeroCarousel";
-import { TravelForm } from "../../../TravelCore/Components/Epic/productsPage/TravelForm"
+import { WhyChooseUs } from "@/TravelCore/Components/Epic/productsPage/WhyChooseUs";
+import { Certifications } from "@/TravelCore/Components/Epic/productsPage/Certifications";
+import { Features } from "@/TravelCore/Components/Epic/productsPage/Features";
+import { Testimonials } from "@/TravelCore/Components/Epic/productsPage/Testimonials";
+import { Stats } from "@/TravelCore/Components/Epic/productsPage/Stats";
+import { HeroCarousel } from "@/TravelCore/Components/Epic/productsPage/HeroCarousel";
+import { TravelForm } from "@/TravelCore/Components/Epic/productsPage/TravelForm"
 
-const ProductsPage: React.FC = () => {
+const ProductsPage = () => {
   return (
     <>
       <HeroCarousel />

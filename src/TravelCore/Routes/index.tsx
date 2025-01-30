@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import { lazy, ReactElement } from 'react';
 import { useRoutes, RouteObject } from 'react-router-dom';
 //import SuspenseLoader from '../Components/Epic/SuspenseLoader';
 import Layout from '../Styles/Layout';
@@ -11,13 +11,12 @@ import Layout from '../Styles/Layout';
     );
 };*/
 
-const ProductsPage = lazy(() => import('../../TravelFeatures/Home/pages/productsPage.tsx'));
-const HomeViewPage = lazy(() => import('../../TravelFeatures/Home/pages/homeFlowPage.tsx'));
+const HomePage = lazy(() => import('../../TravelFeatures/Home/pages/homePage.tsx'));
 const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tripQuotePage.tsx'));
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
 
-export default function Router(): React.ReactElement | null {
+export default function Router(): ReactElement | null {
     const routes: RouteObject[] = [
         {
             path: "/",
@@ -25,16 +24,8 @@ export default function Router(): React.ReactElement | null {
             children: [
                 {
                     index: true,
-                    element: <ProductsPage />,
-                },
-                {
-                    path: "products",
-                    element: <ProductsPage />,
-                },
-                {
-                    path: "home",
-                    element: <HomeViewPage />,
-                },
+                    element: <HomePage />,
+                }
             ],
         },
         {

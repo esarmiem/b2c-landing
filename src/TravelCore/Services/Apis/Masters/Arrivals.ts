@@ -24,7 +24,7 @@ interface ApiResponse {
 }
 
 export const ARRIVALS_API = {
-  getArrivalDestinations: (data): Promise<ApiResponse> => {
+  getArrivalDestinations: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_ARRIVALS}?isActive=${data.isActive}`,
       method: 'GET',
