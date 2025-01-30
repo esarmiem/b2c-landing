@@ -1,25 +1,25 @@
-import React, { ReactNode} from 'react';
-import { CityProvider } from './Cities.tsx';
-import { SessionProvider } from './Session.tsx';
+import React, {ReactNode} from 'react';
+import {MasterProvider} from './Masters.tsx';
+import {SessionProvider} from './Session.tsx';
 
 interface ProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 const providers = [
-    CityProvider,
-    SessionProvider,
+  MasterProvider,
+  SessionProvider,
 ]
 
-export const Providers: React.FC<ProviderProps> = ({ children }) => {
-    return (
-        <>
-            {providers.reduce(
-                (AccumulatedProviders, CurrentProvider) => (
-                    <CurrentProvider>{AccumulatedProviders}</CurrentProvider>
-                ),
-                children
-            )}
-        </>
-    );
+export const Providers: React.FC<ProviderProps> = ({children}) => {
+  return (
+    <>
+      {providers.reduce(
+        (AccumulatedProviders, CurrentProvider) => (
+          <CurrentProvider>{AccumulatedProviders}</CurrentProvider>
+        ),
+        children
+      )}
+    </>
+  );
 };

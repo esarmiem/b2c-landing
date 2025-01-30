@@ -27,7 +27,7 @@ export function SessionProvider({ children }: SessionProviderProps): ReactElemen
     }, [session]);
 
     return (
-        <SessionContext.Provider value={{ session, setSession }}>
+        <SessionContext.Provider value={{ session, setSession, token: session.token}}>
             {children}
         </SessionContext.Provider>
     );

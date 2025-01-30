@@ -2,7 +2,9 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { BASE_URL } from "./constants.ts";
 
 interface Session {
-    isAuthenticated?: boolean;
+    token?: string
+    role?: any
+    user_id?: number
 }
 
 interface AxiosHttpArgs {
@@ -18,8 +20,8 @@ interface AxiosHttpArgs {
 const getDefaultHeaders = (session?: Session): Record<string, string> => {
     const defaultHeaders: Record<string, string> = {};
 
-    if (session && session.isAuthenticated) {
-        defaultHeaders.Authorization = 'Bearer ' + window.sessionStorage.getItem('token');
+    if (session && session.token) {
+        defaultHeaders.Authorization = 'Bearer ' + session.token;
         //defaultHeaders.apiKey = API_KEY;
     }
 
