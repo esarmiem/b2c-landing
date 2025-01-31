@@ -1,5 +1,5 @@
 import { FileText, Globe, Clock, LucideIcon } from 'lucide-react';
-import hero from '../../../../Assets/hero.webp';
+import hero from '../../../../Assets/certifications (4).webp';
 
 interface Benefit {
   icon: LucideIcon;

@@ -86,6 +86,12 @@ export default function HomePage () {
     }
   };
 
+  const images = [
+    '../../../../Assets/slide 1.webp',
+    '../../../../Assets/slide 2.webp',
+    '../../../../Assets/slide 3.webp'
+  ];
+
   return (
     <>
       <HeroCarousel />
