@@ -1,6 +1,7 @@
 import { Link } from "../Raw/Link";
-import { Menu, Headset } from "lucide-react";
+import { Menu, Headset, Languages } from "lucide-react";
 import { DropdownHeader } from "./DropdownHeader";
+import { useTranslation } from "react-i18next";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "ghost" | "default";
@@ -33,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 export const Header: React.FC = () => {
+  const { t, i18n } = useTranslation(["header"])
   return (
     <header className="fixed top-0 w-full bg-white z-50">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
@@ -42,19 +44,19 @@ export const Header: React.FC = () => {
         </Link>
         <div className="flex items-center gap-6">
           <div className="items-center hidden md:flex ">
-            <Headset className="h-4 w-4 mr-2  text-gray-600 hover:text-gray-900" />
+            <Headset className="h-4 w-4 mr-2  text-gray-600 hover:text-gray-900"/>
             <Link
-              href="/Home"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                href="#"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
-              Ventas: +57 317 5032 200
+              {t('label-link-sales')}: +57 317 5032 200
             </Link>
           </div>
 
           <div className="items-center hidden md:flex">
             <Link
-              href="/Home"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                href={'#'}
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
               Blogs
             </Link>
@@ -66,15 +68,24 @@ export const Header: React.FC = () => {
 
           <div className="items-center hidden md:flex">
             <Link
-              href="/Home"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                href="#"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
-              Ingreso Agencias
+              {t('label-link-agency')}
+            </Link>
+          </div>
+          {/* TODO: Quitar el cambio de idioma de este lugar, solo lo puse para pruebas mientras el sidebar se desarrolla */}
+          <div className="items-center hidden md:flex">
+            <Link
+                onClick={() => i18n.changeLanguage(i18n.language == 'es' ? 'en' : 'es')}
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+            >
+              <Languages className="h-4 w-4 mr-2  text-gray-600 hover:text-gray-900"/>
             </Link>
           </div>
 
           <Button variant="ghost" size="icon" className="">
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5"/>
           </Button>
         </div>
       </div>
