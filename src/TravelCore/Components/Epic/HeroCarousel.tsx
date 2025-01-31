@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 // Importar las imágenes
-import slide1 from '../../../../../src/Assets/hero.webp';
-import slide2 from '../../../../../src/Assets/avion.webp';
-import slide3 from '../../../../../src/Assets/cuba.webp';
-import slide4 from '../../../../../src/Assets/lancha.webp';
-import slide5 from '../../../../../src/Assets/hero.webp';
+import slide1 from '../../../../Assets/hero.webp';
+import slide2 from '../../../../Assets/avion.webp';
+import slide3 from '../../../../Assets/cuba.webp';
+import slide4 from '../../../../Assets/lancha.webp';
+import slide5 from '../../../../Assets/hero.webp';
 
 // Definir el tipo para las imágenes importadas
 type ImageType = {

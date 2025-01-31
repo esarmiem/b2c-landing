@@ -4,13 +4,13 @@ import { Masters } from "../model/masters_entity";
 import useSession from "../../../TravelCore/Hooks/useSession";
 import useMasters from "../../../TravelCore/Hooks/useMasters.ts";
 // Components
-import { Certifications } from "@/TravelCore/Components/Epic/productsPage/Certifications";
-import { Features } from "@/TravelCore/Components/Epic/productsPage/Features";
-import { Testimonials } from "@/TravelCore/Components/Epic/productsPage/Testimonials";
-import { Stats } from "@/TravelCore/Components/Epic/productsPage/Stats";
-import { HeroCarousel } from "@/TravelCore/Components/Epic/productsPage/HeroCarousel";
-import { TravelForm } from "@/TravelCore/Components/Epic/productsPage/TravelForm.tsx";
-import { WhyChooseUs } from "@/TravelCore/Components/Epic/productsPage/WhyChooseUs.tsx";
+import { Certifications } from "@/TravelCore/Components/Epic/Certifications.tsx";
+import { Features } from "@/TravelCore/Components/Epic/Features.tsx";
+import { Testimonials } from "@/TravelCore/Components/Epic/Testimonials.tsx";
+import { Stats } from "@/TravelCore/Components/Epic/Stats.tsx";
+import { HeroCarousel } from "@/TravelCore/Components/Epic/HeroCarousel.tsx";
+import { TravelForm } from "@/TravelCore/Components/Epic/TravelForm.tsx";
+import { WhyChooseUs } from "@/TravelCore/Components/Epic/WhyChooseUs.tsx";
 
 // Define types for the possible results of authentication responses
 interface AuthResponse {

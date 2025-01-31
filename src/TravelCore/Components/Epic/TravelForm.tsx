@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SearchFormContent } from "../../Raw/travelForm/searchFormContent";
+import { SearchFormContent } from "./searchFormContent";
 
 export function TravelForm() {
   return (
