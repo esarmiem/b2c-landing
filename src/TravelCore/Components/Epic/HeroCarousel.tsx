@@ -1,76 +1,111 @@
-import { useEffect, useState } from 'react';
-// Importar las imágenes
-import slide1 from '../../../../Assets/hero.webp';
-import slide2 from '../../../../Assets/avion.webp';
-import slide3 from '../../../../Assets/cuba.webp';
-import slide4 from '../../../../Assets/lancha.webp';
-import slide5 from '../../../../Assets/hero.webp';
+import { useState, useEffect } from 'react';
 
-// Definir el tipo para las imágenes importadas
-type ImageType = {
-  src: string;
-  alt: string;
-};
+interface CarouselProps {
+  images: string[];
+  autoplayInterval?: number;
+}
 
-const IMAGES: ImageType[] = [
-  { src: slide1, alt: 'Slide 1' },
-  { src: slide2, alt: 'Slide 2' },
-  { src: slide3, alt: 'Slide 3' },
-  { src: slide4, alt: 'Slide 4' },
-  { src: slide5, alt: 'Slide 5' },
-];
-
-export const HeroCarousel = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+export const HeroCarousel: React.FC<CarouselProps> = ({ 
+  images, 
+  autoplayInterval = 5000
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % IMAGES.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+    const interval = setInterval(() => {
+      handleNext();
+    }, autoplayInterval);
 
-  // Utility function to replace cn
-  const classNames = (...classes: (string | boolean | undefined)[]) => {
-    return classes.filter(Boolean).join(' ');
+    return () => clearInterval(interval);
+  }, [currentIndex, autoplayInterval]);
+
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
   return (
-    <div className="relative h-[380px] w-full overflow-hidden">
-      {IMAGES.map((image, index) => (
-        <div
-          key={index}
-          className={classNames(
-            "absolute inset-0 transition-opacity duration-1000",
-            index === currentSlide ? "opacity-100" : "opacity-0"
-          )}
-        >
-          <img
-            src={image.src}
-            alt={image.alt}
-            className="h-full w-full object-cover"
-            style={{ position: 'absolute' }}
-            loading={index === 0 ? "eager" : "lazy"}
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-      ))}
-      <div className="absolute inset-0 flex items-center justify-center text-end">
-        <div className="container px-2">
-          <div className="px-4 md:px-10 text-white">
-            <p className="text-md md:text-md">
-            ⭐⭐⭐⭐⭐ 4.99 calificación media
-            </p>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Viajes Protegidos
-            </h1>
-            <p className="text-sm md:text-xl">
-              Disfruta de soporte ante emergencias médicas, cancelaciones, 
-            </p>
-            <p className="text-sm md:text-xl">pérdida de equipaje y otros imprevistos durante tu aventura.</p>
+    <div className="relative w-full mt-12" data-carousel="slide">
+      {/* Carousel wrapper */}
+      <div className="relative h-48 sm:h-64 md:h-96 overflow-hidden">
+        {images.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out flex items-center justify-center ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="relative w-full h-full">
+              <img
+                src={image}
+                className="absolute w-full h-full object-contain sm:object-contain md:object-cover"
+                alt={`Slide ${index + 1}`}
+              />
+              {/* Overlay para mejorar la visibilidad en imágenes claras */}
+              <div className="absolute inset-0 bg-black/10"></div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
+
+      {/* Previous button */}
+      <button
+        type="button"
+        className="absolute top-1/2 -translate-y-1/2 start-0 z-30 flex items-center justify-center h-12 px-4 cursor-pointer group focus:outline-none"
+        onClick={handlePrevious}
+      >
+        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg
+            className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+          <span className="sr-only">Previous</span>
+        </span>
+      </button>
+
+      {/* Next button */}
+      <button
+        type="button"
+        className="absolute top-1/2 -translate-y-1/2 end-0 z-30 flex items-center justify-center h-12 px-4 cursor-pointer group focus:outline-none"
+        onClick={handleNext}
+      >
+        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg
+            className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <span className="sr-only">Next</span>
+        </span>
+      </button>
     </div>
   );
 };

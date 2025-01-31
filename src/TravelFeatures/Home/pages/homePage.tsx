@@ -10,7 +10,6 @@ import { Testimonials } from "@/TravelCore/Components/Epic/Testimonials.tsx";
 import { Stats } from "@/TravelCore/Components/Epic/Stats.tsx";
 import { HeroCarousel } from "@/TravelCore/Components/Epic/HeroCarousel.tsx";
 import { TravelForm } from "@/TravelCore/Components/Epic/TravelForm.tsx";
-import { WhyChooseUs } from "@/TravelCore/Components/Epic/WhyChooseUs.tsx";
 
 // Define types for the possible results of authentication responses
 interface AuthResponse {
@@ -92,11 +91,16 @@ const HomePage = () => {
     }
   }
 
+  const images = [
+    '../../../../Assets/slide 1.webp',
+    '../../../../Assets/slide 2.webp',
+    '../../../../Assets/slide 3.webp'
+  ];
+
   return (
       <>
-        <HeroCarousel />
+        <HeroCarousel images={images} />
         <TravelForm />
-        <WhyChooseUs />
         <Certifications />
         <Features />
         <Testimonials />
