@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SearchFormContent } from "../../Raw/travelForm/searchFormContent";
+import { SearchFormContent } from "./searchFormContent";
 
 export function TravelForm() {
   return (
@@ -18,7 +18,7 @@ export function TravelForm() {
           <TabsTrigger
             className="rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-6"
             value="tab2"
-            disabled
+            //disabled
           >
             Comunicación Internacional
             {/* agregar atributo disabled a tab2 para desactivar elder*/}
@@ -28,7 +28,7 @@ export function TravelForm() {
           <SearchFormContent />
         </TabsContent>
         <TabsContent value="tab2">
-          <div className="text-center py-8 text-white">
+          <div className="text-center text-white">
             Este formulario está deshabilitado
           </div>
         </TabsContent>
