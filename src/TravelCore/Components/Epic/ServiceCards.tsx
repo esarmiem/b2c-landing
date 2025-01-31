@@ -1,5 +1,5 @@
 import { Phone, Globe } from 'lucide-react';
-import { Link } from '../../Raw/Link';
+import { Link } from '../Raw/Link';
 
 interface ServiceCard {
   icon: React.ElementType;

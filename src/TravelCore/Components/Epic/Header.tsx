@@ -1,6 +1,6 @@
 import { Link } from "../Raw/Link";
 import { Menu, Headset } from "lucide-react";
-import { DropdownHeader } from "../../Components/Raw/DropdownHeader";
+import { DropdownHeader } from "./DropdownHeader";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "ghost" | "default";

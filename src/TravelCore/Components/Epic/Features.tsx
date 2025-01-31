@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import travelImage from '../../../../Assets/TRAVELKIT_Banners-02.webp'
 
 export const Features = () => {
   const [openItem, setOpenItem] = useState<string | null>(null);
@@ -38,6 +39,13 @@ export const Features = () => {
   return (
     <section className="py-16 px-6 container mx-auto">
       <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative">
+          <img
+            src={travelImage}
+            alt="Travel illustration"
+            className="w-full"
+          />
+        </div>
         <div>
           <h2 className="text-3xl font-bold mb-8">
             ¿Qué debe tener un seguro internacional?
@@ -64,13 +72,6 @@ export const Features = () => {
               </div>
             ))}
           </div>
-        </div>
-        <div className="relative">
-          <img
-            src="/api/placeholder/500/500"
-            alt="Travel illustration"
-            className="w-full"
-          />
         </div>
       </div>
     </section>
