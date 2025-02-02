@@ -48,7 +48,7 @@ interface ResponseData {
   idProspecto: number;
 }
 
-interface dataOrder {
+export interface dataOrder {
   cantidadPax: number
   destino: number
   edades: string
@@ -67,7 +67,7 @@ interface ApiResponse {
   error: string | null;
 }
 
-interface dataPreorder {
+export interface dataPreorder {
   consideracionesgenerales: string
   correoCliente: string
   direccionCliente: string

@@ -1,4 +1,5 @@
 import {MastersServices} from "@/TravelCore/Services/Apis/Masters"
+import {dataOrder} from "@/TravelCore/Services/Apis/Masters/Order"
 
 export class Masters{
 
@@ -28,5 +29,9 @@ export class Masters{
 
     async getProducts(): Promise<any> {
         return await MastersServices.productsApi.getProducts({isActive: true})
+    }
+
+    async getOrderPriceEdad(data: dataOrder): Promise<any> {
+        return await MastersServices.orderPriceEdad.getOrderPriceEdad(data)
     }
 }
