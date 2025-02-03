@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Minus, Plus, Users } from "lucide-react"
+import {useTranslation} from "react-i18next";
 
 interface TravelerAge {
   id: number
@@ -15,6 +16,7 @@ interface TravelersModalProps {
 }
 
 export function TravelersModal({ travelers, setTravelers }: TravelersModalProps) {
+  const { t } = useTranslation(["home"])
   const [ages, setAges] = useState<TravelerAge[]>([{ id: 1, age: "" }])
 
   const handleAddTraveler = () => {
@@ -38,16 +40,16 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
       <DialogTrigger asChild>
         <Button variant="outline" className="justify-start rounded-full">
           <Users className="mr-2 h-4 w-4" />
-          {travelers} {travelers === 1 ? "Viajero" : "Viajeros"}
+          {travelers} {travelers === 1 ? t('content-select-travelers') : t('content-select-travelers') + "s"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Número de viajeros</DialogTitle>
+          <DialogTitle>{t('title-modal-travelers')}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="flex items-center justify-between px-4">
-            <span>Viajeros</span>
+            <span>{t('label-select-count-travelers')}</span>
             <div className="flex items-center gap-4">
               <Button variant="outline" size="icon" onClick={handleRemoveTraveler} disabled={travelers <= 1}>
                 <Minus className="h-4 w-4" />
@@ -60,7 +62,7 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
           </div>
           {ages.map((traveler) => (
             <div key={traveler.id} className="flex items-center gap-4 px-4">
-              <span className="min-w-[100px]">Edad viajero {traveler.id}</span>
+              <span className="min-w-[100px]">{t('label-input-age-travelers')} {traveler.id}</span>
               <div className="flex items-center gap-2 flex-1">
                 <Input
                   type="number"
@@ -70,7 +72,7 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
                   min="0"
                   max="120"
                 />
-                <span>años</span>
+                <span>{t('label-input-age-travelers-sufix')}</span>
               </div>
               {travelers > 1 && (
                 <Button
@@ -81,7 +83,7 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
                     setAges(ages.filter((age) => age.id !== traveler.id))
                   }}
                 >
-                  Eliminar
+                  {t('action-input-travelers')}
                 </Button>
               )}
             </div>

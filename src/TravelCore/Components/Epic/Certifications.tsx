@@ -1,3 +1,4 @@
+import {useTranslation} from "react-i18next";
 
 
 interface Certification {
@@ -30,11 +31,12 @@ const certifications: Certification[] = [
 ];
 
 export const Certifications = () => {
+  const { t } = useTranslation(["home"])
   return (
     <section className="py-16 px-6">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold text-center mb-12">
-          Nuestro respaldo y certificaciones
+          {t('title-certifications')}
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-items-center">
           {certifications.map((cert) => (

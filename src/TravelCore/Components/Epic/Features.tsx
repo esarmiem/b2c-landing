@@ -1,33 +1,36 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import travelImage from '../../../../Assets/TRAVELKIT_Banners-02.webp'
+import {useTranslation} from "react-i18next";
 
 export const Features = () => {
+  const { t } = useTranslation(["home"])
+
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   const features = [
     {
-      title: 'Asistencia Médica Internacional',
-      content: 'Cobertura completa para emergencias médicas en el extranjero, incluyendo hospitalización, consultas médicas y traslados de emergencia.'
+      title: t('title-accordion-feature-medical'),
+      content: t('content-accordion-feature-medical')
     },
     {
-      title: 'Medicamentos',
+      title: t('title-accordion-feature-medicines'),
       content: 'Reembolso de medicamentos prescritos durante el viaje, con cobertura para medicamentos esenciales y de emergencia.'
     },
     {
-      title: 'Odontología',
+      title: t('title-accordion-feature-dental'),
       content: 'Atención dental de emergencia en el extranjero, incluyendo tratamientos para aliviar el dolor y emergencias dentales.'
     },
     {
-      title: 'Cancelación de vuelos',
+      title: t('title-accordion-feature-cancel'),
       content: 'Compensación por cancelaciones de vuelo, incluyendo reembolso de gastos de hotel y nuevos tickets cuando sea necesario.'
     },
     {
-      title: 'Pérdida de equipaje',
+      title: t('title-accordion-feature-loss'),
       content: 'Compensación por pérdida, robo o daño del equipaje durante el viaje, con cobertura para artículos personales.'
     },
     {
-      title: 'Asistencia médica con preexistencias',
+      title:  t('title-accordion-feature-preexisting'),
       content: 'Cobertura para condiciones médicas preexistentes, incluyendo seguimiento y tratamiento de enfermedades crónicas durante el viaje.'
     }
   ];
@@ -48,7 +51,7 @@ export const Features = () => {
         </div>
         <div>
           <h2 className="text-3xl font-bold mb-8">
-            ¿Qué debe tener un seguro internacional?
+            {t('title-features')}
           </h2>
           <div className="w-full space-y-2">
             {features.map((feature, i) => (

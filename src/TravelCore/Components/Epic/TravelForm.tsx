@@ -1,7 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchFormContent } from "./searchFormContent";
+import {useTranslation} from "react-i18next";
 
 export function TravelForm() {
+  const { t } = useTranslation(["home"])
+
   return (
     <div className="container mx-auto px-4 -mt-12 relative z-10">
       <Tabs
@@ -13,14 +16,14 @@ export function TravelForm() {
             className="rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-6"
             value="tab1"
           >
-            Asistencia de viaje
+            {t('label-tab-travel-assist')}
           </TabsTrigger>
           <TabsTrigger
             className="rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-6"
             value="tab2"
             //disabled
           >
-            Comunicación Internacional
+            {t('label-tab-comms')}
             {/* agregar atributo disabled a tab2 para desactivar elder*/}
           </TabsTrigger>
         </TabsList>
@@ -29,7 +32,7 @@ export function TravelForm() {
         </TabsContent>
         <TabsContent value="tab2">
           <div className="text-center text-white">
-            Este formulario está deshabilitado
+            {t('content-tab-comms')}
           </div>
         </TabsContent>
       </Tabs>
