@@ -99,14 +99,16 @@ const HomePage = () => {
 
   return (
       <>
-        <HeroCarousel images={images} />
-        <TravelForm />
-        <Certifications />
-        <Features />
-        <Testimonials />
-        <Stats />
+        <HeroCarousel images={images}/>
+        <div className="container mx-auto px-4 -mt-12 relative z-10">
+          <TravelForm/>
+        <div/>
+        <Certifications/>
+        <Features/>
+        <Testimonials/>
+        <Stats/>
       </>
-  );
-};
+    );
+    };
 
-export default HomePage;
+        export default HomePage;
