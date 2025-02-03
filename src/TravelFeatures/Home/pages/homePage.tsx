@@ -102,7 +102,7 @@ const HomePage = () => {
         <HeroCarousel images={images}/>
         <div className="container mx-auto px-4 -mt-12 relative z-10">
           <TravelForm/>
-        <div/>
+        </div>
         <Certifications/>
         <Features/>
         <Testimonials/>
@@ -110,5 +110,4 @@ const HomePage = () => {
       </>
     );
     };
-
-        export default HomePage;
+export default HomePage;
