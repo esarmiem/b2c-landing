@@ -8,6 +8,7 @@ import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { DateRange } from "react-day-picker"
 import { TravelersModal } from "./travelersModal"
+import { TravelButtonForm } from "./TravelbuttonForm"
 
 const destinations = ["New York", "Paris", "Tokyo", "London", "Rome", "Barcelona", "Dubai"]
 
@@ -84,7 +85,7 @@ export function SearchFormContent() {
 
       <TravelersModal travelers={travelers} setTravelers={setTravelers} />
 
-      <Button className="bg-red-600 hover:bg-red-700 rounded-full">Buscar</Button>
+      <TravelButtonForm/>
     </div>
   )
 }
