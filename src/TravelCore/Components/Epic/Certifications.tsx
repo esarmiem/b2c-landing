@@ -44,7 +44,7 @@ export const Certifications = () => {
               key={cert.id}
               src={cert.imageUrl}
               alt={cert.title}
-              className=" w-[150px] h-[150px] object-contain"
+              className=" w-[200px] h-[200px] object-contain"
             />
           ))}
         </div>

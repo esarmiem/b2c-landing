@@ -1,37 +1,8 @@
-import { Link } from "../Raw/Link";
-import { Menu, Headset, Languages } from "lucide-react";
-import { DropdownHeader } from "./DropdownHeader";
-import { useTranslation } from "react-i18next";
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "ghost" | "default";
-  size?: "icon" | "default";
-  className?: string;
-  children: React.ReactNode;
-}
-
-const Button: React.FC<ButtonProps> = ({
-  variant,
-  size,
-  className = "",
-  children,
-  ...props
-}) => {
-  const baseClasses =
-    "inline-flex items-center justify-center rounded-md font-medium";
-  const variantClasses =
-    variant === "ghost" ? "hover:bg-gray-100 text-gray-700" : "";
-  const sizeClasses = size === "icon" ? "h-10 w-10" : "";
-
-  return (
-    <button
-      className={`${baseClasses} ${variantClasses} ${sizeClasses} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
+import {Link} from "../Raw/Link";
+import {Headset, Languages} from "lucide-react";
+import {DropdownHeader} from "./DropdownHeader";
+import {MenuSheet} from "./MenuSheet";
+import {useTranslation} from "react-i18next";
 
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation(["header"])
@@ -84,9 +55,7 @@ export const Header: React.FC = () => {
             </Link>
           </div>
 
-          <Button variant="ghost" size="icon" className="">
-            <Menu className="h-5 w-5"/>
-          </Button>
+          <MenuSheet />
         </div>
       </div>
     </header>

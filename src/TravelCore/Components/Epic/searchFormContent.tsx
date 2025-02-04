@@ -1,13 +1,14 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { DateRange } from "react-day-picker"
-import { TravelersModal } from "./travelersModal"
+import {useState} from "react"
+import {Button} from "@/components/ui/button"
+import {Calendar} from "@/components/ui/calendar"
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
+import {format} from "date-fns"
+import {CalendarIcon, Check, ChevronsUpDown} from "lucide-react"
+import {cn} from "@/lib/utils"
+import {DateRange} from "react-day-picker"
+import {TravelersModal} from "./travelersModal"
+import {TravelButtonForm} from "./TravelButtonForm.tsx"
 import {useTranslation} from "react-i18next";
 
 const destinations = ["New York", "Paris", "Tokyo", "London", "Rome", "Barcelona", "Dubai"]
@@ -86,7 +87,7 @@ export function SearchFormContent() {
 
       <TravelersModal travelers={travelers} setTravelers={setTravelers} />
 
-      <Button className="bg-red-600 hover:bg-red-700 rounded-full">{t('label-button-search')}</Button>
+      <TravelButtonForm/>
     </div>
   )
 }
