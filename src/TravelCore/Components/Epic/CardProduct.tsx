@@ -11,7 +11,7 @@ interface CardProductProps {
 
 const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, originalPrice, details, recommended }) => {
   return (
-    <div className={`border rounded-lg p-4 max-w-xs mx-auto border-2 border-neutral-800 ${recommended ? 'bg-red-500 text-white' : 'bg-white'}`}>
+    <div className={` rounded-2xl p-4 max-w-xs mx-auto border-2 border-neutral-800 ${recommended ? 'bg-red-500 text-white' : 'bg-white'}`}>
       {recommended && (
         <div className="text-white font-bold text-sm py-1 px-3 bg-red-700 rounded-full absolute top-3 right-3">
           Recomendado
@@ -24,8 +24,8 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
         </h4>
 
       </div>
-      <div className="my-3">
-        <span className="text-lg font-semibold">{price}</span>
+      <div className="my-3 w-100 text-center">
+        <h3 className="text-3xl font-semibold">{price}</h3>
         <span className="line-through text-sm text-gray-500 ml-2">{originalPrice}</span>
       </div>
       <ul className="text-sm text-gray-600 mb-3">

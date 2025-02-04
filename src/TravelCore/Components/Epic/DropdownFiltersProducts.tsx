@@ -30,7 +30,7 @@ export const DropdownFiltersProducts: React.FC = () => {
       <div>
         <button 
           type="button" 
-          className="inline-flex w-full justify-center gap-x-0.3 text-sm font-medium text-gray-600 hover:text-gray-900 border p-3" 
+          className="px-4 py-1 rounded-md inline-flex w-full justify-center gap-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 border" 
           onClick={toggleDropdown}
         >
           Filtros
