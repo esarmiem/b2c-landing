@@ -1,62 +1,54 @@
 import { FC } from 'react';
-import { Calendar, MapPin, Users, Pencil } from "lucide-react";
+import { Earth, Calendar, Users, Pencil, PlaneTakeoff, ArrowRight } from "lucide-react";
 
 export const FilterForm: FC = () => {
   return (
-    <div className="max-w-5xl mx-auto p-4 mt-10">
-      <div className="bg-white rounded-lg shadow-sm border flex flex-col md:flex-row items-center justify-between p-3 gap-4 flex-wrap">
+    <div className="max-w-5xl mx-auto p-4">
+      <div className="bg-white rounded-lg flex flex-col md:flex-row items-end justify-between p-4 gap-4 flex-wrap  ">
         {/* Origen */}
-        <div className="flex items-center gap-2 w-full sm:w-1/2 md:w-auto">
+        <div className="flex items-end gap-2 w-full sm:w-1/2 md:w-auto">
           <div className="text-red-700">
-            <MapPin className="w-5 h-5" />
+            <Earth className="w-10 h-10" />
           </div>
-          <div>
-            <div className="text-xs font-medium text-red-700">Origen</div>
-            <div className="text-sm">Colombia</div>
+          <div className="leading-4 space-y-0.5">
+            <div className="text-base font-bold text-red-700">Origen</div>
+            <div className="text-sm mt-0">Colombia</div>
           </div>
-        </div>
-
-        {/* Destino */}
-        <div className="flex items-center gap-2 w-full sm:w-1/2 md:w-auto">
-          <div className="text-red-700">
-            <MapPin className="w-5 h-5" />
+          <div className="text-black">
+            <PlaneTakeoff className="w-5 h-5" />
           </div>
-          <div>
-            <div className="text-xs font-medium text-red-700">Destino</div>
-            <div className="text-sm">Destino</div>
+          <div className="leading-4 space-y-0.5">
+            <div className="text-base font-bold text-red-700">Destino</div>
+            <div className="text-sm mt-0">Destino</div>
           </div>
         </div>
 
         {/* Desde */}
-        <div className="flex items-center gap-2 w-full sm:w-1/2 md:w-auto">
+        <div className="flex items-end gap-2 w-full sm:w-1/2 md:w-auto">
           <div className="text-red-700">
-            <Calendar className="w-5 h-5" />
+            <Calendar className="w-10 h-10" />
           </div>
-          <div>
-            <div className="text-xs font-medium text-red-700">Desde</div>
-            <div className="text-sm">30/01/2025</div>
+          <div className="leading-4">
+            <div className="text-base font-bold text-red-700">Desde</div>
+            <div className="text-sm mt-0">30/01/2025</div>
           </div>
-        </div>
-
-        {/* Hasta */}
-        <div className="flex items-center gap-2 w-full sm:w-1/2 md:w-auto">
-          <div className="text-red-700">
-            <Calendar className="w-5 h-5" />
+          <div className="text-black">
+            <ArrowRight className="w-5 h-5" />
           </div>
-          <div>
-            <div className="text-xs font-medium text-red-700">Hasta</div>
-            <div className="text-sm">06/02/2025</div>
+          <div className="leading-4 space-y-0.5">
+            <div className="text-base font-bold text-red-700">Hasta</div>
+            <div className="text-sm mt-0">06/02/2025</div>
           </div>
         </div>
 
         {/* Pasajeros */}
-        <div className="flex items-center gap-2 w-full sm:w-1/2 md:w-auto">
+        <div className="flex items-end gap-2 w-full sm:w-1/2 md:w-auto">
           <div className="text-red-700">
-            <Users className="w-5 h-5" />
+            <Users className="w-10 h-10" />
           </div>
-          <div>
-            <div className="text-xs font-medium text-red-700">Pasajeros</div>
-            <div className="text-sm">2 Pasajeros</div>
+          <div className="leading-4">
+            <div className="text-base font-bold text-red-700">Pasajeros</div>
+            <div className="text-sm mt-0">2 Pasajeros</div>
           </div>
         </div>
 
