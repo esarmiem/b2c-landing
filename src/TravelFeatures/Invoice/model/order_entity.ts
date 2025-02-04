@@ -1,11 +1,11 @@
-import {ORDER_API} from '../../../TravelCore/Services/Apis/Order'
+import {ORDER_API} from '../../../TravelCore/Services/Apis/Masters/Order'
 
 export class Order{
     async checkPreOrder(data: any): Promise<any> {
-        return await ORDER_API.checkPreOrder({data})
+        return await ORDER_API.checkPreorderISL(data)
     }
 
-    async addOrder(data: any): Promise<any> {
+    /*async addOrder(data: any): Promise<any> {
         return await ORDER_API.addOrder({data})
-    }
+    }*/
 }

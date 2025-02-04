@@ -24,7 +24,7 @@ interface ApiResponse {
 }
 
 export const QUESTIONS_API = {
-  getQuestions: (data): Promise<ApiResponse> => {
+  getQuestions: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_QUESTIONS}?isActive=${data.isActive}`,
       method: 'GET',

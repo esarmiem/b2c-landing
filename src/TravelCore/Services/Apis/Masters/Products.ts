@@ -37,7 +37,7 @@ interface ApiResponse {
 }
 
 export const PRODUCTS_API = {
-  getProducts: (data): Promise<ApiResponse> => {
+  getProducts: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_PRODUCTS}?isActive=${data.isActive}`,
       method: 'GET',

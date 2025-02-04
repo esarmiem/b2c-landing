@@ -37,7 +37,7 @@ interface ApiResponse {
 }
 
 export const PARAMETERS_API = {
-  getParameters: (data): Promise<ApiResponse> => {
+  getParameters: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_PARAMETERS}?isActive=${data.isActive}`,
       method: 'GET',

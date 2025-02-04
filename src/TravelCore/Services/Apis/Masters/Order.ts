@@ -111,7 +111,7 @@ interface ApiCheckPreOrderResponse {
   error: string | null;
 }
 
-export const GET_ORDER_PRICE_EDAD = {
+export const ORDER_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_ORDER_PRICE_EDAD}`,

@@ -24,7 +24,7 @@ interface ApiResponse {
 }
 
 export const DOCUMENT_TYPE_API = {
-  getDocumentTypes: (data): Promise<ApiResponse> => {
+  getDocumentTypes: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_DOCUMENT_TYPE}?isActive=${data.isActive}`,
       method: 'GET',

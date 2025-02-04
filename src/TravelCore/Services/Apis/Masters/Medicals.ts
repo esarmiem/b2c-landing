@@ -23,7 +23,7 @@ interface ApiResponse {
 }
 
 export const MEDICAL_CONDITIONS_API = {
-  getMedicalConditions: (data): Promise<ApiResponse> => {
+  getMedicalConditions: (data: any): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_MEDICAL_CONDITIONS}?isActive=${data.isActive}`,
       method: 'GET',

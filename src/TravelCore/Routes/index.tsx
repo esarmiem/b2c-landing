@@ -12,7 +12,7 @@ import Layout from '../Styles/Layout';
 };*/
 
 const HomePage = lazy(() => import('../../TravelFeatures/Home/pages/homePage.tsx'));
-const EmbedQuotePage = lazy(() => import('../../TravelFeatures/Home/pages/EmbedQuotePage.tsx'));
+const EmbedQuotePage = lazy(() => import('../../TravelFeatures/Home/pages/embedQuotePage.tsx'));
 const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tripQuotePage.tsx'));
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));

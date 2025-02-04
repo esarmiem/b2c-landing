@@ -1,4 +1,4 @@
-import {ASSISTANCE_API} from '../../../TravelCore/Services/Apis/Assistance'
+import {ASSISTANCE_API} from '../../../TravelCore/Services/Apis/Assistance/Assistance.ts'
 
 interface AssistanceResponse {
     idProspecto: number

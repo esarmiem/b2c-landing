@@ -39,14 +39,14 @@ interface citiesByCountryResponse {
 }
 
 export const COUNTRIES_API = {
-  getCountries: (data): Promise<countriesResponse> => {
+  getCountries: (data: any): Promise<countriesResponse> => {
     return axiosHttp({
       path: `${SERVICE_COUNTRIES}?isActive=${data.isActive}`,
       method: 'GET',
       session: {token: GET_TOKEN}
     })
   },
-  getCitiesByCountry: (data): Promise<citiesByCountryResponse> => {
+  getCitiesByCountry: (data: any): Promise<citiesByCountryResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_CITIES_BY_COUNTRY}?isActive=${data.isActive}`,
       method: 'GET',
