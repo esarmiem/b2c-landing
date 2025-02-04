@@ -4,12 +4,13 @@ import {Masters} from "../model/masters_entity";
 import useSession from "../../../TravelCore/Hooks/useSession";
 import useMasters from "../../../TravelCore/Hooks/useMasters";
 // Components
-import {HeroCarousel} from "@/TravelCore/Components/Epic/HeroCarousel.tsx";
-import {TravelForm} from "@/TravelCore/Components/Epic/TravelForm.tsx";
-import Certifications from "@/TravelCore/Components/Epic/Certifications.tsx";
-import Features from "@/TravelCore/Components/Epic/Features.tsx";
-import {Testimonials} from "@/TravelCore/Components/Epic/Testimonials.tsx";
-import Stats from "@/TravelCore/Components/Epic/Stats.tsx";
+import { Certifications } from "@/TravelCore/Components/Epic/Certifications.tsx";
+import { Features } from "@/TravelCore/Components/Epic/Features.tsx";
+import { Testimonials } from "@/TravelCore/Components/Epic/Testimonials.tsx";
+import { Stats } from "@/TravelCore/Components/Epic/Stats.tsx";
+import { HeroCarousel } from "@/TravelCore/Components/Epic/HeroCarousel.tsx";
+import { TravelForm } from "@/TravelCore/Components/Epic/TravelForm.tsx";
+import { TravelSteps } from "@/TravelCore/Components/Epic/TravelSteps.tsx";
 
 
 interface AuthResponse {
@@ -93,13 +94,14 @@ export default function HomePage () {
   ];
 
   return (
-    <>
-      <HeroCarousel images={images} />
-      <TravelForm />
-      <Certifications />
-      <Features />
-      <Testimonials />
-      <Stats />
-    </>
+      <>
+        <HeroCarousel images={images} />
+        <TravelForm />
+        <TravelSteps />
+        <Certifications />
+        <Features />
+        <Testimonials />
+        <Stats />
+      </>
   );
 }

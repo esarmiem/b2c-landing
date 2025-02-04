@@ -1,17 +1,20 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { DateRange } from "react-day-picker"
-import { TravelersModal } from "./travelersModal"
+import {useState} from "react"
+import {Button} from "@/components/ui/button"
+import {Calendar} from "@/components/ui/calendar"
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
+import {format} from "date-fns"
+import {CalendarIcon, Check, ChevronsUpDown} from "lucide-react"
+import {cn} from "@/lib/utils"
+import {DateRange} from "react-day-picker"
+import {TravelersModal} from "./travelersModal"
+import {TravelButtonForm} from "./TravelButtonForm.tsx"
+import {useTranslation} from "react-i18next";
 
 const destinations = ["New York", "Paris", "Tokyo", "London", "Rome", "Barcelona", "Dubai"]
 
 export function SearchFormContent() {
+  const { t } = useTranslation(["home"])
   const [destination, setDestination] = useState("")
   const [date, setDate] = useState<DateRange | undefined>()
   const [open, setOpen] = useState(false)
@@ -22,15 +25,15 @@ export function SearchFormContent() {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" role="combobox" aria-expanded={open} className="justify-between rounded-full">
-            {destination || "Seleccionar destino"}
+            {destination || t('label-dropdown-destination') }
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command>
-            <CommandInput placeholder="Buscar destino..." />
+            <CommandInput placeholder= {t('placeholder-dropdown-destination')}/>
             <CommandList>
-              <CommandEmpty>No se encontraron resultados.</CommandEmpty>
+              <CommandEmpty>{t('search-dropdown-destination-empty')}</CommandEmpty>
               <CommandGroup>
                 {destinations.map((dest) => (
                   <CommandItem
@@ -66,7 +69,7 @@ export function SearchFormContent() {
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span>Seleccionar fechas</span>
+              <span>{t('label-between-dates')}</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -84,7 +87,7 @@ export function SearchFormContent() {
 
       <TravelersModal travelers={travelers} setTravelers={setTravelers} />
 
-      <Button className="bg-red-600 hover:bg-red-700 rounded-full">Buscar</Button>
+      <TravelButtonForm/>
     </div>
   )
 }

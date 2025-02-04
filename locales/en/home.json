@@ -1,0 +1,27 @@
+{
+  "label-tab-travel-assist": "Travel assistance",
+  "label-tab-comms": "International communication",
+  "content-tab-comms": "This form is disabled",
+  "label-dropdown-destination": "Select destination",
+  "placeholder-dropdown-destination": "Search destination...",
+  "search-dropdown-destination-empty": "No results found.",
+  "label-between-dates": "Select dates",
+  "label-button-search": "Search",
+  "content-select-travelers": "Traveler",
+  "title-modal-travelers": "Number of travelers",
+  "label-select-count-travelers": "Travelers",
+  "label-input-age-travelers": "Traveler age",
+  "label-input-age-travelers-sufix": "years old",
+  "action-input-travelers": "Delete",
+  "title-certifications": "Our support and certifications",
+  "title-features": "What should international insurance have?",
+  "title-accordion-feature-medical": "International Medical Assistance",
+  "content-accordion-feature-medical": "Comprehensive coverage for medical emergencies abroad, including hospitalization, medical consultations and emergency transfers.",
+  "title-accordion-feature-medicines": "Medications",
+  "title-accordion-feature-dental": "Dentistry",
+  "title-accordion-feature-cancel": "Flight cancellations",
+  "title-accordion-feature-loss": "Lost luggage",
+  "title-accordion-feature-preexisting": "Medical assistance with pre-existing conditions"
+
+
+}

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from "../Raw/Link";
 import { ShieldPlus } from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export const DropdownHeader: React.FC = () => {
+  const { t } = useTranslation(["header"])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +38,7 @@ export const DropdownHeader: React.FC = () => {
           aria-expanded={isDropdownOpen}
           aria-haspopup="true"
         >
-          Productos
+          {t('label-link-products')}
           <svg 
             className={`-mr-1 size-5 text-gray-600 hover:text-gray-900 transform transition-transform ${
               isDropdownOpen ? 'rotate-180' : ''
@@ -65,7 +67,7 @@ export const DropdownHeader: React.FC = () => {
                 href="/Home" 
                 className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
-                Asistencia Internacional
+                {t('label-link-assist')}
               </Link>
             </div>
 
@@ -91,7 +93,7 @@ export const DropdownHeader: React.FC = () => {
                 href="#" 
                 className="text-sm font-medium ml-2 text-gray-600 hover:text-gray-900"
               >
-                Comunicación Internacional
+                {t('label-link-comms')}
               </Link>
             </div>
           </div>
