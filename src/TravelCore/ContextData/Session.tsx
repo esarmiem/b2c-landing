@@ -9,6 +9,7 @@ interface SessionContextType {
     session: SessionState;
     setSession: Dispatch<SetStateAction<SessionState>>;
     token?: string;
+    token_isl?: string;
 }
 
 // Create the context with a default value of undefined
@@ -28,7 +29,7 @@ export function SessionProvider({ children }: SessionProviderProps): ReactElemen
     }, [session]);
 
     return (
-        <SessionContext.Provider value={{ session, setSession, token: session.token}}>
+        <SessionContext.Provider value={{ session, setSession, token: session.token, token_isl: session.token_isl }}>
             {children}
         </SessionContext.Provider>
     );

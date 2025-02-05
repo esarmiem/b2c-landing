@@ -1,7 +1,7 @@
-import {MastersServices} from "../../../TravelCore/Services/Apis/Masters"
+import {AUTH_API} from "@/TravelCore/Services/Apis/Authentication";
 
 export class Auth{
     async login(): Promise<any> {
-        return await MastersServices.authApi.login()
+        return await AUTH_API.login();
     }
 }

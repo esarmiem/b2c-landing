@@ -1,8 +1,8 @@
-import {B2CPARAMETERS_API} from '../../../TravelCore/Services/Apis/Parameters'
+import {MastersServices} from '@/TravelCore/Services/Apis/Masters'
 
 export class Parameters{
     async getParameters(lang: string): Promise<any> {
-        const response: any = await B2CPARAMETERS_API.getB2CParameters({lang})
+        const response: any = await MastersServices.parametersApi.getParameters({isActive: true})
         return response.filter((item:any) => item.idioma === lang)
     }
 }

@@ -7,7 +7,6 @@ const STORAGE_KEYS = {
   countries: 'tk-countries',
   documents: 'tk-documents',
   medicals: 'tk-medicals',
-  order: 'tk-order',
   parameters: 'tk-parameters',
   products: 'tk-products',
   questions: 'tk-questions'

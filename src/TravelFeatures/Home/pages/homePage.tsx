@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Auth} from "../model/auth_entity";
+import {AuthISL} from "@/TravelFeatures/Home/model/auth_isl_entity.ts";
 import {Masters} from "../model/masters_entity";
 import useSession from "../../../TravelCore/Hooks/useSession";
 import useMasters from "../../../TravelCore/Hooks/useMasters";
@@ -24,7 +25,6 @@ interface AuthResponse {
 export default function HomePage () {
   const { setSession } = useSession() || {};
   const masterContext = useMasters();
-  const [, setIsAuth] = useState(false);
 
   useEffect(() => {
     handleInitialization();
@@ -39,18 +39,22 @@ export default function HomePage () {
 
   const getAuthentication = async (): Promise<boolean> => {
     try {
+
       const auth = new Auth();
       const response: AuthResponse = await auth.login();
 
-      if (response?.data && !response.error) {
+      const authISL = new AuthISL();
+      const responseISL = await authISL.loginISL();
+
+      if (response?.data && responseISL?.data && !response.error) {
         const sessionData = {
           token: response.data.payload.accessToken,
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser,
+          token_isl: responseISL?.data.result.token ?? ""
         };
 
         setSession?.(sessionData);
-        setIsAuth(true);
         return true;
       }
     } catch (error) {

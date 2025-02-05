@@ -1,5 +1,5 @@
 import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD} from "../../../Utils/constants.ts"
+import {SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD,} from "../../../Utils/constants.ts"
 import {GET_TOKEN} from "../../../Utils/storage.ts"
 
 interface DescripcionDescuentos {
@@ -24,7 +24,7 @@ interface Condiciones {
   terms: string;
 }
 
-interface Plan {
+export interface Plan {
   Id: number;
   IdPlan: number;
   Pregunta: string;
@@ -48,7 +48,7 @@ interface ResponseData {
   idProspecto: number;
 }
 
-export interface dataOrder {
+interface dataOrder {
   cantidadPax: number
   destino: number
   edades: string
@@ -67,7 +67,7 @@ interface ApiResponse {
   error: string | null;
 }
 
-export interface dataPreorder {
+interface dataPreorder {
   consideracionesgenerales: string
   correoCliente: string
   direccionCliente: string
@@ -111,7 +111,7 @@ interface ApiCheckPreOrderResponse {
   error: string | null;
 }
 
-export const GET_ORDER_PRICE_EDAD = {
+export const ASSISTANCE_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_ORDER_PRICE_EDAD}`,
@@ -120,6 +120,33 @@ export const GET_ORDER_PRICE_EDAD = {
       session: {token: GET_TOKEN}
     })
   },
+  // getProductUpdates: async (productCode: string) => {
+  //   const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
+  //   const token = await getISLToken();
+  //   const data = {
+  //     request: 'get_upgrade',
+  //     token: token,
+  //     id_plan: productCode,
+  //     language: 'spa',
+  //   };
+  //
+  //   try {
+  //     const response = await axiosHttp({
+  //       method: 'GET',
+  //       path: url,
+  //       data: JSON.stringify(data),
+  //       customConfig: {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       },
+  //     });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error fetching product updates:', error);
+  //     throw error;
+  //   }
+  // },
   checkPreorderISL: (data: dataPreorder): Promise<ApiCheckPreOrderResponse> => {
     return axiosHttp({
       path: `${SERVICE_CHECK_PREORDER_ISL}`,
