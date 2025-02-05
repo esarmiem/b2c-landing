@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import profile1 from '../../../../Assets/emma.webp';
 import profile2 from '../../../../Assets/jhon.webp';
 import profile3 from '../../../../Assets/valen.webp';
+import {useTranslation} from "react-i18next";
 
 interface Testimonial {
   name: string;
@@ -11,28 +12,8 @@ interface Testimonial {
   image: string;
 }
 
-const testimonials: Testimonial[] = [
-  {
-    name: 'Valen A.',
-    text: 'Seriedad y cumplimiento al instante. Laura y Dani fueron muy atentos conmigo en el WhatsApp, me resolvieron mi inquietud de inmediato.',
-    rating: 5,
-    image: profile1
-  },
-  {
-    name: 'Juan P.',
-    text: 'Excelente servicio y atención al cliente. Muy recomendado.',
-    rating: 5,
-    image: profile2 
-  },
-  {
-    name: 'María S.',
-    text: 'La mejor asistencia de viaje que he tenido. Muy profesionales.',
-    rating: 5,
-    image: profile3
-  },
-];
-
 export const Testimonials = () => {
+  const { t } = useTranslation(["home"])
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
 
@@ -59,6 +40,27 @@ export const Testimonials = () => {
     });
   }, []);
 
+  const testimonials: Testimonial[] = [
+    {
+      name: 'Valen A.',
+      text: t('text-testimonials-1'),
+      rating: 5,
+      image: profile1
+    },
+    {
+      name: 'Juan P.',
+      text:  t('text-testimonials-2'),
+      rating: 5,
+      image: profile2
+    },
+    {
+      name: 'María S.',
+      text:  t('text-testimonials-3'),
+      rating: 5,
+      image: profile3
+    },
+  ];
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "/api/placeholder/64/64";
   };
@@ -67,7 +69,7 @@ export const Testimonials = () => {
     <section className="py-16 bg-red-800 text-white px-6">
       <div className="container mx-auto text-center">
         <h2 className="text-3xl font-bold mb-12">
-          Hemos acompañado a miles de viajeros increíbles
+          {t('title-testimonials')}
         </h2>
         <div className="max-w-2xl mx-auto">
           <div className="relative h-[200px] overflow-hidden">

@@ -1,11 +1,11 @@
 import {Link} from "../Raw/Link";
-import {Headset, Languages} from "lucide-react";
+import {Headset} from "lucide-react";
 import {DropdownHeader} from "./DropdownHeader";
 import {MenuSheet} from "./MenuSheet";
 import {useTranslation} from "react-i18next";
 
 export const Header: React.FC = () => {
-  const { t, i18n } = useTranslation(["header"])
+  const { t } = useTranslation(["header"])
   return (
     <header className="fixed top-0 w-full bg-white z-50">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
@@ -45,16 +45,6 @@ export const Header: React.FC = () => {
               {t('label-link-agency')}
             </Link>
           </div>
-          {/* TODO: Quitar el cambio de idioma de este lugar, solo lo puse para pruebas mientras el sidebar se desarrolla */}
-          <div className="items-center hidden md:flex">
-            <Link
-                onClick={() => i18n.changeLanguage(i18n.language == 'es' ? 'en' : 'es')}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
-            >
-              <Languages className="h-4 w-4 mr-2  text-gray-600 hover:text-gray-900"/>
-            </Link>
-          </div>
-
           <MenuSheet />
         </div>
       </div>
