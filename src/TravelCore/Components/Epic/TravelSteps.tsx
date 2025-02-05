@@ -4,10 +4,13 @@ import {
   CreditCard,
   Stamp as Passport,
 } from "lucide-react";
+import {useTranslation} from "react-i18next";
 
 export const TravelSteps = () => {
+  const { t } = useTranslation(["home"])
 
-    const scrollToTop = () => {
+
+  const scrollToTop = () => {
         window.scrollTo({
           top: 0,
           behavior: "smooth", // Habilita el scroll suave
@@ -17,30 +20,30 @@ export const TravelSteps = () => {
   const steps = [
     {
       number: "1",
-      title: "Ingresa tus datos",
-      description: "Completa los datos del viaje para ver ofertas exclusivas.",
+      title: t('label-title-content-step-1'),
+      description: t('label-text-content-step-1'),
       image: "../../../../Assets/steps1.webp",
       icon: ClipboardList,
     },
     {
       number: "2",
-      title: "Compara seguros de viaje",
-      description: "Analiza las coberturas y elige qué necesitas para viajar.",
+      title: t('label-title-content-step-2'),
+      description: t('label-text-content-step-2'),
       image: "../../../../Assets/steps2.webp",
       icon: FileText,
     },
     {
       number: "3",
-      title: "Paga tu asistencia",
-      description: "Revisa los datos y paga tu seguro médico internacional.",
+      title: t('label-title-content-step-3'),
+      description: t('label-text-content-step-3'),
       image: "../../../../Assets/steps3.webp",
       icon: CreditCard,
     },
     {
       number: "4",
-      title: "Viaja sin preocuparte",
+      title: t('label-title-content-step-4'),
       description:
-        "Recibe en tu correo el voucher con las instrucciones de uso.",
+          t('label-text-content-step-4'),
       image: "../../../../Assets/steps4.webp",
       icon: Passport,
     },
@@ -51,10 +54,10 @@ export const TravelSteps = () => {
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
-          Compra tu seguro de viaje
+          {t('title-stepper')}
         </h2>
         <p className="text-lg md:text-xl text-gray-500 italic">
-          en pocos pasos
+          {t('subtitle-stepper')}
         </p>
       </div>
 
@@ -111,7 +114,7 @@ export const TravelSteps = () => {
           onClick={scrollToTop} // Llama a la función de scroll suave
           className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 text-lg rounded-full cursor-pointer"
         >
-          Cotiza ahora tu asistencia →
+          {t('label-button-stepper')} →
         </button>
       </div>
     </section>
