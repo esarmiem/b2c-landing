@@ -3,7 +3,7 @@ import { Earth, Calendar, Users, Pencil, PlaneTakeoff, ArrowRight } from "lucide
 
 export const FilterForm: FC = () => {
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4">
       <div className="bg-white rounded-lg flex flex-col md:flex-row items-end justify-between p-4 gap-4 flex-wrap  ">
         {/* Origen */}
         <div className="flex items-end gap-2 w-full sm:w-1/2 md:w-auto">

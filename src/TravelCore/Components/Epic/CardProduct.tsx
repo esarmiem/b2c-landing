@@ -1,46 +1,56 @@
 import React from 'react';
+import { CircleCheck } from "lucide-react"
 
 interface CardProductProps {
   title: string;
   subtitle: string;
   price: string;
   originalPrice: string;
+  typeOfProduct: string;
   details: string[];
   recommended?: boolean;
 }
 
-const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, originalPrice, details, recommended }) => {
+const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, originalPrice, details, typeOfProduct, recommended }) => {
   return (
-    <div className={` rounded-2xl p-4 max-w-xs mx-auto border-2 border-neutral-800 ${recommended ? 'bg-red-500 text-white' : 'bg-white'}`}>
-      {recommended && (
-        <div className="text-white font-bold text-sm py-1 px-3 bg-red-700 rounded-full absolute top-3 right-3">
-          Recomendado
-        </div>
-      )}
-      <div className="text-center px-1">
-        <h2 className="font-bold text-2xl mb-2">{title}</h2>    
-        <h4 className={`text-base font-bold ${recommended ? 'text-white' : 'text-neutral-800'}`}>
+    <div className="max-w-[320px] rounded-3xl border-2 border-neutral-800 relative overflow-hidden">
+      <div className={` text-center px-1 py-8 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
+        {recommended && (
+          <div className="text-white font-bold text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
+            Recomendado
+          </div>
+        )}
+        <h2 className="font-bold text-2xl my-4">{title}</h2>
+        <div className="space-y-0 text-base font-bold">
+          <p className={`my-0 ${recommended ? 'text-white' : 'text-neutral-800'}`}>
             {subtitle}
-        </h4>
-
+          </p>
+          <p className="mt-1">Precio Total</p>
+        </div>
+        <div className="space-y-1">
+          <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-800'}`}>{price}</h3>
+          <span className={`${recommended ? 'text-rose-400' : 'text-neutral-800'} line-through text-sm`}>{originalPrice}</span>
+        </div>
       </div>
-      <div className="my-3 w-100 text-center">
-        <h3 className="text-3xl font-semibold">{price}</h3>
-        <span className="line-through text-sm text-gray-500 ml-2">{originalPrice}</span>
+      <div className="bg-stone-800 text-white py-2 text-center text-sm">{typeOfProduct}</div>
+      <div className="p-3 space-y-3">
+        <ul className="text-sm text-gray-600 mb-3">
+          {details.map((detail, idx) => (
+            <li key={idx} className="flex items-top mb-2 gap-1 font-bold">
+              <CircleCheck className="h-3 w-3 text-green-500 mt-1 flex-shrink-0" />
+              {detail}
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul className="text-sm text-gray-600 mb-3">
-        {details.map((detail, idx) => (
-          <li key={idx} className="flex items-center mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-green-500 mr-2">
-              <path d="M13.646 4.646a1 1 0 0 1 0 1.414L6.707 12.707a1 1 0 0 1-1.414 0L2.354 9.854a1 1 0 0 1 1.414-1.414L6 10.586 12.232 4.646a1 1 0 0 1 1.414 0z" />
-            </svg>
-            {detail}
-          </li>
-        ))}
-      </ul>
-      <button className="bg-red-500 text-white py-2 px-4 rounded-full w-full">
-        Seleccionar
-      </button>
+      <div className="p-3 space-y-1 text-center">
+        <button className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold">
+          Seleccionar
+        </button>
+        <a href="#" className="text-xs text-blue-600 hover:underline">
+          VER DETALLES DE COBERTURA
+        </a>
+      </div>
     </div>
   );
 };
