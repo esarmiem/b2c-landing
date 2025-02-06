@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
             >
               {t("label-link-sales")}: +57 317 5032 200
             </Link>
-          </div>
+          </div>  
 
           <div className="items-center hidden md:flex">
             <Link
