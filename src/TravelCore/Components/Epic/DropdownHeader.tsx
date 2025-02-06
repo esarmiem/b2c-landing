@@ -29,7 +29,7 @@ export const DropdownHeader: React.FC = () => {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative text-left hidden md:flex">
+    <div ref={dropdownRef} className="relative text-left hidden lg:flex">
       <div>
         <button 
           type="button" 
