@@ -90,12 +90,12 @@ export const MenuSheet= () => {
           <div className="p-6">
             <h3 className="text-gray-400 mb-4">{t('label-title-sidebar-lang')}</h3>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" className={`${i18n.language === 'es' ? 'bg-red-800' : ''} text-white`}
+              <Button variant="ghost" size="sm" className={`${i18n.language === 'es' ? 'bg-red-700' : ''} text-white`}
                       onClick={() => i18n.changeLanguage('es')}>
                 <Globe2 className="mr-2 h-4 w-4" />
                 esp
               </Button>
-              <Button variant="ghost" size="sm" className={`${i18n.language === 'en' ? 'bg-red-800' : ''} text-white`}
+              <Button variant="ghost" size="sm" className={`${i18n.language === 'en' ? 'bg-red-700' : ''} text-white`}
                       onClick={() => i18n.changeLanguage('en')}>
                 <Globe2 className="mr-2 h-4 w-4" />
                 eng
