@@ -2,63 +2,63 @@ import {
   ClipboardList,
   FileText,
   CreditCard,
+  Sparkle,
   Stamp as Passport,
 } from "lucide-react";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export const TravelSteps = () => {
-  const { t } = useTranslation(["home"])
-
+  const { t } = useTranslation(["home"]);
 
   const scrollToTop = () => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth", // Habilita el scroll suave
-        });
-      };
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Habilita el scroll suave
+    });
+  };
 
   const steps = [
     {
       number: "1",
-      title: t('label-title-content-step-1'),
-      description: t('label-text-content-step-1'),
+      title: t("label-title-content-step-1"),
+      description: t("label-text-content-step-1"),
       image: "../../../../Assets/steps1.webp",
       icon: ClipboardList,
     },
     {
       number: "2",
-      title: t('label-title-content-step-2'),
-      description: t('label-text-content-step-2'),
+      title: t("label-title-content-step-2"),
+      description: t("label-text-content-step-2"),
       image: "../../../../Assets/steps2.webp",
       icon: FileText,
     },
     {
       number: "3",
-      title: t('label-title-content-step-3'),
-      description: t('label-text-content-step-3'),
+      title: t("label-title-content-step-3"),
+      description: t("label-text-content-step-3"),
       image: "../../../../Assets/steps3.webp",
       icon: CreditCard,
     },
     {
       number: "4",
-      title: t('label-title-content-step-4'),
-      description:
-          t('label-text-content-step-4'),
+      title: t("label-title-content-step-4"),
+      description: t("label-text-content-step-4"),
       image: "../../../../Assets/steps4.webp",
       icon: Passport,
     },
   ];
 
   return (
-    <section className="container mx-auto px-4 py-12 md:py-16 lg:py-24">
+    <section className="container mx-auto px-4 py-10 md:py-12 lg:py-12">
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center flex flex-col items-center mb-12">
+        <Sparkle className="h-6 w-6 md:h-8 md:w-8 lg:h-8 lg:w-8 text-primary"/>
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
-          {t('title-stepper')}
+          {t("title-stepper")}
         </h2>
-        <p className="text-lg md:text-xl text-gray-500 italic">
-          {t('subtitle-stepper')}
-        </p>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold italic">
+          {t("subtitle-stepper")}
+        </h2>
       </div>
 
       {/* Timeline */}
@@ -69,26 +69,26 @@ export const TravelSteps = () => {
             <div
               key={index}
               className={`relative flex flex-col md:flex-row gap-8 ${
-                index % 2 === 0 ? "md:flex-row-reverse" : ""
+                index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
               }`}
             >
               {/* Content */}
               <div className="flex-1 md:w-1/2 flex items-center shadow-lg md:shadow-none">
                 <div
-                  className={`bg-white p-6 rounded-lg shadow-sm border relative ${
-                    index % 2 === 0 ? "md:text-start" : ""
+                  className={`bg-white flex gap-2 items-center p-6 rounded-lg shadow-sm border relative ${
+                    index % 2 === 0 ? "md:text-start" : "md:flex-row-reverse md:gap-4"
                   }`}
                 >
-                  <div className="flex items-center gap-2 mb-2 text-red-600 font-bold">
-            
+                  <div className="flex flex-col items-start gap-2 mb-2 text-red-600 font-bold">
                     <span>
                       {step.number}. {step.title}
                     </span>
-                    <div className="bg-red-500 text-white rounded-md p-1">
-                    <step.icon className="h-5 w-5" />
-                    </div>
+                    <p className="text-gray-600 font-normal">{step.description}</p>
                   </div>
-                  <p className="text-gray-600">{step.description}</p>
+                  
+                  <div className="bg-red-700 text-white rounded-md p-1">
+                      <step.icon className="h-7 w-7" />
+                    </div>
                 </div>
               </div>
               {/* Image */}
@@ -114,7 +114,7 @@ export const TravelSteps = () => {
           onClick={scrollToTop} // Llama a la función de scroll suave
           className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 text-lg rounded-full cursor-pointer"
         >
-          {t('label-button-stepper')} →
+          {t("label-button-stepper")} →
         </button>
       </div>
     </section>
