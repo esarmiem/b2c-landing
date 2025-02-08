@@ -6,20 +6,22 @@ export function TravelForm() {
   const { t } = useTranslation(["home"])
 
   return (
-    <div className="container mx-auto px-4 -mt-12 relative z-10">
+    <div className="container mx-auto px-4 relative z-10">
       <Tabs
         defaultValue="tab1"
-        className="bg-red-700 rounded-lg md:rounded-full shadow-lg p-8"
+        className=""//bg-red-700 rounded-lg md:rounded-full shadow-lg p-8
       >
-        <TabsList className="grid w-1/2 gap-10 grid-rows-2 md:grid-cols-2 mb-12 md:mb-0 -mt-12 rounded-sm bg-red-700">
+        <TabsList className="grid w-[500px] h-[50px] gap-2 grid-rows-2 md:grid-cols-2 mb-12 lg:ml-6 md:mb-0 -mt-16 rounded-md bg-red-700">
           <TabsTrigger
-            className="rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-6"
+            className="text-white data-[state=active]:bg-white data-[state=active]:mt-3 data-[state=inactive]:pt-4"
+            //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab1"
           >
             {t('label-tab-travel-assist')}
           </TabsTrigger>
           <TabsTrigger
-            className="rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-6"
+            className="text-white data-[state=active]:bg-white data-[state=active]:mt-3 data-[state=inactive]:pt-4"
+            //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab2"
             //disabled
           >
@@ -31,7 +33,7 @@ export function TravelForm() {
           <SearchFormContent />
         </TabsContent>
         <TabsContent value="tab2">
-          <div className="text-center text-white">
+          <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">
             {t('content-tab-comms')}
           </div>
         </TabsContent>

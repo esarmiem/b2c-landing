@@ -21,7 +21,7 @@ export function SearchFormContent() {
   const [travelers, setTravelers] = useState(1)
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" role="combobox" aria-expanded={open} className="justify-between rounded-full">
