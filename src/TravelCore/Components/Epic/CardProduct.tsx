@@ -29,7 +29,7 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
         </div>
         <div className="space-y-1">
           <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-800'}`}>{price}</h3>
-          <span className={`${recommended ? 'text-rose-400' : 'text-neutral-800'} line-through text-sm`}>{originalPrice}</span>
+          <span className={`${recommended ? 'text-[rgb(203,71,71)]' : 'text-neutral-800'} line-through text-sm`}>{originalPrice}</span>
         </div>
       </div>
       <div className="bg-stone-800 text-white py-2 text-center text-sm">{typeOfProduct}</div>
