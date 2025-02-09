@@ -4,9 +4,6 @@ import ProductsRow from '@/TravelCore/Components/Epic/ProductsRow'
 import DropdownFiltersProducts from '@/TravelCore/Components/Epic/DropdownFiltersProducts';
 
 const TripQuotePage: React.FC = () => {
-  const handleSelectPlan = async (): Promise<void> => {
-    console.log("Plan x seleccionado, redirigir al detalle de la compra");
-  };
 
     return (
         <>

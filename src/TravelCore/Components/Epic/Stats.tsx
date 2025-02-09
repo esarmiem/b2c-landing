@@ -19,7 +19,7 @@ export const Stats = () => {
   ];
 
   return (
-    <section className="py-16 bg-red-800 text-white">
+    <section className="hidden lg:flex pt-4 pb-16 bg-red-800 text-white">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((stat) => (

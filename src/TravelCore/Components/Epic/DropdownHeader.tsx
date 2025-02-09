@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from "../Raw/Link";
 import { ShieldPlus } from "lucide-react";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export const DropdownHeader: React.FC = () => {
   const { t } = useTranslation(["header"])
@@ -13,7 +13,8 @@ export const DropdownHeader: React.FC = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    // Define el tipo de la función antes de su uso
+    const handleClickOutside = (event: MouseEvent): void => {
       if (
         dropdownRef.current && 
         !dropdownRef.current.contains(event.target as Node)
@@ -29,7 +30,7 @@ export const DropdownHeader: React.FC = () => {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative text-left hidden md:flex">
+    <div ref={dropdownRef} className="relative items-center text-left hidden lg:flex">
       <div>
         <button 
           type="button" 
@@ -48,14 +49,14 @@ export const DropdownHeader: React.FC = () => {
             aria-hidden="true" 
             data-slot="icon"
           >
-            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
           </svg>
         </button>
       </div>
 
       {isDropdownOpen && (
         <div 
-          className="absolute right-0 z-10 mt-10 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden" 
+          className="absolute right-0 z-10 mt-40 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden" 
           role="menu" 
           aria-orientation="vertical" 
           aria-labelledby="menu-button"
@@ -79,9 +80,9 @@ export const DropdownHeader: React.FC = () => {
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
-                stroke-width="2" 
-                stroke-linecap="round" 
-                stroke-linejoin="round" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
                 className="lucide lucide-card-sd"
               >
                 <path d="M6 22a2 2 0 0 1-2-2V6l4-4h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2Z" />
@@ -102,6 +103,5 @@ export const DropdownHeader: React.FC = () => {
     </div>
   );
 };
-
 
 export default DropdownHeader;

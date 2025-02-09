@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react';
-import LoadingGif from '../../../../Assets/loading.gif';
+import LoadingGif from '../../../../Assets/loadinganimation.gif';
 
 interface LoadingScreenProps {
   message?: string;

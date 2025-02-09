@@ -32,9 +32,9 @@ export const HeroCarousel: React.FC<CarouselProps> = ({
   };
 
   return (
-    <div className="relative w-full mt-12" data-carousel="slide">
+    <div className="relative w-full" data-carousel="slide">
       {/* Carousel wrapper */}
-      <div className="relative h-48 sm:h-64 md:h-96 overflow-hidden">
+      <div className="relative h-[30vh] sm:h-[30vh] md:h-[50vh] overflow-hidden">
         {images.map((image, index) => (
           <div
             key={index}
@@ -45,7 +45,7 @@ export const HeroCarousel: React.FC<CarouselProps> = ({
             <div className="relative w-full h-full">
               <img
                 src={image}
-                className="absolute w-full h-full object-contain sm:object-contain md:object-cover"
+                className="absolute w-full h-full object-cover"
                 alt={`Slide ${index + 1}`}
               />
               {/* Overlay para mejorar la visibilidad en imágenes claras */}

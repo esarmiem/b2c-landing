@@ -66,9 +66,9 @@ export const Testimonials = () => {
   };
 
   return (
-    <section className="py-16 bg-red-800 text-white px-6">
+    <section className="hidden lg:flex py-16 bg-red-800 px-6">
       <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-12">
+        <h2 className="text-3xl text-white font-bold mb-6">
           {t('title-testimonials')}
         </h2>
         <div className="max-w-2xl mx-auto">
@@ -87,18 +87,20 @@ export const Testimonials = () => {
                     src={testimonial.image}
                     alt={testimonial.name}
                     onError={handleImageError}
-                    className={`rounded-full w-16 h-16 object-cover transition-opacity duration-300 ${
+                    className={`rounded-full border-red-800 border-8 w-16 h-16 lg:w-20 lg:h-20 object-cover transition-opacity duration-300 ${
                       imagesLoaded[testimonial.image] ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
                 </div>
-                <div className="flex justify-center gap-1 mb-4">
+                <div className="bg-white rounded-full -mt-14 pb-4 pt-10">
+                <div className="flex justify-center gap-1 pt-2 pb-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-current" />
+                    <Star key={i} className="h-5 w-5 fill-yellow-400 stroke-yellow-400" />
                   ))}
                 </div>
                 <p className="mb-4">{testimonial.text}</p>
                 <p className="font-semibold">{testimonial.name}</p>
+                </div>
               </div>
             ))}
           </div>
