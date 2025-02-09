@@ -15,6 +15,7 @@ const HomePage = lazy(() => import('../../TravelFeatures/Home/pages/homePage.tsx
 const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tripQuotePage.tsx'));
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
+const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'));
 
 export default function Router(): ReactElement | null {
     const routes: RouteObject[] = [
@@ -53,6 +54,10 @@ export default function Router(): ReactElement | null {
                 {
                     path: "billing",
                     element: <InvoicePage />,
+                },
+                {
+                    path: "billingResult",
+                    element: <BillingResultPage />,
                 },
             ],
         },
