@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 export const Header: React.FC = () => {
   const { t } = useTranslation(["header"])
   return (
-    <header className="fixed top-0 w-full bg-white z-50">
+    <header className="sticky top-0 w-full bg-white z-50">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
       <div className="flex h-14 items-center justify-between px-4 md:px-20">
         <Link href="/" className="font-extrabold text-xl text-red-700">
