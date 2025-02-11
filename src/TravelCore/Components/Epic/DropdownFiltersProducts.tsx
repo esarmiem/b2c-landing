@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { List, Columns3, TrendingDown, TrendingUp, ShieldPlus } from "lucide-react";
  
-interface DropdownFiltersProductsProps {
-  viewType: 'list' | 'grid';
+interface DropdownFiltersProductsProps {  
   setViewType: (type: 'list' | 'grid') => void;
 }
 
-const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ viewType, setViewType }) => {
+const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setViewType }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
