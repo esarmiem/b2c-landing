@@ -46,12 +46,12 @@ export default function HomePage () {
       const authISL = new AuthISL();
       const responseISL = await authISL.loginISL();
 
-      if (response?.data && responseISL?.data && !response.error) {
+      if (response?.data && responseISL?.data && !response.error && !responseISL.error) {
         const sessionData = {
           token: response.data.payload.accessToken,
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser,
-          token_isl: responseISL?.data.result.token ?? ""
+          token_isl: responseISL.data.result.token
         };
 
         setSession?.(sessionData);

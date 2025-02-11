@@ -3,5 +3,14 @@
   "label-link-products": "Products",
   "label-link-agency": "Agencies Access",
   "label-link-assist": "International Assistance",
-  "label-link-comms": "International Communication"
+  "label-link-comms": "International Communication",
+  "label-link-emergency": "Report an emergency",
+  "label-link-vip-rooms": "Pre-registration VIP rooms",
+  "label-title-sidebar-agency": "Are you an Agency?",
+  "label-button-sidebar-agency": "Login",
+  "label-title-sidebar-lang": "Language",
+  "label-title-sidebar-contact": "Contact us",
+  "label-title-sidebar-sales": "Sales",
+  "label-title-sidebar-services": "Customer service",
+  "label-title-sidebar-questions": "Do you have Questions?"
 }

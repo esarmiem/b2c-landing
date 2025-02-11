@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react';
-import LoadingGif from '../../../../Assets/loading.gif';
+import LoadingGif from '../../../../Assets/loadinganimation.gif';
 
 interface LoadingScreenProps {
   message?: string;
@@ -7,8 +7,8 @@ interface LoadingScreenProps {
 }
 
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({
-  message = "Buscando tus beneficios exclusivos ...",
-  subMessage = "Más de 165 personas están explorando este destino. ¡Sé el siguiente en aprovechar las mejores ofertas!",
+  message,
+  subMessage,
 }) => {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-white">

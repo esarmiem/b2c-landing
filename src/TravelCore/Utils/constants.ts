@@ -17,4 +17,4 @@ export const PASSWORD: string = import.meta.env.VITE_REACT_APP_USER_PASSWORD || 
 export const ISL_USER_NAME = import.meta.env.VITE_ISL_USER_NAME || '';
 export const ISL_PASSWORD = import.meta.env.VITE_ISL_PASSWORD || '';
 export const ISL_APP_SERVICE_UPGRADES = import.meta.env.VITE_ISL_APP_SERVICE_UPGRADES || '';
-export const ISL_AUTHENTICATION = import.meta.env.VITE_ISL_AUTHENTICATION || '';
+export const ISL_LOGIN = import.meta.env.VITE_REACT_APP_API_URL_ISL || '';

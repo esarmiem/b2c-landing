@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button'; // Adjust import path as needed
-import { LoadingScreen } from './LoadingScreen'; // Your loading screen component
+import { LoadingScreen } from './LoadingScreen';
+import {useTranslation} from "react-i18next"; // Your loading screen component
+import { Search } from 'lucide-react';
 
 export const TravelButtonForm: React.FC = () => {
+  const { t } = useTranslation(["home"])
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -20,15 +23,16 @@ export const TravelButtonForm: React.FC = () => {
   };
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen message={t("label-title-loader")} subMessage={t("label-text-loader")}/>;
   }
 
   return (
       <Button 
-        className="bg-red-600 hover:bg-red-700 rounded-full"
+        className="bg-red-600 hover:bg-black rounded-full lg:w-full"
         onClick={handleSearch}
       >
-        Buscar
+        <Search />
+        {t('label-button-search')}
       </Button>
   );
 };

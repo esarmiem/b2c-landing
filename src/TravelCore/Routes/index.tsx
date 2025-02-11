@@ -15,6 +15,8 @@ const HomePage = lazy(() => import('../../TravelFeatures/Home/pages/homePage.tsx
 const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tripQuotePage.tsx'));
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
+const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'));
+const TravelerPage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/TravelerPage.tsx'));
 
 export default function Router(): ReactElement | null {
   const routes: RouteObject[] = [
@@ -40,6 +42,10 @@ export default function Router(): ReactElement | null {
           path: "comms",
           element: <CommsQuotePage/>,
         },
+        {
+          path: "client-data",
+          element: <TravelerPage/>,
+        }
       ],
     },
     {
@@ -47,8 +53,22 @@ export default function Router(): ReactElement | null {
       element: <Layout/>,
       children: [
         {
-          index: true,
-          element: <InvoicePage/>,
+            path: "invoice",
+            element: <Layout />,
+            children: [
+                {
+                    index: true,
+                    element: <InvoicePage />,
+                },
+                {
+                    path: "billing",
+                    element: <InvoicePage />,
+                },
+                {
+                    path: "billingResult",
+                    element: <BillingResultPage />,
+                },
+            ],
         },
         {
           path: "billing",

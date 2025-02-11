@@ -1,23 +1,25 @@
+import {useTranslation} from "react-i18next";
 
 
 export const Stats = () => {
+  const { t } = useTranslation(["home"])
   const stats = [
     {
-      number: '+ de 290.000',
-      label: 'Seguros Vendidos',
+      number: t('data-sales-testimonials'),
+      label: t('text-sales-testimonials'),
     },
     {
-      number: '+ de 500.000',
-      label: 'Viajeros Asegurados',
+      number: t('data-travelers-testimonials'),
+      label: t('text-travelers-testimonials'),
     },
     {
-      number: '+ de 10 Años',
-      label: 'de experiencia en el mercado',
+      number: t('data-experience-testimonials'),
+      label: t('text-experience-testimonials'),
     },
   ];
 
   return (
-    <section className="py-16 bg-red-800 text-white">
+    <section className="hidden lg:flex pt-4 pb-16 bg-red-800 text-white">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((stat) => (

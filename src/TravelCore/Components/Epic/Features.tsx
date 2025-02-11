@@ -15,23 +15,23 @@ export const Features = () => {
     },
     {
       title: t('title-accordion-feature-medicines'),
-      content: 'Reembolso de medicamentos prescritos durante el viaje, con cobertura para medicamentos esenciales y de emergencia.'
+      content: t('content-accordion-feature-medicines')
     },
     {
       title: t('title-accordion-feature-dental'),
-      content: 'Atención dental de emergencia en el extranjero, incluyendo tratamientos para aliviar el dolor y emergencias dentales.'
+      content: t('content-accordion-feature-dental')
     },
     {
       title: t('title-accordion-feature-cancel'),
-      content: 'Compensación por cancelaciones de vuelo, incluyendo reembolso de gastos de hotel y nuevos tickets cuando sea necesario.'
+      content: t('content-accordion-feature-cancel')
     },
     {
       title: t('title-accordion-feature-loss'),
-      content: 'Compensación por pérdida, robo o daño del equipaje durante el viaje, con cobertura para artículos personales.'
+      content: t('content-accordion-feature-loss')
     },
     {
       title:  t('title-accordion-feature-preexisting'),
-      content: 'Cobertura para condiciones médicas preexistentes, incluyendo seguimiento y tratamiento de enfermedades crónicas durante el viaje.'
+      content: t('content-accordion-feature-preexisting')
     }
   ];
 
@@ -40,22 +40,23 @@ export const Features = () => {
   };
 
   return (
-    <section className="py-16 px-6 container mx-auto">
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div className="relative">
+    <section className="py-6 lg:py-2 px-6 mx-auto bg-gray-100">
+      <h2 className="text-3xl font-bold text-center mb-12 lg:mb-0">
+            {t('title-features')}
+          </h2>
+      <div className="grid md:grid-cols-2 gap-4 px-8 items-center">
+        <div className="relative order-last md:order-first">
           <img
             src={travelImage}
             alt="Travel illustration"
             className="w-full"
           />
         </div>
+        
         <div>
-          <h2 className="text-3xl font-bold mb-8">
-            {t('title-features')}
-          </h2>
           <div className="w-full space-y-2">
             {features.map((feature, i) => (
-              <div key={i} className="border rounded-lg">
+              <div key={i} className="border-2 rounded-lg bg-white">
                 <button
                   className="w-full flex justify-between items-center p-4 font-medium text-left"
                   onClick={() => toggleItem(`item-${i}`)}

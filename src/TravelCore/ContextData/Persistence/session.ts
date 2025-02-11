@@ -1,4 +1,4 @@
-const SESSION_KEYS: string[] = ['token', 'role', 'user_id'];
+const SESSION_KEYS: string[] = ['token', 'role', 'user_id', 'token_isl'];
 
 /* Use an IIFE to export the persisted state in a variable */
 export const getPersistedSession: Record<string, string> = (() => {

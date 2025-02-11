@@ -23,11 +23,12 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 
     if (session && session.token) {
         defaultHeaders.Authorization = 'Bearer ' + session.token;
+        console.log('session.token', session.token);
         //defaultHeaders.apiKey = API_KEY;
     }
 
-    defaultHeaders['Accept'] = 'application/json';
     //defaultHeaders['apiKey'] = API_KEY;
+    defaultHeaders['Accept'] = 'application/json';
     defaultHeaders['Content-Type'] = 'application/json';
     defaultHeaders['Access-Control-Allow-Origin'] = '*';
     return defaultHeaders;
@@ -36,13 +37,10 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
     const url = args.pathISL ? args.pathISL : `${BASE_URL}/${args.path}`;
     const headers = args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers;
-    console.log("path ISL: ", args.pathISL)
 
     const config: AxiosRequestConfig = {
         method: args.method,
         url: url,
-        // url: `${BASE_URL}/${args.path}`,
-        //headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers,
         headers: headers,
         data: args.data,
         timeout: args.timeout || 60000,
