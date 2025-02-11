@@ -14,7 +14,7 @@ export function TravelForm() {
       >
         <TabsList className="grid md:w-[500px] md:h-[50px] gap-2 grid-cols-2 md:grid-cols-2 pt-0 lg:ml-6 mb-3 md:mb-0 md:-mt-20 -mt-10 rounded-lg bg-red-700">
           <TabsTrigger
-            className="text-white text-xs md:text-sm data-[state=active]:bg-white md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
+            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab1"
           >
@@ -22,7 +22,7 @@ export function TravelForm() {
             {t('label-tab-travel-assist')}
           </TabsTrigger>
           <TabsTrigger
-            className="text-white text-xs md:text-sm data-[state=active]:bg-white md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
+            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab2"
             //disabled

@@ -56,7 +56,7 @@ export function SearchFormContent() {
             aria-expanded={open}
             className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
           >
-            <div className="flex items-center gap-2">
+            <div className="items-center gap-2 hidden md:flex">
               <span className="text-sm text-muted-foreground">Where to?</span>
               <TooltipProvider>
                 <Tooltip
@@ -128,7 +128,7 @@ export function SearchFormContent() {
             variant="outline"
             className="justify-between text-left font-normal rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
           >
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <span className="text-sm text-muted-foreground">When?</span>
               <TooltipProvider>
                 <Tooltip
