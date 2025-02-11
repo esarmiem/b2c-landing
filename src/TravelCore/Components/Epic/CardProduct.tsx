@@ -15,22 +15,26 @@ interface CardProductProps {
 const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, originalPrice, details, typeOfProduct, recommended, viewType = 'grid', }) => {
   if (viewType === 'list') {
     return (
-      <div className="flex border-2 border-neutral-800 rounded-lg overflow-hidden">
+      <div className="flex border-2 border-neutral-800 rounded-3xl overflow-hidden">
         {/* Sección izquierda: Información resumida */}
-        <div className={`w-1/3 flex flex-col items-center justify-center p-4 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
-          <h2 className="font-bold text-lg">{title}</h2>
+        <div className={`w-1/2 flex flex-col text-center justify-around  ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
           {recommended && (
-            <div className="mt-2 text-xs font-bold bg-stone-800 text-white px-2 py-1 rounded">
+            <div className="mt-0 text-xs font-normal  bg-stone-800 text-white px-2 py-1 rounded mx-auto ">
               Recomendado
             </div>
           )}
+          <div className="space-y-1 py-8">
+            <h2 className="font-bold text-2xl">{title}</h2>
+            <p className={`font-bold ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>{subtitle}</p>
+            <p className="font-bold">Precio Total</p>
+            <p className={`mt-1 text-4xl font-bold ${recommended ? 'text-neutral-100' : 'text-red-600'}`}>{price}</p>
+            <p className={`line-through ${recommended ? 'text-[rgb(203,71,71)]' : 'text-neutral-400'}`}>{originalPrice}</p>
+          </div>
+          <div className="bg-stone-800 text-white py-2 text-center text-sm w-100">{typeOfProduct}</div>
         </div>
         {/* Sección derecha: Detalles */}
-        <div className="w-2/3 p-4 flex flex-col justify-between">
+        <div className="w-1/2 p-4 flex flex-col justify-between">
           <div>
-            <p className={`font-bold ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>{subtitle}</p>
-            <p className="mt-1 text-xl font-bold">{price}</p>
-            <p className="line-through text-sm">{originalPrice}</p>
             <ul className="mt-2 space-y-1">
               {details.map((detail, idx) => (
                 <li key={idx} className="flex items-center gap-1 text-sm">
@@ -40,7 +44,10 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
               ))}
             </ul>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 text-center space-y-3">
+            <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
+              VER DETALLES DE COBERTURA
+            </a>
             <button className="w-full bg-red-500 text-white py-2 px-4 rounded-full font-bold  hover:bg-red-700 transition-all">
               Seleccionar
             </button>
@@ -54,7 +61,7 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
     <div className="rounded-3xl border-2 border-neutral-800 relative overflow-hidden">
       <div className={` text-center px-1 py-8 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
         {recommended && (
-          <div className="text-white font-bold text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
+          <div className="text-white font-normal text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
             Recomendado
           </div>
         )}
@@ -66,11 +73,11 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
           <p className="mt-1">Precio Total</p>
         </div>
         <div className="space-y-1">
-          <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-800'}`}>{price}</h3>
-          <span className={`${recommended ? 'text-[rgb(203,71,71)]' : 'text-neutral-800'} line-through text-sm`}>{originalPrice}</span>
+          <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>{price}</h3>
+          <span className={`${recommended ? 'text-[rgb(203,71,71)]' : 'text-neutral-400'} font-semibold line-through text-sm`}>{originalPrice}</span>
         </div>
       </div>
-      <div className="bg-stone-800 text-white py-2 text-center text-sm">{typeOfProduct}</div>
+      <div className="bg-stone-800 text-white py-2 text-center text-xs font-semibold">{typeOfProduct}</div>
       <div className="p-3 space-y-3">
         <ul className="text-sm text-gray-600 mb-3">
           {details.map((detail, idx) => (
@@ -85,7 +92,7 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
         <button className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold hover:bg-red-700 transition-all">
           Seleccionar
         </button>
-        <a href="#" className="text-xs text-blue-600 hover:underline">
+        <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
           VER DETALLES DE COBERTURA
         </a>
       </div>

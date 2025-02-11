@@ -49,6 +49,7 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
         'Cobertura deportes amateur USD 1,000.00',
         'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
       ],
+      recommended: false,
     },
     {
       title: 'DISCOVER',
