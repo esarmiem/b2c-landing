@@ -2,8 +2,14 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Minus, Plus, Users } from "lucide-react"
-import {useTranslation} from "react-i18next";
+import { Info, Minus, Plus, Users } from "lucide-react"
+import { useTranslation } from "react-i18next"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface TravelerAge {
   id: number
@@ -18,6 +24,7 @@ interface TravelersModalProps {
 export function TravelersModal({ travelers, setTravelers }: TravelersModalProps) {
   const { t } = useTranslation(["home"])
   const [ages, setAges] = useState<TravelerAge[]>([{ id: 1, age: "" }])
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
 
   const handleAddTraveler = () => {
     setTravelers(travelers + 1)
@@ -38,9 +45,34 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="justify-start rounded-full">
-          <Users className="mr-2 h-4 w-4" />
-          {travelers} {travelers === 1 ? t('content-select-travelers') : t('content-select-travelers') + "s"}
+        <Button variant="outline" className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">How many?</span>
+            <TooltipProvider>
+              <Tooltip
+                open={activeTooltip === "travelers"}
+                onOpenChange={(open) => setActiveTooltip(open ? "travelers" : null)}
+              >
+                <TooltipTrigger asChild>
+                  <span
+                    onMouseEnter={() => setActiveTooltip("travelers")}
+                    onMouseLeave={() => setActiveTooltip(null)}
+                  >
+                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="w-64">Specify the number of travelers and their ages. This helps us provide accurate pricing and recommendations for your group.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span className="text-ellipsis overflow-hidden">
+              {travelers} {travelers === 1 ? t('content-select-travelers') : t('content-select-travelers') + "s"}
+            </span>
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -93,4 +125,3 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
     </Dialog>
   )
 }
-

@@ -12,7 +12,7 @@ export function TravelForm() {
         defaultValue="tab1"
         className=""//bg-red-700 rounded-lg md:rounded-full shadow-lg p-8
       >
-        <TabsList className="grid md:w-[500px] md:h-[50px] gap-2 grid-cols-2 md:grid-cols-2 pt-0 lg:ml-6 mb-3 md:mb-0 -mt-16 rounded-lg bg-red-700">
+        <TabsList className="grid md:w-[500px] md:h-[50px] gap-2 grid-cols-2 md:grid-cols-2 pt-0 lg:ml-6 mb-3 md:mb-0 md:-mt-20 -mt-10 rounded-lg bg-red-700">
           <TabsTrigger
             className="text-white text-xs md:text-sm data-[state=active]:bg-white md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
