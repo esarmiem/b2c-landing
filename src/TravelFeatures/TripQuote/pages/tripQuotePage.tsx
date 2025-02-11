@@ -17,10 +17,13 @@ const TripQuotePage: React.FC = () => {
                     <h3 className='font-display tracking-tight font-bold text-slate-900 md:text-3xl'>
                         Asistencia para tu viaje
                     </h3>
-                    <DropdownFiltersProducts viewType={viewType} setViewType={setViewType}  />
+                    <DropdownFiltersProducts setViewType={setViewType} />
+                </div>
+                <ProductsRow viewType={viewType} />
+                <div className="mx-auto my-3 p-4 align-middle text-center">
+                    <button className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all">Mostrar Más Opciones</button>
                 </div>
             </div>
-            <ProductsRow viewType={viewType} />
         </>
     );
 };
