@@ -1,8 +1,8 @@
-import {ASSISTANCE_API} from '../../../TravelCore/Services/Apis/Assistance'
+import { ASSISTANCE_API } from '@/TravelCore/Services/Apis/Order'
 
 interface AssistanceResponse {
     idProspecto: number
-    planes: object
+    planes: object[]
 }
 
 interface AssistanceRequest {
@@ -21,6 +21,6 @@ interface AssistanceRequest {
 
 export class TravelAssistance{
     async getOrderPriceByAge(data: AssistanceRequest): Promise<AssistanceResponse> {
-        return await ASSISTANCE_API.getOrderPriceByAge({data})
+        return await ASSISTANCE_API.getOrderPriceEdad(data)
     }
 }

@@ -1,4 +1,4 @@
-import {MastersServices} from "../../../TravelCore/Services/Apis/Masters"
+import {MastersServices} from "@/TravelCore/Services/Apis/Masters"
 
 export class Masters{
 

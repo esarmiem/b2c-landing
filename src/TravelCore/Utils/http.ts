@@ -9,7 +9,8 @@ interface Session {
 
 interface AxiosHttpArgs {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE'
-    path: string
+    path?: string
+    pathISL?: string
     session?: Session | null
     headers?: Record<string, string>
     data?: any
@@ -22,24 +23,28 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 
     if (session && session.token) {
         defaultHeaders.Authorization = 'Bearer ' + session.token;
+        console.log('session.token', session.token);
         //defaultHeaders.apiKey = API_KEY;
     }
 
     //defaultHeaders['apiKey'] = API_KEY;
+    defaultHeaders['Accept'] = 'application/json';
     defaultHeaders['Content-Type'] = 'application/json';
-
+    defaultHeaders['Access-Control-Allow-Origin'] = '*';
     return defaultHeaders;
 }
 
 export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
+    const url = args.pathISL ? args.pathISL : `${BASE_URL}/${args.path}`;
+    const headers = args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers;
+
     const config: AxiosRequestConfig = {
         method: args.method,
-        url: `${BASE_URL}/${args.path}`,
-        headers: args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers,
+        url: url,
+        headers: headers,
         data: args.data,
         timeout: args.timeout || 60000,
     };
-
     try {
         const response: AxiosResponse = await axios({ ...config, ...args.customConfig });
         return { data: response.data, error: null };

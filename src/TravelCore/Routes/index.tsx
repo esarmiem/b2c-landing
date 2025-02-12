@@ -1,5 +1,5 @@
-import { lazy, ReactElement } from 'react';
-import { useRoutes, RouteObject } from 'react-router-dom';
+import {lazy, ReactElement} from 'react';
+import {useRoutes, RouteObject} from 'react-router-dom';
 //import SuspenseLoader from '../Components/Epic/SuspenseLoader';
 import Layout from '../Styles/Layout';
 
@@ -16,52 +16,78 @@ const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tr
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
 const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'));
+const TravelerPage = lazy(() => import('../../TravelFeatures/Traveler/pages/TravelerPage.tsx'));
 
 export default function Router(): ReactElement | null {
-    const routes: RouteObject[] = [
+  const routes: RouteObject[] = [
+    {
+      path: "/",
+      element: <Layout/>,
+      children: [
         {
-            path: "/",
-            element: <Layout />,
-            children: [
-                {
-                    index: true,
-                    element: <HomePage />,
-                }
-            ],
+          index: true,
+          element: <HomePage/>,
+        }
+      ],
+    },
+    {
+      path: "quote",
+      element: <Layout/>,
+      children: [
+        {
+          path: "travel",
+          element: <TripQuotePage/>,
         },
         {
-            path: "quote",
-            element: <Layout />,
-            children: [
-                {
-                    path: "travel",
-                    element: <TripQuotePage />,
-                },
-                {
-                    path: "comms",
-                    element: <CommsQuotePage />,
-                },
-            ],
+          path: "comms",
+          element: <CommsQuotePage/>,
         },
+        // {
+        //   path: "client-data",
+        //   element: <TravelerPage/>,
+        // },
+        // {
+        //   path: "billing-invoice",
+        //   element: <BillingPage/>,
+        // }
+      ],
+    },
+    {
+      path: "client-data",
+      element: <Layout/>,
+      children: [
         {
-            path: "invoice",
-            element: <Layout />,
-            children: [
-                {
-                    index: true,
-                    element: <InvoicePage />,
-                },
-                {
-                    path: "billing",
-                    element: <InvoicePage />,
-                },
-                {
-                    path: "billingResult",
-                    element: <BillingResultPage />,
-                },
-            ],
-        },
-    ];
+          index: true,
+          element: <TravelerPage/>,
+        }
+      ],
+    },
+    {
+      path: "invoice",
+      element: <Layout/>,
+      children: [
+        // {
+        //     path: "invoice",
+        //     element: <Layout />,
+        //     children: [
+            {
+                index: true,
+                element: <InvoicePage />,
+            },
+            // {
+            //     path: "billing",
+            //     element: <InvoicePage />,
+            // },
+            {
+                path: "billingResult",
+                element: <BillingResultPage />,
+            },
+            //     },
+            // ],
 
-    return useRoutes(routes);
+      ],
+    },
+  ];
+
+  return useRoutes(routes);
 }

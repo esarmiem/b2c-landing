@@ -134,7 +134,8 @@ const CardProduct: React.FC<CardProductProps> = ({
               className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold hover:bg-red-700 transition-all"
               onClick={openModal}
             >
-              Seleccionar
+              <a href="/client-data" className="text-white hover:bg-red-700">
+                Seleccionar</a>
             </button>
             <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
               VER DETALLES DE COBERTURA
