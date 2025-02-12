@@ -24,8 +24,10 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
   const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null)
 
   const handleAddTraveler = () => {
-    setTravelers(travelers + 1)
-    setAges([...ages, { id: ages.length + 1, age: "0" }])
+    if (travelers < 9) {  // Agregamos esta validación
+      setTravelers(travelers + 1)
+      setAges([...ages, { id: ages.length + 1, age: "0" }])
+    }
   }
 
   const handleRemoveTraveler = (idToRemove: number) => {
@@ -67,7 +69,7 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="w-64">
-                    Specify the number of travelers and their ages. This helps us provide accurate pricing and
+                    Specify the number of travelers and their ages (maximum 9 travelers). This helps us provide accurate pricing and
                     recommendations for your group.
                   </p>
                 </TooltipContent>
@@ -82,7 +84,7 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80" align="start" side="bottom">
+      <PopoverContent className="w-auto" align="start" side="bottom">
         <div className="flex flex-col max-h-[320px]">
           <div className="flex-1 overflow-y-auto pr-2">
             <div className="space-y-4">
@@ -99,7 +101,13 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="min-w-8 text-center">{travelers}</span>
-                  <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleAddTraveler}>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-8 w-8" 
+                    onClick={handleAddTraveler}
+                    disabled={travelers >= 9}  // Agregamos esta propiedad
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>

@@ -57,7 +57,7 @@ export function SearchFormContent() {
             className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
           >
             <div className="items-center gap-2 hidden md:flex">
-              <span className="text-sm text-muted-foreground">Where to?</span>
+              <span className="text-sm text-muted-foreground">{t("placeholder-tooltip-destination")}</span>
               <TooltipProvider>
                 <Tooltip
                   open={activeTooltip === "destination"} // Controla si este Tooltip está abierto
@@ -75,8 +75,7 @@ export function SearchFormContent() {
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="w-64">
-                      Choose from our curated list of popular destinations. Each
-                      location offers unique experiences and attractions.
+                      {t("tooltip-destination")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -129,7 +128,7 @@ export function SearchFormContent() {
             className="justify-between text-left font-normal rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
           >
             <div className="hidden md:flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">When?</span>
+              <span className="text-sm text-muted-foreground">{t("placeholder-tooltip-dates")}</span>
               <TooltipProvider>
                 <Tooltip
                   open={activeTooltip === "dates"} // Controla si este Tooltip está abierto
