@@ -17,6 +17,7 @@ const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
 const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'));
 const TravelerPage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/TravelerPage.tsx'));
+const BillingPage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/BillingPage.tsx'));
 
 export default function Router(): ReactElement | null {
   const routes: RouteObject[] = [
@@ -45,6 +46,10 @@ export default function Router(): ReactElement | null {
         {
           path: "client-data",
           element: <TravelerPage/>,
+        },
+        {
+          path: "billing-invoice",
+          element: <BillingPage/>,
         }
       ],
     },

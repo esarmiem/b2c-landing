@@ -12,5 +12,9 @@
   "label-title-sidebar-contact": "Contact us",
   "label-title-sidebar-sales": "Sales",
   "label-title-sidebar-services": "Customer service",
-  "label-title-sidebar-questions": "Do you have Questions?"
+  "label-title-sidebar-questions": "Do you have Questions?",
+  "label-title-travelers-page": "Traveler's data",
+  "label-title-traveler-page": "Traveler data",
+  "label-description-traveler-page": "By entering your data, you accept our",
+  "label-link-privacy-policy": "Data Handling and Terms of Use"
 }
