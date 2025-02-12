@@ -1,33 +1,46 @@
-import { useState } from "react"
+import * as React from "react"
+import { Info, Minus, Plus, Trash2, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Minus, Plus, Users } from "lucide-react"
-import {useTranslation} from "react-i18next";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useTranslation } from "react-i18next"
 
 interface TravelerAge {
   id: number
   age: string
 }
 
-interface TravelersModalProps {
+interface TravelersPopoverProps {
   travelers: number
   setTravelers: (value: number) => void
 }
 
-export function TravelersModal({ travelers, setTravelers }: TravelersModalProps) {
+export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, setTravelers }) => {
   const { t } = useTranslation(["home"])
-  const [ages, setAges] = useState<TravelerAge[]>([{ id: 1, age: "" }])
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [ages, setAges] = React.useState<TravelerAge[]>([{ id: 1, age: "0" }])
+  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null)
 
   const handleAddTraveler = () => {
-    setTravelers(travelers + 1)
-    setAges([...ages, { id: ages.length + 1, age: "" }])
+    if (travelers < 9) {  // Agregamos esta validación
+      setTravelers(travelers + 1)
+      setAges([...ages, { id: ages.length + 1, age: "0" }])
+    }
   }
 
-  const handleRemoveTraveler = () => {
+  const handleRemoveTraveler = (idToRemove: number) => {
     if (travelers > 1) {
       setTravelers(travelers - 1)
-      setAges(ages.slice(0, -1))
+      setAges(
+        ages
+          .filter((age) => age.id !== idToRemove)
+          .map((age, index) => ({
+            ...age,
+            id: index + 1,
+          })),
+      )
     }
   }
 
@@ -36,61 +49,110 @@ export function TravelersModal({ travelers, setTravelers }: TravelersModalProps)
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="justify-start rounded-full">
-          <Users className="mr-2 h-4 w-4" />
-          {travelers} {travelers === 1 ? t('content-select-travelers') : t('content-select-travelers') + "s"}
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
+        >
+          <div className="hidden md:flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">How many?</span>
+            <TooltipProvider>
+              <Tooltip
+                open={activeTooltip === "travelers"}
+                onOpenChange={(open) => setActiveTooltip(open ? "travelers" : null)}
+              >
+                <TooltipTrigger asChild>
+                  <span onMouseEnter={() => setActiveTooltip("travelers")} onMouseLeave={() => setActiveTooltip(null)}>
+                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="w-64">
+                    Specify the number of travelers and their ages (maximum 9 travelers). This helps us provide accurate pricing and
+                    recommendations for your group.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span className="text-ellipsis overflow-hidden">
+              {travelers} {travelers === 1 ? t("content-select-travelers") : t("content-select-travelers") + "s"}
+            </span>
+          </div>
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{t('title-modal-travelers')}</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="flex items-center justify-between px-4">
-            <span>{t('label-select-count-travelers')}</span>
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" onClick={handleRemoveTraveler} disabled={travelers <= 1}>
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="w-8 text-center">{travelers}</span>
-              <Button variant="outline" size="icon" onClick={handleAddTraveler}>
-                <Plus className="h-4 w-4" />
-              </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto" align="start" side="bottom">
+        <div className="flex flex-col max-h-[320px]">
+          <div className="flex-1 overflow-y-auto pr-2">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span>{t("label-select-count-travelers")}</span>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => handleRemoveTraveler(ages[ages.length - 1].id)}
+                    disabled={travelers <= 1}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="min-w-8 text-center">{travelers}</span>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-8 w-8" 
+                    onClick={handleAddTraveler}
+                    disabled={travelers >= 9}  // Agregamos esta propiedad
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {ages.map((traveler) => (
+                <React.Fragment key={traveler.id}>
+                  <Separator />
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="min-w-[100px]">
+                      {t("label-input-age-travelers")} {traveler.id}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        value={traveler.age}
+                        onChange={(e) => handleAgeChange(traveler.id, e.target.value)}
+                        className="w-20"
+                        min="0"
+                        max="120"
+                      />
+                      <span>{t("label-input-age-travelers-sufix")}</span>
+                      {travelers > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive"
+                          onClick={() => handleRemoveTraveler(traveler.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
             </div>
           </div>
-          {ages.map((traveler) => (
-            <div key={traveler.id} className="flex items-center gap-4 px-4">
-              <span className="min-w-[100px]">{t('label-input-age-travelers')} {traveler.id}</span>
-              <div className="flex items-center gap-2 flex-1">
-                <Input
-                  type="number"
-                  value={traveler.age}
-                  onChange={(e) => handleAgeChange(traveler.id, e.target.value)}
-                  className="w-20"
-                  min="0"
-                  max="120"
-                />
-                <span>{t('label-input-age-travelers-sufix')}</span>
-              </div>
-              {travelers > 1 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setTravelers(travelers - 1)
-                    setAges(ages.filter((age) => age.id !== traveler.id))
-                  }}
-                >
-                  {t('action-input-travelers')}
-                </Button>
-              )}
-            </div>
-          ))}
+          <div className="sticky bottom-0 pt-4 bg-white">
+            <Button className="w-full bg-red-600 hover:bg-red-700 text-white" onClick={() => setIsOpen(false)}>
+              {t("action-apply")}
+            </Button>
+          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   )
 }
-

@@ -28,7 +28,7 @@ export const TravelButtonForm: React.FC = () => {
 
   return (
       <Button 
-        className="bg-red-600 hover:bg-black rounded-full lg:w-full"
+        className="bg-red-600 hover:bg-black rounded-full lg:w-full h-auto"
         onClick={handleSearch}
       >
         <Search />
