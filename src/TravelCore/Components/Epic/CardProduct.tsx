@@ -11,7 +11,7 @@ interface CardProductProps {
   recommended?: boolean;
 }
 
-const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, originalPrice, details, typeOfProduct, recommended }) => {
+const CardProduct = ({ title, subtitle, price, originalPrice, details, typeOfProduct, recommended }: {CardProductProps}) => {
   return (
     <div className="max-w-[320px] rounded-3xl border-2 border-neutral-800 relative overflow-hidden">
       <div className={` text-center px-1 py-8 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
@@ -45,7 +45,7 @@ const CardProduct: React.FC<CardProductProps> = ({ title, subtitle, price, origi
       </div>
       <div className="p-3 space-y-1 text-center">
         <button className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold">
-          Seleccionar
+          <a href="/client-data">Seleccionar</a>
         </button>
         <a href="#" className="text-xs text-blue-600 hover:underline">
           VER DETALLES DE COBERTURA

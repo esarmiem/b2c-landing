@@ -16,8 +16,7 @@ const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/tr
 const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'));
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'));
 const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'));
-const TravelerPage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/TravelerPage.tsx'));
-const BillingPage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/BillingPage.tsx'));
+const TravelerPage = lazy(() => import('../../TravelFeatures/Traveler/pages/TravelerPage.tsx'));
 
 export default function Router(): ReactElement | null {
   const routes: RouteObject[] = [
@@ -43,13 +42,23 @@ export default function Router(): ReactElement | null {
           path: "comms",
           element: <CommsQuotePage/>,
         },
+        // {
+        //   path: "client-data",
+        //   element: <TravelerPage/>,
+        // },
+        // {
+        //   path: "billing-invoice",
+        //   element: <BillingPage/>,
+        // }
+      ],
+    },
+    {
+      path: "client-data",
+      element: <Layout/>,
+      children: [
         {
-          path: "client-data",
+          index: true,
           element: <TravelerPage/>,
-        },
-        {
-          path: "billing-invoice",
-          element: <BillingPage/>,
         }
       ],
     },
@@ -57,28 +66,25 @@ export default function Router(): ReactElement | null {
       path: "invoice",
       element: <Layout/>,
       children: [
-        {
-            path: "invoice",
-            element: <Layout />,
-            children: [
-                {
-                    index: true,
-                    element: <InvoicePage />,
-                },
-                {
-                    path: "billing",
-                    element: <InvoicePage />,
-                },
-                {
-                    path: "billingResult",
-                    element: <BillingResultPage />,
-                },
-            ],
-        },
-        {
-          path: "billing",
-          element: <InvoicePage/>,
-        },
+        // {
+        //     path: "invoice",
+        //     element: <Layout />,
+        //     children: [
+            {
+                index: true,
+                element: <InvoicePage />,
+            },
+            // {
+            //     path: "billing",
+            //     element: <InvoicePage />,
+            // },
+            {
+                path: "billingResult",
+                element: <BillingResultPage />,
+            },
+            //     },
+            // ],
+
       ],
     },
   ];
