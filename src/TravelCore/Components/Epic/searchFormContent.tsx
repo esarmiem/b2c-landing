@@ -24,7 +24,7 @@ import { format } from "date-fns";
 import { CalendarIcon, Check, ChevronsUpDown, MapPin, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
-import { TravelersModal } from "./travelersModal";
+import { TravelersPopover } from "./TravelersPopover";
 import { TravelButtonForm } from "./TravelButtonForm";
 import { useTranslation } from "react-i18next";
 
@@ -146,8 +146,7 @@ export function SearchFormContent() {
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="w-64">
-                      Choose your check-in and check-out dates. Prices may vary
-                      based on the selected dates and availability.
+                      {t("tooltip-dates")}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -184,7 +183,7 @@ export function SearchFormContent() {
         </PopoverContent>
       </Popover>
 
-      <TravelersModal travelers={travelers} setTravelers={setTravelers} />
+      <TravelersPopover travelers={travelers} setTravelers={setTravelers} />
 
       <TravelButtonForm />
     </div>

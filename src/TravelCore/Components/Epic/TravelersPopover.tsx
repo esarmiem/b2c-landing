@@ -17,7 +17,7 @@ interface TravelersPopoverProps {
   setTravelers: (value: number) => void
 }
 
-export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, setTravelers }) => {
+export const TravelersPopover: React.FC<TravelersPopoverProps> = ({ travelers, setTravelers }) => {
   const { t } = useTranslation(["home"])
   const [isOpen, setIsOpen] = React.useState(false)
   const [ages, setAges] = React.useState<TravelerAge[]>([{ id: 1, age: "0" }])
@@ -56,7 +56,7 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
           className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
         >
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">How many?</span>
+            <span className="text-sm text-muted-foreground">{t("placeholder-count-travelers")}</span>
             <TooltipProvider>
               <Tooltip
                 open={activeTooltip === "travelers"}
@@ -69,8 +69,7 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="w-64">
-                    Specify the number of travelers and their ages (maximum 9 travelers). This helps us provide accurate pricing and
-                    recommendations for your group.
+                    {t("tooltip-travelers")}
                   </p>
                 </TooltipContent>
               </Tooltip>
