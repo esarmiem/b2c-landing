@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -30,6 +30,13 @@ const destinations = [
   "Rome",
   "Barcelona",
   "Dubai",
+  "Berlin",
+  "Sydney",
+  "Toronto",
+  "Turbaco",
+  "Malambo",
+  "Arjona",
+  "Soledad"
 ];
 
 interface DestinationSelectorProps {
@@ -48,6 +55,23 @@ export function DestinationSelector({
   t 
 }: DestinationSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [origin, setOrigin] = useState<string>("");
+
+  useEffect(() => {
+    // Obtener el país de origen del navegador, esta api es gratis pero con usos limitados (se debe implementar algo aquí)
+    fetch("https://ipapi.co/json/")
+      .then((response) => response.json())
+      .then((data) => {
+        setOrigin(data.country_name);
+      })
+      .catch(() => {
+        setOrigin("Unknown");
+      });
+  }, []);
+
+  const handleOriginChange = (newOrigin: string) => {
+    setOrigin(newOrigin);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -100,7 +124,24 @@ export function DestinationSelector({
               {t("search-dropdown-destination-empty")}
             </CommandEmpty>
             <CommandGroup>
-              {destinations.map((dest) => (
+              <CommandItem
+                className="font-semibold"
+                onSelect={() => {
+                  const newOrigin = prompt("Enter your origin country:", origin);
+                  if (newOrigin !== null) {
+                    handleOriginChange(newOrigin);
+                  }
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    origin ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {t("label-dropdown-change-origin")} {origin}
+              </CommandItem>
+              {destinations.slice(0, 14).map((dest) => (
                 <CommandItem
                   key={dest}
                   onSelect={() => {

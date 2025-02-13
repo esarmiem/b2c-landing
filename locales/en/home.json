@@ -5,6 +5,7 @@
   "label-dropdown-destination": "Select destination",
   "placeholder-tooltip-destination": "Where to?",
   "tooltip-destination": "Choose from our curated list of popular destinations. Each location offers unique experiences and attractions.",
+  "label-dropdown-change-origin": "Origin :",
   "placeholder-tooltip-dates": "Date of trip",
   "tooltip-dates": "Choose your check-in and check-out dates. Prices may vary based on the selected dates and availability.",
   "placeholder-count-travelers": "How many?",
