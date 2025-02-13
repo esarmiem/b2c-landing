@@ -25,7 +25,6 @@ const ModalProductDetails: React.FC<ModalProductDetailsProps> = ({ isOpen, onClo
                     <DialogTitle className="text-3xl font-bold text-center">{product.name}</DialogTitle>
                 </DialogHeader>
 
-
                 <div className="space-y-3">
                     <p className="text-lg  font-semibold">{product.subtitle}</p>
                     <p className="text-lg font-bold">Precio Total:</p>
