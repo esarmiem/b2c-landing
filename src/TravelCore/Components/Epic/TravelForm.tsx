@@ -2,8 +2,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchFormContent } from "./searchFormContent";
 import {useTranslation} from "react-i18next";
 import { Luggage } from 'lucide-react';
+import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 
-export function TravelForm() {
+interface TravelFormProps {
+  getOrder: ({ orderPayload }: { orderPayload: dataOrder }) => void;
+}
+
+export function TravelForm({ getOrder }: TravelFormProps) {
   const { t } = useTranslation(["home"])
 
   return (
@@ -49,7 +54,7 @@ export function TravelForm() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">
-          <SearchFormContent />
+          <SearchFormContent getOrder={getOrder} />
         </TabsContent>
         <TabsContent value="tab2">
           <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">

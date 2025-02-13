@@ -1,35 +1,59 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { format } from "date-fns";
+import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,} from "@/components/ui/tooltip";
+import { format, parse } from "date-fns";
 import { CalendarIcon, Info } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import useData from "@/TravelCore/Hooks/useData.ts";
+import {useEffect, useState} from "react";
 
 interface DateSelectorProps {
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
   activeTooltip: string | null;
   setActiveTooltip: (tooltip: string | null) => void;
   t: (key: string) => string;
 }
 
-export function DateSelector({ 
-  date, 
-  setDate, 
-  activeTooltip, 
-  setActiveTooltip,
-  t 
-}: DateSelectorProps) {
+export function DateSelector({activeTooltip, setActiveTooltip, t}: DateSelectorProps) {
+
+  // const initialDateRange: DateRange | undefined = data?.salida && data?.llegada
+  //   ? {
+  //     from: new Date(data.salida),
+  //     to: new Date(data.llegada),
+  //   } : undefined;
+
+  const {data, setData} = useData() || {};
+
+  const isValidDate = (dateString: string | undefined): boolean => {
+    if (!dateString) return false;
+    // Convertir "dd/MM/yyyy" a un objeto Date
+    const parsedDate = parse(dateString, "dd/MM/yyyy", new Date());
+    return !isNaN(parsedDate.getTime());
+  };
+
+  const initialDateRange: DateRange | undefined = isValidDate(data?.salida) && isValidDate(data?.llegada)
+    ? {
+      from: parse(data.salida!, "dd/MM/yyyy", new Date()),
+      to: parse(data.llegada!, "dd/MM/yyyy", new Date()),
+    }
+    : undefined;
+
+  const [date, setDate] = useState<DateRange | undefined>(initialDateRange);
+
+  useEffect(() => {
+    if (date?.from && date?.to && setData) {
+      setData((prevData) => ({
+        ...prevData,
+        salida: date.from ? format(date.from, "dd/MM/yyyy") : "",
+        llegada: date.to ? format(date.to, "dd/MM/yyyy") : "",
+        numeroPregunta: 1,
+        email: "hola@hola.com",
+        telefono: "+571234569875",
+        lenguaje: "es",
+      }));
+    }
+  }, [date]);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -94,5 +118,3 @@ export function DateSelector({
     </Popover>
   );
 }
-
-export default DateSelector;

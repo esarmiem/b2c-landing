@@ -2,19 +2,11 @@ import * as React from "react";
 import { Info, Minus, Plus, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import { useTranslation } from "react-i18next";
+import useData from "@/TravelCore/Hooks/useData.ts";
 
 interface TravelerAge {
   id: number;
@@ -26,14 +18,40 @@ interface TravelersPopoverProps {
   setTravelers: (value: number) => void;
 }
 
-export const TravelersPopover: React.FC<TravelersPopoverProps> = ({
-  travelers,
-  setTravelers,
-}) => {
+export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, setTravelers}) => {
   const { t } = useTranslation(["home"]);
+  const { data, setData } = useData() || {};
   const [isOpen, setIsOpen] = React.useState(false);
-  const [ages, setAges] = React.useState<TravelerAge[]>([{ id: 1, age: "0" }]);
   const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
+
+  const initialAges = React.useMemo(() => {
+    if(data?.edades){
+      return data.edades.split(',').map((age, index) => ({
+        id: index + 1,
+        age: age.trim()
+      }))
+    }
+    return [{ id: 1, age: "0" }]
+  }, [data?.edades]);
+
+  const [ages, setAges] = React.useState<TravelerAge[]>(initialAges);
+
+  React.useEffect(() => {
+    if (setData) {
+      const formattedAges = ages.map((age) => age.age).join(",");
+      setData((prevData) => ({
+        ...prevData,
+        cantidadPax: travelers,
+        edades: formattedAges,
+      }));
+    }
+  }, [travelers, ages]);
+
+  React.useEffect(() => {
+    if (data?.cantidadPax) {
+      setTravelers(data.cantidadPax);
+    }
+  }, [data, setTravelers]);
 
   const handleAddTraveler = () => {
     if (travelers < 9) {
@@ -60,6 +78,8 @@ export const TravelersPopover: React.FC<TravelersPopoverProps> = ({
   const handleAgeChange = (id: number, value: string) => {
     setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)));
   };
+
+  console.log("travelers", travelers);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -160,8 +180,8 @@ export const TravelersPopover: React.FC<TravelersPopoverProps> = ({
                         size="icon"
                         className="h-8 w-8 text-destructive"
                         style={{
-                          opacity: travelers > 1 ? 1 : 0,
-                          pointerEvents: travelers > 1 ? "auto" : "none",
+                          opacity: data?.cantidadPax as number > 1 ? 1 : 0,
+                          pointerEvents: data?.cantidadPax as number > 1 ? "auto" : "none",
                         }}
                         onClick={() => handleRemoveTraveler(traveler.id)}
                       >

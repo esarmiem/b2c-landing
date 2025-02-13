@@ -1,35 +1,7 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_PRODUCTS} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
-
-interface ProductsPregunta {
-  idPregunta: number
-  descripcion: string
-  estaActivo: boolean
-  tipoViaje: string
-}
-
-interface ProductsItems {
-  idProducto: number
-  nombre: string
-  descripcionInterna: string
-  tipo: string
-  idPregunta: number
-  estaActivo: boolean
-  porcentajeDescuento: string
-  tiempoMinimo: string
-  tiempoMaximo: string
-  pregunta: ProductsPregunta
-}
-
-interface ProductsData {
-  total: number
-  page: number
-  totalPages: number
-  items: ProductsItems[]
-  next: string | null
-  prev: string | null
-}
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_PRODUCTS} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
+import {ProductsData} from "@/TravelCore/Utils/interfaces/Products.ts";
 
 interface ApiResponse {
   data: ProductsData

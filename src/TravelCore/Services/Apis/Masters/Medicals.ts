@@ -1,21 +1,7 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_MEDICAL_CONDITIONS} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
-
-interface MedicalConditionsItems {
-  idCondicionMedica: number
-  descripcion: string
-  estaActivo: boolean
-}
-
-interface MedicalConditionsData {
-  total: number
-  page: number
-  totalPages: number
-  items: MedicalConditionsItems[]
-  next: string | null,
-  prev: string | null
-}
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_MEDICAL_CONDITIONS} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
+import {MedicalConditionsData} from "@/TravelCore/Utils/interfaces/Medicals.ts";
 
 interface ApiResponse {
   data: MedicalConditionsData

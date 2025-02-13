@@ -1,35 +1,7 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_PARAMETERS} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
-
-interface Padre {
-  idParametro: number
-  idioma: string
-  texto: string
-  link: string
-  archivoUrl: string
-  descripcion: string
-  agrupacion: string
-  titulo: boolean
-  estado: boolean
-  pagina: string
-  idPadre: number | null
-}
-
-interface ParametersData {
-  idParametro: number
-  idioma: string
-  texto: string
-  link: string
-  archivoUrl: string
-  descripcion: string
-  agrupacion: string
-  titulo: boolean
-  estado: boolean
-  pagina: string
-  idPadre: number | null
-  padre: Padre | null
-}
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_PARAMETERS} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
+import {ParametersData} from "@/TravelCore/Utils/interfaces/Parameters.ts";
 
 interface ApiResponse {
   data: ParametersData[]
