@@ -1,52 +1,65 @@
-import * as React from "react"
-import { Info, Minus, Plus, Trash2, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { useTranslation } from "react-i18next"
+import * as React from "react";
+import { Info, Minus, Plus, Trash2, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useTranslation } from "react-i18next";
 
 interface TravelerAge {
-  id: number
-  age: string
+  id: number;
+  age: string;
 }
 
 interface TravelersPopoverProps {
-  travelers: number
-  setTravelers: (value: number) => void
+  travelers: number;
+  setTravelers: (value: number) => void;
 }
 
-export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, setTravelers }) => {
-  const { t } = useTranslation(["home"])
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [ages, setAges] = React.useState<TravelerAge[]>([{ id: 1, age: "0" }])
-  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null)
+export const TravelersPopover: React.FC<TravelersPopoverProps> = ({
+  travelers,
+  setTravelers,
+}) => {
+  const { t } = useTranslation(["home"]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [ages, setAges] = React.useState<TravelerAge[]>([{ id: 1, age: "0" }]);
+  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
 
   const handleAddTraveler = () => {
-    if (travelers < 9) {  // Agregamos esta validación
-      setTravelers(travelers + 1)
-      setAges([...ages, { id: ages.length + 1, age: "0" }])
+    if (travelers < 9) {
+      // Agregamos esta validación
+      setTravelers(travelers + 1);
+      setAges([...ages, { id: ages.length + 1, age: "0" }]);
     }
-  }
+  };
 
   const handleRemoveTraveler = (idToRemove: number) => {
     if (travelers > 1) {
-      setTravelers(travelers - 1)
+      setTravelers(travelers - 1);
       setAges(
         ages
           .filter((age) => age.id !== idToRemove)
           .map((age, index) => ({
             ...age,
             id: index + 1,
-          })),
-      )
+          }))
+      );
     }
-  }
+  };
 
   const handleAgeChange = (id: number, value: string) => {
-    setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)))
-  }
+    setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)));
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -56,22 +69,26 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
           className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
         >
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">How many?</span>
+            <span className="text-sm text-muted-foreground">
+              {t("placeholder-count-travelers")}
+            </span>
             <TooltipProvider>
               <Tooltip
                 open={activeTooltip === "travelers"}
-                onOpenChange={(open) => setActiveTooltip(open ? "travelers" : null)}
+                onOpenChange={(open) =>
+                  setActiveTooltip(open ? "travelers" : null)
+                }
               >
                 <TooltipTrigger asChild>
-                  <span onMouseEnter={() => setActiveTooltip("travelers")} onMouseLeave={() => setActiveTooltip(null)}>
+                  <span
+                    onMouseEnter={() => setActiveTooltip("travelers")}
+                    onMouseLeave={() => setActiveTooltip(null)}
+                  >
                     <Info className="h-4 w-4 text-muted-foreground cursor-help" />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="w-64">
-                    Specify the number of travelers and their ages (maximum 9 travelers). This helps us provide accurate pricing and
-                    recommendations for your group.
-                  </p>
+                  <p className="w-64">{t("tooltip-travelers")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -79,7 +96,10 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span className="text-ellipsis overflow-hidden">
-              {travelers} {travelers === 1 ? t("content-select-travelers") : t("content-select-travelers") + "s"}
+              {travelers}{" "}
+              {travelers === 1
+                ? t("content-select-travelers")
+                : t("content-select-travelers") + "s"}
             </span>
           </div>
         </Button>
@@ -95,18 +115,20 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => handleRemoveTraveler(ages[ages.length - 1].id)}
+                    onClick={() =>
+                      handleRemoveTraveler(ages[ages.length - 1].id)
+                    }
                     disabled={travelers <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="min-w-8 text-center">{travelers}</span>
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
-                    className="h-8 w-8" 
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
                     onClick={handleAddTraveler}
-                    disabled={travelers >= 9}  // Agregamos esta propiedad
+                    disabled={travelers >= 9} // Agregamos esta propiedad
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -124,22 +146,27 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
                       <Input
                         type="number"
                         value={traveler.age}
-                        onChange={(e) => handleAgeChange(traveler.id, e.target.value)}
+                        onChange={(e) =>
+                          handleAgeChange(traveler.id, e.target.value)
+                        }
                         className="w-20"
                         min="0"
                         max="120"
                       />
                       <span>{t("label-input-age-travelers-sufix")}</span>
-                      {travelers > 1 && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive"
-                          onClick={() => handleRemoveTraveler(traveler.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
+                      {/* Botón siempre presente, pero invisible y no interactuable cuando travelers === 1 */}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive"
+                        style={{
+                          opacity: travelers > 1 ? 1 : 0,
+                          pointerEvents: travelers > 1 ? "auto" : "none",
+                        }}
+                        onClick={() => handleRemoveTraveler(traveler.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </React.Fragment>
@@ -147,12 +174,15 @@ export const TravelersModal: React.FC<TravelersPopoverProps> = ({ travelers, set
             </div>
           </div>
           <div className="sticky bottom-0 pt-4 bg-white">
-            <Button className="w-full bg-red-600 hover:bg-red-700 text-white" onClick={() => setIsOpen(false)}>
+            <Button
+              className="w-full bg-red-600 hover:bg-red-700 text-white rounded-full"
+              onClick={() => setIsOpen(false)}
+            >
               {t("action-apply")}
             </Button>
           </div>
         </div>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
