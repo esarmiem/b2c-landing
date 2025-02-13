@@ -29,7 +29,7 @@ const Step: FC<StepProps> = ({ number, text, isActive = false, showDivider = fal
         </span>
       </div>
       {showDivider && (
-        <div className="h-[2px] w-16 md:w-32 mx-2 md:mx-4 border-t-2 border-dashed border-gray-300" />
+        <div className="h-[2px] w-4 md:w-32 mx-2 md:mx-4 border-t-2 border-dashed border-gray-300" />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CircleCheck } from "lucide-react";
 import ModalUpgrades from "./ModalUpgrades";
+import ModalProductDetails from "./ModalProductDetails";
 
 interface CardProductProps {
   title: string;
@@ -34,6 +35,8 @@ const CardProduct: React.FC<CardProductProps> = ({
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
   // 🔹 Función para abrir el modal
   const openModal = () => {
     console.log("Abriendo modal");
@@ -49,6 +52,19 @@ const CardProduct: React.FC<CardProductProps> = ({
   // 🔹 Función para cerrar el modal
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const openDetailsModal = () => {
+    setSelectedProduct({
+      id: "1",
+      name: title,
+      price: parseFloat(price.replace(/[^0-9.]/g, "")),
+      description: "Detalles adicionales del producto y coberturas.",
+    });
+    setIsDetailsModalOpen(true);
+  };
+ 
+  const closeDetailsModal = () => {
+    setIsDetailsModalOpen(false);
   };
 
   return (
@@ -136,16 +152,32 @@ const CardProduct: React.FC<CardProductProps> = ({
             >
               Seleccionar
             </button>
-            <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
+            <a href="#" className="text-xs text-blue-600 hover:underline font-semibold"
+            onClick={openDetailsModal}
+            >
               VER DETALLES DE COBERTURA
             </a>
           </div>
         </div>
       )}
 
-      {/* 🔹 Modal dentro del return y usando estados correctamente */}
+      {/* Modal dentro del return y usando estados correctamente */}
       {isModalOpen && (
         <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />
+      )}
+      {/* Modal de detalles */}
+      {isDetailsModalOpen && (
+        <ModalProductDetails
+          isOpen={isDetailsModalOpen}
+          onClose={closeDetailsModal}
+          product={{
+            name: title,
+            subtitle,
+            price,
+            originalPrice,
+            typeOfProduct,
+          }}
+        />
       )}
     </>
   );

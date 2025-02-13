@@ -75,7 +75,7 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
       : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center';
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto py-4">
       <div className={containerClasses}>
         {cardData.map((card, index) => (
           <CardProduct key={index} viewType={viewType} {...card} />
