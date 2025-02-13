@@ -1,26 +1,9 @@
-import { ASSISTANCE_API } from '@/TravelCore/Services/Apis/Order'
-
-interface AssistanceResponse {
-    idProspecto: number
-    planes: object[]
-}
-
-interface AssistanceRequest {
-    pais: string
-    destino: number
-    numeroPregunta: number
-    salida: string
-    llegada: string
-    cantidadPax: number
-    edades: string
-    telefono: string
-    email: string
-    lenguaje: string
-    idUser: string
-}
+import {ASSISTANCE_API} from '@/TravelCore/Services/Apis/Order'
+import {dataOrder, ResponseData} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 export class TravelAssistance{
-    async getOrderPriceByAge(data: AssistanceRequest): Promise<AssistanceResponse> {
-        return await ASSISTANCE_API.getOrderPriceEdad(data)
+    async getOrderPriceByAge(data: dataOrder): Promise<ResponseData> {
+        const response = await ASSISTANCE_API.getOrderPriceEdad(data);
+        return response as unknown as ResponseData;
     }
 }

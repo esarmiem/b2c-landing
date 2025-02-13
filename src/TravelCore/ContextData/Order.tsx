@@ -1,13 +1,14 @@
 import { createContext, useEffect, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 import { getPersisted, savePersistense } from './Persistence/data';
+import { ResponseData } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 const STORAGE_KEY = 'tk-order';
 
-type State = Record<string, any> | null;
+type State = ResponseData | null;
 
 type OrderContextType = {
-  data: State;
-  setData: Dispatch<SetStateAction<State>>;
+  order: State;
+  setOrder: Dispatch<SetStateAction<State>>;
 };
 
 export const OrderContext = createContext<OrderContextType | undefined>(undefined);
@@ -17,19 +18,19 @@ interface OrderProviderProps {
 }
 
 export function OrderProvider({ children }: OrderProviderProps): JSX.Element {
-  const [data, setData] = useState<State>(() => {
-    const cachedData = getPersisted(STORAGE_KEY);
+  const [order, setOrder] = useState<State>(() => {
+    const cachedData = getPersisted(STORAGE_KEY) as ResponseData | null;
     return cachedData;
   });
 
   useEffect(() => {
-    if (data !== null) {
-      savePersistense(data, STORAGE_KEY);
+    if (order !== null) {
+      savePersistense(order, STORAGE_KEY);
     }
-  }, [data]);
+  }, [order]);
 
   return (
-    <OrderContext.Provider value={{ data, setData }}>
+    <OrderContext.Provider value={{ order, setOrder }}>
       {children}
     </OrderContext.Provider>
   );

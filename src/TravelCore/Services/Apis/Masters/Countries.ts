@@ -1,6 +1,6 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_COUNTRIES, SERVICE_GET_CITIES_BY_COUNTRY} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_COUNTRIES, SERVICE_GET_CITIES_BY_COUNTRY} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
 import {CountriesData, CitiesByCountryData} from "@/TravelCore/Utils/interfaces/countries.ts";
 
 interface countriesResponse {

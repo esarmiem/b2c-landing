@@ -1,6 +1,6 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_ARRIVALS} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_ARRIVALS} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
 import {ArrivalsData} from "@/TravelCore/Utils/interfaces/Arrivals.ts";
 
 interface ApiResponse {

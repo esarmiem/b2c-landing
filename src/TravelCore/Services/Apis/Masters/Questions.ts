@@ -1,22 +1,7 @@
-import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_QUESTIONS} from "../../../Utils/constants.ts"
-import {GET_TOKEN} from "../../../Utils/storage.ts"
-
-interface QuestionItems {
-  idPregunta: number
-  descripcion: string
-  estaActivo: boolean
-  tipoViaje: string
-}
-
-interface QuestionData {
-  total: number
-  page: number
-  totalPages: number
-  items: QuestionItems[]
-  next: string | null
-  prev: string | null
-}
+import {axiosHttp} from "@/TravelCore/Utils/http.ts"
+import {SERVICE_QUESTIONS} from "@/TravelCore/Utils/constants.ts"
+import {GET_TOKEN} from "@/TravelCore/Utils/storage.ts"
+import {QuestionData} from "@/TravelCore/Utils/interfaces/Questions.ts";
 
 interface ApiResponse {
   data: QuestionData

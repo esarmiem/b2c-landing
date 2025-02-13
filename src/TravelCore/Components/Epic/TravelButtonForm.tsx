@@ -4,9 +4,16 @@ import { Button } from '@/components/ui/button'; // Adjust import path as needed
 import { LoadingScreen } from './LoadingScreen';
 import {useTranslation} from "react-i18next"; // Your loading screen component
 import { Search } from 'lucide-react';
+import useData from "@/TravelCore/Hooks/useData.ts";
+import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 
-export const TravelButtonForm: React.FC = () => {
+interface TravelButtonFormProps {
+  getOrder: ({ orderPayload }: { orderPayload: dataOrder }) => void;
+}
+
+export const TravelButtonForm = ({getOrder}: TravelButtonFormProps) => {
   const { t } = useTranslation(["home"])
+  const { data } = useData() || {};
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -15,6 +22,9 @@ export const TravelButtonForm: React.FC = () => {
 
     const timer = setTimeout(() => {
       setIsLoading(false);
+      if (data) {
+        getOrder({ orderPayload: data });
+      }
       navigate('/quote/travel');
     }, 4000);
 

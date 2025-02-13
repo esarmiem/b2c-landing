@@ -1,11 +1,10 @@
 import { createContext, useEffect, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 import { getPersisted, savePersistense } from './Persistence/data';
+import {ApiResponse, GenericItem} from "@/TravelCore/Utils/interfaces/context.ts";
 
 const STORAGE_KEY = 'user-preferences';
 
-type Preferences = {
-  settings: Record<string, any>;
-};
+type Preferences<T = GenericItem> = ApiResponse<T> | null;
 
 type UserPreferencesContextType = {
   preferences: Preferences;
@@ -21,7 +20,7 @@ interface UserPreferencesProviderProps {
 export function UserPreferencesProvider({ children }: UserPreferencesProviderProps): JSX.Element {
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const cachedPreferences = getPersisted(STORAGE_KEY);
-    return cachedPreferences || { settings: {} };
+    return cachedPreferences;
   });
 
   useEffect(() => {
