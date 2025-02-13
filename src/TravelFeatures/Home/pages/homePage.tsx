@@ -27,6 +27,7 @@ export default function HomePage () {
         <Features />
         <Testimonials />
         <Stats />
+        <WhatsAppButton />
       </>
   );
 }
