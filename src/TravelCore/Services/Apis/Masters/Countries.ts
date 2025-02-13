@@ -1,32 +1,7 @@
 import {axiosHttp} from "../../../Utils/http.ts"
 import {SERVICE_COUNTRIES, SERVICE_GET_CITIES_BY_COUNTRY} from "../../../Utils/constants.ts"
 import {GET_TOKEN} from "../../../Utils/storage.ts"
-
-interface CountriesItems {
-  idPais: number
-  descripcion: string
-  estaActivo: boolean
-  codigoISO: string
-  indicativo: string | null
-  comInternActivo: boolean
-}
-
-interface CountriesData {
-  total: number
-  page: number
-  totalPages: number
-  items: CountriesItems[]
-  next: string | null
-  previous: string | null
-}
-
-interface CitiesByCountryData {
-  idCiudad: number
-  descripcion: string
-  codigo: string
-  estaActivo: boolean
-  idPais: number
-}
+import {CountriesData, CitiesByCountryData} from "@/TravelCore/Utils/interfaces/countries.ts";
 
 interface countriesResponse {
   data: CountriesData
