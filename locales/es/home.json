@@ -57,5 +57,8 @@
   "text-testimonials-2": "Excelente servicio y atención al cliente. Muy recomendado.",
   "text-testimonials-3": "La mejor asistencia de viaje que he tenido. Muy profesionales.",
   "label-title-loader": "Buscando tus beneficios exclusivos...",
-  "label-text-loader": "Más de 165 personas están explorando este destino. ¡Sé el siguiente en aprovechar las mejores ofertas!"
+  "label-text-loader": "Más de 165 personas están explorando este destino. ¡Sé el siguiente en aprovechar las mejores ofertas!",
+  "label-placeholder-loader-phone": "Número de teléfono",
+  "label-placeholder-loader-email": "Correo",
+  "label-button-loader-continue": "Continuar"
 }
