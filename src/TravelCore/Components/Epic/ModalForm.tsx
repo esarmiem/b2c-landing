@@ -24,6 +24,7 @@ export const ModalForm = ({ isOpen, toggleModal, onClick }: ModalProps) => {
   const { t } = useTranslation(["home"]);
   const {setData} = useData() || {};
   const [modalForm, setModalForm] = useState({"phone": "", "email":""})
+  const [loadingSave, setLoadingSave] = useState(false)
 console.log(modalForm)
 
   const handleChange = (e: any) => {
@@ -43,8 +44,12 @@ console.log(modalForm)
         email: modalForm.email
       }
     }));
-    toggleModal()
-    onClick()
+    setLoadingSave(true)
+    setTimeout(() => {
+      toggleModal()
+      onClick()
+      setLoadingSave(true)
+    }, 2000);
   }
 
   return (
@@ -89,8 +94,15 @@ console.log(modalForm)
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleSave} className="bg-red-600 hover:bg-black rounded-full w-1/2 h-auto p-2 font-medium ml-auto">
-            Enviar y ver mis ofertas
+          <Button
+              onClick={handleSave}
+              className="bg-red-600 hover:bg-black rounded-full h-auto px-6 font-medium ml-auto"
+              disabled={loadingSave}
+          >
+            {loadingSave && <Loader2 className="h-5 w-5 animate-spin text-white-600"/>}
+            <div className="flex items-center gap-2 font-extrabold">
+              Enviar y ver mis ofertas
+            </div>
             <ChevronRight />
           </Button>
         </DialogFooter>

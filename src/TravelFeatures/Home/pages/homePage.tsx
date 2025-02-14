@@ -7,8 +7,9 @@ import {TravelForm} from "@/TravelCore/Components/Epic/TravelForm.tsx";
 import {TravelSteps} from "@/TravelCore/Components/Epic/TravelSteps.tsx";
 import useHomeState from "@/TravelFeatures/Home/stateHelper";
 import {WhatsAppButton} from "@/TravelCore/Components/Epic/WhatsAppButton.tsx";
+/*
 import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
-import {useEffect, useState} from "react";
+*/
 import {useNavigate} from "react-router-dom";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
@@ -17,7 +18,9 @@ export default function HomePage () {
   const { HandleGetOrder } = useHomeState()
   const {data} = useData() || {}
   const navigate = useNavigate();
+/*
   const [isOpenContactModal, setIsOpenContactModal] = useState(false);
+*/
 
   const images = [
     '../../../../Assets/slide 1.webp',
@@ -27,26 +30,22 @@ export default function HomePage () {
 
   console.log("Order: ", data?.responseOrder)
 
-  useEffect(() => {
-    console.log('se recibio un prospecto')
-    if(data && data?.responseOrder?.idProspecto) {
-      navigate('/quote/travel'); // Navegar a la siguiente pantalla
-    }
-  }, [data?.responseOrder]);
+ console.log("data", data?.payloadOrder)
 
-console.log("data", data?.payloadOrder)
-
-  const handleSearch = () => {
+/*  const handleSearch = () => {
     //Llamar al modal
     setIsOpenContactModal(true)
-  };
+  };*/
 
-  const handleGetQuote = () => {
+  const handleGetQuote = async () => {
   console.log('click en handleGetQuote ', isDataOrderValid(data?.payloadOrder))
     //Validate if data is entire fill
-    setTimeout(() => {
+    setTimeout(async () => {
       if (data && isDataOrderValid(data?.payloadOrder)) {
-          HandleGetOrder(data.payloadOrder)
+        const resp: any = await HandleGetOrder(data.payloadOrder)
+        if (resp && resp > 0) {
+          navigate('/quote/travel'); // Navegar a la siguiente pantalla
+        }
       }
     }, 2000);
   };
@@ -81,7 +80,9 @@ console.log("data", data?.payloadOrder)
         <Testimonials />
         <Stats />
         <WhatsAppButton />
+{/*
         <ModalForm isOpen={isOpenContactModal} toggleModal={() => setIsOpenContactModal(!isOpenContactModal)} onClick ={handleGetQuote} />
+*/}
       </>
   );
 }

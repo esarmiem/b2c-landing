@@ -99,10 +99,17 @@ export default function useHomeState () {
             responseOrder: response?.data
           })
         )
+        return {
+          idProspecto: response?.data?.idProspecto
+        }
       }
     } catch (error) {
       console.error("Failed to get order:", error);
-  }}
+    }
+    finally {
+      return null
+    }
+  }
 
   return (
     {

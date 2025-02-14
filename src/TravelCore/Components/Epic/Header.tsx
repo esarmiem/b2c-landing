@@ -10,12 +10,12 @@ import {useEffect, useState} from "react";
 
 
 export const Header: React.FC = () => {
-  const { t, i18n } = useTranslation(["header"]);
+  const { t, i18n } = useTranslation(["header", "home"]);
   const {data} = useData() || {};
   const [isLoadingOrders, setIsLoadingOrders] = useState(false);
 
   useEffect(() => {
-    if(data?.ResponseOrder?.idProspecto) {
+    if(data && data?.responseOrder?.idProspecto) {
       setIsLoadingOrders(true) // Indicar que se debe navegar
       setTimeout(() => {
         setIsLoadingOrders(false)
@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
   }, [data?.ResponseOrder]);
 
   if (isLoadingOrders) {
-    return <LoadingScreen message={t("label-title-loader")} subMessage={t("label-text-loader")}/>;
+    return <LoadingScreen message={t("home:label-title-loader")} subMessage={t("home:label-text-loader")}/>;
   }
 
   return (
