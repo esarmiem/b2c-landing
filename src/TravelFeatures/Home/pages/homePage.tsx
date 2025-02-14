@@ -5,6 +5,7 @@ import {Stats} from "@/TravelCore/Components/Epic/Stats.tsx";
 import {HeroCarousel} from "@/TravelCore/Components/Epic/HeroCarousel.tsx";
 import {TravelForm} from "@/TravelCore/Components/Epic/TravelForm.tsx";
 import {TravelSteps} from "@/TravelCore/Components/Epic/TravelSteps.tsx";
+import {WhatsAppButton} from "@/TravelCore/Components/Epic/WhatsAppButton.tsx";
 import useHomeState from "@/TravelFeatures/Home/stateHelper";
 
 export default function HomePage () {
