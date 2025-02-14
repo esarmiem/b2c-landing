@@ -2,7 +2,7 @@
 import { FaWhatsapp } from 'react-icons/fa';
 
 export const WhatsAppButton = () => {
-  const phoneNumber = '573008992753';
+  const phoneNumber = '57573175032200';
   const message = 'Hola, tengo una consulta sobre el seguro de viaje';
 
   return (
