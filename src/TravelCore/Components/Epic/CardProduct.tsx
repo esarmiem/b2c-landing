@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CircleCheck } from "lucide-react";
 import ModalUpgrades from "./ModalUpgrades";
+import { useTranslation } from "react-i18next"; // Importar useTranslation
 
 interface CardProductProps {
   title: string;
@@ -30,6 +31,8 @@ const CardProduct: React.FC<CardProductProps> = ({
   recommended,
   viewType = "grid",
 }) => {
+  const { t } = useTranslation(["products"]); 
+
   // 🔹 Estados del modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +65,7 @@ const CardProduct: React.FC<CardProductProps> = ({
           >
             {recommended && (
               <div className="mt-0 text-xs font-normal bg-stone-800 text-white px-2 py-1 rounded mx-auto">
-                Recomendado
+                {t("label-recommended")} 
               </div>
             )}
             <div className="space-y-1 py-8">
@@ -70,7 +73,7 @@ const CardProduct: React.FC<CardProductProps> = ({
               <p className={`font-bold ${recommended ? "text-red-100" : "text-neutral-800"}`}>
                 {subtitle}
               </p>
-              <p className="font-bold">Precio Total</p>
+              <p className="font-bold">{t("label-total-price")}</p> 
               <p className={`mt-1 text-4xl font-bold ${recommended ? "text-neutral-100" : "text-red-600"}`}>
                 {price}
               </p>
@@ -91,13 +94,13 @@ const CardProduct: React.FC<CardProductProps> = ({
             </ul>
             <div className="mt-4 text-center space-y-3">
               <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
-                VER DETALLES DE COBERTURA
+                {t("link-view-coverage-details")} 
               </a>
               <button
                 className="w-full bg-red-500 text-white py-2 px-4 rounded-full font-bold hover:bg-red-700 transition-all"
                 onClick={openModal}
               >
-                Seleccionar
+                {t("button-select")} 
               </button>
             </div>
           </div>
@@ -107,12 +110,12 @@ const CardProduct: React.FC<CardProductProps> = ({
           <div className={`text-center px-1 py-8 ${recommended ? "bg-red-800 text-white" : "bg-zinc-100 text-neutral-800"}`}>
             {recommended && (
               <div className="text-white font-normal text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
-                Recomendado
+                {t("label-recommended")}
               </div>
             )}
             <h2 className="font-bold text-2xl my-4">{title}</h2>
             <p className={`my-0 ${recommended ? "text-white" : "text-neutral-800"}`}>{subtitle}</p>
-            <p className="mt-1">Precio Total</p>
+            <p className="mt-1">{t("label-total-price")}</p> 
             <h3 className={`text-4xl font-bold ${recommended ? "text-white" : "text-red-600"}`}>{price}</h3>
             <span className={`${recommended ? "text-[rgb(203,71,71)]" : "text-neutral-400"} font-semibold line-through text-sm`}>
               {originalPrice}
@@ -134,10 +137,10 @@ const CardProduct: React.FC<CardProductProps> = ({
               className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold hover:bg-red-700 transition-all"
               onClick={openModal}
             >
-                Seleccionar
+              {t("button-select")} 
             </button>
             <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
-              VER DETALLES DE COBERTURA
+              {t("link-view-coverage-details")} 
             </a>
           </div>
         </div>
