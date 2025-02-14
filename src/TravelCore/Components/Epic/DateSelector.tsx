@@ -15,26 +15,18 @@ interface DateSelectorProps {
 }
 
 export function DateSelector({activeTooltip, setActiveTooltip, t}: DateSelectorProps) {
-
-  // const initialDateRange: DateRange | undefined = data?.salida && data?.llegada
-  //   ? {
-  //     from: new Date(data.salida),
-  //     to: new Date(data.llegada),
-  //   } : undefined;
-
   const {data, setData} = useData() || {};
-
+  const payloadOrder = data?.payloadOrder;
   const isValidDate = (dateString: string | undefined): boolean => {
     if (!dateString) return false;
-    // Convertir "dd/MM/yyyy" a un objeto Date
     const parsedDate = parse(dateString, "dd/MM/yyyy", new Date());
     return !isNaN(parsedDate.getTime());
   };
 
-  const initialDateRange: DateRange | undefined = isValidDate(data?.salida) && isValidDate(data?.llegada)
+  const initialDateRange: DateRange | undefined = isValidDate(payloadOrder?.salida) && isValidDate(payloadOrder?.llegada)
     ? {
-      from: parse(data.salida!, "dd/MM/yyyy", new Date()),
-      to: parse(data.llegada!, "dd/MM/yyyy", new Date()),
+      from: parse(payloadOrder?.salida!, "dd/MM/yyyy", new Date()),
+      to: parse(payloadOrder?.llegada!, "dd/MM/yyyy", new Date()),
     }
     : undefined;
 
@@ -44,15 +36,16 @@ export function DateSelector({activeTooltip, setActiveTooltip, t}: DateSelectorP
     if (date?.from && date?.to && setData) {
       setData((prevData) => ({
         ...prevData,
-        salida: date.from ? format(date.from, "dd/MM/yyyy") : "",
-        llegada: date.to ? format(date.to, "dd/MM/yyyy") : "",
-        numeroPregunta: 1,
-        email: "hola@hola.com",
-        telefono: "+571234569875",
-        lenguaje: "es",
-      }));
+        payloadOrder: {
+          ...prevData?.payloadOrder,
+          salida: date.from ? format(date.from, "dd/MM/yyyy") : "",
+          llegada: date.to ? format(date.to, "dd/MM/yyyy") : "",
+          numeroPregunta: 1,
+          lenguaje: "es",
+        }
+      }))
     }
-  }, [date]);
+  }, [date])
 
   return (
     <Popover>

@@ -21,41 +21,44 @@ interface TravelersPopoverProps {
 export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, setTravelers}) => {
   const { t } = useTranslation(["home"]);
   const { data, setData } = useData() || {};
+  const payloadOrder = data?.payloadOrder;
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
 
   const initialAges = React.useMemo(() => {
-    if(data?.edades){
-      return data.edades.split(',').map((age, index) => ({
+    if(payloadOrder?.edades){
+      return payloadOrder.edades.split(',').map((age, index) => ({
         id: index + 1,
         age: age.trim()
       }))
     }
     return [{ id: 1, age: "0" }]
-  }, [data?.edades]);
+  }, [payloadOrder?.edades]);
 
   const [ages, setAges] = React.useState<TravelerAge[]>(initialAges);
 
   React.useEffect(() => {
     if (setData) {
-      const formattedAges = ages.map((age) => age.age).join(",");
+      const formattedAges = ages.map((age) => age.age).join(",")
       setData((prevData) => ({
         ...prevData,
-        cantidadPax: travelers,
-        edades: formattedAges,
-      }));
+        payloadOrder: {
+          ...prevData?.payloadOrder,
+          cantidadPax: travelers,
+          edades: formattedAges,
+        }
+      }))
     }
   }, [travelers, ages]);
 
   React.useEffect(() => {
-    if (data?.cantidadPax) {
-      setTravelers(data.cantidadPax);
+    if (payloadOrder?.cantidadPax) {
+      setTravelers(payloadOrder.cantidadPax);
     }
-  }, [data, setTravelers]);
+  }, [payloadOrder, setTravelers]);
 
   const handleAddTraveler = () => {
     if (travelers < 9) {
-      // Agregamos esta validación
       setTravelers(travelers + 1);
       setAges([...ages, { id: ages.length + 1, age: "0" }]);
     }
@@ -78,8 +81,6 @@ export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, se
   const handleAgeChange = (id: number, value: string) => {
     setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)));
   };
-
-  console.log("travelers", travelers);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -180,8 +181,8 @@ export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, se
                         size="icon"
                         className="h-8 w-8 text-destructive"
                         style={{
-                          opacity: data?.cantidadPax as number > 1 ? 1 : 0,
-                          pointerEvents: data?.cantidadPax as number > 1 ? "auto" : "none",
+                          opacity: payloadOrder?.cantidadPax as number > 1 ? 1 : 0,
+                          pointerEvents: payloadOrder?.cantidadPax as number > 1 ? "auto" : "none",
                         }}
                         onClick={() => handleRemoveTraveler(traveler.id)}
                       >

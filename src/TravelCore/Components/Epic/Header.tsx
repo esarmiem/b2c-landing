@@ -4,9 +4,29 @@ import { DropdownHeader } from "./DropdownHeader";
 import { MenuSheet } from "./MenuSheet";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import useData from "@/TravelCore/Hooks/useData.ts";
+import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
+import {useEffect, useState} from "react";
+
 
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation(["header"]);
+  const {data} = useData() || {};
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
+  useEffect(() => {
+    if(data?.ResponseOrder?.idProspecto) {
+      setIsLoadingOrders(true) // Indicar que se debe navegar
+      setTimeout(() => {
+        setIsLoadingOrders(false)
+      }, 4000);
+    }
+  }, [data?.ResponseOrder]);
+
+  if (isLoadingOrders) {
+    return <LoadingScreen message={t("label-title-loader")} subMessage={t("label-text-loader")}/>;
+  }
+
   return (
     <header className="sticky top-0 w-full bg-white z-50">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}

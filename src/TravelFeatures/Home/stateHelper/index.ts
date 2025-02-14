@@ -7,7 +7,7 @@ import {Masters} from "@/TravelFeatures/Home/model/masters_entity.ts";
 
 import {TravelAssistance} from "@/TravelFeatures/Home/model/travel_assistance_entity.ts";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
-import useOrder from "@/TravelCore/Hooks/useOrder.ts";
+import useData from "@/TravelCore/Hooks/useData.ts";
 
 interface AuthResponse {
   data?: {
@@ -19,8 +19,7 @@ interface AuthResponse {
 
 export default function useHomeState () {
   const {setSession} = useSession() || {};
-  const {order, setOrder} = useOrder() || {};
-
+  const {setData} = useData() || {};
   const masterContext = useMasters();
 
   useEffect(() => {
@@ -88,12 +87,18 @@ export default function useHomeState () {
     }
   };
 
-  const getOrder = async ({orderPayload}: {orderPayload: dataOrder}) => {
+  const HandleGetOrder = async (orderPayload: dataOrder) => {
+    console.log('Haciendo la peticion: ', orderPayload)
     const travelAssistance = new TravelAssistance();
     try {
       const response = await travelAssistance.getOrderPriceByAge(orderPayload);
-      if (response?.planes && response?.planes.length > 0 && response?.idProspecto) {
-        setOrder?.(response);
+      console.log('response', response?.data)
+      if (response && response?.data?.planes && response?.data?.planes.length > 0 && response?.data?.idProspecto) {
+        setData?.((prevData) => ({
+            ...prevData,
+            responseOrder: response?.data
+          })
+        )
       }
     } catch (error) {
       console.error("Failed to get order:", error);
@@ -101,8 +106,7 @@ export default function useHomeState () {
 
   return (
     {
-      getOrder,
-      order
+      HandleGetOrder
     }
   )
 }

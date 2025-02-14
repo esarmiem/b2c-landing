@@ -1,16 +1,15 @@
-import { useState } from "react";
+import {MouseEvent, useState} from "react";
 import { useTranslation } from "react-i18next";
 import { DestinationSelector } from "./DestinationSelector";
 import { DateSelector } from "./DateSelector";
 import { TravelersPopover } from "./TravelersPopover";
 import { TravelButtonForm } from "./TravelButtonForm";
-import { dataOrder } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface SearchFormContentProps {
-  getOrder: ({ orderPayload }: { orderPayload: dataOrder }) => void;
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function SearchFormContent({ getOrder }: SearchFormContentProps) {
+export function SearchFormContent({onClick}: SearchFormContentProps) {
   const { t } = useTranslation(["home"]);
   const [travelers, setTravelers] = useState(1);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
@@ -31,7 +30,7 @@ export function SearchFormContent({ getOrder }: SearchFormContentProps) {
 
       <TravelersPopover travelers={travelers} setTravelers={setTravelers} />
 
-      <TravelButtonForm getOrder={getOrder} />
+      <TravelButtonForm onClick={onClick} />
     </div>
   );
 }

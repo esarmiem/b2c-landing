@@ -39,10 +39,14 @@ export interface Plan {
   cobertura: Cobertura[];
   Condiciones: Condiciones;
 }
-
-export interface ResponseData {
+export interface Data {
   planes: Plan[];
   idProspecto: number;
+}
+
+export interface ResponseData {
+  data: Data;
+  error: string | null;
 }
 //Order Payload
 export interface dataOrder {
