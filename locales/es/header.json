@@ -1,0 +1,20 @@
+{
+  "label-link-sales": "Ventas",
+  "label-link-products": "Productos",
+  "label-link-agency": "Ingreso Agencias",
+  "label-link-assist": "Asistencia Internacional",
+  "label-link-comms": "Comunicación Internacional",
+  "label-link-emergency": "Reportar una emergencia",
+  "label-link-vip-rooms": "Pre registros Salas VIP",
+  "label-title-sidebar-agency": "¿Eres Agencia?",
+  "label-button-sidebar-agency": "Inicia Sesión",
+  "label-title-sidebar-lang": "Idioma",
+  "label-title-sidebar-contact": "Contáctanos",
+  "label-title-sidebar-sales": "Ventas",
+  "label-title-sidebar-services": "Servicio Al Cliente",
+  "label-title-sidebar-questions": "¿Tienes Preguntas?",
+  "label-title-travelers-page": "Datos de los viajeros",
+  "label-title-traveler-page": "Datos del viajero",
+  "label-description-traveler-page": "Al ingresar tus datos, aceptas nuestra Política de",
+  "label-link-privacy-policy": "Manejo de Datos y Términos de Uso"
+}
