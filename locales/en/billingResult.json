@@ -1,0 +1,20 @@
+{
+    "label-payment-approved": "Congratulations, your payment has been approved!",
+    "label-payment-declined": "We're sorry, your payment has been declined!",
+    "label-payment-approved-message": "We have sent the purchase information to your registered email. You can also check the summary of your purchase below and download your voucher.",
+    "label-payment-declined-message": "We were unable to process your payment. Please verify your card details or try another payment method. You can also contact your bank for more information.",
+    "label-product-summary": "Product Summary",
+    "label-order-number": "Order Number:",
+    "label-organization-id": "Organization ID:",
+    "label-invoice-number": "Invoice No.:",
+    "label-product": "Product:",
+    "label-price-per-person-cop": "Price per traveler in pesos:",
+    "label-price-per-person-usd": "Price per traveler in dollars:",
+    "label-total-price-cop": "Total product price in pesos:",
+    "label-total-price-usd": "Total product price in dollars:",
+    "label-total-amount": "Total Amount",
+    "label-payment-not-processed": "Payment not processed",
+    "label-download-voucher": "Download Voucher",
+    "label-retry-payment": "Try again or choose another payment method",
+    "label-back-to-home": "Back to home"
+  }

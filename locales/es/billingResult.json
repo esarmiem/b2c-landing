@@ -1,0 +1,20 @@
+{
+    "label-payment-approved": "¡Felicidades, su pago ha sido aprobado!",
+    "label-payment-declined": "¡Lo sentimos, tu pago ha sido rechazado!",
+    "label-payment-approved-message": "Hemos enviado a tu correo electrónico registrado la información de tu compra. También podrás consultar a continuación el resumen de tu compra y descargar tu voucher.",
+    "label-payment-declined-message": "No hemos podido procesar tu pago. Por favor, verifica los datos de tu tarjeta o intenta con otro método de pago. También puedes contactar a tu entidad bancaria para más información.",
+    "label-product-summary": "Resumen del producto",
+    "label-order-number": "Número de Orden:",
+    "label-organization-id": "ID Organización:",
+    "label-invoice-number": "No. Factura:",
+    "label-product": "Producto:",
+    "label-price-per-person-cop": "Valor por viajero en pesos:",
+    "label-price-per-person-usd": "Valor por viajero en dólares:",
+    "label-total-price-cop": "Valor del producto en pesos:",
+    "label-total-price-usd": "Valor del producto en dólares:",
+    "label-total-amount": "Total Importe",
+    "label-payment-not-processed": "Pago no procesado",
+    "label-download-voucher": "Descargar Voucher",
+    "label-retry-payment": "Intenta nuevamente o elige otro método de pago",
+    "label-back-to-home": "Volver al inicio"
+  }

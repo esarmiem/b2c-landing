@@ -60,5 +60,7 @@
   "label-text-loader": "Más de 165 personas están explorando este destino. ¡Sé el siguiente en aprovechar las mejores ofertas!",
   "label-placeholder-loader-phone": "Número de teléfono",
   "label-placeholder-loader-email": "Correo",
-  "label-button-loader-continue": "Continuar"
+  "label-button-loader-continue": "Continuar",
+   "whatsapp-message": "Hola, tengo una consulta sobre el seguro de viaje",
+  "whatsapp-button-text": "¿Tienes dudas?"
 }

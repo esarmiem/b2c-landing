@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next'; 
 
 interface StepProps {
   number: number;
@@ -36,24 +37,26 @@ const Step: FC<StepProps> = ({ number, text, isActive = false, showDivider = fal
 };
 
 export const Breadcrumb: FC = () => {
+  const { t } = useTranslation(["products"]); 
+
   return (
     <div className="w-full bg-gray-50">
       <div className="max-w-5xl mx-auto py-9">
         <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
           <Step
             number={1}
-            text="Elige tu producto"
+            text={t("label-step-1")}
             isActive={true}
             showDivider={true}
           />
           <Step 
             number={2} 
-            text="Pasajeros" 
+            text={t("label-step-2")}
             showDivider={true} 
           />
           <Step 
             number={3} 
-            text="Pago" 
+            text={t("label-step-3")}
           />
         </div>
       </div>
