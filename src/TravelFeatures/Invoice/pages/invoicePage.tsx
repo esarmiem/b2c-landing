@@ -48,7 +48,7 @@ export default function InvoicePage () {
         <>
             <Breadcrumb />
             <main className="max-w-6xl mx-auto p-4 my-6">
-                <GoBack title="Volver a la informacion de pasajeros" url="/client-data" />
+                <GoBack title="Volver a la informacion de pasajeros" url="/traveler" />
                 <section className="grid md:grid-cols-[1fr_400px] gap-6 my-2">
                     <section className="space-y-4 items-center">
                         <HeaderBilling />

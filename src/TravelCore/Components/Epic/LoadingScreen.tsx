@@ -11,7 +11,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   subMessage,
 }) => {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-40">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-0">
       <div className="flex flex-col items-center max-w-md text-center p-4">
         <img
           src={LoadingGif}

@@ -7,6 +7,7 @@ import { CalendarIcon, Info } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 interface DateSelectorProps {
   activeTooltip: string | null;
@@ -16,6 +17,7 @@ interface DateSelectorProps {
 
 export function DateSelector({activeTooltip, setActiveTooltip, t}: DateSelectorProps) {
   const {data, setData} = useData() || {};
+  const { i18n } = useTranslation();
   const payloadOrder = data?.payloadOrder;
   const isValidDate = (dateString: string | undefined): boolean => {
     if (!dateString) return false;
@@ -41,7 +43,9 @@ export function DateSelector({activeTooltip, setActiveTooltip, t}: DateSelectorP
           salida: date.from ? format(date.from, "dd/MM/yyyy") : "",
           llegada: date.to ? format(date.to, "dd/MM/yyyy") : "",
           numeroPregunta: 1,
-          lenguaje: "es",
+          lenguaje: i18n.language,
+          telefono: '+000000000000',
+          email: 'dummy@dummy.com'
         }
       }))
     }

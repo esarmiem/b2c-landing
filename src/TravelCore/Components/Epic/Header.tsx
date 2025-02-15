@@ -4,28 +4,9 @@ import { DropdownHeader } from "./DropdownHeader";
 import { MenuSheet } from "./MenuSheet";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import useData from "@/TravelCore/Hooks/useData.ts";
-import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
-import {useEffect, useState} from "react";
-
 
 export const Header: React.FC = () => {
-  const { t, i18n } = useTranslation(["header", "home"]);
-  const {data} = useData() || {};
-  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
-
-  useEffect(() => {
-    if(data && data?.responseOrder?.idProspecto) {
-      setIsLoadingOrders(true) // Indicar que se debe navegar
-      setTimeout(() => {
-        setIsLoadingOrders(false)
-      }, 4000);
-    }
-  }, [data?.ResponseOrder]);
-
-  if (isLoadingOrders) {
-    return <LoadingScreen message={t("home:label-title-loader")} subMessage={t("home:label-text-loader")}/>;
-  }
+  const { t, i18n } = useTranslation(["header"]);
 
   return (
     <header className="sticky top-0 w-full bg-white z-50">

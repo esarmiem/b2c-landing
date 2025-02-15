@@ -99,15 +99,13 @@ export default function useHomeState () {
             responseOrder: response?.data
           })
         )
-        return {
-          idProspecto: response?.data?.idProspecto
-        }
+        console.log('devolviendo: ',response.data.idProspecto)
+        return  response.data.idProspecto
+
       }
+      return null
     } catch (error) {
       console.error("Failed to get order:", error);
-    }
-    finally {
-      return null
     }
   }
 

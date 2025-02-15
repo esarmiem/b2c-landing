@@ -13,24 +13,27 @@ import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
 import {useNavigate} from "react-router-dom";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
+import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
+import {useState, useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 export default function HomePage () {
-  const { HandleGetOrder } = useHomeState()
-  const {data} = useData() || {}
-  const navigate = useNavigate();
-/*
-  const [isOpenContactModal, setIsOpenContactModal] = useState(false);
-*/
+    const { t } = useTranslation(["home"]);
+
+    const { HandleGetOrder } = useHomeState()
+    const {data} = useData() || {}
+    const navigate = useNavigate();
+    const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+    /*
+      const [isOpenContactModal, setIsOpenContactModal] = useState(false);
+    */
+
 
   const images = [
     '../../../../Assets/slide 1.webp',
     '../../../../Assets/slide 2.webp',
     '../../../../Assets/slide 3.webp'
   ];
-
-  console.log("Order: ", data?.responseOrder)
-
- console.log("data", data?.payloadOrder)
 
 /*  const handleSearch = () => {
     //Llamar al modal
@@ -39,15 +42,20 @@ export default function HomePage () {
 
   const handleGetQuote = async () => {
   console.log('click en handleGetQuote ', isDataOrderValid(data?.payloadOrder))
+      setIsLoadingOrders(true) // Indicar que se debe navegar
     //Validate if data is entire fill
     setTimeout(async () => {
       if (data && isDataOrderValid(data?.payloadOrder)) {
-        const resp: any = await HandleGetOrder(data.payloadOrder)
+        const resp: number | null = await HandleGetOrder(data.payloadOrder)
+          console.log('recibiendo el response en home', resp)
         if (resp && resp > 0) {
-          navigate('/quote/travel'); // Navegar a la siguiente pantalla
+            console.log('siguiente pantalla')
+            setTimeout(() => {
+                navigate('/quote/travel'); // Navegar a la siguiente pantalla
+            }, 1000);
         }
       }
-    }, 2000);
+    }, 500);
   };
 
 
@@ -55,25 +63,26 @@ export default function HomePage () {
   const isDataOrderValid = (order: dataOrder): boolean => {
     return Object.values(order).every(value => {
       if (value === null || value === undefined) {
-        console.log('validacion 1')
         return false;
       }
       if (typeof value === 'string' && value.trim() === '') {
-        console.log('validacion 2')
         return false;
       }
       if (Object.keys(order).length !== 11) {
-        console.log('validacion 3', Object.keys(order).length)
         return false;
       }
       return true;
     });
   }
 
+  if (isLoadingOrders) {
+      return <LoadingScreen message={t("label-title-loader")} subMessage={t("label-text-loader")}/>;
+  }
+
   return (
       <>
         <HeroCarousel images={images} />
-        <TravelForm onClick ={handleSearch} />
+        <TravelForm onClick ={handleGetQuote} />
         <TravelSteps />
         <Certifications />
         <Features />

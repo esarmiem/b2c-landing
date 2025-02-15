@@ -1,11 +1,13 @@
 import React from 'react';
 import CardProduct from './CardProduct';
+import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface ProductsRowProps {
   viewType: 'list' | 'grid';
+  plans: Plan[]
 }
 
-const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
+const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
   const cardData = [
     {
       title: 'DISCOVER',
@@ -77,8 +79,8 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
   return (
     <div className="max-w-6xl mx-auto p-4">
       <div className={containerClasses}>
-        {cardData.map((card, index) => (
-          <CardProduct key={index} viewType={viewType} {...card} />
+        {plans.map((plan, index) => (
+          <CardProduct key={index} viewType={viewType} {...plan} />
         ))}
       </div>
     </div>
