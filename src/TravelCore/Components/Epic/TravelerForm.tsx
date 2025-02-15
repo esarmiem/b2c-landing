@@ -3,7 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
 import { useTranslation } from "react-i18next";
+import {MouseEvent} from "react";
 
+interface TravelFormProps {
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+}
 export function TravelerForm({ traveler }: { traveler: { id: number, age: string, phone: string } }) {
   const { t } = useTranslation(["traveler"]); 
 
