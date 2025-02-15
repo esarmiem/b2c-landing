@@ -3,6 +3,7 @@ import { CircleCheck } from "lucide-react";
 import ModalUpgrades from "./ModalUpgrades";
 import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
 import {useTranslation} from "react-i18next";
+import ModalProductDetails from "./ModalProductDetails";
 
 interface Product {
   id: string;
@@ -16,6 +17,8 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { i18n } = useTranslation();
+
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const formatCurrency = (value: string, currency: 'COP' | 'USD'): string => {
     const valueNumber = parseFloat(value);
@@ -57,6 +60,19 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
   // 🔹 Función para cerrar el modal
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const openDetailsModal = () => {
+    setSelectedProduct({
+      id: "1",
+      name: "title",
+      price: parseFloat(price.replace(/[^0-9.]/g, "")),
+      description: "Detalles adicionales del producto y coberturas.",
+    });
+    setIsDetailsModalOpen(true);
+  };
+ 
+  const closeDetailsModal = () => {
+    setIsDetailsModalOpen(false);
   };
 
   return (
@@ -153,7 +169,7 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
               >
                 Seleccionar
               </button>
-              <a href="#" className="text-xs text-blue-600 hover:underline font-medium">
+              <a href="#" onClick={openDetailsModal} className="text-xs text-blue-600 hover:underline font-medium">
                 Ver detalles de <span className="font-bold">{cobertura.length} coberturas</span>
               </a>
             </div>
@@ -161,9 +177,23 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
         </div>
       )}
 
-      {/* 🔹 Modal dentro del return y usando estados correctamente */}
+      {/* Modal dentro del return y usando estados correctamente */}
       {isModalOpen && (
           <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct}/>
+      )}
+      {/* Modal de detalles */}
+      {isDetailsModalOpen && (
+        <ModalProductDetails
+          isOpen={isDetailsModalOpen}
+          onClose={closeDetailsModal}
+          product={{
+            name: Categoria,
+            subtitle: nombre,
+            typeOfProduct: TipoViaje,
+            price: price,
+            originalPrice: originalPrice,
+          }}
+        />
       )}
     </>
   );

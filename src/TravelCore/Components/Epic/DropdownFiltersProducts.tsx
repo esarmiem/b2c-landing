@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { List, Columns3, TrendingDown, TrendingUp, ShieldPlus } from "lucide-react";
+import { AlignCenter, List, Columns3, TrendingDown, TrendingUp, ShieldPlus , ChevronDown} from "lucide-react";
 import { useTranslation } from 'react-i18next'; // Importar useTranslation
-
 interface DropdownFiltersProductsProps {  
   setViewType: (type: 'list' | 'grid') => void;
 }
@@ -43,7 +42,7 @@ const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setVi
       <div>
         <button
           type="button"
-          className="px-4 py-1 rounded-md inline-flex w-full justify-center gap-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 border"
+          className="px-4 py-1 rounded-md inline-flex w-full justify-center gap-x-2 text-sm/12 align-middle font-medium   text-gray-600 hover:text-gray-900 bg-zinc-100 border"
           onClick={toggleDropdown}
         >
           {t("label-filters")} 

@@ -18,32 +18,31 @@ interface PayloadUpgrades {
   language : string
 }
 
-// export const getProductUpdates: async (payload: PayloadUpgrades) => {
-//   const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
-//   const data = {
-//     request: 'get_upgrade',
-//     token: GET_TOKEN_ISL,
-//     id_plan: payload.id_plan,
-//     language: payload.language,
-//   };
-//
-//   try {
-//     const response = await -({
-//       method: 'GET',
-//       path: url,
-//       data: JSON.stringify(data),
-//       customConfig: {
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching product updates:', error);
-//     throw error;
-//   }
-// }
+export const getProductUpdates = async (payload: PayloadUpgrades) => {
+  const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
+  const data = {
+    request: 'get_upgrade',
+    token: GET_TOKEN_ISL,
+    id_plan: payload.id_plan,
+    language: payload.language,
+  };
+
+  try {
+    const response = await axiosHttp({
+      method: 'GET',
+      path: url,
+      data: JSON.stringify(data),
+      customConfig: {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching product updates:', error);
+    throw error;
+  }
 
 export const ASSISTANCE_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
