@@ -41,15 +41,12 @@ export default function HomePage () {
   };*/
 
   const handleGetQuote = async () => {
-  console.log('click en handleGetQuote ', isDataOrderValid(data?.payloadOrder))
       setIsLoadingOrders(true) // Indicar que se debe navegar
     //Validate if data is entire fill
     setTimeout(async () => {
       if (data && isDataOrderValid(data?.payloadOrder)) {
         const resp: number | null = await HandleGetOrder(data.payloadOrder)
-          console.log('recibiendo el response en home', resp)
         if (resp && resp > 0) {
-            console.log('siguiente pantalla')
             setTimeout(() => {
                 navigate('/quote/travel'); // Navegar a la siguiente pantalla
             }, 1000);

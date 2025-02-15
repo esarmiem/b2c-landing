@@ -25,7 +25,6 @@ export const ModalForm = ({ isOpen, toggleModal, onClick }: ModalProps) => {
   const {setData} = useData() || {};
   const [modalForm, setModalForm] = useState({"phone": "", "email":""})
   const [loadingSave, setLoadingSave] = useState(false)
-console.log(modalForm)
 
   const handleChange = (e: any) => {
     setModalForm((prev) => ({

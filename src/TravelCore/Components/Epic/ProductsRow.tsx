@@ -8,67 +8,6 @@ interface ProductsRowProps {
 }
 
 const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
-  const cardData = [
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección básica 22.000 USD',
-      price: 'US$ 22.000',
-      originalPrice: 'US$ 30.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección standard 35.000 USD',
-      price: 'US$ 35.000',
-      originalPrice: 'US$ 50.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-      recommended: true
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección especial 55.000 USD',
-      price: 'US$ 55.000',
-      originalPrice: 'US$ 75.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-      recommended: false,
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección ideal 110.000 USD',
-      price: 'US$ 110.000',
-      originalPrice: 'US$ 150.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-    },
-  ];
-
   // Definimos las clases condicionales:
   // Si viewType es "list", usamos una grilla de 1 columna; si es "grid", usamos varias columnas.
   const containerClasses =

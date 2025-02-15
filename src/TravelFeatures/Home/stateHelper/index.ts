@@ -88,18 +88,15 @@ export default function useHomeState () {
   };
 
   const HandleGetOrder = async (orderPayload: dataOrder) => {
-    console.log('Haciendo la peticion: ', orderPayload)
     const travelAssistance = new TravelAssistance();
     try {
       const response = await travelAssistance.getOrderPriceByAge(orderPayload);
-      console.log('response', response?.data)
       if (response && response?.data?.planes && response?.data?.planes.length > 0 && response?.data?.idProspecto) {
         setData?.((prevData) => ({
             ...prevData,
             responseOrder: response?.data
           })
         )
-        console.log('devolviendo: ',response.data.idProspecto)
         return  response.data.idProspecto
 
       }

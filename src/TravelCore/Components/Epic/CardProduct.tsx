@@ -31,17 +31,11 @@ interface Product {
   description?: string;
 }
 
-const CardProduct: React.FC<PlansProps> = ({
- Categoria, nombre, Valor, ValorPesos, DescripcionDescuentosDolares, DescripcionDescuentosPesos,
-  cobertura,
-  TipoViaje,
-  viewType = "grid",
-}) => {
+const CardProduct: React.FC<PlansProps> = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuentosDolares, DescripcionDescuentosPesos, cobertura, TipoViaje, viewType = "grid"}) => {
   // 🔹 Estados del modal
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { i18n } = useTranslation();
-
 
   const formatCurrency = (value: string, currency: 'COP' | 'USD'): string => {
     const valueNumber = parseFloat(value);
@@ -71,7 +65,6 @@ const CardProduct: React.FC<PlansProps> = ({
 
   // 🔹 Función para abrir el modal
   const openModal = () => {
-    console.log("Abriendo modal");
     setSelectedProduct({
       id: "1",
       name: Categoria,
