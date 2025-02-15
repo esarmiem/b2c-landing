@@ -23,7 +23,9 @@ export const Header: React.FC = () => {
           <div className="items-center hidden lg:flex bg-red-700 p-3 pt-4 mb-2 rounded-bl-3xl">
             <Headset className="h-4 w-4 mr-2  text-white hover:font-semibold" />
             <Link
-              href="tel:+573175032200"
+              href="https://wa.me/573175032200"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm font-medium text-white hover:text-white"
             >
               {t("label-link-sales")}: +57 317 5032 200
@@ -45,7 +47,9 @@ export const Header: React.FC = () => {
 
           <div className="items-center hidden lg:flex">
             <Link
-              href="#"
+              href="https://travelkit.online/"
+              target="_blank"
+              rel="noopener noreferrer" 
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
               {t("label-link-agency")}
