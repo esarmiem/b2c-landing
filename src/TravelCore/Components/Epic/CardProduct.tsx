@@ -189,7 +189,7 @@ const CardProduct: React.FC<PlansProps> = ({
 
       {/* 🔹 Modal dentro del return y usando estados correctamente */}
       {isModalOpen && (
-        <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />
+          <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct}/>
       )}
     </>
   );

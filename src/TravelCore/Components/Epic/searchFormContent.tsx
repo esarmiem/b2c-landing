@@ -11,7 +11,6 @@ interface SearchFormContentProps {
 
 export function SearchFormContent({onClick}: SearchFormContentProps) {
   const { t } = useTranslation(["home"]);
-  const [travelers, setTravelers] = useState(1);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   return (
@@ -28,7 +27,7 @@ export function SearchFormContent({onClick}: SearchFormContentProps) {
         t={t}
       />
 
-      <TravelersPopover travelers={travelers} setTravelers={setTravelers} />
+      <TravelersPopover/>
 
       <TravelButtonForm onClick={onClick} />
     </div>

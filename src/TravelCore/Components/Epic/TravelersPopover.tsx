@@ -7,23 +7,20 @@ import { Separator } from "@/components/ui/separator";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import { useTranslation } from "react-i18next";
 import useData from "@/TravelCore/Hooks/useData.ts";
+import {useState} from "react";
 
 interface TravelerAge {
   id: number;
   age: string;
 }
 
-interface TravelersPopoverProps {
-  travelers: number;
-  setTravelers: (value: number) => void;
-}
-
-export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, setTravelers}) => {
+export const TravelersPopover = () => {
   const { t } = useTranslation(["home"]);
   const { data, setData } = useData() || {};
   const payloadOrder = data?.payloadOrder;
   const [isOpen, setIsOpen] = React.useState(false);
-  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
+  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null)
+  const [travelers, setTravelers] = useState(1);
 
   const initialAges = React.useMemo(() => {
     if(payloadOrder?.edades){
@@ -66,17 +63,16 @@ export const TravelersPopover: React.FC<TravelersPopoverProps> = ({travelers, se
 
   const handleRemoveTraveler = (idToRemove: number) => {
     if (travelers > 1) {
-      setTravelers(travelers - 1);
-      setAges(
-        ages
+      setTravelers((prevTravelers) => prevTravelers - 1);
+      const updatedAges = ages
           .filter((age) => age.id !== idToRemove)
           .map((age, index) => ({
             ...age,
             id: index + 1,
-          }))
-      );
+          }));
+      setAges(updatedAges);
     }
-  };
+  }
 
   const handleAgeChange = (id: number, value: string) => {
     setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)));
