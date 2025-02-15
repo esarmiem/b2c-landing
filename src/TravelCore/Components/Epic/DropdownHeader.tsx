@@ -65,7 +65,9 @@ export const DropdownHeader: React.FC = () => {
             <div className="items-center flex px-4 py-2 text-sm">
               <ShieldPlus className="h-4 w-4 mr-2" />
               <Link 
-                href="/Home" 
+                href="https://wc.mitravelkit.com/asistencia-al-viajero/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
                 {t('label-link-assist')}
@@ -91,7 +93,9 @@ export const DropdownHeader: React.FC = () => {
                 <path d="M16 6v4" />
               </svg>
               <Link 
-                href="#" 
+                href="#"
+                target=""
+                rel="noopener noreferrer" 
                 className="text-sm font-medium ml-2 text-gray-600 hover:text-gray-900"
               >
                 {t('label-link-comms')}
