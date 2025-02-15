@@ -60,5 +60,7 @@
   "label-text-loader": "More than 165 people are exploring this destination. Be the next to take advantage of the best offers!",
   "label-placeholder-loader-phone": "Phone number",
   "label-placeholder-loader-email": "Email",
-  "label-button-loader-continue": "Continue"
+  "label-button-loader-continue": "Continue",
+   "whatsapp-message": "Hello, I have a question about the travel insurance",
+  "whatsapp-button-text": "Got any questions?"
 }

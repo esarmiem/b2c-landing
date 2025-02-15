@@ -1,17 +1,18 @@
-import {Input} from "@/components/ui/input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {PhoneNumberForm} from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
-import {useState} from "react";
+import { Input } from "@/components/ui/input.tsx";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+import { useState } from "react";
+import { useTranslation } from "react-i18next"; 
 
 export function BillingForm() {
-
-  const [usePassengerInfo, setUsePassengerInfo] = useState(false)
+  const { t } = useTranslation(["invoice"]); 
+  const [usePassengerInfo, setUsePassengerInfo] = useState(false);
 
   return (
     <>
       <section className="p-4">
         <h2 className="mb-4 font-bold text-lg">
-          Selecciona uno de los pasajeros como titular de los datos de facturación:
+          {t("billing-select-passenger-title")} 
         </h2>
         <div className="flex items-center space-x-2">
           <Input
@@ -22,7 +23,7 @@ export function BillingForm() {
             className="h-3 w-3 rounded border-gray-300"
           />
           <label htmlFor="usePassengerInfo" className="text-sm font-medium text-gray-700">
-            Usar la misma información del Pasajero 1 para la facturación
+            {t("billing-use-passenger-info")} 
           </label>
         </div>
       </section>
@@ -30,40 +31,63 @@ export function BillingForm() {
       <section className="space-y-4 p-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">Nombre(s)</label>
-            <Input placeholder="Ingrese su nombre" className="rounded-3xl border-gray-300 p-6" />
+            <label className="block font-semibold text-gray-500 text-sm mb-1">
+              {t("billing-first-name")} 
+            </label>
+            <Input
+              placeholder={t("billing-placeholder-first-name")} 
+              className="rounded-3xl border-gray-300 p-6"
+            />
           </div>
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">Apellidos</label>
-            <Input placeholder="Ingrese su apellido" className="rounded-3xl border-gray-300 p-6" />
+            <label className="block font-semibold text-gray-500 text-sm mb-1">
+              {t("billing-last-name")} 
+            </label>
+            <Input
+              placeholder={t("billing-placeholder-last-name")} 
+              className="rounded-3xl border-gray-300 p-6"
+            />
           </div>
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">Tipo de documento</label>
+            <label className="block font-semibold text-gray-500 text-sm mb-1">
+              {t("billing-document-type")} 
+            </label>
             <Select>
               <SelectTrigger className="rounded-3xl border-gray-300 p-6">
-                <SelectValue placeholder="Seleccione" />
+                <SelectValue placeholder={t("billing-placeholder-select-document-type")} /> 
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="cc">Cédula de Ciudadanía</SelectItem>
-                <SelectItem value="ce">Cédula de Extranjería</SelectItem>
-                <SelectItem value="passport">Pasaporte</SelectItem>
+                <SelectItem value="cc">{t("billing-option-cc")}</SelectItem> 
+                <SelectItem value="ce">{t("billing-option-ce")}</SelectItem> 
+                <SelectItem value="passport">{t("billing-option-passport")}</SelectItem> 
               </SelectContent>
             </Select>
           </div>
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">No. de documento</label>
-            <Input placeholder="Número de documento" className="rounded-3xl border-gray-300 p-6" />
+            <label className="block font-semibold text-gray-500 text-sm mb-1">
+              {t("billing-document-number")} 
+            </label>
+            <Input
+              placeholder={t("billing-placeholder-document-number")} 
+              className="rounded-3xl border-gray-300 p-6"
+            />
           </div>
           <PhoneNumberForm celType="Teléfono" />
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">Correo electrónico</label>
-            <Input type="email" placeholder="correo@ejemplo.com" className="rounded-3xl border-gray-300 p-6" />
+            <label className="block font-semibold text-gray-500 text-sm mb-1">
+              {t("billing-email")} 
+            </label>
+            <Input
+              type="email"
+              placeholder={t("billing-placeholder-email")} 
+              className="rounded-3xl border-gray-300 p-6"
+            />
           </div>
         </div>
         <div className="grid gap-4">
           <div className="space-y-2">
             <label className="block font-semibold text-gray-500 text-sm mb-1">
-              País de facturación
+              {t("billing-country")} 
             </label>
             <Input
               type="text"
@@ -73,29 +97,29 @@ export function BillingForm() {
 
           <div className="space-y-2">
             <label className="block font-semibold text-gray-500 text-sm mb-1">
-              Ciudad de facturación
+              {t("billing-city")} 
             </label>
             <Select>
               <SelectTrigger className="rounded-3xl border-gray-300 p-6">
-                <SelectValue placeholder="Bogotá" />
+                <SelectValue placeholder={t("billing-placeholder-city")} /> 
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="bogota">Bogotá</SelectItem>
-                <SelectItem value="medellin">Medellín</SelectItem>
-                <SelectItem value="cali">Cali</SelectItem>
+                <SelectItem value="bogota">{t("billing-option-bogota")}</SelectItem> 
+                <SelectItem value="medellin">{t("billing-option-medellin")}</SelectItem> 
+                <SelectItem value="cali">{t("billing-option-cali")}</SelectItem> 
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <label className="block font-semibold text-gray-500 text-sm mb-1">
-              Dirección de facturación
+              {t("billing-address")} 
             </label>
             <Input
               type="text"
               id="address"
               name="address"
-              placeholder="Calle 123 #45-67"
+              placeholder={t("billing-placeholder-address")} 
               required
               className="w-full rounded-3xl border border-gray-300 text-base p-6"
             />
@@ -103,18 +127,18 @@ export function BillingForm() {
 
           <div className="space-y-2">
             <label className="block font-semibold text-gray-500 text-sm mb-1">
-              Información adicional
+              {t("billing-additional-info")} 
             </label>
             <Input
               type="text"
               id="additional"
               name="additional"
-              placeholder="Apartamento, suite, unidad, etc."
+              placeholder={t("billing-placeholder-additional-info")} 
               className="w-full rounded-3xl border border-gray-300 text-base p-6"
             />
           </div>
         </div>
       </section>
     </>
-  )
+  );
 }
