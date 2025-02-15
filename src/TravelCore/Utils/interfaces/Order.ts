@@ -38,11 +38,16 @@ export interface Plan {
   upgrade: any[];
   cobertura: Cobertura[];
   Condiciones: Condiciones;
+  viewType?: "list" | "grid";
+}
+export interface Data {
+  planes: Plan[];
+  idProspecto: number;
 }
 
 export interface ResponseData {
-  planes: Plan[];
-  idProspecto: number;
+  data: Data;
+  error: string | null;
 }
 //Order Payload
 export interface dataOrder {

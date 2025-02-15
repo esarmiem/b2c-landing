@@ -1,3 +1,5 @@
+import {dataOrder, Data} from "@/TravelCore/Utils/interfaces/Order.ts";
+
 export interface GenericItem {
   [key: string]: any
 }
@@ -16,3 +18,9 @@ export interface StorageData<T = any> {
   timestamp: number
   version: string
 }
+
+export interface GlobalData {
+  payloadOrder: dataOrder
+  responseOrder: Data
+}
+

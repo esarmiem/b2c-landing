@@ -23,7 +23,6 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 
     if (session && session.token) {
         defaultHeaders.Authorization = 'Bearer ' + session.token;
-        console.log('session.token', session.token);
         //defaultHeaders.apiKey = API_KEY;
     }
 

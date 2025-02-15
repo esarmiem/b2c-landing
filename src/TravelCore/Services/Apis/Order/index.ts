@@ -13,6 +13,38 @@ interface ApiCheckPreOrderResponse {
   error: string | null;
 }
 
+interface PayloadUpgrades {
+  id_plan : string
+  language : string
+}
+
+// export const getProductUpdates: async (payload: PayloadUpgrades) => {
+//   const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
+//   const data = {
+//     request: 'get_upgrade',
+//     token: GET_TOKEN_ISL,
+//     id_plan: payload.id_plan,
+//     language: payload.language,
+//   };
+//
+//   try {
+//     const response = await -({
+//       method: 'GET',
+//       path: url,
+//       data: JSON.stringify(data),
+//       customConfig: {
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching product updates:', error);
+//     throw error;
+//   }
+// }
+
 export const ASSISTANCE_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
     return axiosHttp({
@@ -22,33 +54,6 @@ export const ASSISTANCE_API = {
       session: {token: GET_TOKEN}
     })
   },
-  // getProductUpdates: async (productCode: string) => {
-  //   const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
-  //   const token = await getISLToken();
-  //   const data = {
-  //     request: 'get_upgrade',
-  //     token: token,
-  //     id_plan: productCode,
-  //     language: 'spa',
-  //   };
-  //
-  //   try {
-  //     const response = await axiosHttp({
-  //       method: 'GET',
-  //       path: url,
-  //       data: JSON.stringify(data),
-  //       customConfig: {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error fetching product updates:', error);
-  //     throw error;
-  //   }
-  // },
   checkPreorderISL: (data: dataPreorder): Promise<ApiCheckPreOrderResponse> => {
     return axiosHttp({
       path: `${SERVICE_CHECK_PREORDER_ISL}`,

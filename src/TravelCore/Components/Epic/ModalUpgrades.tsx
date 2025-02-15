@@ -95,7 +95,7 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
           </div>
         </div>
 
-        <a href="/client-data" className="w-full rounded-full">
+        <a href="/traveler" className="w-full rounded-full">
           <button className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600">
             {t("button-continue")}
           </button>

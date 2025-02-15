@@ -21,8 +21,9 @@ export function DestinationSelector({activeTooltip, setActiveTooltip, t}: Destin
   const master = useMasters();
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[];
   const {data, setData} = useData() || {};
+  const payloadOrder = data?.payloadOrder
 
-  const selectDestination = arrivals?.find((dest) => dest.idDestino === data?.destino)?.descripcion;
+  const selectDestination = arrivals?.find((dest) => dest.idDestino === payloadOrder?.destino)?.descripcion;
 
   const [open, setOpen] = useState(false);
   const [origin, setOrigin] = useState<string>("");
@@ -31,8 +32,8 @@ export function DestinationSelector({activeTooltip, setActiveTooltip, t}: Destin
     // Obtener el país de origen del navegador, esta api es gratis pero con usos limitados (se debe implementar algo aquí)
     fetch("https://ipapi.co/json/")
       .then((response) => response.json())
-      .then((data) => {
-        setOrigin(data.country_name);
+      .then((payloadOrder) => {
+        setOrigin(payloadOrder.country_name);
       })
       .catch(() => {
         setOrigin("Unknown");
@@ -42,6 +43,18 @@ export function DestinationSelector({activeTooltip, setActiveTooltip, t}: Destin
   const handleOriginChange = (newOrigin: string) => {
     setOrigin(newOrigin);
   };
+
+  const handleSelectDestination = (dest: ArrivalsItems) => {
+    setData?.((prevData) => ({
+      ...prevData,
+      payloadOrder: {
+        ...prevData?.payloadOrder,
+        destino: dest.idDestino,
+        pais: "CO",
+        idUser: "5"
+      }
+    }));
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -115,14 +128,14 @@ export function DestinationSelector({activeTooltip, setActiveTooltip, t}: Destin
                 <CommandItem
                   key={dest.idDestino}
                   onSelect={() => {
-                    setData?.((prevData) => ({...prevData, destino: dest.idDestino, pais: "CO", idUser: "5"}));
+                    handleSelectDestination(dest);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      data?.destino === dest.idDestino ? "opacity-100" : "opacity-0"
+                      payloadOrder?.destino === dest.idDestino ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {dest.descripcion}

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation(["header"]);
+
   return (
     <header className="sticky top-0 w-full bg-white z-50">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}

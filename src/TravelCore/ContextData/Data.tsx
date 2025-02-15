@@ -1,10 +1,10 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react';
 import { getPersisted, savePersistense } from './Persistence/data';
-import { dataOrder } from "@/TravelCore/Utils/interfaces/Order.ts";
+import {GlobalData} from "@/TravelCore/Utils/interfaces/context.ts";
 
 const STORAGE_KEY = 'tk-data';
 
-type State = dataOrder | null;
+type State = GlobalData | null;
 
 type DataContextType = {
   data: State;
@@ -19,7 +19,7 @@ interface DataProviderProps {
 
 export function DataProvider({ children }: DataProviderProps): JSX.Element {
   const [data, setData] = useState<State>(() => {
-    const cachedData = getPersisted(STORAGE_KEY) as dataOrder | null;
+    const cachedData = getPersisted(STORAGE_KEY) as GlobalData | null;
     return cachedData;
   });
 
