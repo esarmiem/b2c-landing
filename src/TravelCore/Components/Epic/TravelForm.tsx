@@ -12,7 +12,7 @@ export function TravelForm({ getOrder }: TravelFormProps) {
   const { t } = useTranslation(["home"])
 
   return (
-    <div className="container mx-auto px-4 relative z-10">
+    <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <Tabs
         defaultValue="tab1"
         className=""//bg-red-700 rounded-lg md:rounded-full shadow-lg p-8

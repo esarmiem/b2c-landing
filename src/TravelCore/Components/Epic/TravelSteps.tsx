@@ -49,7 +49,7 @@ export const TravelSteps = () => {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-10 md:py-12 lg:py-12">
+    <section className="container mx-auto py-10 md:py-12 lg:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* Header */}
       <div className="text-center flex flex-col items-center mb-12">
         <Sparkle className="h-6 w-6 md:h-8 md:w-8 lg:h-8 lg:w-8 text-primary"/>

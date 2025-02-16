@@ -66,7 +66,7 @@ export const Testimonials = () => {
   };
 
   return (
-    <section className="hidden lg:flex py-16 bg-red-800 px-6">
+    <section className="hidden lg:flex py-16 bg-red-800 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <div className="container mx-auto text-center">
         <h2 className="text-3xl text-white font-bold mb-6">
           {t('title-testimonials')}
