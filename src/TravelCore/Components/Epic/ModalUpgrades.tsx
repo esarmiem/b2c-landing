@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Plus, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
@@ -7,9 +7,9 @@ import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts"
 import { getProductUpdates } from "@/TravelCore/Services/Apis/Order"
 
 interface ModalUpgradesProps {
-  isOpen: boolean;
-  onClose: () => void;
-  product: { name: string; price: number } | null;
+  isOpen: boolean
+  onClose: () => void
+  product: Plan
 }
 
 const upgrades = [
@@ -39,6 +39,40 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
   );
 
   const totalPrice = product.price + totalUpgradesCost;
+
+  useEffect(() => {
+    // Datos que enviarás en el cuerpo de la petición GET
+    const body = {
+      key1: 'value1',
+      key2: 'value2',
+    };
+
+    // Configuración de la petición
+    const requestOptions = {
+      method: 'GET', // Método GET
+      headers: {
+        'Content-Type': 'application/json', // Especifica el tipo de contenido
+      },
+      body: JSON.stringify(body), // Convierte el cuerpo a JSON
+    };
+
+    // Realizar la petición
+    fetch('https://dtravelassist.com/apirest_v1/information', requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error en la petición');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log('Respuesta:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+  }, []);
+
+  console.log("upgrades: ", productUpgrades)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
