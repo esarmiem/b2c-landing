@@ -96,7 +96,7 @@
     @apply bg-background text-foreground;
   }
 }
-/* Agrega estos estilos en tu archivo CSS global o en un archivo de estilos específico */
+/* Animación para el botón de whatsapp */
 .ripple-effect {
   position: absolute;
   border-radius: 50%;

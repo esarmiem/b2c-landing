@@ -44,11 +44,13 @@ export const TravelButtonForm = ({ getOrder }: TravelButtonFormProps) => {
 
   return (
     <Button
-      className="bg-red-600 hover:bg-black rounded-full lg:w-full h-auto"
+      className="relative overflow-hidden border border-red-600 bg-red-600 text-white shadow-2xl transition-all before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:duration-500 after:absolute after:right-0 after:top-0 after:h-full after:w-0 after:duration-500 hover:text-white hover:shadow-red-600 hover:before:w-2/4 hover:before:bg-black hover:after:w-2/4 hover:after:bg-black rounded-full lg:w-full h-auto px-4 py-2 flex items-center justify-center gap-2"
       onClick={handleSearch}
     >
-      <Search />
-      {t('label-button-search')}
+      <span className="relative z-10 flex items-center gap-2">
+        <Search className="w-5 h-5" /> {/* Ajusta el tamaño del ícono si es necesario */}
+        {t('label-button-search')}
+      </span>
     </Button>
   );
 };
