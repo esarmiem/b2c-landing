@@ -29,7 +29,7 @@ export const PaymentStatus: React.FC<PaymentStatusProps> = ({ payment, onRetry, 
   const isApproved = payment.status === "approved";
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-4 flex flex-col gap-4 items-center justify-center">
+    <div className="min-h-screen w-full bg-gray-50 flex flex-col gap-4 items-center justify-center py-6 px-2 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <Card className="w-full max-w-3xl">
         <CardHeader className={`${isApproved ? "bg-green-600" : "bg-red-600"} rounded-t-lg p-6`}>
           <div className="flex flex-col items-center justify-center gap-4">
@@ -103,7 +103,7 @@ export const PaymentStatus: React.FC<PaymentStatusProps> = ({ payment, onRetry, 
               </Button>
             ) : (
               <Button onClick={onRetry} className="w-full max-w-md text-xs md:text-base hover:bg-white hover:text-black hover:border-2 hover:border-black">
-                <RefreshCcw className="w-4 h-4 mr-2" />
+                <RefreshCcw className="hidden md:flex w-4 h-4 mr-2" />
                 {t("label-retry-payment")}
               </Button>
             )}

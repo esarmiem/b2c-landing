@@ -9,9 +9,9 @@ export const Header: React.FC = () => {
   const { t, i18n } = useTranslation(["header"]);
 
   return (
-    <header className="sticky top-0 w-full bg-white z-50">
+    <header className="sticky top-0 w-full bg-white z-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
-      <div className="flex h-14 items-top justify-between px-4 md:px-20 ">
+      <div className="flex h-14 items-top justify-between">
         <div className="flex items-center">
           <Link
             href="/"

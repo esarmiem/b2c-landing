@@ -96,3 +96,18 @@
     @apply bg-background text-foreground;
   }
 }
+/* Animación para el botón de whatsapp */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(0);
+  animation: ripple-animation 0.5s linear;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

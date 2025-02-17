@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 
 export default function HomePage () {

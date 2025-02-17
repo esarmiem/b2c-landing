@@ -33,7 +33,7 @@ const certifications: Certification[] = [
 export const Certifications = () => {
   const { t } = useTranslation(["home"])
   return (
-    <section className="py-16 px-6 bg-gray-100 border-t-2">
+    <section className="py-16 bg-gray-100 border-t-2 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-12">
           {t('title-certifications')}
