@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Plus, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
+import {formatCurrency} from "@/TravelCore/Utils/format.ts";
+import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts"
+import { getProductUpdates } from "@/TravelCore/Services/Apis/Order"
 
 interface ModalUpgradesProps {
-  isOpen: boolean;
-  onClose: () => void;
-  product: { name: string; price: number } | null;
+  isOpen: boolean
+  onClose: () => void
+  product: Plan
 }
 
 const upgrades = [
@@ -19,9 +22,11 @@ const upgrades = [
 const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product }) => {
   const { t } = useTranslation(["products"]); 
   const [selectedUpgrades, setSelectedUpgrades] = useState<number[]>([]);
+  const { i18n } = useTranslation();
+  const [productUpgrades, setProductUpgrades] = useState(null);
 
   if (!product) return null;
-
+console.log("languaje: ", i18n.language)
   const toggleUpgrade = (id: number) => {
     setSelectedUpgrades((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
@@ -34,6 +39,16 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
   );
 
   const totalPrice = product.price + totalUpgradesCost;
+
+  useEffect(() => {
+    const updateProduct = async () => {
+      const response = await getProductUpdates({ id_plan: "1618", language: "spa" });
+      setProductUpgrades(response);
+  }
+    updateProduct();
+  }, []);
+
+  console.log("upgrades: ", productUpgrades)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -83,15 +98,15 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
           </div>
           <div className="flex justify-between">
             <p className="text-sm font-medium">{t("label-product-value-per-traveler")}</p>
-            <p className="font-bold text-red-950">{product.price.toLocaleString()} COP</p>
+            <p className="font-bold text-red-950">{formatCurrency(product.price.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
           <div className="flex justify-between">
             <p className="text-sm font-bold text-red-500">{t("label-total-upgrades")}</p>
-            <p className="font-bold text-red-500">{totalUpgradesCost.toLocaleString()} COP</p>
+            <p className="font-bold text-red-500">{formatCurrency(totalUpgradesCost.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
           <div className="flex justify-between text-lg font-bold">
-            <p>{t("label-total")}</p>
-            <p className="text-red-950">{totalPrice.toLocaleString()} COP</p>
+          <p>{t("label-total")}</p>
+            <p className="text-red-950">{formatCurrency(totalPrice.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
         </div>
 

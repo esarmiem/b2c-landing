@@ -13,6 +13,7 @@ export default function TravelForm() {
   const travelers = [
     { id: 1, age: `35 ${t("label-years")}`, phone: t("label-phone") },
     { id: 2, age: `20 ${t("label-years")}`, phone: t("label-phone") },
+    { id: 3, age: `25 ${t("label-years")}`, phone: t("label-phone") },
   ];
 
   return (

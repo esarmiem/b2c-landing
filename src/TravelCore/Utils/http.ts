@@ -44,6 +44,7 @@ export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error
         data: args.data,
         timeout: args.timeout || 60000,
     };
+    console.log(config)
     try {
         const response: AxiosResponse = await axios({ ...config, ...args.customConfig });
         return { data: response.data, error: null };

@@ -3,56 +3,44 @@ import { CircleCheck } from "lucide-react";
 import ModalUpgrades from "./ModalUpgrades";
 import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
 import {useTranslation} from "react-i18next";
+import {formatCurrency} from "@/TravelCore/Utils/format.ts"
+import useData from "@/TravelCore/Hooks/useData.ts";
 import ModalProductDetails from "./ModalProductDetails";
 
 interface Product {
-  id: string;
+  id: number;
   name: string;
   price: number;
   description?: string;
 }
 
-const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuentosDolares, DescripcionDescuentosPesos, cobertura, TipoViaje, viewType = "grid"}: Plan) => {
+const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuentosDolares, DescripcionDescuentosPesos, cobertura, TipoViaje, IdPlan, viewType = "grid"}: Plan) => {
   const { t } = useTranslation(["products"]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { i18n } = useTranslation();
-
+  const {setData} = useData() || {};
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const formatCurrency = (value: string, currency: 'COP' | 'USD'): string => {
-    const valueNumber = parseFloat(value);
 
-    if (isNaN(valueNumber)) {
-      throw new Error("El valor proporcionado no es un número válido.");
-    }
-    let options = {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    };
 
-    if (currency === 'COP') {
-      // Para pesos colombianos, no mostramos los decimales
-      options.minimumFractionDigits = 0;
-      options.maximumFractionDigits = 0;
-    }
-
-    return new Intl.NumberFormat(currency === 'COP' ? 'es-CO' : 'en-US', options as Intl.NumberFormatOptions).format(valueNumber);
-  }
-
-  const price = i18n.language === "es" ? formatCurrency(ValorPesos, 'COP') : formatCurrency(Valor, 'USD')
+const rawPrice = i18n.language === "es" ? ValorPesos : Valor
+  const price = i18n.language === "es" ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
   const recommended = DescripcionDescuentosDolares.porcentaje !== '0'
   const originalPrice = recommended ? i18n.language === "es" ? formatCurrency(DescripcionDescuentosPesos.valorTotal.toString(), 'COP') : formatCurrency(DescripcionDescuentosDolares.valorTotal.toString(), 'USD') : ""
 
   // 🔹 Función para abrir el modal
   const openModal = () => {
+    setData?.((prevData) => ({
+          ...prevData,
+          selectedPlan: IdPlan
+        })
+    )
     setSelectedProduct({
-      id: "1",
+      id: IdPlan,
       name: Categoria,
-      price: parseFloat(price.replace(/[^0-9.]/g, "")), // ✅ Limpia caracteres no numéricos
-      description: "", // ✅ Evita undefined en description
+      price: parseFloat(rawPrice),
+      description: "",
     });
     setIsModalOpen(true);
   };
@@ -70,7 +58,7 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
     });
     setIsDetailsModalOpen(true);
   };
- 
+
   const closeDetailsModal = () => {
     setIsDetailsModalOpen(false);
   };
@@ -177,7 +165,7 @@ const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuent
         </div>
       )}
 
-      {/* Modal dentro del return y usando estados correctamente */}
+      {/* 🔹 Modal dentro del return y usando estados correctamente */}
       {isModalOpen && (
           <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct}/>
       )}

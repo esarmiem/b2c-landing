@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/isl-login': {
-        target: 'https://preview.ilsbsys.com/apirest_v1/auth',
+        target: 'https://dtravelassist.com/apirest_v1/auth',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/isl-login/, '')
       },
@@ -14,7 +14,12 @@ export default defineConfig({
         target: 'https://api.mitravelkit.com/api/v1',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/mi-travelkit/, '')
-      }
+      },
+      '/plan-upgrades': {
+        target: 'https://dtravelassist.com/apirest_v1/information',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/plan-upgrades/, '')
+      },
     }
   },
   plugins: [react()],

@@ -1,7 +1,8 @@
 import {axiosHttp} from "../../../Utils/http.ts"
-import {SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD,} from "../../../Utils/constants.ts"
-import {GET_TOKEN, GET_TOKEN_ISL} from "../../../Utils/storage.ts"
+import {SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD, ISL_APP_SERVICE_UPGRADES} from "../../../Utils/constants.ts"
+import {GET_TOKEN} from "../../../Utils/storage.ts"
 import {dataOrder, dataPreorder, ResponseData, CheckPreorderISLResponse} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {AUTH_ISL_API} from "@/TravelCore/Services/Apis/AuthenticationISL";
 
 interface ApiResponse {
   data: ResponseData;
@@ -19,19 +20,23 @@ interface PayloadUpgrades {
 }
 
 export const getProductUpdates = async (payload: PayloadUpgrades) => {
-  const url = `${ISL_APP_SERVICE_UPGRADES_PRODUCTION}`;
-  const data = {
+
+  const authISL = await AUTH_ISL_API.loginISL();
+  console.log("authISL: ", authISL);
+  const queryParams = new URLSearchParams({
     request: 'get_upgrade',
-    token: GET_TOKEN_ISL,
-    id_plan: payload.id_plan,
+    token: authISL?.data?.result?.token,
+    id_plan: payload.id_plan.toString(),
     language: payload.language,
-  };
+  }).toString();
+
+  const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`;
+  console.log("url: ", url);
 
   try {
     const response = await axiosHttp({
       method: 'GET',
-      path: url,
-      data: JSON.stringify(data),
+      pathISL: url,
       customConfig: {
         headers: {
           'Content-Type': 'application/json',

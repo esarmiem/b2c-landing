@@ -1,18 +1,7 @@
-import {createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState} from 'react'
+import {createContext, ReactNode, useEffect, useState} from 'react'
 import {getPersisted, savePersistense} from './Persistence/data.ts'
 import {MASTER_CONST_STORAGE_KEYS} from "@/TravelCore/Utils/ConstStorageKeys.ts"
-import {GenericItem, ApiResponse} from "@/TravelCore/Utils/interfaces/context.ts";
-
-type StateKey = keyof typeof MASTER_CONST_STORAGE_KEYS
-type State<T = GenericItem> = ApiResponse<T> | null;
-
-// Tipo para el contexto usando las llaves definidas
-type MasterContextType = {
-  [K in StateKey]: {
-    data: State<any>
-    setData: Dispatch<SetStateAction<State<any>>>
-  }
-}
+import {MasterContextType, State} from "@/TravelCore/Utils/interfaces/context.ts";
 
 export const MasterContext = createContext<MasterContextType | undefined>(undefined)
 
