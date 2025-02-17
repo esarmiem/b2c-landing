@@ -30,7 +30,7 @@ export function TravelForm({ onClick }: TravelFormProps) {
             className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab2"
-            //disabled
+            disabled
           >
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
