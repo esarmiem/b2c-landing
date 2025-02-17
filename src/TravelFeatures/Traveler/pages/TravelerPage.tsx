@@ -18,7 +18,7 @@ export default function TravelForm() {
   return (
     <>
       <Breadcrumb />
-      <main className="max-w-6xl mx-auto p-4 my-6">
+      <main className="max-w-6xl mx-auto p-4 my-6 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
         <GoBack title={t("label-back-to-coverages")} url="quote/travel" />
         <section className="grid md:grid-cols-[1fr_400px] gap-6 my-2">
           <section className="space-y-4 items-center">
