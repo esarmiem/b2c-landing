@@ -26,7 +26,7 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
   const [productUpgrades, setProductUpgrades] = useState(null);
 
   if (!product) return null;
-
+console.log("languaje: ", i18n.language)
   const toggleUpgrade = (id: number) => {
     setSelectedUpgrades((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
@@ -41,35 +41,11 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
   const totalPrice = product.price + totalUpgradesCost;
 
   useEffect(() => {
-    // Datos que enviarás en el cuerpo de la petición GET
-    const body = {
-      key1: 'value1',
-      key2: 'value2',
-    };
-
-    // Configuración de la petición
-    const requestOptions = {
-      method: 'GET', // Método GET
-      headers: {
-        'Content-Type': 'application/json', // Especifica el tipo de contenido
-      },
-      body: JSON.stringify(body), // Convierte el cuerpo a JSON
-    };
-
-    // Realizar la petición
-    fetch('https://dtravelassist.com/apirest_v1/information', requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Error en la petición');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log('Respuesta:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+    const updateProduct = async () => {
+      const response = await getProductUpdates({ id_plan: "1618", language: "spa" });
+      setProductUpgrades(response);
+  }
+    updateProduct();
   }, []);
 
   console.log("upgrades: ", productUpgrades)

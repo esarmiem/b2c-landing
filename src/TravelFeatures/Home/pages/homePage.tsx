@@ -11,16 +11,15 @@ import {WhatsAppButton} from "@/TravelCore/Components/Epic/WhatsAppButton.tsx";
 import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
 */
 import {useNavigate} from "react-router-dom";
-import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 
 export default function HomePage () {
     const { t } = useTranslation(["home"]);
 
-    const { HandleGetOrder } = useHomeState()
+    const { HandleGetOrder, isDataOrderValid } = useHomeState()
     const {data} = useData() || {}
     const navigate = useNavigate();
     const [isLoadingOrders, setIsLoadingOrders] = useState(false);
@@ -54,23 +53,6 @@ export default function HomePage () {
       }
     }, 500);
   };
-
-
- //TODO: Trasladar esta funcion al utils
-  const isDataOrderValid = (order: dataOrder): boolean => {
-    return Object.values(order).every(value => {
-      if (value === null || value === undefined) {
-        return false;
-      }
-      if (typeof value === 'string' && value.trim() === '') {
-        return false;
-      }
-      if (Object.keys(order).length !== 11) {
-        return false;
-      }
-      return true;
-    });
-  }
 
   if (isLoadingOrders) {
       return <LoadingScreen message={t("label-title-loader")} subMessage={t("label-text-loader")}/>;
