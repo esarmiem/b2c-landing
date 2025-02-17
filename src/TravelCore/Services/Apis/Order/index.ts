@@ -43,6 +43,7 @@ export const getProductUpdates = async (payload: PayloadUpgrades) => {
     console.error('Error fetching product updates:', error);
     throw error;
   }
+}
 
 export const ASSISTANCE_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
