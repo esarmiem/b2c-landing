@@ -7,15 +7,15 @@ export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#111111] text-gray-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <footer className="w-full bg-[#111111] text-gray-300 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+      <div className="container mx-auto py-8 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="text-left sm:text-left">
+          <div className="text-left sm:text-left lg:text-center">
             <h3 className="font-extrabold text-white text-xl mb-4">
               TRAVELKIT
             </h3>
             <p className="text-sm mb-4">{t("label-title-social")}</p>
-            <div className="flex justify-start sm:justify-start gap-6">
+            <div className="flex justify-start sm:justify-start lg:justify-center gap-6">
               <Link
                 href="#"
                 className="hover:text-white transition-colors duration-200"
@@ -66,7 +66,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="text-left sm:texleft">
+          <div className="text-left sm:texleft lg:text-center">
             <h4 className="font-semibold text-white text-lg mb-4">
               {t("label-title-products")}
             </h4>
@@ -90,7 +90,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          <div className="text-left sm:text-left">
+          <div className="text-left sm:text-left lg:text-center">
             <h4 className="font-semibold text-white text-lg mb-4">
               {t("label-title-company")}
             </h4>
@@ -122,7 +122,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-          <div className="text-left sm:text-left">
+          <div className="text-left sm:text-left lg:text-center">
             <h4 className="font-semibold text-white text-lg mb-4">
               {t("label-title-legal")}
             </h4>

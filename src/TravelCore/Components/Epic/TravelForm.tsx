@@ -2,17 +2,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchFormContent } from "./searchFormContent";
 import {useTranslation} from "react-i18next";
 import { Luggage } from 'lucide-react';
-import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {MouseEvent} from "react";
 
 interface TravelFormProps {
-  getOrder: ({ orderPayload }: { orderPayload: dataOrder }) => void;
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function TravelForm({ getOrder }: TravelFormProps) {
+export function TravelForm({ onClick }: TravelFormProps) {
   const { t } = useTranslation(["home"])
 
   return (
-    <div className="container mx-auto px-4 relative z-10">
+    <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <Tabs
         defaultValue="tab1"
         className=""//bg-red-700 rounded-lg md:rounded-full shadow-lg p-8
@@ -30,7 +30,7 @@ export function TravelForm({ getOrder }: TravelFormProps) {
             className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab2"
-            //disabled
+            disabled
           >
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -54,7 +54,7 @@ export function TravelForm({ getOrder }: TravelFormProps) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">
-          <SearchFormContent getOrder={getOrder} />
+          <SearchFormContent onClick={onClick} />
         </TabsContent>
         <TabsContent value="tab2">
           <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">

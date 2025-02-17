@@ -1,25 +1,32 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Plus, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
+import {formatCurrency} from "@/TravelCore/Utils/format.ts";
+import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts"
+import { getProductUpdates } from "@/TravelCore/Services/Apis/Order"
 
 interface ModalUpgradesProps {
-  isOpen: boolean;
-  onClose: () => void;
-  product: { name: string; price: number } | null;
+  isOpen: boolean
+  onClose: () => void
+  product: Plan
 }
 
 const upgrades = [
-  { id: 1, title: "Protección de dispositivos hasta USD 2.000", price: 381191, icon: "🛡️" },
-  { id: 2, title: "Deportes hasta USD 20.000", price: 280367, icon: "⚽" },
-  { id: 3, title: "Extra cancelación multi causa hasta USD 2.000", price: 155276, icon: "❌" },
-  { id: 4, title: "Asistencia médica para mascotas hasta USD 2.000", price: 381191, icon: "🐶" },
+  { id: 1, title: "label-device-protection", price: 381191, icon: "🛡️" },
+  { id: 2, title: "label-sports-coverage", price: 280367, icon: "⚽" },
+  { id: 3, title: "label-multi-cause-cancellation", price: 155276, icon: "❌" },
+  { id: 4, title: "label-pet-medical-assistance", price: 381191, icon: "🐶" },
 ];
 
 const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product }) => {
+  const { t } = useTranslation(["products"]); 
   const [selectedUpgrades, setSelectedUpgrades] = useState<number[]>([]);
+  const { i18n } = useTranslation();
+  const [productUpgrades, setProductUpgrades] = useState(null);
 
   if (!product) return null;
-
+console.log("languaje: ", i18n.language)
   const toggleUpgrade = (id: number) => {
     setSelectedUpgrades((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
@@ -33,15 +40,25 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
 
   const totalPrice = product.price + totalUpgradesCost;
 
+  useEffect(() => {
+    const updateProduct = async () => {
+      const response = await getProductUpdates({ id_plan: "1618", language: "spa" });
+      setProductUpgrades(response);
+  }
+    updateProduct();
+  }, []);
+
+  console.log("upgrades: ", productUpgrades)
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-lg p-6 rounded-xl"  >
+      <DialogContent className="w-full max-w-lg p-6 rounded-xl">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <DialogTitle className="text-2xl font-bold">Upgrades</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">{t("label-upgrades")}</DialogTitle>
           </div>
           <DialogDescription className="text-gray-600">
-            Selecciona los beneficios adicionales que desea agregar
+            {t("label-select-additional-benefits")}
           </DialogDescription>
         </DialogHeader>
 
@@ -59,9 +76,9 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
               <div className="flex items-center text-start gap-3">
                 <span className="text-xl">{upgrade.icon}</span>
                 <div>
-                  <p className="font-medium">{upgrade.title}</p>
+                  <p className="font-medium">{t(upgrade.title)}</p>
                   <p className="text-xs text-gray-500">
-                    {upgrade.price.toLocaleString()} COP por persona
+                    {upgrade.price.toLocaleString()} {t("label-cop-per-person")}
                   </p>
                 </div>
               </div>
@@ -76,26 +93,26 @@ const ModalUpgrades: React.FC<ModalUpgradesProps> = ({ isOpen, onClose, product 
 
         <div className="mt-4 border-t pt-4 space-y-2">
           <div className="flex justify-between">
-            <p className="text-sm font-medium">Número de viajeros:</p>
+            <p className="text-sm font-medium">{t("label-number-of-travelers")}</p>
             <p className="font-bold text-red-950">2</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-sm font-medium">Valor producto por viajero:</p>
-            <p className="font-bold text-red-950">{product.price.toLocaleString()} COP</p>
+            <p className="text-sm font-medium">{t("label-product-value-per-traveler")}</p>
+            <p className="font-bold text-red-950">{formatCurrency(product.price.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
           <div className="flex justify-between">
-            <p className="text-sm font-bold text-red-500">Total Upgrades:</p>
-            <p className="font-bold text-red-500">{totalUpgradesCost.toLocaleString()} COP</p>
+            <p className="text-sm font-bold text-red-500">{t("label-total-upgrades")}</p>
+            <p className="font-bold text-red-500">{formatCurrency(totalUpgradesCost.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
           <div className="flex justify-between text-lg font-bold">
-            <p>TOTAL:</p>
-            <p className="text-red-950">{totalPrice.toLocaleString()} COP</p>
+          <p>{t("label-total")}</p>
+            <p className="text-red-950">{formatCurrency(totalPrice.toString(), i18n.language === "es" ? "COP" : "USD")} {i18n.language === "es" ? "COP" : "USD"}</p>
           </div>
         </div>
 
-        <a href="/client-data" className="w-full rounded-full">
+        <a href="/traveler" className="w-full rounded-full">
           <button className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600">
-            Continuar
+            {t("button-continue")}
           </button>
         </a>
       </DialogContent>

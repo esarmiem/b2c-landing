@@ -42,18 +42,10 @@ export default function Router(): ReactElement | null {
           path: "comms",
           element: <CommsQuotePage/>,
         },
-        // {
-        //   path: "client-data",
-        //   element: <TravelerPage/>,
-        // },
-        // {
-        //   path: "billing-invoice",
-        //   element: <BillingPage/>,
-        // }
       ],
     },
     {
-      path: "client-data",
+      path: "traveler",
       element: <Layout/>,
       children: [
         {
@@ -66,25 +58,15 @@ export default function Router(): ReactElement | null {
       path: "invoice",
       element: <Layout/>,
       children: [
-        // {
-        //     path: "invoice",
-        //     element: <Layout />,
-        //     children: [
-            {
-                index: true,
-                element: <InvoicePage />,
-            },
-            // {
-            //     path: "billing",
-            //     element: <InvoicePage />,
-            // },
-            {
-                path: "billingResult",
-                element: <BillingResultPage />,
-            },
-            //     },
-            // ],
+        {
+            index: true,
+            element: <InvoicePage />,
+        },
 
+        {
+            path: "billingResult",
+            element: <BillingResultPage />,
+        },
       ],
     },
   ];

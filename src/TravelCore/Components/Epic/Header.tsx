@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 
 export const Header: React.FC = () => {
   const { t, i18n } = useTranslation(["header"]);
+
   return (
-    <header className="sticky top-0 w-full bg-white z-50">
+    <header className="sticky top-0 w-full bg-white z-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
-      <div className="flex h-14 items-top justify-between px-4 md:px-20 ">
+      <div className="flex h-14 items-top justify-between">
         <div className="flex items-center">
           <Link
             href="/"
@@ -23,7 +24,9 @@ export const Header: React.FC = () => {
           <div className="items-center hidden lg:flex bg-red-700 p-3 pt-4 mb-2 rounded-bl-3xl">
             <Headset className="h-4 w-4 mr-2  text-white hover:font-semibold" />
             <Link
-              href="tel:+573175032200"
+              href="https://wa.me/573175032200"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm font-medium text-white hover:text-white"
             >
               {t("label-link-sales")}: +57 317 5032 200
@@ -45,7 +48,9 @@ export const Header: React.FC = () => {
 
           <div className="items-center hidden lg:flex">
             <Link
-              href="#"
+              href="https://travelkit.online/"
+              target="_blank"
+              rel="noopener noreferrer" 
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
               {t("label-link-agency")}

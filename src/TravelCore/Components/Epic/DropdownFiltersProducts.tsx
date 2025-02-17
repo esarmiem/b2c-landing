@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { List, Columns3, TrendingDown, TrendingUp, ShieldPlus } from "lucide-react";
- 
+import { AlignCenter, List, Columns3, TrendingDown, TrendingUp, ShieldPlus , ChevronDown} from "lucide-react";
+import { useTranslation } from 'react-i18next'; // Importar useTranslation
 interface DropdownFiltersProductsProps {  
   setViewType: (type: 'list' | 'grid') => void;
 }
 
 const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setViewType }) => {
+  const { t } = useTranslation(["products"]); // Obtener la función de traducción
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -41,10 +42,10 @@ const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setVi
       <div>
         <button
           type="button"
-          className="px-4 py-1 rounded-md inline-flex w-full justify-center gap-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 border"
+          className="px-4 py-1 rounded-md inline-flex w-full justify-center gap-x-2 text-sm/12 align-middle font-medium   text-gray-600 hover:text-gray-900 bg-zinc-100 border"
           onClick={toggleDropdown}
         >
-          Filtros
+          {t("label-filters")} 
           <svg
             className={`-mr-1 w-5 h-5 text-gray-600 hover:text-gray-900 transform transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 20 20"
@@ -68,7 +69,7 @@ const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setVi
               onClick={handleListView}
             >
               <List className="w-4 h-4" />
-              Ver como Lista
+              {t("label-view-as-list")} 
             </div>
  
             <div 
@@ -77,24 +78,24 @@ const DropdownFiltersProducts: React.FC<DropdownFiltersProductsProps> = ({ setVi
               onClick={handleGridView}
             >
               <Columns3 className="w-4 h-4" />
-              Ver como Tabla
+              {t("label-view-as-grid")} 
             </div>
  
             <div className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer hover:bg-gray-200" role="menuitem">
               <TrendingDown className="w-3 h-3" />
-              Más barato primero
+              {t("label-cheapest-first")} 
             </div>
             <div className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer hover:bg-gray-200" role="menuitem">
               <ShieldPlus className="w-4 h-4" />
-              Mayor cobertura primero
+              {t("label-highest-coverage-first")} 
             </div>
             <div className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer hover:bg-gray-200" role="menuitem">
               <List className="w-4 h-4" />
-              Más popular primero
+              {t("label-most-popular-first")} 
             </div>
             <div className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer hover:bg-gray-200" role="menuitem">
               <TrendingUp className="w-4 h-4" />
-              Más caro primero
+              {t("label-most-expensive-first")} 
             </div>
           </div>
         </div>

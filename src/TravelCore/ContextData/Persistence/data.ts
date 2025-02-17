@@ -1,13 +1,11 @@
-import {ApiResponse, StorageData} from "@/TravelCore/Utils/interfaces/context.ts";
-import {ResponseData, dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {ApiResponse, StorageData, GlobalData} from "@/TravelCore/Utils/interfaces/context.ts"
 
 const STORAGE_CONFIG = {
     VERSION: '1.0.0',
-    MAX_SIZE: 5 * 1024 * 1024, // 5MB límite
+    MAX_SIZE: 5 * 1024 * 1024,
 } as const
 
-/* Use an IIFE to export the persisted state in a variable */
-export const getPersisted = (StorageKey: string): ApiResponse | ResponseData | dataOrder | null => {
+export const getPersisted = (StorageKey: string): ApiResponse | GlobalData | null => {
     try {
         const rawState = window.localStorage.getItem(StorageKey)
         if (rawState === null || (rawState && rawState.toString() === "{}")) return null
@@ -26,7 +24,7 @@ export const getPersisted = (StorageKey: string): ApiResponse | ResponseData | d
     }
 }
 
-export const savePersistense = (state: ApiResponse | ResponseData | dataOrder, StorageKey: string): void => {
+export const savePersistense = (state: ApiResponse | GlobalData, StorageKey: string): void => {
     let rawState: string
 
     try {
@@ -35,7 +33,7 @@ export const savePersistense = (state: ApiResponse | ResponseData | dataOrder, S
             return
         }
 
-        const storageData: StorageData<ApiResponse | ResponseData | dataOrder> = {
+        const storageData: StorageData<ApiResponse | GlobalData> = {
             data: structuredClone(state),
             timestamp: Date.now(),
             version: STORAGE_CONFIG.VERSION

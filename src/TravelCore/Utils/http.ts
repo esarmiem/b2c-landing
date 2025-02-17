@@ -23,7 +23,6 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
 
     if (session && session.token) {
         defaultHeaders.Authorization = 'Bearer ' + session.token;
-        console.log('session.token', session.token);
         //defaultHeaders.apiKey = API_KEY;
     }
 
@@ -45,6 +44,7 @@ export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error
         data: args.data,
         timeout: args.timeout || 60000,
     };
+    console.log(config)
     try {
         const response: AxiosResponse = await axios({ ...config, ...args.customConfig });
         return { data: response.data, error: null };
