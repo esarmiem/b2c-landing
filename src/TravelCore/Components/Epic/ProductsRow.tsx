@@ -1,123 +1,44 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import CardProduct from './CardProduct';
-import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
+import { Plan } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface ProductsRowProps {
   viewType: 'list' | 'grid';
   plans: Plan[]
 }
 
-const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
-  const cardData = [
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección básica 22.000 USD',
-      price: 'US$ 22.000',
-      originalPrice: 'US$ 30.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección standard 35.000 USD',
-      price: 'US$ 35.000',
-      originalPrice: 'US$ 50.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-      recommended: true
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección especial 55.000 USD',
-      price: 'US$ 55.000',
-      originalPrice: 'US$ 75.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-      recommended: false,
-    },
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección ideal 110.000 USD',
-      price: 'US$ 110.000',
-      originalPrice: 'US$ 150.000',
-      typeOfProduct: 'Ideal para: VACACIONES',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-    },
-    
-    {
-      title: 'DISCOVER',
-      subtitle: 'Protección especial 666 USD',
-      price: 'US$ 666',
-      originalPrice: 'US$ 50.000',
-      typeOfProduct: 'Ideal para: Prueba',
-      details: [
-        'Asistencia médica por accidente USD 35,000/EUR 35,000',
-        'Cancelación e interrupción Multicausa de viaje contratado',
-        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
-        'Cobertura deportes amateur USD 1,000.00',
-        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
-      ],
-      recommended: false,
-    },
-  ];
-
-
-  // Estado para controlar cuantos productos s emuestran 
+const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
   const [visibleCount, setVisibleCount] = useState(4);
+
+  // Función para alternar entre ver más y ver menos
   const toggleVisibility = () => {
-    setVisibleCount(visibleCount === cardData.length ? 4 : cardData.length);
+    // Si estamos mostrando 4, mostramos todos. Si no, volvemos a mostrar 4.
+    setVisibleCount(visibleCount === plans.length ? 4 : plans.length);
   };
-
-
-  // Si viewType es "list", usamos una grilla de 1 columna; si es "grid", usamos varias columnas.
+  // clases condicionales para el contenedor basado en el tipo de vista
   const containerClasses =
     viewType === 'list'
       ? 'grid grid-cols-1 gap-4'
       : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center';
 
   return (
-    <>
-      <div className="max-w-6xl mx-auto py-4 transition-all">
-        <div className={`${containerClasses} transition-all duration-500 ease-in-out`}>{/* Animacion para cuando se expande */}
-          {cardData.slice(0,visibleCount).map((card, index) => (
-            <CardProduct key={index} viewType={viewType} {...card} />
-          ))}
-        </div>
+    <div className="max-w-6xl mx-auto py-4">
+      <div className={containerClasses}>
+        {plans.slice(0, visibleCount).map((plan, index) => (
+          <CardProduct key={index} viewType={viewType} {...plan} />
+        ))}
       </div>
+      {/* boton para ver mas ver menos */}
       <div className="mx-auto my-3 p-4 align-middle text-center">
-        {cardData.length > 4 && (
+        {plans.length > 4 && (
           <button
-          className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all"
-          onClick={toggleVisibility}>
-          {visibleCount === cardData.length ? 'Ver menos' : 'Ver más opciones'}
-        </button>
+            className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all"
+            onClick={toggleVisibility}>
+            {visibleCount === plans.length ? 'Ver menos' : 'Ver más opciones'}
+          </button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
