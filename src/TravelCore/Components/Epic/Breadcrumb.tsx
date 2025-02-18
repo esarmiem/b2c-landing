@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 interface StepProps {
   number: number;
@@ -36,6 +36,9 @@ const Step: FC<StepProps> = ({ number, text, isActive = false, showDivider = fal
 };
 
 export const Breadcrumb: FC = () => {
+
+  const [activeStep, setActiveStep] = useState(1);
+
   return (
     <div className="w-full bg-gray-50">
       <div className="max-w-5xl mx-auto py-9">
@@ -43,17 +46,19 @@ export const Breadcrumb: FC = () => {
           <Step
             number={1}
             text="Elige tu producto"
-            isActive={true}
+            isActive={activeStep === 1}
             showDivider={true}
           />
           <Step 
             number={2} 
             text="Pasajeros" 
+            isActive={activeStep === 2}
             showDivider={true} 
           />
           <Step 
             number={3} 
             text="Pago" 
+            isActive={activeStep === 3}
           />
         </div>
       </div>
