@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import CardProduct from './CardProduct';
 
 interface ProductsRowProps {
@@ -65,9 +65,32 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
         'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
       ],
     },
+    
+    {
+      title: 'DISCOVER',
+      subtitle: 'Protección especial 666 USD',
+      price: 'US$ 666',
+      originalPrice: 'US$ 50.000',
+      typeOfProduct: 'Ideal para: Prueba',
+      details: [
+        'Asistencia médica por accidente USD 35,000/EUR 35,000',
+        'Cancelación e interrupción Multicausa de viaje contratado',
+        'Robo o Pérdida de pasaporte exclusivamente en viaje USD 70.00',
+        'Cobertura deportes amateur USD 1,000.00',
+        'Demora de vuelo = Sala VIP (A partir de 60 minutos) Incluido'
+      ],
+      recommended: false,
+    },
   ];
 
-  // Definimos las clases condicionales:
+
+  // Estado para controlar cuantos productos s emuestran 
+  const [visibleCount, setVisibleCount] = useState(4);
+  const toggleVisibility = () => {
+    setVisibleCount(visibleCount === cardData.length ? 4 : cardData.length);
+  };
+
+
   // Si viewType es "list", usamos una grilla de 1 columna; si es "grid", usamos varias columnas.
   const containerClasses =
     viewType === 'list'
@@ -75,13 +98,24 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType }) => {
       : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center';
 
   return (
-    <div className="max-w-6xl mx-auto py-4">
-      <div className={containerClasses}>
-        {cardData.map((card, index) => (
-          <CardProduct key={index} viewType={viewType} {...card} />
-        ))}
+    <>
+      <div className="max-w-6xl mx-auto py-4 transition-all">
+        <div className={`${containerClasses} transition-all duration-500 ease-in-out`}>{/* Animacion para cuando se expande */}
+          {cardData.slice(0,visibleCount).map((card, index) => (
+            <CardProduct key={index} viewType={viewType} {...card} />
+          ))}
+        </div>
       </div>
-    </div>
+      <div className="mx-auto my-3 p-4 align-middle text-center">
+        {cardData.length > 4 && (
+          <button
+          className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all"
+          onClick={toggleVisibility}>
+          {visibleCount === cardData.length ? 'Ver menos' : 'Ver más opciones'}
+        </button>
+        )}
+      </div>
+    </>
   );
 };
 
