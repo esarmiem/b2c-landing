@@ -36,17 +36,6 @@ export default function useHomeState () {
 
   const validateOrGetAuthentication = async (): Promise<boolean> => {
     try {
-      const storedToken = localStorage.getItem('token');
-      const storedTokenExpiration = localStorage.getItem('tokenExpiration');
-
-      const now = new Date().getTime();
-
-      if (storedToken && storedTokenExpiration && now < parseInt(storedTokenExpiration, 10)) {
-        console.log("Token válido, no se requiere nueva autenticación.");
-        return true;
-      }
-
-      console.log("Token inválido o expirado, realizando nueva autenticación...");
       const auth = new Auth();
       const response: AuthResponse = await auth.login();
 
@@ -57,13 +46,7 @@ export default function useHomeState () {
           user_id: response.data.user.idUser,
         };
 
-        const expirationTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
-
-        localStorage.setItem('token', sessionData.token);
-        localStorage.setItem('tokenExpiration', expirationTime.toString());
-
         setSession?.(sessionData);
-
         return true;
       }
     } catch (error) {
