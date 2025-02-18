@@ -16,5 +16,8 @@
   "label-title-travelers-page": "Datos de los viajeros",
   "label-title-traveler-page": "Datos del viajero",
   "label-description-traveler-page": "Al ingresar tus datos, aceptas nuestra Política de",
-  "label-link-privacy-policy": "Manejo de Datos y Términos de Uso"
+  "label-link-privacy-policy": "Manejo de Datos y Términos de Uso",
+  "label-page-not-found": "Página No Encontrada",
+  "label-page-not-found-description": "Lo sentimos, la página que estás buscando no pudo ser encontrada.",
+  "label-return-home": "Volver al Inicio"
 }
