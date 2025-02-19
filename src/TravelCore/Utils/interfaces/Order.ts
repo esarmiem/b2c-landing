@@ -1,53 +1,63 @@
 //Order Response
 export interface DescripcionDescuentos {
-  valorDescuento: string;
-  valorTotal: number;
-  porcentaje: string;
+  valorDescuento: string
+  valorTotal: number
+  porcentaje: string
 }
 
 export interface Cobertura {
-  valor_spa: string;
-  valor_eng: string;
-  id_benefit: string;
-  name: string;
-  language_id: string;
-  extended_info: string;
+  valor_spa: string
+  valor_eng: string
+  id_benefit: string
+  name: string
+  language_id: string
+  extended_info: string
 }
 
 export interface Condiciones {
-  id: number;
-  description: string;
-  name: string;
-  terms: string;
+  id: number
+  description: string
+  name: string
+  terms: string
+}
+
+export interface Upgrades {
+  type_raider: string
+  rd_calc_type: string
+  id_raider: string
+  cost_raider: string
+  name_raider: string
+  value_raider: string
 }
 
 export interface Plan {
-  Id: number;
-  IdPlan: number;
-  Pregunta: string;
-  Categoria: string;
-  TipoViaje: string;
-  nombre: string;
-  ValorCobertura: string;
-  DescripcionDescuentosDolares: DescripcionDescuentos;
-  DescripcionDescuentosPesos: DescripcionDescuentos;
-  Valor: string;
-  ValorPesos: string;
-  ValorPax: string;
-  ValorPaxPesos: string;
-  upgrade: any[];
-  cobertura: Cobertura[];
-  Condiciones: Condiciones;
-  viewType?: "list" | "grid";
+  Id: number
+  IdPlan: number
+  Pregunta: string
+  Categoria: string
+  TipoViaje: string
+  nombre: string
+  ValorCobertura: string
+  DescripcionDescuentosDolares: DescripcionDescuentos
+  DescripcionDescuentosPesos: DescripcionDescuentos
+  Valor: string
+  ValorPesos: string
+  ValorPax: string
+  ValorPaxPesos: string
+  upgrade: Upgrades[]
+  cobertura: Cobertura[]
+  Condiciones: Condiciones
+  viewType?: 'list' | 'grid'
 }
+
 export interface Data {
-  planes: Plan[];
-  idProspecto: number;
+  planes: Plan[]
+  idProspecto: number
 }
 
 export interface ResponseData {
-  data: Data;
-  error: string | null;
+  data: Data
+  error: string | null
 }
 //Order Payload
 export interface dataOrder {
@@ -93,13 +103,13 @@ export interface dataPreorder {
 }
 //PreOrder Response
 export interface CheckPreorderISLResponse {
-  "mensaje": {
-    "": string
-    status: string,
+  mensaje: {
+    '': string
+    status: string
     valor: string
     documento: string
     referencia: string
     El_valor_de_cambio_fue_ajustado_a: string
-  },
+  }
   idCliente: number
 }
