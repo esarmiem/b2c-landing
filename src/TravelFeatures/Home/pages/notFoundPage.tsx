@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import maleta from '../../../../Assets/maleta.webp';
+import {Link} from '../../../TravelCore/Components/Raw/Link';
 
 export const NotFoundPage: React.FC = () => {
   const { t } = useTranslation(["header"]);
@@ -38,6 +39,14 @@ export const NotFoundPage: React.FC = () => {
       <div className="w-1/2 flex lg:items-end justify-center p-4">
         <img src={maleta} alt="Maleta" className="w-full lg:w-1/2" />
       </div>
+      <div className="flex lg:hidden items-center text-center">
+          <Link
+            href="/"
+            className="font-extrabold text-2xl md:text-3xl text-red-600 hover:text-red-600"
+          >
+            TRAVELKIT
+          </Link>
+        </div>
     </div>
   );
 };

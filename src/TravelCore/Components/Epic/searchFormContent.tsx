@@ -14,7 +14,7 @@ export function SearchFormContent({onClick}: SearchFormContentProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-red-700 rounded-lg lg:rounded-full shadow-xl p-4 -mt-7">
       <DestinationSelector
         activeTooltip={activeTooltip}
         setActiveTooltip={setActiveTooltip}
