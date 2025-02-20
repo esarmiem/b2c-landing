@@ -86,9 +86,11 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
               <p className={`mt-1 text-4xl font-bold ${recommended ? "text-neutral-100" : "text-red-600"}`}>
                 {price} <span className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
               </p>
-              <p className={`line-through font-semibold text-lg ${recommended ? "text-black" : "text-neutral-400"}`}>
-                {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
-              </p>
+              {recommended &&
+                  <p className={`line-through font-semibold text-lg text-black`}>
+                    {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
+                  </p>
+              }
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-sm w-100 mb-0">Ideal para {TipoViaje}</div>
           </div>
@@ -130,10 +132,13 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
               <p className={`my-0 ${recommended ? "text-white" : "text-neutral-800"}`}>{nombre}</p>
               <p className="mt-1 font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? "text-white" : "text-red-600"}`}>{price} <span
-                  className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span></h3>
-              <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
+                  className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
+              </h3>
+              {recommended &&
+                  <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
                  {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
-              </span>
+                </span>
+              }
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-xs font-semibold">Ideal para {TipoViaje}</div>
           </section>

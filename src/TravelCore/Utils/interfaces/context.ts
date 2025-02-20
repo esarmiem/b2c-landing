@@ -24,6 +24,7 @@ export interface StorageData<T = any> {
 export interface GlobalData {
   payloadOrder?: dataOrder
   responseOrder?: Data | null
+  travelersData?: Data | null
 }
 
 //type for MasterContext

@@ -1,0 +1,1 @@
+import{j as e}from"./main-63fd4306.js";const r=()=>{const l=async()=>{console.log("Plan x seleccionado, redirigir al detalle de la compra")};return e.jsxs(e.Fragment,{children:[e.jsx("p",{children:"Ver planes de seguros de viajes filtrados"}),e.jsx("button",{onClick:l,children:"Lo quiero"}),e.jsx("button",{children:"Ver modal de detalles"})]})};export{r as default};

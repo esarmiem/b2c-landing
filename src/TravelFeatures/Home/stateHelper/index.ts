@@ -3,7 +3,6 @@ import useMasters from "@/TravelCore/Hooks/useMasters.ts";
 import {useEffect} from "react";
 import {Auth} from "@/TravelFeatures/Home/model/auth_entity.ts";
 import {Masters} from "@/TravelFeatures/Home/model/masters_entity.ts";
-
 import {TravelAssistance} from "@/TravelFeatures/Home/model/travel_assistance_entity.ts";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
@@ -30,23 +29,11 @@ export default function useHomeState () {
         await getMasters();
       }
     };
-
     handleInitialization();
   }, []);
 
   const validateOrGetAuthentication = async (): Promise<boolean> => {
     try {
-      const storedToken = localStorage.getItem('token');
-      const storedTokenExpiration = localStorage.getItem('tokenExpiration');
-
-      const now = new Date().getTime();
-
-      if (storedToken && storedTokenExpiration && now < parseInt(storedTokenExpiration, 10)) {
-        console.log("Token válido, no se requiere nueva autenticación.");
-        return true;
-      }
-
-      console.log("Token inválido o expirado, realizando nueva autenticación...");
       const auth = new Auth();
       const response: AuthResponse = await auth.login();
 
@@ -56,20 +43,12 @@ export default function useHomeState () {
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser,
         };
-
-        const expirationTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
-
-        localStorage.setItem('token', sessionData.token);
-        localStorage.setItem('tokenExpiration', expirationTime.toString());
-
         setSession?.(sessionData);
-
         return true;
       }
     } catch (error) {
       console.error("Error durante la autenticación:", error);
     }
-
     return false;
   }
 
