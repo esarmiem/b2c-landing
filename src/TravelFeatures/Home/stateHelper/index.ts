@@ -1,81 +1,112 @@
-import useSession from "@/TravelCore/Hooks/useSession.ts";
-import useMasters from "@/TravelCore/Hooks/useMasters.ts";
-import {useEffect} from "react";
-import {Auth} from "@/TravelFeatures/Home/model/auth_entity.ts";
-import {Masters} from "@/TravelFeatures/Home/model/masters_entity.ts";
+import useData from '@/TravelCore/Hooks/useData.ts'
+import useMasters from '@/TravelCore/Hooks/useMasters.ts'
+import useSession from '@/TravelCore/Hooks/useSession.ts'
+import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
+import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
+import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
+import { TravelAssistance } from '@/TravelFeatures/Home/model/travel_assistance_entity.ts'
+import { useEffect } from 'react'
 
-import {TravelAssistance} from "@/TravelFeatures/Home/model/travel_assistance_entity.ts";
-import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
-import useData from "@/TravelCore/Hooks/useData.ts";
-import {StateKey} from "@/TravelCore/Utils/interfaces/context.ts";
-
+/**
+ * AuthResponse
+ *
+ * Spanish:
+ * Define la estructura de la respuesta de autenticación.
+ *
+ * English:
+ * Defines the structure of the authentication response.
+ */
 interface AuthResponse {
   data?: {
-    payload: { accessToken: string };
-    user: { role: string; idUser: string };
-  };
-  error?: boolean;
+    payload: { accessToken: string }
+    user: { role: string; idUser: string }
+  }
+  error?: boolean
 }
-
-export default function useHomeState () {
-  const {setSession} = useSession() || {};
-  const {setData} = useData() || {};
+/**
+ * useHomeState
+ *
+ * Spanish:
+ * Hook personalizado para gestionar el estado de la página de inicio. Este hook se encarga de:
+ * - Ejecutar la autenticación del usuario y establecer la sesión.
+ * - Cargar los datos maestros (master data) si la autenticación es exitosa.
+ * - Proveer funciones para obtener datos de órdenes y validar la carga útil de una orden.
+ *
+ * English:
+ * Custom hook to manage the home page state. This hook is responsible for:
+ * - Executing user authentication and setting the session.
+ * - Loading master data if authentication is successful.
+ * - Providing functions to fetch order data and validate the order payload.
+ *
+ * @returns {Object} Un objeto que contiene las funciones HandleGetOrder e isDataOrderValid.
+ *                   / An object containing the HandleGetOrder and isDataOrderValid functions.
+ */
+export default function useHomeState() {
+  // Obtener la función para establecer la sesión y la data del pedido.
+  // Get the function to set the session and order data.
+  const { setSession } = useSession() || {};
+  const { setData } = useData() || {};
   const masterContext = useMasters();
-
-  //Auth execution
+  // Efecto de inicialización: se ejecuta una vez al montar el componente.
+  // Initialization effect: runs once when the component mounts.
   useEffect(() => {
     const handleInitialization = async () => {
-      const isAuthenticated = await validateOrGetAuthentication();
-      if (isAuthenticated) {
-        await getMasters();
-      }
-    };
+      const isAuthenticated = await validateOrGetAuthentication()
+      if (isAuthenticated) await getMasters()
+    }
 
     handleInitialization();
   }, []);
-
+  /**
+   * validateOrGetAuthentication
+   *
+   * Spanish:
+   * Función asíncrona que autentica al usuario utilizando la clase Auth. Si la autenticación es exitosa,
+   * establece la sesión con el token, rol e identificador de usuario.
+   *
+   * English:
+   * Asynchronous function that authenticates the user using the Auth class. If authentication is successful,
+   * it sets the session with the token, role, and user ID.
+   *
+   * @returns {Promise<boolean>} Una promesa que se resuelve con true si la autenticación es exitosa, de lo contrario false.
+   *                             / A promise that resolves to true if authentication is successful, otherwise false.
+   */
   const validateOrGetAuthentication = async (): Promise<boolean> => {
     try {
-      const storedToken = localStorage.getItem('token');
-      const storedTokenExpiration = localStorage.getItem('tokenExpiration');
-
-      const now = new Date().getTime();
-
-      if (storedToken && storedTokenExpiration && now < parseInt(storedTokenExpiration, 10)) {
-        console.log("Token válido, no se requiere nueva autenticación.");
-        return true;
-      }
-
-      console.log("Token inválido o expirado, realizando nueva autenticación...");
-      const auth = new Auth();
-      const response: AuthResponse = await auth.login();
+      const auth = new Auth()
+      const response: AuthResponse = await auth.login()
 
       if (response?.data && !response.error) {
         const sessionData = {
           token: response.data.payload.accessToken,
           role: JSON.stringify(response.data.user.role),
-          user_id: response.data.user.idUser,
-        };
+          user_id: response.data.user.idUser
+        }
 
-        const expirationTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000;
-
-        localStorage.setItem('token', sessionData.token);
-        localStorage.setItem('tokenExpiration', expirationTime.toString());
-
-        setSession?.(sessionData);
-
-        return true;
+        setSession?.(sessionData)
+        return true
       }
     } catch (error) {
-      console.error("Error durante la autenticación:", error);
+      console.error('Error durante la autenticación:', error)
     }
-
     return false;
-  }
-
-  //Get all data from masters
+  };
+  /**
+   * getMasters
+   *
+   * Spanish:
+   * Función asíncrona que carga los datos maestros utilizando la clase Masters. Para cada categoría de datos
+   * (países, llegadas, preguntas, condiciones médicas, etc.), se verifica si ya se han cargado en el contexto.
+   * Si no es así, se realiza la solicitud para obtener los datos y se actualiza el contexto correspondiente.
+   *
+   * English:
+   * Asynchronous function that loads master data using the Masters class. For each data category
+   * (countries, arrivals, questions, medical conditions, etc.), it checks whether the data has already been loaded
+   * in the context. If not, it fetches the data and updates the corresponding context.
+   */
   const getMasters = async () => {
-    const masters = new Masters();
+    const masters = new Masters()
     const masterDataMap = {
       countries: masters.getCountries,
       arrivals: masters.getArrivalDestinations,
@@ -83,61 +114,73 @@ export default function useHomeState () {
       medicals: masters.getMedicalConditions,
       documents: masters.getDocumentTypes,
       products: masters.getProducts,
-      parameters: masters.getParameters,
-    };
+      parameters: masters.getParameters
+    }
 
     try {
       const loadDataPromises = Object.entries(masterDataMap).map(async ([key, fetchFn]) => {
-        const typedKey = key as StateKey;
+        const typedKey = key as StateKey
 
         if (masterContext && !masterContext[typedKey]?.data) {
-          const response = await fetchFn();
+          const response = await fetchFn()
           if (response?.data) {
-            masterContext[typedKey].setData(response.data);
+            masterContext[typedKey].setData(response.data)
           }
         }
-      });
+      })
 
-      await Promise.all(loadDataPromises);
+      await Promise.all(loadDataPromises)
     } catch (error) {
-      console.error("Failed to load master data:", error);
+      console.error('Failed to load master data:', error)
     }
-  }
-
-  //Get data from order
+  };
+  /**
+   * HandleGetOrder
+   *
+   * Spanish:
+   * Función asíncrona que obtiene los datos de una orden utilizando la clase TravelAssistance. Si la respuesta
+   * contiene datos válidos (como una lista de planes y un identificador de prospecto), actualiza el contexto de datos
+   * y retorna el identificador del prospecto.
+   *
+   * English:
+   * Asynchronous function that fetches order data using the TravelAssistance class. If the response contains valid data
+   * (such as a list of plans and a prospect identifier), it updates the data context and returns the prospect ID.
+   *
+   * @param {dataOrder} orderPayload - La carga útil de la orden. / The order payload.
+   * @returns {Promise<any>} Una promesa que se resuelve con el ID del prospecto si la orden es válida, de lo contrario null.
+   *                         / A promise that resolves with the prospect ID if the order is valid, otherwise null.
+   */
   const HandleGetOrder = async (orderPayload: dataOrder) => {
-    const travelAssistance = new TravelAssistance();
+    const travelAssistance = new TravelAssistance()
     try {
-      const response = await travelAssistance.getOrderPriceByAge(orderPayload);
-      if (response && response?.data?.planes && response?.data?.planes.length > 0 && response?.data?.idProspecto) {
-        setData?.((prevData) => ({
-            ...prevData,
-            responseOrder: response?.data
-          })
-        )
-        return  response.data.idProspecto
-
+      const response = await travelAssistance.getOrderPriceByAge(orderPayload)
+      if (response?.data?.planes.length > 0 && response?.data?.idProspecto) {
+        setData?.(prevData => ({
+          ...prevData,
+          responseOrder: response?.data
+        }))
+        return response.data.idProspecto
       }
-      return null
+      return null;
     } catch (error) {
-      console.error("Failed to get order:", error);
+      console.error('Failed to get order:', error)
     }
-  }
+  };
 
   const isDataOrderValid = (order: dataOrder): boolean => {
     return Object.values(order).every(value => {
       if (value === null || value === undefined) {
-        return false;
+        return false
       }
       if (typeof value === 'string' && value.trim() === '') {
-        return false;
+        return false
       }
       if (Object.keys(order).length !== 11) {
-        return false;
+        return false
       }
-      return true;
-    });
+      return true
+    })
   }
 
-  return ({HandleGetOrder, isDataOrderValid})
+  return { HandleGetOrder, isDataOrderValid }
 }

@@ -16,5 +16,8 @@
   "label-title-travelers-page": "Traveler's data",
   "label-title-traveler-page": "Traveler data",
   "label-description-traveler-page": "By entering your data, you accept our",
-  "label-link-privacy-policy": "Data Handling and Terms of Use"
+  "label-link-privacy-policy": "Data Handling and Terms of Use",
+  "label-page-not-found": "Page Not Found",
+  "label-page-not-found-description": "Sorry, the page you are looking for could not be found.",
+  "label-return-home": "Return Home"
 }
