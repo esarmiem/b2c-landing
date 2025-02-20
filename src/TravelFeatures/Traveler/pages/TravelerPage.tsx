@@ -1,5 +1,5 @@
-import { Breadcrumb } from '@/TravelCore/Components/Epic/Breadcrumb.tsx';
-import { HeaderTraveler } from '@/TravelCore/Components/Epic/HeaderTraveler.tsx';
+import { Breadcrumb } from "@/TravelCore/Components/Epic/Breadcrumb.tsx";
+import { HeaderTraveler } from "@/TravelCore/Components/Epic/HeaderTraveler.tsx";
 import { TravelerForm } from "@/TravelCore/Components/Epic/TravelerForm.tsx";
 import { EmergencyContact } from "@/TravelCore/Components/Epic/EmergencyContact.tsx";
 import { PurchaseDetails } from "@/TravelCore/Components/Epic/PurchaseDetails.tsx";
@@ -14,8 +14,31 @@ import {Masters} from "@/TravelFeatures/Traveler/model/masters_entity.ts";
 import {useNavigate} from "react-router-dom";
 import useMasters from "@/TravelCore/Hooks/useMasters.ts";
 
+/**
+ * TravelForm
+ *
+ * Spanish:
+ * Componente que renderiza el formulario de viaje. Este componente integra varios subcomponentes:
+ * - Breadcrumb: muestra la ruta de navegación.
+ * - HeaderTraveler: visualiza la información de los viajeros.
+ * - TravelerForm: formulario individual para cada viajero.
+ * - EmergencyContact: formulario para el contacto de emergencia.
+ * - PurchaseDetails: muestra los detalles de la compra, incluyendo un botón para continuar.
+ *
+ * English:
+ * Component that renders the travel form. This component integrates several subcomponents:
+ * - Breadcrumb: displays the navigation path.
+ * - HeaderTraveler: shows traveler information.
+ * - TravelerForm: individual form for each traveler.
+ * - EmergencyContact: form for emergency contact information.
+ * - PurchaseDetails: displays purchase details, including a continue button.
+ */
 export default function TravelForm() {
+  // Hook de traducción para obtener textos en distintos idiomas.
+  // Translation hook to retrieve texts in different languages.
   const { t } = useTranslation(["traveler"]);
+  // Array de viajeros con información traducida.
+  // Array of travelers with translated information.
   const masterContext = useMasters();
   const {setData} = useData() || {};
   const navigate = useNavigate();
