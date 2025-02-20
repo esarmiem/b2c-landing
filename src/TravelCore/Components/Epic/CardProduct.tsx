@@ -126,9 +126,9 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
                     {DescripcionDescuentosDolares.porcentaje}% OFF
                   </div>
               )}
-              <h2 className="font-bold text-2xl my-4">{Categoria}</h2>
+              <h2 className="font-bold text-2xl my-3">{Categoria}</h2>
               <p className={`my-0 ${recommended ? "text-white" : "text-neutral-800"}`}>{nombre}</p>
-              <p className="mt-1 font-bold">Precio Total</p>
+              <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? "text-white" : "text-red-600"}`}>{price} <span
                   className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span></h3>
               <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
@@ -141,7 +141,7 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
 
             <div className="p-3 space-y-3 max-h-60 overflow-y-auto">
               <ul className="text-sm text-gray-600 mb-3 ">
-                {cobertura.map((detail, idx) => (
+                {cobertura.slice(0,5).map((detail, idx) => (
                     <li key={idx} className="flex items-start mb-2 gap-1 font-bold">
                       <CircleCheck className="h-3 w-3 text-green-500 mt-1 flex-shrink-0"/>
                       {detail.name}
@@ -179,7 +179,8 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
             subtitle: nombre,
             typeOfProduct: TipoViaje,
             price: price,
-            originalPrice: originalPrice,
+            originalPrice: originalPrice,            
+            details: cobertura.map((detail: any) => detail.name),
           }}
         />
       )}
