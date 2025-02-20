@@ -7,7 +7,7 @@ interface ProductsRowProps {
   plans: Plan[]
 }
 
-const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
+const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }: ProductsRowProps) => {
   // Definimos las clases condicionales:
   // Si viewType es "list", usamos una grilla de 1 columna; si es "grid", usamos varias columnas.
   const containerClasses =

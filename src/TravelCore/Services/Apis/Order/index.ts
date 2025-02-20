@@ -20,9 +20,7 @@ interface PayloadUpgrades {
 }
 
 export const getProductUpdates = async (payload: PayloadUpgrades) => {
-
   const authISL = await AUTH_ISL_API.loginISL();
-  console.log("authISL: ", authISL);
   const queryParams = new URLSearchParams({
     request: 'get_upgrade',
     token: authISL?.data?.result?.token,
@@ -31,8 +29,6 @@ export const getProductUpdates = async (payload: PayloadUpgrades) => {
   }).toString();
 
   const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`;
-  console.log("url: ", url);
-
   try {
     const response = await axiosHttp({
       method: 'GET',

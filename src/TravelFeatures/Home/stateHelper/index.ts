@@ -3,7 +3,6 @@ import useMasters from "@/TravelCore/Hooks/useMasters.ts";
 import {useEffect} from "react";
 import {Auth} from "@/TravelFeatures/Home/model/auth_entity.ts";
 import {Masters} from "@/TravelFeatures/Home/model/masters_entity.ts";
-
 import {TravelAssistance} from "@/TravelFeatures/Home/model/travel_assistance_entity.ts";
 import {dataOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 import useData from "@/TravelCore/Hooks/useData.ts";
@@ -30,7 +29,6 @@ export default function useHomeState () {
         await getMasters();
       }
     };
-
     handleInitialization();
   }, []);
 
@@ -45,14 +43,12 @@ export default function useHomeState () {
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser,
         };
-
         setSession?.(sessionData);
         return true;
       }
     } catch (error) {
       console.error("Error durante la autenticación:", error);
     }
-
     return false;
   }
 

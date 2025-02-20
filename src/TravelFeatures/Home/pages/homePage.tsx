@@ -15,6 +15,7 @@ import useData from "@/TravelCore/Hooks/useData.ts";
 import {LoadingScreen} from "@/TravelCore/Components/Epic/LoadingScreen.tsx";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
+import {Masters} from "@/TravelFeatures/Traveler/model/masters_entity.ts";
 
 export default function HomePage () {
     const { t } = useTranslation(["home"]);
@@ -44,7 +45,7 @@ export default function HomePage () {
     //Validate if data is entire fill
     setTimeout(async () => {
       if (data && isDataOrderValid(data?.payloadOrder)) {
-        const resp: number | null = await HandleGetOrder(data.payloadOrder)
+        const resp = await HandleGetOrder(data.payloadOrder)
         if (resp && resp > 0) {
             setTimeout(() => {
                 navigate('/quote/travel'); // Navegar a la siguiente pantalla
