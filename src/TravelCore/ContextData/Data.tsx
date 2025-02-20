@@ -1,13 +1,6 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { getPersisted, savePersistense } from "./Persistence/data";
-import { GlobalData } from "@/TravelCore/Utils/interfaces/context.ts";
+import type { GlobalData } from '@/TravelCore/Utils/interfaces/context.ts'
+import { type Dispatch, type ReactNode, type SetStateAction, createContext, useEffect, useState } from 'react'
+import { getPersisted, savePersistense } from './Persistence/data'
 
 // Clave de almacenamiento para persistencia en localStorage.
 // Storage key for persistence in localStorage.
@@ -20,20 +13,18 @@ type State = GlobalData | null;
 // Definición del tipo del contexto que provee el estado y la función para actualizarlo.
 // Definition of the context type that provides the state and the function to update it.
 type DataContextType = {
-  data: State;
-  setData: Dispatch<SetStateAction<State>>;
-};
+  data: State
+  setData: Dispatch<SetStateAction<State>>
+}
 
 // Creación del contexto con un valor inicial undefined.
 // Create the context with an initial value of undefined.
-export const DataContext = createContext<DataContextType | undefined>(
-  undefined,
-);
+export const DataContext = createContext<DataContextType | undefined>(undefined)
 
 // Definición de las propiedades del proveedor del contexto.
 // Definition of the context provider's props.
 interface DataProviderProps {
-  children: ReactNode | ReactNode[];
+  children: ReactNode | ReactNode[]
 }
 /**
  * DataProvider
@@ -58,23 +49,19 @@ export function DataProvider({ children }: DataProviderProps): JSX.Element {
   // Inicializa el estado con datos persistidos (si existen) a partir de STORAGE_KEY.
   // Initializes the state with persisted data (if available) from STORAGE_KEY.
   const [data, setData] = useState<State>(() => {
-    const cachedData = getPersisted(STORAGE_KEY) as GlobalData | null;
-    return cachedData;
-  });
+    const cachedData = getPersisted(STORAGE_KEY) as GlobalData | null
+    return cachedData
+  })
 
   // Guarda en el almacenamiento cualquier cambio en el estado.
   // Saves any changes in the state to storage.
   useEffect(() => {
     if (data !== null) {
-      savePersistense(data, STORAGE_KEY);
+      savePersistense(data, STORAGE_KEY)
     }
-  }, [data]);
+  }, [data])
 
   // Retorna el proveedor del contexto que envuelve a los componentes hijos.
   // Returns the context provider wrapping the child components.
-  return (
-    <DataContext.Provider value={{ data, setData }}>
-      {children}
-    </DataContext.Provider>
-  );
+  return <DataContext.Provider value={{ data, setData }}>{children}</DataContext.Provider>
 }

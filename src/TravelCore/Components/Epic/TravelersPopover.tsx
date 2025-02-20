@@ -1,122 +1,127 @@
-import * as React from "react";
-import { Info, Minus, Plus, Trash2, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import { useTranslation } from "react-i18next";
-import useData from "@/TravelCore/Hooks/useData.ts";
-import {useState} from "react";
+import useData from '@/TravelCore/Hooks/useData.ts'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Info, Minus, Plus, Trash2, Users } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface TravelerAge {
-  id: number;
-  age: string;
+  id: number
+  age: string
 }
 
-export const TravelersPopover = () => {
-  const { t } = useTranslation(["home"]);
-  const { data, setData } = useData() || {};
-  const payloadOrder = data?.payloadOrder;
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null)
-  const [travelers, setTravelers] = useState(1);
+interface TravelersPopoverProps {
+  onChange: (value: string) => void
+  errors?: string[]
+}
 
-  const initialAges = React.useMemo(() => {
-    if(payloadOrder?.edades){
+export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) => {
+  const { t } = useTranslation(['home'])
+  const { data, setData } = useData() || {}
+  const payloadOrder = data?.payloadOrder
+  const [isOpen, setIsOpen] = useState(false)
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
+  const [travelers, setTravelers] = useState(payloadOrder?.cantidadPax || 1)
+
+  const initialAges = useMemo(() => {
+    if (payloadOrder?.edades) {
       return payloadOrder.edades.split(',').map((age, index) => ({
         id: index + 1,
         age: age.trim()
       }))
     }
-    return [{ id: 1, age: "0" }]
-  }, [payloadOrder?.edades]);
+    return [{ id: 1, age: '' }]
+  }, [payloadOrder?.edades])
 
-  const [ages, setAges] = React.useState<TravelerAge[]>(initialAges);
+  const [ages, setAges] = useState<TravelerAge[]>(initialAges)
+  const formattedAges = useMemo(() => ages.map(age => age.age).join(','), [ages])
 
-  React.useEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    // Solo llamamos onChange si tenemos datos iniciales o si se han hecho cambios
+    if (payloadOrder?.edades || ages.some(age => age.age !== '')) {
+      onChange(formattedAges)
+    }
+
     if (setData) {
-      const formattedAges = ages.map((age) => age.age).join(",")
-      setData((prevData) => ({
+      setData(prevData => ({
         ...prevData,
         payloadOrder: {
           ...prevData?.payloadOrder,
           cantidadPax: travelers,
-          edades: formattedAges,
+          edades: formattedAges
         }
       }))
     }
-  }, [travelers, ages]);
+  }, [travelers, ages, formattedAges, payloadOrder?.edades])
 
-  React.useEffect(() => {
-    if (payloadOrder?.cantidadPax) {
-      setTravelers(payloadOrder.cantidadPax);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (payloadOrder?.cantidadPax && !travelers) {
+      setTravelers(payloadOrder.cantidadPax)
     }
-  }, [payloadOrder, setTravelers]);
+  }, [payloadOrder])
 
   const handleAddTraveler = () => {
     if (travelers < 9) {
-      setTravelers(travelers + 1);
-      setAges([...ages, { id: ages.length + 1, age: "0" }]);
+      setTravelers(travelers + 1)
+      setAges([...ages, { id: ages.length + 1, age: '0' }])
     }
-  };
+  }
 
   const handleRemoveTraveler = (idToRemove: number) => {
     if (travelers > 1) {
-      setTravelers((prevTravelers) => prevTravelers - 1);
+      setTravelers(prevTravelers => prevTravelers - 1)
       const updatedAges = ages
-          .filter((age) => age.id !== idToRemove)
-          .map((age, index) => ({
-            ...age,
-            id: index + 1,
-          }));
-      setAges(updatedAges);
+        .filter(age => age.id !== idToRemove)
+        .map((age, index) => ({
+          ...age,
+          id: index + 1
+        }))
+      setAges(updatedAges)
     }
   }
 
   const handleAgeChange = (id: number, value: string) => {
-    setAges(ages.map((age) => (age.id === id ? { ...age, age: value } : age)));
-  };
+    setAges(ages.map(age => (age.id === id ? { ...age, age: value } : age)))
+  }
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start"
-        >
+        <Button variant="outline" className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start">
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {t("placeholder-count-travelers")}
+            <span className={`text-sm text-muted-foreground ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}>
+              {errors && errors?.length > 0 ? errors : t('placeholder-count-travelers')}
             </span>
             <TooltipProvider>
-              <Tooltip
-                open={activeTooltip === "travelers"}
-                onOpenChange={(open) =>
-                  setActiveTooltip(open ? "travelers" : null)
-                }
-              >
+              <Tooltip open={activeTooltip === 'travelers'} onOpenChange={open => setActiveTooltip(open ? 'travelers' : null)}>
                 <TooltipTrigger asChild>
-                  <span
-                    onMouseEnter={() => setActiveTooltip("travelers")}
-                    onMouseLeave={() => setActiveTooltip(null)}
-                  >
-                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                  <span onMouseEnter={() => setActiveTooltip('travelers')} onMouseLeave={() => setActiveTooltip(null)}>
+                    <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="w-64">{t("tooltip-travelers")}</p>
+                  <p className="w-64">{t('tooltip-travelers')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            <span className="text-ellipsis overflow-hidden">
-              {travelers}{" "}
-              {travelers === 1
-                ? t("content-select-travelers")
-                : t("content-select-travelers") + "s"}
+          <div>
+            <div className={`flex items-center gap-2 ${errors && errors?.length > 0 ? 'hidden sm:flex' : ''}`}>
+              <Users className="h-4 w-4" />
+              <span className="text-ellipsis overflow-hidden">
+                {travelers} {travelers === 1 ? t('content-select-travelers') : `${t('content-select-travelers')}s`}{' '}
+              </span>
+            </div>
+            <span
+              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+            >
+              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              {errors && errors?.length > 0 ? errors : ''}
             </span>
           </div>
         </Button>
@@ -126,15 +131,13 @@ export const TravelersPopover = () => {
           <div className="flex-1 overflow-y-auto pr-2">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span>{t("label-select-count-travelers")}</span>
+                <span>{t('label-select-count-travelers')}</span>
                 <div className="flex items-center gap-3">
                   <Button
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() =>
-                      handleRemoveTraveler(ages[ages.length - 1].id)
-                    }
+                    onClick={() => handleRemoveTraveler(ages[ages.length - 1].id)}
                     disabled={travelers <= 1}
                   >
                     <Minus className="h-4 w-4" />
@@ -152,33 +155,45 @@ export const TravelersPopover = () => {
                 </div>
               </div>
 
-              {ages.map((traveler) => (
-                <React.Fragment key={traveler.id}>
+              {ages.map(traveler => (
+                <div key={traveler.id}>
                   <Separator />
                   <div className="flex items-center justify-between gap-4">
                     <span className="min-w-[100px]">
-                      {t("label-input-age-travelers")} {traveler.id}
+                      {t('label-input-age-travelers')} {traveler.id}
                     </span>
                     <div className="flex items-center gap-2">
                       <Input
-                        type="number"
+                        type="text"
                         value={traveler.age}
-                        onChange={(e) =>
-                          handleAgeChange(traveler.id, e.target.value)
-                        }
-                        className="w-20"
+                        onChange={e => handleAgeChange(traveler.id, e.target.value)}
+                        onKeyPress={e => {
+                          if (!/^[0-9]$/.test(e.key)) {
+                            e.preventDefault()
+                          }
+                        }}
+                        className="w-16 my-0.5"
+                        pattern="[0-9]*"
                         min="0"
                         max="120"
                       />
-                      <span>{t("label-input-age-travelers-sufix")}</span>
+                      {/*<Input*/}
+                      {/*  type="number"*/}
+                      {/*  value={traveler.age}*/}
+                      {/*  onChange={e => handleAgeChange(traveler.id, e.target.value)}*/}
+                      {/*  className="w-20"*/}
+                      {/*  min="0"*/}
+                      {/*  max="120"*/}
+                      {/*/>*/}
+                      <span>{t('label-input-age-travelers-sufix')}</span>
                       {/* Botón siempre presente, pero invisible y no interactuable cuando travelers === 1 */}
                       <Button
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-destructive"
                         style={{
-                          opacity: payloadOrder?.cantidadPax as number > 1 ? 1 : 0,
-                          pointerEvents: payloadOrder?.cantidadPax as number > 1 ? "auto" : "none",
+                          opacity: (payloadOrder?.cantidadPax as number) > 1 ? 1 : 0,
+                          pointerEvents: (payloadOrder?.cantidadPax as number) > 1 ? 'auto' : 'none'
                         }}
                         onClick={() => handleRemoveTraveler(traveler.id)}
                       >
@@ -186,20 +201,23 @@ export const TravelersPopover = () => {
                       </Button>
                     </div>
                   </div>
-                </React.Fragment>
+                </div>
               ))}
             </div>
           </div>
           <div className="sticky bottom-0 pt-4 bg-white">
             <Button
               className="w-full bg-red-600 hover:bg-red-700 text-white rounded-full"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false)
+                onChange(`${formattedAges !== '0' ? formattedAges : ''}`)
+              }}
             >
-              {t("action-apply")}
+              {t('action-apply')}
             </Button>
           </div>
         </div>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

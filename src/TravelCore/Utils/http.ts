@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { BASE_URL } from "./constants.ts";
+import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { BASE_URL } from './constants.ts'
 
 /**
  * Session
@@ -11,9 +11,9 @@ import { BASE_URL } from "./constants.ts";
  * Defines the structure for a session, which may include an authentication token, role, and user ID.
  */
 interface Session {
-  token?: string;
-  role?: any;
-  user_id?: number;
+  token?: string
+  role?: any
+  user_id?: number
 }
 /**
  * AxiosHttpArgs
@@ -25,14 +25,14 @@ interface Session {
  * Defines the necessary arguments to configure and make an HTTP request using axios.
  */
 interface AxiosHttpArgs {
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  path?: string;
-  pathISL?: string;
-  session?: Session | null;
-  headers?: Record<string, string>;
-  data?: any;
-  timeout?: number;
-  customConfig?: AxiosRequestConfig;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  path?: string
+  pathISL?: string
+  session?: Session | null
+  headers?: Record<string, string>
+  data?: any
+  timeout?: number
+  customConfig?: AxiosRequestConfig
 }
 
 /**
@@ -50,19 +50,19 @@ interface AxiosHttpArgs {
  * @returns {Record<string, string>} Los encabezados HTTP por defecto. / The default HTTP headers.
  */
 const getDefaultHeaders = (session?: Session): Record<string, string> => {
-  const defaultHeaders: Record<string, string> = {};
+  const defaultHeaders: Record<string, string> = {}
 
   if (session && session.token) {
-    defaultHeaders.Authorization = "Bearer " + session.token;
+    defaultHeaders.Authorization = 'Bearer ' + session.token
     //defaultHeaders.apiKey = API_KEY;
   }
 
   //defaultHeaders['apiKey'] = API_KEY;
-  defaultHeaders["Accept"] = "application/json";
-  defaultHeaders["Content-Type"] = "application/json";
-  defaultHeaders["Access-Control-Allow-Origin"] = "*";
-  return defaultHeaders;
-};
+  defaultHeaders['Accept'] = 'application/json'
+  defaultHeaders['Content-Type'] = 'application/json'
+  defaultHeaders['Access-Control-Allow-Origin'] = '*'
+  return defaultHeaders
+}
 
 /**
  * axiosHttp

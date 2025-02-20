@@ -10,9 +10,9 @@
  */
 
 export interface DescripcionDescuentos {
-  valorDescuento: string;
-  valorTotal: number;
-  porcentaje: string;
+  valorDescuento: string
+  valorTotal: number
+  porcentaje: string
 }
 
 /**
@@ -27,12 +27,12 @@ export interface DescripcionDescuentos {
  * the benefit identifier, name, language identifier, and extended information.
  */
 export interface Cobertura {
-  valor_spa: string;
-  valor_eng: string;
-  id_benefit: string;
-  name: string;
-  language_id: string;
-  extended_info: string;
+  valor_spa: string
+  valor_eng: string
+  id_benefit: string
+  name: string
+  language_id: string
+  extended_info: string
 }
 
 /**
@@ -45,10 +45,19 @@ export interface Cobertura {
  * Defines the conditions associated with a plan, including its identifier, description, name, and terms.
  */
 export interface Condiciones {
-  id: number;
-  description: string;
-  name: string;
-  terms: string;
+  id: number
+  description: string
+  name: string
+  terms: string
+}
+//Upgrades
+interface Upgrade {
+  type_raider: string
+  rd_calc_type: string
+  id_raider: string
+  cost_raider: string
+  name_raider: string
+  value_raider: string
 }
 
 export interface Pax {
@@ -98,23 +107,23 @@ export interface PaxForm {
  * Optionally, it may have a viewType indicating whether it is displayed as "list" or "grid".
  */
 export interface Plan {
-  Id: number;
-  IdPlan: number;
-  Pregunta: string;
-  Categoria: string;
-  TipoViaje: string;
-  nombre: string;
-  ValorCobertura: string;
-  DescripcionDescuentosDolares: DescripcionDescuentos;
-  DescripcionDescuentosPesos: DescripcionDescuentos;
-  Valor: string;
-  ValorPesos: string;
-  ValorPax: string;
-  ValorPaxPesos: string;
-  upgrade: any[];
-  cobertura: Cobertura[];
-  Condiciones: Condiciones;
-  viewType?: "list" | "grid";
+  Id: number
+  IdPlan: number
+  Pregunta: string
+  Categoria: string
+  TipoViaje: string
+  nombre: string
+  ValorCobertura: string
+  DescripcionDescuentosDolares: DescripcionDescuentos
+  DescripcionDescuentosPesos: DescripcionDescuentos
+  Valor: string
+  ValorPesos: string
+  ValorPax: string
+  ValorPaxPesos: string
+  upgrade: Upgrade[]
+  cobertura: Cobertura[]
+  Condiciones: Condiciones
+  viewType?: 'list' | 'grid'
 }
 
 /**
@@ -127,8 +136,8 @@ export interface Plan {
  * Defines the structure for order response data, which includes a list of plans and a prospect identifier.
  */
 export interface Data {
-  planes: Plan[];
-  idProspecto: number;
+  planes: Plan[]
+  idProspecto: number
 }
 
 /**
@@ -141,8 +150,8 @@ export interface Data {
  * Defines the structure of an order response. It contains the order data and, in case of an error, an error message.
  */
 export interface ResponseData {
-  data: Data;
-  error: string | null;
+  data: Data
+  error: string | null
 }
 /**
  * dataOrder
@@ -156,26 +165,17 @@ export interface ResponseData {
  * destination, ages, contact details, and arrival and departure dates, among others.
  */
 export interface dataOrder {
-  cantidadPax: number;
-  destino: number;
-  edades: string;
-  email: string;
-  idUser: string;
-  lenguaje: string;
-  llegada: string;
-  numeroPregunta: number;
-  pais: string;
-  salida: string;
-  telefono: string;
-}
-//Upgrades
-interface Upgrade {
-  type_raider: string
-  rd_calc_type: string
-  id_raider: string
-  cost_raider: string
-  name_raider: string
-  value_raider: string
+  cantidadPax: number
+  destino: number
+  edades: string
+  email: string
+  idUser: string
+  lenguaje: string
+  llegada: string
+  numeroPregunta: number
+  pais: string
+  salida: string
+  telefono: string
 }
 //Order Isl Payload
 export interface dataIslOrder {
@@ -187,7 +187,7 @@ export interface dataIslOrder {
   fechallegada: string
   fechasalida: string
   idCliente: number
-  idDestino : number
+  idDestino: number
   idOrigen: number
   idProducto: number
   idProspecto: number
@@ -199,7 +199,7 @@ export interface dataIslOrder {
   paisdestino: number
   paisorigen: number
   pax: Pax[]
-  referencia:string
+  referencia: string
   telefonocontacto: string
   totalUpgradesPesos: number
   totalVenta: number
@@ -226,30 +226,30 @@ export interface dataIslOrder {
  * document data, additional information, currency, name, and phone number, among others.
  */
 export interface dataPreorder {
-  consideracionesgenerales: string;
-  correoCliente: string;
-  direccionCliente: string;
-  edad: string;
-  emailcontacto: string;
-  fechallegada: string;
-  fechasalida: string;
-  idCiudadCliente: number;
-  idPaisCliente: number;
-  idProspecto: number;
-  idTipoDocumentoCliente: number;
-  idUser: string;
-  idplan: number;
-  informacionAdicionalCliente: string;
-  moneda: string;
-  nombreCliente: string;
-  nombrecontacto: string;
-  numeroDocumentoCliente: string;
-  paisdestino: number;
-  paisorigen: string;
-  referencia: string;
-  telefonoCliente: number;
-  telefonocontacto: string;
-  upgrades: string;
+  consideracionesgenerales: string
+  correoCliente: string
+  direccionCliente: string
+  edad: string
+  emailcontacto: string
+  fechallegada: string
+  fechasalida: string
+  idCiudadCliente: number
+  idPaisCliente: number
+  idProspecto: number
+  idTipoDocumentoCliente: number
+  idUser: string
+  idplan: number
+  informacionAdicionalCliente: string
+  moneda: string
+  nombreCliente: string
+  nombrecontacto: string
+  numeroDocumentoCliente: string
+  paisdestino: number
+  paisorigen: string
+  referencia: string
+  telefonoCliente: number
+  telefonocontacto: string
+  upgrades: string
 }
 /**
  * CheckPreorderISLResponse
@@ -264,12 +264,12 @@ export interface dataPreorder {
  */
 export interface CheckPreorderISLResponse {
   mensaje: {
-    "": string;
-    status: string;
-    valor: string;
-    documento: string;
-    referencia: string;
-    El_valor_de_cambio_fue_ajustado_a: string;
-  };
-  idCliente: number;
+    '': string
+    status: string
+    valor: string
+    documento: string
+    referencia: string
+    El_valor_de_cambio_fue_ajustado_a: string
+  }
+  idCliente: number
 }
