@@ -1,5 +1,4 @@
 import { validateForm } from '@/TravelCore/Utils/formValidations.ts'
-import { valueOf } from 'node'
 import type { MouseEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +16,7 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     destination: '',
-    origin: '',
+    //origin: '',
     travelDate: '',
     travelers: ''
   })
@@ -30,7 +29,7 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
       required: true,
       isDateRange: true
     },
-    travelers: { required: true }
+    travelers: { requiredAge: true }
   }
 
   const handleChange = (field: string, value: string) => {
@@ -55,6 +54,8 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
     console.log('Formulario válido:', formData)
     onClick(event)
   }
+
+  console.log('formData: ', formData)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-red-700 rounded-lg lg:rounded-full shadow-xl p-4 -mt-7">

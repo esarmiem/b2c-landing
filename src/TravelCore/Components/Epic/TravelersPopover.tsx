@@ -20,12 +20,11 @@ interface TravelersPopoverProps {
 
 export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) => {
   const { t } = useTranslation(['home'])
-  const [isOpen, setIsOpen] = useState(false)
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
-  const [travelers, setTravelers] = useState(1)
-
   const { data, setData } = useData() || {}
   const payloadOrder = data?.payloadOrder
+  const [isOpen, setIsOpen] = useState(false)
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
+  const [travelers, setTravelers] = useState(payloadOrder?.cantidadPax || 1)
 
   const initialAges = useMemo(() => {
     if (payloadOrder?.edades) {
@@ -42,6 +41,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    onChange(`${formattedAges !== '0' ? formattedAges : '0'}`)
     if (setData) {
       setData(prevData => ({
         ...prevData,
@@ -54,11 +54,12 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
     }
   }, [travelers, ages])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (payloadOrder?.cantidadPax) {
+    if (payloadOrder?.cantidadPax && !travelers) {
       setTravelers(payloadOrder.cantidadPax)
     }
-  }, [payloadOrder, travelers])
+  }, [payloadOrder])
 
   const handleAddTraveler = () => {
     if (travelers < 9) {
@@ -105,13 +106,18 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex items-center gap-2">
-            <Users className={`h-4 w-4 ${errors && errors?.length > 0 ? 'sm:text-red-500' : ''}`} />
-            <span className={`text - ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}>
-              {travelers === 1 ? t('content-select-travelers') : `${t('content-select-travelers')}s`}{' '}
-            </span>
-            <span className={`sm:block hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}>
-              {errors && errors?.length > 0 ? errors : travelers}
+          <div>
+            <div className={`flex items-center gap-2 ${errors && errors?.length > 0 ? 'hidden sm:flex' : ''}`}>
+              <Users className="h-4 w-4" />
+              <span className="text-ellipsis overflow-hidden">
+                {travelers} {travelers === 1 ? t('content-select-travelers') : `${t('content-select-travelers')}s`}{' '}
+              </span>
+            </div>
+            <span
+              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+            >
+              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              {errors && errors?.length > 0 ? errors : ''}
             </span>
           </div>
         </Button>
@@ -154,13 +160,27 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
                     </span>
                     <div className="flex items-center gap-2">
                       <Input
-                        type="number"
+                        type="text"
                         value={traveler.age}
                         onChange={e => handleAgeChange(traveler.id, e.target.value)}
-                        className="w-20"
+                        onKeyPress={e => {
+                          if (!/^[0-9]$/.test(e.key)) {
+                            e.preventDefault()
+                          }
+                        }}
+                        className="w-16 my-0.5"
+                        pattern="[0-9]*"
                         min="0"
                         max="120"
                       />
+                      {/*<Input*/}
+                      {/*  type="number"*/}
+                      {/*  value={traveler.age}*/}
+                      {/*  onChange={e => handleAgeChange(traveler.id, e.target.value)}*/}
+                      {/*  className="w-20"*/}
+                      {/*  min="0"*/}
+                      {/*  max="120"*/}
+                      {/*/>*/}
                       <span>{t('label-input-age-travelers-sufix')}</span>
                       {/* Botón siempre presente, pero invisible y no interactuable cuando travelers === 1 */}
                       <Button

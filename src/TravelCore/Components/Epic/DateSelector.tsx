@@ -80,20 +80,28 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex items-center gap-2">
-            <CalendarIcon className={`h-4 w-4 ${errors && errors?.length > 0 ? 'sm:text-red-500' : ''}`} />
-            <span className="text-ellipsis overflow-hidden">
-              {date?.from ? (
-                date.to ? (
-                  <>
-                    {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
-                  </>
+          <div>
+            <div className={`flex items-center gap-2 ${errors && errors?.length > 0 ? 'hidden sm:flex' : ''}`}>
+              <CalendarIcon className="h-4 w-4" />
+              <span className="text-ellipsis overflow-hidden">
+                {date?.from ? (
+                  date.to ? (
+                    <>
+                      {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                    </>
+                  ) : (
+                    format(date.from, 'LLL dd, y')
+                  )
                 ) : (
-                  format(date.from, 'LLL dd, y')
-                )
-              ) : (
-                <span>{t('label-between-dates')}</span>
-              )}
+                  <span>{t('label-between-dates')}</span>
+                )}
+              </span>
+            </div>
+            <span
+              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+            >
+              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              {errors && errors?.length > 0 ? errors : ''}
             </span>
           </div>
         </Button>

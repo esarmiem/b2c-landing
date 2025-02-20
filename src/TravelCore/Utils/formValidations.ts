@@ -7,6 +7,7 @@ export interface ValidationRange {
 
 export interface ValidationRules {
   required?: boolean
+  requiredAge?: boolean
   pattern?: ValidationPattern
   minLength?: number
   maxLength?: number
@@ -38,6 +39,7 @@ const VALIDATION_PATTERNS: Record<ValidationPattern, RegExp> = {
 
 const VALIDATION_MESSAGES = {
   required: 'Este campo es requerido',
+  requiredAge: 'La edad es requerida',
   email: 'Ingrese un email válido',
   phone: 'Ingrese un número de teléfono válido',
   password: 'La contraseña debe tener al menos 8 caracteres, una letra y un número',
@@ -93,6 +95,12 @@ export const validateField = (value: any, validations: ValidationRules = {}): st
   // Validación de campo requerido
   if (validations.required && !value) {
     errors.push(VALIDATION_MESSAGES.required)
+    return errors
+  }
+
+  // Validación de edad requerida
+  if (validations.requiredAge && !value) {
+    errors.push(VALIDATION_MESSAGES.requiredAge)
     return errors
   }
 

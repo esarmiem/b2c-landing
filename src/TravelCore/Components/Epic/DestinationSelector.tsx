@@ -54,6 +54,12 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
       }
     }))
   }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (payloadOrder?.destino) {
+      onChange(selectDestination || '')
+    }
+  }, [payloadOrder?.destino])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -80,10 +86,18 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
-            <span className="text-ellipsis overflow-hidden">{selectDestination || t('label-dropdown-destination')}</span>
-            <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+          <div>
+            <div className={`flex items-center gap-2 ${errors && errors?.length > 0 ? 'hidden sm:flex' : ''}`}>
+              <MapPin className="h-4 w-4" />
+              <span className="text-ellipsis overflow-hidden">{selectDestination || t('label-dropdown-destination')}</span>
+              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+            </div>
+            <span
+              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+            >
+              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              {errors && errors?.length > 0 ? errors : ''}
+            </span>
           </div>
         </Button>
       </PopoverTrigger>
