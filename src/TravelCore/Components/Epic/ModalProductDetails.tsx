@@ -22,9 +22,13 @@ const ModalProductDetails: React.FC<ModalProductDetailsProps> = ({ isOpen, onClo
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-lg p-6 rounded-xl text-center">
                 <DialogHeader>
-                    <DialogTitle className="text-3xl font-bold text-center">{product.name}</DialogTitle>
-                    <p className="text-center text-base  font-semibold">{product.subtitle}</p>
-                </DialogHeader> 
+                    <DialogTitle className="text-lg text-red-500 font-bold text-center">{product.name}</DialogTitle>
+                    <p className="text-center text-3xl  font-semibold">{product.subtitle}</p>
+                </DialogHeader>
+
+                <div className="py-2">                                       
+                    <p className="text-2xl font-normal">BENEFICIOS:</p>
+                </div>
 
                 {/* Aquí se mapean los datos de los beneficios */}
                 <ul className="mt-2 text-sm text-start text-gray-700 max-h-80 overflow-y-auto border rounded-lg">

@@ -51,7 +51,7 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
   };
   const openDetailsModal = () => {
     setSelectedProduct({
-      id: "1",
+      id: 1,
       name: "title",
       price: parseFloat(price.replace(/[^0-9.]/g, "")),
       description: "Detalles adicionales del producto y coberturas.",

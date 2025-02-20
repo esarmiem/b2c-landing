@@ -20,7 +20,6 @@ export interface Condiciones {
   name: string;
   terms: string;
 }
-
 export interface Plan {
   Id: number;
   IdPlan: number;
