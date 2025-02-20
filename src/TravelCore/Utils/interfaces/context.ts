@@ -1,6 +1,6 @@
-import {dataOrder, Data} from "@/TravelCore/Utils/interfaces/Order.ts";
-import {Dispatch, SetStateAction} from "react";
-import {MASTER_CONST_STORAGE_KEYS} from "@/TravelCore/Utils/ConstStorageKeys.ts";
+import type { MASTER_CONST_STORAGE_KEYS } from '@/TravelCore/Utils/ConstStorageKeys.ts'
+import type { Data, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { Dispatch, SetStateAction } from 'react'
 
 export interface GenericItem {
   [key: string]: any
@@ -22,13 +22,13 @@ export interface StorageData<T = any> {
 }
 
 export interface GlobalData {
-  payloadOrder?: dataOrder
+  payloadOrder?: Partial<dataOrder>
   responseOrder?: Data | null
 }
 
 //type for MasterContext
 export type StateKey = keyof typeof MASTER_CONST_STORAGE_KEYS
-export type State<T = GenericItem> = ApiResponse<T> | null;
+export type State<T = GenericItem> = ApiResponse<T> | null
 
 export type MasterContextType = {
   [K in StateKey]: {
