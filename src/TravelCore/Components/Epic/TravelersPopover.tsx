@@ -33,15 +33,19 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
         age: age.trim()
       }))
     }
-    return [{ id: 1, age: '0' }]
+    return [{ id: 1, age: '' }]
   }, [payloadOrder?.edades])
 
   const [ages, setAges] = useState<TravelerAge[]>(initialAges)
-  const formattedAges = ages.map(age => age.age).join(',')
+  const formattedAges = useMemo(() => ages.map(age => age.age).join(','), [ages])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    onChange(`${formattedAges !== '0' ? formattedAges : '0'}`)
+    // Solo llamamos onChange si tenemos datos iniciales o si se han hecho cambios
+    if (payloadOrder?.edades || ages.some(age => age.age !== '')) {
+      onChange(formattedAges)
+    }
+
     if (setData) {
       setData(prevData => ({
         ...prevData,
@@ -52,7 +56,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
         }
       }))
     }
-  }, [travelers, ages])
+  }, [travelers, ages, formattedAges, payloadOrder?.edades])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {

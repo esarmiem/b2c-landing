@@ -51,7 +51,7 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
   };
   const openDetailsModal = () => {
     setSelectedProduct({
-      id: "1",
+      id: 1,
       name: "title",
       price: parseFloat(price.replace(/[^0-9.]/g, "")),
       description: "Detalles adicionales del producto y coberturas.",
@@ -86,9 +86,11 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
               <p className={`mt-1 text-4xl font-bold ${recommended ? "text-neutral-100" : "text-red-600"}`}>
                 {price} <span className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
               </p>
-              <p className={`line-through font-semibold text-lg ${recommended ? "text-black" : "text-neutral-400"}`}>
-                {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
-              </p>
+              {recommended &&
+                  <p className={`line-through font-semibold text-lg text-black`}>
+                    {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
+                  </p>
+              }
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-sm w-100 mb-0">Ideal para {TipoViaje}</div>
           </div>
@@ -126,14 +128,17 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
                     {DescripcionDescuentosDolares.porcentaje}% OFF
                   </div>
               )}
-              <h2 className="font-bold text-2xl my-4">{Categoria}</h2>
+              <h2 className="font-bold text-2xl my-3">{Categoria}</h2>
               <p className={`my-0 ${recommended ? "text-white" : "text-neutral-800"}`}>{nombre}</p>
-              <p className="mt-1 font-bold">Precio Total</p>
+              <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? "text-white" : "text-red-600"}`}>{price} <span
-                  className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span></h3>
-              <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
+                  className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
+              </h3>
+              {recommended &&
+                  <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
                  {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
-              </span>
+                </span>
+              }
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-xs font-semibold">Ideal para {TipoViaje}</div>
           </section>
@@ -141,7 +146,7 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
 
             <div className="p-3 space-y-3 max-h-60 overflow-y-auto">
               <ul className="text-sm text-gray-600 mb-3 ">
-                {cobertura.map((detail, idx) => (
+                {cobertura.slice(0,5).map((detail, idx) => (
                     <li key={idx} className="flex items-start mb-2 gap-1 font-bold">
                       <CircleCheck className="h-3 w-3 text-green-500 mt-1 flex-shrink-0"/>
                       {detail.name}
@@ -179,7 +184,8 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
             subtitle: nombre,
             typeOfProduct: TipoViaje,
             price: price,
-            originalPrice: originalPrice,
+            originalPrice: originalPrice,            
+            details: cobertura.map((detail: any) => detail.name),
           }}
         />
       )}
