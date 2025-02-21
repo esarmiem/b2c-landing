@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardProduct from './CardProduct';
-import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
+import { Plan } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface ProductsRowProps {
   viewType: 'list' | 'grid';
   plans: Plan[]
 }
 
-const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }: ProductsRowProps) => {
+const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  const toggleVisibility = () => {
+    setVisibleCount(visibleCount === plans.length ? 4 : plans.length);
+  };
+
+  // clases condicionales para el contenedor basado en el tipo de vista
   // Definimos las clases condicionales:
   // Si viewType es "list", usamos una grilla de 1 columna; si es "grid", usamos varias columnas.
   const containerClasses =
@@ -18,9 +25,19 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }: ProductsRo
   return (
     <div className="max-w-6xl mx-auto py-4">
       <div className={containerClasses}>
-        {plans.map((plan, index) => (
+        {plans.slice(0, visibleCount).map((plan, index) => (
           <CardProduct key={index} viewType={viewType} {...plan} />
         ))}
+      </div>
+      {/* boton para ver mas ver menos */}
+      <div className="mx-auto my-3 p-4 align-middle text-center">
+        {plans.length > 4 && (
+          <button
+            className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all"
+            onClick={toggleVisibility}>
+            {visibleCount === plans.length ? 'Ver menos' : 'Ver más opciones'}
+          </button>
+        )}
       </div>
     </div>
   );
