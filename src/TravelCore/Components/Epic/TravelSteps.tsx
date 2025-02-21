@@ -75,7 +75,7 @@ export const TravelSteps = () => {
               {/* Content */}
               <div className="flex-1 md:w-1/2 flex items-center">
                 <div
-                  className={`bg-white flex gap-2 items-center p-6 rounded-lg shadow-lg border relative ${
+                  className={`bg-white flex gap-2 items-center p-6 rounded-lg shadow-lg md:hover:shadow-xl border relative ${
                     index % 2 === 0
                       ? "md:text-start"
                       : "md:flex-row-reverse md:gap-4"
