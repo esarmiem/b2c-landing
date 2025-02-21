@@ -52,7 +52,7 @@ export const TravelSteps = () => {
     <section className="container mx-auto py-10 md:py-12 lg:py-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* Header */}
       <div className="text-center flex flex-col items-center mb-12">
-        <Sparkle className="h-6 w-6 md:h-8 md:w-8 lg:h-8 lg:w-8 text-primary"/>
+        <Sparkle className="h-6 w-6 md:h-8 md:w-8 lg:h-8 lg:w-8 text-primary" />
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
           {t("title-stepper")}
         </h2>
@@ -76,19 +76,23 @@ export const TravelSteps = () => {
               <div className="flex-1 md:w-1/2 flex items-center">
                 <div
                   className={`bg-white flex gap-2 items-center p-6 rounded-lg shadow-lg border relative ${
-                    index % 2 === 0 ? "md:text-start" : "md:flex-row-reverse md:gap-4"
+                    index % 2 === 0
+                      ? "md:text-start"
+                      : "md:flex-row-reverse md:gap-4"
                   }`}
                 >
                   <div className="flex flex-col items-start gap-2 mb-2 text-red-600 font-bold">
                     <span>
                       {step.number}. {step.title}
                     </span>
-                    <p className="text-gray-600 font-normal">{step.description}</p>
+                    <p className="text-gray-600 font-normal">
+                      {step.description}
+                    </p>
                   </div>
-                  
+
                   <div className="bg-red-700 text-white rounded-md p-1">
-                      <step.icon className="h-7 w-7" />
-                    </div>
+                    <step.icon className="h-7 w-7" />
+                  </div>
                 </div>
               </div>
               {/* Image */}
@@ -112,9 +116,11 @@ export const TravelSteps = () => {
       <div className="text-center mt-12">
         <button
           onClick={scrollToTop} // Llama a la función de scroll suave
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 text-lg rounded-full cursor-pointer"
+          className="relative overflow-hidden border border-red-600 bg-red-600 text-white shadow-2xl transition-all before:absolute before:left-0 before:top-0 before:h-full before:w-0 before:duration-500 after:absolute after:right-0 after:top-0 after:h-full after:w-0 after:duration-500 hover:text-white hover:shadow-red-600 hover:before:w-2/4 hover:before:bg-black hover:after:w-2/4 hover:after:bg-black rounded-full px-8 py-6 text-lg cursor-pointer"
         >
-          {t("label-button-stepper")} →
+          <span className="relative z-10 flex items-center gap-2">
+            {t("label-button-stepper")} →
+          </span>
         </button>
       </div>
     </section>
