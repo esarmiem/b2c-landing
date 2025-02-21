@@ -7,9 +7,10 @@ import { GoBack } from "@/TravelCore/Components/Raw/GoBack.tsx";
 import { ContinuarButton } from "@/TravelCore/Components/Raw/ContinuarButton.tsx";
 import { useTranslation } from "react-i18next";
 import useData from "@/TravelCore/Hooks/useData.ts";
-import {useState, useCallback} from "react";
+import {useState, useCallback, useEffect} from "react";
 import {PaxForm, Pax} from "@/TravelCore/Utils/interfaces/Order.ts";
 import {calculateAge} from "@/TravelCore/Utils/dates.ts"
+import {createTravelers} from "@/TravelCore/Utils/object.ts"
 import {Masters} from "@/TravelFeatures/Traveler/model/masters_entity.ts";
 import {useNavigate} from "react-router-dom";
 import useMasters from "@/TravelCore/Hooks/useMasters.ts";
@@ -17,31 +18,26 @@ import useMasters from "@/TravelCore/Hooks/useMasters.ts";
 export default function TravelForm() {
   const { t } = useTranslation(["traveler"]);
   const masterContext = useMasters();
-  const {setData} = useData() || {};
+  const {data, setData} = useData() || {};
   const navigate = useNavigate();
   const [travelersData, setTravelersData] = useState<PaxForm[]>([])
-  const [emergencyContact, setEmergencyContact] = useState({
-    firstName: "",
-    lastName: "",
-    phone1: "",
-    phone2: "",
-  });
+  const [emergencyContact, setEmergencyContact] = useState({});
 
-  const travelers = [
-    { id: 1, age: `35 ${t("label-years")}`, phone: t("label-phone") },
-    { id: 2, age: `20 ${t("label-years")}`, phone: t("label-phone") },
-    { id: 3, age: `25 ${t("label-years")}`, phone: t("label-phone") },
-  ];
+    useEffect(() => {
+        setTravelersData(data.travelersData)
+        setEmergencyContact(data.emergencyContactData)
+
+        console.log('rescatando el estado', travelersData, data.travelersData)
+    }, []);
+
+  const travelers = createTravelers(data.payloadOrder.cantidadPax, data.payloadOrder.edades)
 
   const handleSendTravelers = async () => {
-      console.log('guardando travelersData: ', travelersData);
-      const mapDocumentType = (docType: string): number => {
-          const types: { [key: string]: number } = {ce: 1, passport: 2};
-          return types[docType] || 0;
-      };
+      console.log(';;;;;;;;;;;;;;: ', travelersData);
+/*
 
       const paxArray: Pax[] = travelersData
-          .filter((item): item is NonNullable<typeof item> => item !== null)
+          .filter((item): item is NonNullable<typeof item> => item !== undefined)
           .map((item) => ({
               apellidos: item.lastName,
               apellidosContactoEmergencia: emergencyContact.lastName,
@@ -50,7 +46,7 @@ export default function TravelForm() {
               email: item.email,
               idNacionalidad: item.nationality,
               idPais: item.residenceCountry,
-              idTipoDocumento: mapDocumentType(item.documentType),
+              idTipoDocumento: parseInt(item.documentType),
               medical: "",
               nacimientos: item.birthdate,
               nombre: item.firstName,
@@ -60,30 +56,31 @@ export default function TravelForm() {
               telefonos: emergencyContact.phone2
           }));
 
-      setData?.((prevData) => ({
+      console.log('guardando travelersData: ', travelersData, paxArray);
+*/
+
+      setData?.((prevData: any) => ({
               ...prevData,
-              travelersData: paxArray
+              travelersData: travelersData.filter((item) => item !== undefined),
+              emergencyContactData: emergencyContact
           })
       )
 
       const masters = new Masters();
-      const resp = await masters.getCitiesByCountry({countryId: paxArray[0].idPais})
-      if (resp && resp > 0) {
+      const resp = await masters.getCitiesByCountry({countryId: travelersData.filter((item) => item !== undefined)[0].residenceCountry})
+      console.log('resp cities', resp)
+      if (resp && resp.data) {
           if (masterContext) {
               masterContext['cities'].setData(resp.data);
           }
           setTimeout(() => {
-              navigate('/quote/travel'); // Navegar a la siguiente pantalla
+              console.log('redirigiendo a /invoice')
+              navigate('/invoice'); // Navegar a la siguiente pantalla
           }, 1000);
       }
   };
 
-  console.log('travelersData: ', travelersData)
-  console.log('emergencyContact: ', emergencyContact)
-
   const handleChangeTravelers = useCallback( (index: number, name: string, value: string) => {
-    console.log(`Cambiando ${name} del viajero ${index}:`, value);
-
     setTravelersData((prevData) => {
       const updatedTravelers = [...prevData];
       updatedTravelers[index] = {
@@ -96,13 +93,12 @@ export default function TravelForm() {
   }, [])
 
   const handleChangeEmergency = (name, value) => {
-    console.log(`Cambiando ${name}:`, value);
     setEmergencyContact((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
+console.log('emergency state: ', emergencyContact)
   return (
     <>
       <Breadcrumb />
@@ -118,7 +114,7 @@ export default function TravelForm() {
               <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency}/>
             </form>
           </section>
-          <PurchaseDetails button={<ContinuarButton onClick={handleSendTravelers} url={"invoice"} />} />
+          <PurchaseDetails button={<ContinuarButton onClick={handleSendTravelers}/>} />
         </section>
       </main>
     </>

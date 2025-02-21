@@ -1,12 +1,47 @@
 import { Input } from "@/components/ui/input.tsx";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
-import { useState } from "react";
-import { useTranslation } from "react-i18next"; 
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import useMasters from "@/TravelCore/Hooks/useMasters";
+import {CitiesItems} from "@/TravelCore/Utils/interfaces/Cities.ts";
+import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
+import {PaxForm} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {calculateAndCompareAge} from "@/TravelCore/Utils/dates.ts";
 
-export function BillingForm() {
+interface BillingFormProps {
+  onChangeField?: (index: number, name: string, value: string) => void;
+  data: PaxForm[];
+}
+
+export function BillingForm({ onChangeField, data }: BillingFormProps) {
   const { t } = useTranslation(["invoice"]); 
   const [usePassengerInfo, setUsePassengerInfo] = useState(false);
+  const master = useMasters();
+  const cities = master?.cities?.data as CitiesItems[];
+  const documentType = master?.documents.data?.items as DocumentTypeItems[];
+  const activeCities = cities.filter(city => city.estaActivo);
+  const activeDocumentType = documentType.filter(type => type.estaActivo);
+
+  const citiesOptions = activeCities.map(city => (
+      <SelectItem key={city.idCiudad} value={city.idCiudad.toString()}>
+        {city.descripcion}
+      </SelectItem>
+  ));
+  const documentTypeOptions = activeDocumentType.map(type => (
+      <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
+        {type.abreviacion} - {type.nombre}
+      </SelectItem>
+  ));
+
+  const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    onChangeField?.(name, value);
+  }, [onChangeField]);
+
+  const handleSelectChange = React.useCallback((name: string, value: string) => {
+    onChangeField?.(name, value);
+  }, [onChangeField]);
 
   return (
     <>
@@ -35,8 +70,11 @@ export function BillingForm() {
               {t("billing-first-name")} 
             </label>
             <Input
-              placeholder={t("billing-placeholder-first-name")} 
-              className="rounded-3xl border-gray-300 p-6"
+                name="firstName"
+                value={data.firstName || ""}
+                placeholder={t("billing-placeholder-first-name")}
+                className="rounded-3xl border-gray-300 p-6"
+                onChange={handleInputChange}
             />
           </div>
           <div>
@@ -44,22 +82,27 @@ export function BillingForm() {
               {t("billing-last-name")} 
             </label>
             <Input
-              placeholder={t("billing-placeholder-last-name")} 
-              className="rounded-3xl border-gray-300 p-6"
+                name="lastName"
+                value={data.lastName || ""}
+                placeholder={t("billing-placeholder-last-name")}
+                className="rounded-3xl border-gray-300 p-6"
+                onChange={handleInputChange}
             />
           </div>
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">
               {t("billing-document-type")} 
             </label>
-            <Select>
+            <Select
+                name="documentType"
+                value={data.documentType || ""}
+                onValueChange={(value) => handleSelectChange("documentType", value)}
+            >
               <SelectTrigger className="rounded-3xl border-gray-300 p-6">
                 <SelectValue placeholder={t("billing-placeholder-select-document-type")} /> 
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="cc">{t("billing-option-cc")}</SelectItem> 
-                <SelectItem value="ce">{t("billing-option-ce")}</SelectItem> 
-                <SelectItem value="passport">{t("billing-option-passport")}</SelectItem> 
+                {documentTypeOptions}
               </SelectContent>
             </Select>
           </div>
@@ -68,19 +111,25 @@ export function BillingForm() {
               {t("billing-document-number")} 
             </label>
             <Input
-              placeholder={t("billing-placeholder-document-number")} 
-              className="rounded-3xl border-gray-300 p-6"
+                name="documentNumber"
+                value={data.documentNumber || ""}
+                placeholder={t("billing-placeholder-document-number")}
+                className="rounded-3xl border-gray-300 p-6"
+                onChange={handleInputChange}
             />
           </div>
-          <PhoneNumberForm celType="Teléfono" />
+          <PhoneNumberForm celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">
               {t("billing-email")} 
             </label>
             <Input
-              type="email"
-              placeholder={t("billing-placeholder-email")} 
-              className="rounded-3xl border-gray-300 p-6"
+                name="email"
+                value={data.email || ""}
+                type="email"
+                placeholder={t("billing-placeholder-email")}
+                className="rounded-3xl border-gray-300 p-6"
+                onChange={handleInputChange}
             />
           </div>
         </div>
@@ -90,8 +139,11 @@ export function BillingForm() {
               {t("billing-country")} 
             </label>
             <Input
-              type="text"
-              className="w-full rounded-3xl border border-gray-300 text-base p-6"
+                name="billingCountry"
+                value={data.billingCountry || ""}
+                type="text"
+                className="w-full rounded-3xl border border-gray-300 text-base p-6"
+                onChange={handleInputChange}
             />
           </div>
 
@@ -99,14 +151,16 @@ export function BillingForm() {
             <label className="block font-semibold text-gray-500 text-sm mb-1">
               {t("billing-city")} 
             </label>
-            <Select>
+            <Select
+                name="billingCity"
+                value={data.billingCity || ""}
+                onValueChange={(value) => handleSelectChange("billingCity", value)}
+            >
               <SelectTrigger className="rounded-3xl border-gray-300 p-6">
                 <SelectValue placeholder={t("billing-placeholder-city")} /> 
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="bogota">{t("billing-option-bogota")}</SelectItem> 
-                <SelectItem value="medellin">{t("billing-option-medellin")}</SelectItem> 
-                <SelectItem value="cali">{t("billing-option-cali")}</SelectItem> 
+                {citiesOptions}
               </SelectContent>
             </Select>
           </div>
@@ -119,9 +173,11 @@ export function BillingForm() {
               type="text"
               id="address"
               name="address"
+              value={data.address || ""}
               placeholder={t("billing-placeholder-address")} 
               required
               className="w-full rounded-3xl border border-gray-300 text-base p-6"
+              onChange={handleInputChange}
             />
           </div>
 
@@ -133,8 +189,10 @@ export function BillingForm() {
               type="text"
               id="additional"
               name="additional"
+              value={data.additional || ""}
               placeholder={t("billing-placeholder-additional-info")} 
               className="w-full rounded-3xl border border-gray-300 text-base p-6"
+              onChange={handleInputChange}
             />
           </div>
         </div>
