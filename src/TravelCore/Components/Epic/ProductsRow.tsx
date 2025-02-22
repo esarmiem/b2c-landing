@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import CardProduct from './CardProduct';
-import { Plan } from "@/TravelCore/Utils/interfaces/Order.ts";
+import type { Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
+import { useState } from 'react'
+import CardProduct from './CardProduct'
 
 interface ProductsRowProps {
-  viewType: 'list' | 'grid';
+  viewType: 'list' | 'grid'
   plans: Plan[]
 }
 
 const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(4)
 
   const toggleVisibility = () => {
-    setVisibleCount(visibleCount === plans.length ? 4 : plans.length);
-  };
+    setVisibleCount(visibleCount === plans.length ? 4 : plans.length)
+  }
 
   // clases condicionales para el contenedor basado en el tipo de vista
   // Definimos las clases condicionales:
@@ -20,7 +20,7 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
   const containerClasses =
     viewType === 'list'
       ? 'grid grid-cols-1 gap-4'
-      : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center';
+      : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center'
 
   return (
     <div className="max-w-6xl mx-auto py-4">
@@ -33,14 +33,16 @@ const ProductsRow: React.FC<ProductsRowProps> = ({ viewType, plans }) => {
       <div className="mx-auto my-3 p-4 align-middle text-center">
         {plans.length > 4 && (
           <button
+            type="button"
             className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all"
-            onClick={toggleVisibility}>
+            onClick={toggleVisibility}
+          >
             {visibleCount === plans.length ? 'Ver menos' : 'Ver más opciones'}
           </button>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductsRow;
+export default ProductsRow

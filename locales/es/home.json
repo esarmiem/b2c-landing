@@ -62,5 +62,28 @@
   "label-placeholder-loader-email": "Correo",
   "label-button-loader-continue": "Continuar",
    "whatsapp-message": "Hola, tengo una consulta sobre el seguro de viaje",
-  "whatsapp-button-text": "¿Tienes dudas?"
+  "whatsapp-button-text": "¿Tienes dudas?",
+
+
+  "validation": {
+    "required": "Este campo es requerido",
+    "requiredAge": "La edad es requerida",
+    "email": "Ingrese un email válido",
+    "phone": "Ingrese un número de teléfono válido",
+    "password": "La contraseña debe tener al menos 8 caracteres, una letra y un número",
+    "url": "Ingrese una URL válida",
+    "numbers": "Este campo solo acepta números",
+    "lettersOnly": "Este campo solo acepta letras",
+    "minLength": "Debe tener al menos",
+    "maxLength": "Debe tener máximo",
+    "range": "El número debe estar entre",
+    "and": "y",
+    "characters": "caracteres",
+    "match": "Los campos no coinciden",
+    "dateRange": {
+      "invalid": "Rango de fechas inválido",
+      "past": "La fecha debe ser futura",
+      "format": "El formato de fecha debe ser DD/MM/YYYY"
+    }
+  }
 }

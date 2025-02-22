@@ -1,75 +1,87 @@
-import { useState } from "react";
-import { CircleCheck } from "lucide-react";
-import ModalUpgrades from "./ModalUpgrades";
-import {Plan} from "@/TravelCore/Utils/interfaces/Order.ts";
-import {useTranslation} from "react-i18next";
-import {formatCurrency} from "@/TravelCore/Utils/format.ts"
-import useData from "@/TravelCore/Hooks/useData.ts";
-import ModalProductDetails from "./ModalProductDetails";
+import useData from '@/TravelCore/Hooks/useData.ts'
+import { formatCurrency } from '@/TravelCore/Utils/format.ts'
+import type { Cobertura, Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
+import { CircleCheck } from 'lucide-react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import ModalProductDetails from './ModalProductDetails'
+import ModalUpgrades from './ModalUpgrades'
 
 interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description?: string;
+  id: number
+  name: string
+  price: number
+  description?: string
 }
 
-const CardProduct = ({ Categoria, nombre, Valor, ValorPesos, DescripcionDescuentosDolares, DescripcionDescuentosPesos, cobertura, TipoViaje, IdPlan, viewType = "grid"}: Plan) => {
-  const { t } = useTranslation(["products"]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { i18n } = useTranslation();
-  const {setData} = useData() || {};
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+const CardProduct = ({
+  Categoria,
+  nombre,
+  Valor,
+  ValorPesos,
+  DescripcionDescuentosDolares,
+  DescripcionDescuentosPesos,
+  cobertura,
+  TipoViaje,
+  IdPlan,
+  viewType = 'grid'
+}: Plan) => {
+  const { t } = useTranslation(['products'])
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { i18n } = useTranslation()
+  const { setData } = useData() || {}
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
 
-
-
-const rawPrice = i18n.language === "es" ? ValorPesos : Valor
-  const price = i18n.language === "es" ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
+  const rawPrice = i18n.language === 'es' ? ValorPesos : Valor
+  const price = i18n.language === 'es' ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
   const recommended = DescripcionDescuentosDolares.porcentaje !== '0'
-  const originalPrice = recommended ? i18n.language === "es" ? formatCurrency(DescripcionDescuentosPesos.valorTotal.toString(), 'COP') : formatCurrency(DescripcionDescuentosDolares.valorTotal.toString(), 'USD') : ""
+  const originalPrice = recommended
+    ? i18n.language === 'es'
+      ? formatCurrency(DescripcionDescuentosPesos.valorTotal.toString(), 'COP')
+      : formatCurrency(DescripcionDescuentosDolares.valorTotal.toString(), 'USD')
+    : ''
 
   // 🔹 Función para abrir el modal
   const openModal = () => {
-    setData?.((prevData) => ({
-          ...prevData,
-          selectedPlan: IdPlan
-        })
-    )
+    setData?.(prevData => ({
+      ...prevData,
+      selectedPlan: IdPlan
+    }))
     setSelectedProduct({
       id: IdPlan,
       name: Categoria,
-      price: parseFloat(rawPrice),
-      description: "",
-    });
-    setIsModalOpen(true);
-  };
+      price: Number.parseFloat(rawPrice),
+      description: ''
+    })
+    setIsModalOpen(true)
+  }
 
   // 🔹 Función para cerrar el modal
   const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
   const openDetailsModal = () => {
     setSelectedProduct({
       id: 1,
-      name: "title",
-      price: parseFloat(price.replace(/[^0-9.]/g, "")),
-      description: "Detalles adicionales del producto y coberturas.",
-    });
-    setIsDetailsModalOpen(true);
-  };
+      name: 'title',
+      price: Number.parseFloat(price.replace(/[^0-9.]/g, '')),
+      description: 'Detalles adicionales del producto y coberturas.'
+    })
+    setIsDetailsModalOpen(true)
+  }
 
   const closeDetailsModal = () => {
-    setIsDetailsModalOpen(false);
-  };
+    setIsDetailsModalOpen(false)
+  }
 
   return (
     <>
-      {viewType === "list" ? (
+      {viewType === 'list' ? (
         <div className="flex border-2 border-neutral-800 rounded-3xl overflow-hidden">
           <div
             className={`w-1/2 flex flex-col text-center justify-around ${
-              recommended ? "bg-red-800 text-white" : "bg-zinc-100 text-neutral-800"
+              recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'
             }`}
           >
             {recommended && (
@@ -79,18 +91,16 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
             )}
             <div className="space-y-1 py-8">
               <h2 className="font-bold text-2xl">{Categoria}</h2>
-              <p className={` ${recommended ? "text-red-100" : "text-neutral-800"}`}>
-                {nombre}
+              <p className={` ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>{nombre}</p>
+              <p className="font-bold">{t('label-total-price')}</p>
+              <p className={`mt-1 text-4xl font-bold ${recommended ? 'text-neutral-100' : 'text-red-600'}`}>
+                {price} <span className="text-lg">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
               </p>
-              <p className="font-bold">{t("label-total-price")}</p> 
-              <p className={`mt-1 text-4xl font-bold ${recommended ? "text-neutral-100" : "text-red-600"}`}>
-                {price} <span className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
-              </p>
-              {recommended &&
-                  <p className={`line-through font-semibold text-lg text-black`}>
-                    {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
-                  </p>
-              }
+              {recommended && (
+                <p className="line-through font-semibold text-lg text-black">
+                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                </p>
+              )}
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-sm w-100 mb-0">Ideal para {TipoViaje}</div>
           </div>
@@ -105,14 +115,15 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
             </ul>
             <div className="mt-4 text-center space-y-3">
               <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
-                {t("link-view-coverage-details")} 
+                {t('link-view-coverage-details')}
                 Ver detalles de <span className="font-bold">{cobertura.length} coberturas</span>
               </a>
               <button
+                type="button"
                 className="w-full bg-red-500 text-white py-2 px-4 rounded-full font-bold hover:bg-red-700 transition-all"
                 onClick={openModal}
               >
-                {t("button-select")} 
+                {t('button-select')}
               </button>
             </div>
           </div>
@@ -120,61 +131,54 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
       ) : (
         <div className="rounded-3xl border-2 border-neutral-800 overflow-hidden grid">
           <section>
-            <div
-                className={`relative text-center px-1 py-8 ${recommended ? "bg-red-800 text-white" : "bg-zinc-100 text-neutral-800"}`}>
+            <div className={`relative text-center px-1 py-8 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
               {recommended && (
-                  <div
-                      className="text-white font-extrabold text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
-                    {DescripcionDescuentosDolares.porcentaje}% OFF
-                  </div>
+                <div className="text-white font-extrabold text-sm py-1 px-3 bg-stone-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2">
+                  {DescripcionDescuentosDolares.porcentaje}% OFF
+                </div>
               )}
               <h2 className="font-bold text-2xl my-3">{Categoria}</h2>
-              <p className={`my-0 ${recommended ? "text-white" : "text-neutral-800"}`}>{nombre}</p>
+              <p className={`my-0 ${recommended ? 'text-white' : 'text-neutral-800'}`}>{nombre}</p>
               <p className="font-bold">Precio Total</p>
-              <h3 className={`text-4xl font-bold ${recommended ? "text-white" : "text-red-600"}`}>{price} <span
-                  className='text-lg'>{i18n.language === "es" ? "COP" : "USD"}</span>
+              <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
+                {price} <span className="text-lg">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
               </h3>
-              {recommended &&
-                  <span className={`${recommended ? "text-black" : "text-neutral-400"} font-semibold line-through text-lg`}>
-                 {originalPrice} <span className='text-sm'>{i18n.language === "es" ? "COP" : "USD"}</span>
+              {recommended && (
+                <span className={`${recommended ? 'text-black' : 'text-neutral-400'} font-semibold line-through text-lg`}>
+                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
                 </span>
-              }
+              )}
             </div>
             <div className="bg-stone-800 text-white py-2 text-center text-xs font-semibold">Ideal para {TipoViaje}</div>
           </section>
           <section className="flex flex-col justify-between">
-
             <div className="p-3 space-y-3 max-h-60 overflow-y-auto">
               <ul className="text-sm text-gray-600 mb-3 ">
-                {cobertura.slice(0,5).map((detail, idx) => (
-                    <li key={idx} className="flex items-start mb-2 gap-1 font-bold">
-                      <CircleCheck className="h-3 w-3 text-green-500 mt-1 flex-shrink-0"/>
-                      {detail.name}
-                    </li>
+                {cobertura.slice(0, 4).map((detail, idx) => (
+                  <li key={idx} className="flex items-start mb-2 gap-1 font-bold">
+                    <CircleCheck className="h-3 w-3 text-green-500 mt-1 flex-shrink-0" />
+                    {detail.name}
+                  </li>
                 ))}
               </ul>
             </div>
 
             <div className="p-3 space-y-1 text-center bg-white">
               <button
-                  className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold hover:bg-red-700 transition-all"
-                  onClick={openModal}
+                type="button"
+                className="bg-red-500 text-white py-3 px-4 rounded-full w-full font-bold hover:bg-red-700 transition-all"
+                onClick={openModal}
               >
                 Seleccionar
               </button>
-              <a href="#" onClick={openDetailsModal} className="text-xs text-blue-600 hover:underline font-medium">
+              <span onClick={openDetailsModal} className="text-xs text-blue-600 hover:underline font-medium">
                 Ver detalles de <span className="font-bold">{cobertura.length} coberturas</span>
-              </a>
+              </span>
             </div>
           </section>
         </div>
       )}
-
-      {/* 🔹 Modal dentro del return y usando estados correctamente */}
-      {isModalOpen && (
-          <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct}/>
-      )}
-      {/* Modal de detalles */}
+      {isModalOpen && <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />}
       {isDetailsModalOpen && (
         <ModalProductDetails
           isOpen={isDetailsModalOpen}
@@ -184,13 +188,13 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
             subtitle: nombre,
             typeOfProduct: TipoViaje,
             price: price,
-            originalPrice: originalPrice,            
-            details: cobertura.map((detail: any) => detail.name),
+            originalPrice: originalPrice,
+            details: cobertura.map((detail: Cobertura) => detail.name)
           }}
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default CardProduct;
+export default CardProduct
