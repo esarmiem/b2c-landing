@@ -102,8 +102,7 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
               ))}
             </ul>
             <div className="mt-4 text-center space-y-3">
-              <a href="#" className="text-xs text-blue-600 hover:underline font-semibold">
-                {t("link-view-coverage-details")} 
+            <a href="#" onClick={openDetailsModal} className="text-xs text-blue-600 hover:underline font-medium">
                 Ver detalles de <span className="font-bold">{cobertura.length} coberturas</span>
               </a>
               <button
