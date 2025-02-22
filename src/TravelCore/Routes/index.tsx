@@ -28,7 +28,11 @@ export default function Router(): ReactElement | null {
         {
           index: true,
           element: <HomePage/>,
-        }
+        },
+        {
+          path: "*",
+          element: <NotFoundPage/>,
+        },
       ],
     },
     {
@@ -69,10 +73,6 @@ export default function Router(): ReactElement | null {
             element: <BillingResultPage />,
         },
       ],
-    },
-    {
-      path: "*",
-      element: <NotFoundPage />,
     },
   ];
 

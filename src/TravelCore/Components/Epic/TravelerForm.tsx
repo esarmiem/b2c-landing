@@ -36,13 +36,11 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
       </SelectItem>
   ));
 
-  const travelerData = data[traveler.id] || {};
-
+console.log('travelerData =====', data)
+  const travelerData = data.length > 0 ? data[traveler.id] : {}
   const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name)
     if(name === 'birthdate') {
-      console.log('fecha de nacimiento',name,  calculateAndCompareAge(value,parseInt(traveler.age)))
       if (!calculateAndCompareAge(value,parseInt(traveler.age))) {
         setAgeError("La fecha de nacimiento debe coincidir con la edad del pasajero.")
       } else {
@@ -50,19 +48,18 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
       }
     }
         onChangeField?.(traveler.id, name, value);
-      }, [traveler.id, onChangeField]);
+    }, [traveler.id, onChangeField]);
 
   const handleSelectChange = React.useCallback((name: string, value: string) => {
     onChangeField?.(traveler.id, name, value);
       }, [traveler.id, onChangeField]);
 
-  console.log(ageError)
   return (
       <section key={traveler.id} className="space-y-4">
         <div className="bg-[#B91C1C] text-white px-8 py-2 text-sm flex items-center gap-2 rounded-t-xl">
           <SquareUser className="w-6 h-6" />
           <h1 className="font-semibold text-xl">
-            {t("label-traveler")} {traveler.id} - {traveler.age}
+            {t("label-traveler")} {traveler.id} - {traveler.age} {t("label-years")}
           </h1>
         </div>
 
@@ -181,7 +178,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
                 </SelectContent>
               </Select>
             </div>
-            <PhoneNumberForm celType={traveler.phone} value={{phoneNumber: travelerData.phone, countryCode: travelerData.countryCode }} onChange={handleInputChange} />
+            <PhoneNumberForm celType={traveler.phone} value={{phone: travelerData.phone, countryCode: travelerData.countryCode }} onChange={handleInputChange} />
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-email")}</label>
               <Input

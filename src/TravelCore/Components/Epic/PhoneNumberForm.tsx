@@ -4,35 +4,20 @@ import { Input } from "@/components/ui/input.tsx";
 import { useTranslation } from "react-i18next";
 
 interface PhoneNumberFormProps {
-  celType: string;
-  value?: { countryCode: string; phoneNumber: string };
-  onChange?: (value: { countryCode: string; phoneNumber: string }) => void;
+    celType: string;
+    value?: { countryCode: string; phone: string };
+  onChange?: () => void;
 }
 
 export const PhoneNumberForm = React.memo(
-    ({ celType, value = { countryCode: "co", phoneNumber: "" }, onChange }: PhoneNumberFormProps) => {
+    ({ celType, value = { countryCode: "", phone: "" }, onChange }: PhoneNumberFormProps) => {
+
       const { t } = useTranslation(["traveler"], { useSuspense: false });
-
-      const handleCountryCodeChange = React.useCallback(
-          (countryCode: string) => {
-            onChange?.({ ...value, countryCode });
-          },
-          [value, onChange]
-      );
-
-      const handlePhoneNumberChange = React.useCallback(
-          (e: React.ChangeEvent<HTMLInputElement>) => {
-            const phoneNumber = e.target.value;
-            onChange?.({ ...value, phoneNumber });
-          },
-          [value, onChange]
-      );
-
       return (
           <div>
-            <label className="block font-semibold text-gray-500 text-sm mb-1">{celType}</label>
+            <label className="block font-semibold text-gray-500 text-sm mb-1">{celType ? celType : t("label-phone")}</label>
             <div className="flex border border-gray-300 rounded-3xl">
-              <Select name="phone" value={value.countryCode} onValueChange={handleCountryCodeChange}>
+              <Select name="countryCode" value={value.countryCode} onValueChange={(val) => onChange({ target:{ name:"countryCode", value: val}})}>
                 <SelectTrigger className="w-[80px] p-6 border-none focus:outline-none focus:ring-0">
                   <SelectValue placeholder="🇨🇴" />
                 </SelectTrigger>
@@ -50,10 +35,11 @@ export const PhoneNumberForm = React.memo(
               </Select>
 
               <Input
+                  name="phone"
                   className="flex-1 ml-2 p-6 border-none focus:outline-none focus:ring-0"
                   placeholder={t("phone-number-placeholder")}
-                  value={value.phoneNumber}
-                  onChange={handlePhoneNumberChange}
+                  value={value.phone}
+                  onChange={onChange}
               />
             </div>
           </div>
