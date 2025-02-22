@@ -8,6 +8,8 @@ interface EmergencyContactForm {
   lastName: string;
   phone1: string;
   phone2: string;
+  indicative1: string;
+  indicative2: string;
 }
 
 interface TravelFormProps {
@@ -21,8 +23,8 @@ export const EmergencyContact = React.memo(
 
       const namePhone = React.useMemo(
           () => [
-            { id: 1, phone: t("emergency-phone"), value: data.phone1 || "" },
-            { id: 2, phone: t("emergency-phone-optional"), value: data.phone2 || "" },
+            { id: 1, phone: t("emergency-phone"), value: data?.phone1, indicative: data?.indicative1 },
+            { id: 2, phone: t("emergency-phone-optional"), value: data?.phone2, indicative: data?.indicative2 },
           ],
           [t, data.phone1, data.phone2] // Dependencias
       );
@@ -36,13 +38,14 @@ export const EmergencyContact = React.memo(
       );
 
       const handlePhoneChange = React.useCallback(
-          (phoneId: number, value: string) => {
-            const fieldName = phoneId === 1 ? "phone1" : "phone2";
-            onChangeField?.(fieldName, value);
+          (phoneId: number, value: any) => {
+              const fieldName = value.target.name
+              const fieldValue = value.target.value
+              onChangeField?.(fieldName+phoneId, fieldValue);
           },
           [onChangeField]
       );
-
+console.log("data", data, namePhone)
       return (
           <section className="space-y-4 pb-4">
             <div className="px-4 py-1">
@@ -61,7 +64,7 @@ export const EmergencyContact = React.memo(
                       name="firstName"
                       placeholder={t("emergency-placeholder-first-name")}
                       className="rounded-3xl border-gray-300 p-6"
-                      value={data.firstName || ""}
+                      value={data?.firstName}
                       onChange={handleInputChange}
                   />
                 </div>
@@ -73,7 +76,7 @@ export const EmergencyContact = React.memo(
                       name="lastName"
                       placeholder={t("emergency-placeholder-last-name")}
                       className="rounded-3xl border-gray-300 p-6"
-                      value={data.lastName || ""}
+                      value={data?.lastName}
                       onChange={handleInputChange}
                   />
                 </div>
@@ -81,8 +84,8 @@ export const EmergencyContact = React.memo(
                     <div key={phone.id}>
                       <PhoneNumberForm
                           celType={phone.phone}
-                          value={phone.value}
-                          onChange={(value) => handlePhoneChange(phone.id, value)}
+                          value={{ countryCode: phone.indicative, phone: phone.value }}
+                          onChange={(val) => handlePhoneChange(phone.id, val)}
                       />
                     </div>
                 ))}

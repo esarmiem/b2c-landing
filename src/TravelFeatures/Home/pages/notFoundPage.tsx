@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import maleta from '../../../../Assets/maleta.webp';
 import {Link} from '../../../TravelCore/Components/Raw/Link';
 
-export const NotFoundPage: React.FC = () => {
+export const NotFoundPage = () => {
   const { t } = useTranslation(["header"]);
 
   return (
