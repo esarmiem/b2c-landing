@@ -98,7 +98,7 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
               </span>
             </div>
             <span
-              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+              className={`items-center gap-2 hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500 flex sm:hidden' : ''}`}
             >
               <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
               {errors && errors?.length > 0 ? errors : ''}

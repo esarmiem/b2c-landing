@@ -21,7 +21,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ message, subMessag
       <div className="flex flex-col items-center max-w-md text-center p-4">
         <img src={LoadingGif} alt="Loading" className="mb-8 w-[400px] h-[400px]" />
         <div className="flex items-center">
-          <p className="font-extrabold text-2xl md:text-3xl text-red-600 hover:text-red-600">TRAVELKIT</p>
+          <p className="font-extrabold text-4xl md:text-6xl text-red-600 hover:text-red-600">TRAVELKIT</p>
         </div>
         <div className="flex items-center gap-2 text-lg md:text-xl font-medium text-gray-700 mb-4">
           <Loader2 className="h-5 w-5 animate-spin text-red-600" />

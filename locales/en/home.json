@@ -63,6 +63,7 @@
   "label-button-loader-continue": "Continue",
    "whatsapp-message": "Hello, I have a question about the travel insurance",
   "whatsapp-button-text": "Got any questions?",
+  "placeholder-dropdown-origin": "Search origin...",
 
   "validation": {
     "required": "This field is required",

@@ -63,7 +63,7 @@
   "label-button-loader-continue": "Continuar",
    "whatsapp-message": "Hola, tengo una consulta sobre el seguro de viaje",
   "whatsapp-button-text": "¿Tienes dudas?",
-
+  "placeholder-dropdown-origin": "Buscar origen...",
 
   "validation": {
     "required": "Este campo es requerido",
