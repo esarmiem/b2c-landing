@@ -17,20 +17,20 @@ const Step: FC<StepProps> = ({ number, text, isActive = false, showDivider = fal
             isActive
               ? 'bg-red-600 text-white'
               : 'border-2 border-gray-300 text-gray-500'
-          } rounded-full w-6 h-6 flex items-center justify-center text-sm`}
+          } rounded-full w-5 h-5 md:w-6 md:h-6 flex items-center justify-center text-xs md:text-sm`}
         >
           {number}
         </div>
         <span
-          className={`ml-2 ${
+          className={`ml-1 md:ml-2 ${
             isActive ? 'text-red-600 font-medium' : 'text-gray-500'
-          } text-sm md:text-base`}
+          } text-xs md:text-base`}
         >
           {text}
         </span>
       </div>
       {showDivider && (
-        <div className="h-[2px] w-4 md:w-32 mx-2 md:mx-4 border-t-2 border-dashed border-gray-300" />
+        <div className="h-[2px] w-3 md:w-32 mx-1 md:mx-4 border-t-2 border-dashed border-gray-300" />
       )}
     </div>
   );
@@ -42,7 +42,7 @@ export const Breadcrumb: FC = () => {
   return (
     <div className="w-full bg-gray-50">
       <div className="max-w-5xl mx-auto py-4 md:py-9">
-        <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap md:flex-nowrap">
+        <div className="flex items-center justify-center gap-1 md:gap-4 flex-nowrap">
           <Step
             number={1}
             text={t("label-step-1")}
