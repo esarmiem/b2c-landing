@@ -1,8 +1,5 @@
-import { ASSISTANCE_API } from "@/TravelCore/Services/Apis/Order";
-import {
-  dataOrder,
-  ResponseData,
-} from "@/TravelCore/Utils/interfaces/Order.ts";
+import { ASSISTANCE_API } from '@/TravelCore/Services/Apis/Order'
+import type { ResponseData, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 /**
  * TravelAssistance
  *
@@ -35,7 +32,7 @@ export class TravelAssistance {
    *                                  / A promise that resolves with the API response.
    */
   async getOrderPriceByAge(data: dataOrder): Promise<ResponseData> {
-    const response = await ASSISTANCE_API.getOrderPriceEdad(data);
-    return response as unknown as ResponseData;
+    const response = await ASSISTANCE_API.getOrderPriceEdad(data)
+    return response as unknown as ResponseData
   }
 }

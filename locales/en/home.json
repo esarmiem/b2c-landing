@@ -62,5 +62,28 @@
   "label-placeholder-loader-email": "Email",
   "label-button-loader-continue": "Continue",
    "whatsapp-message": "Hello, I have a question about the travel insurance",
-  "whatsapp-button-text": "Got any questions?"
+  "whatsapp-button-text": "Got any questions?",
+  "placeholder-dropdown-origin": "Search origin...",
+
+  "validation": {
+    "required": "This field is required",
+    "requiredAge": "Age is required",
+    "email": "Enter a valid email",
+    "phone": "Enter a valid phone number",
+    "password": "Password must have at least 8 characters, one letter and one number",
+    "url": "Enter a valid URL",
+    "numbers": "This field only accepts numbers",
+    "lettersOnly": "This field only accepts letters",
+    "minLength": "Must have at least",
+    "maxLength": "Must have maximum",
+    "range": "The number must be between",
+    "and": "and",
+    "characters": "characters",
+    "match": "Fields do not match",
+    "dateRange": {
+      "invalid": "Invalid date range",
+      "past": "The date must be in the future",
+      "format": "Date format must be DD/MM/YYYY"
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import type { MASTER_CONST_STORAGE_KEYS } from '@/TravelCore/Utils/ConstStorageKeys.ts'
-import type { Data, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { Data, EmergencyContactType, PaxForm, Quotation, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import type { Dispatch, SetStateAction } from 'react'
 
 /**
@@ -12,7 +12,7 @@ import type { Dispatch, SetStateAction } from 'react'
  * Represents a generic object with string keys and values of any type.
  */
 export interface GenericItem {
-  [key: string]: any;
+  [key: string]: any
 }
 
 /**
@@ -31,12 +31,12 @@ export interface GenericItem {
  * @template T - El tipo de los elementos en la respuesta. / The type of the items in the response.
  */
 export interface ApiResponse<T = GenericItem> {
-  total: number;
-  page: number;
-  totalPages: number;
-  items: T[];
-  next: number | null;
-  prev: number | null;
+  total: number
+  page: number
+  totalPages: number
+  items: T[]
+  next: number | null
+  prev: number | null
 }
 
 /**
@@ -53,9 +53,9 @@ export interface ApiResponse<T = GenericItem> {
  * @template T - El tipo de dato que se almacena. / The type of data being stored.
  */
 export interface StorageData<T = any> {
-  data: T;
-  timestamp: number;
-  version: string;
+  data: T
+  timestamp: number
+  version: string
 }
 
 /**
@@ -71,8 +71,11 @@ export interface StorageData<T = any> {
  */
 export interface GlobalData {
   payloadOrder?: Partial<dataOrder>
-  responseOrder?: Data | null
-  travelersData?: Data | null
+  responseOrder?: Data
+  travelersData?: PaxForm[]
+  emergencyContactData?: EmergencyContactType
+  travelerQuotation?: Quotation
+  TRM?: number
 }
 
 //type for MasterContext

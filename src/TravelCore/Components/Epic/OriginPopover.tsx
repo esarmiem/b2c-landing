@@ -1,42 +1,58 @@
+import useData from '@/TravelCore/Hooks/useData'
+import useMasters from '@/TravelCore/Hooks/useMasters'
+import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { PopoverContent } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import type { TFunction } from 'i18next'
 import { MapPinHouse } from 'lucide-react'
-import { TFunction } from 'i18next'
+import { useCallback } from 'react'
 
 interface OriginPopoverProps {
-  origin: string
-  onOriginChange: (value: string) => void
   t: TFunction
+  setOriginPopoverOpen: (open: boolean) => void
 }
 
-// Lista de países para el selector de origen
-const countries = [
-  'Argentina', 'Brasil', 'Chile', 'Colombia', 'Ecuador', 
-  'España', 'Estados Unidos', 'México', 'Perú', 'Venezuela',
-  'Canadá', 'Francia', 'Italia', 'Alemania', 'Reino Unido',
-  'Japón', 'China', 'Australia', 'Nueva Zelanda', 'Rusia'
-]
+export function OriginPopover({ t, setOriginPopoverOpen }: OriginPopoverProps) {
+  const master = useMasters()
+  const countries = master?.countries?.data?.items as CountriesItems[]
 
-export function OriginPopover({ origin, onOriginChange, t }: OriginPopoverProps) {
-  const handleOriginSelect = (country: string) => {
-    onOriginChange(country)
+  const { data, setData } = useData() || {}
+  const origin = data?.payloadOrder?.pais
+
+  const handleOriginSelect = useCallback(
+    (country: CountriesItems) => {
+      if (setData) {
+        setData(prevData => ({
+          ...prevData,
+          payloadOrder: {
+            ...prevData?.payloadOrder,
+            pais: country.codigoISO
+          }
+        }))
+      }
+      setOriginPopoverOpen(false)
+    },
+    [setData, setOriginPopoverOpen]
+  )
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      setOriginPopoverOpen(false)
+    }
   }
 
   return (
-    <PopoverContent className="w-full p-0">
+    <PopoverContent className="w-3/4 p-0 items-center m-auto" onKeyDown={handleKeyDown}>
       <Command>
         <CommandInput placeholder={t('placeholder-dropdown-origin') || 'Search country...'} />
         <CommandList>
           <CommandEmpty>{t('search-dropdown-origin-empty') || 'No country found'}</CommandEmpty>
           <CommandGroup>
-            {countries.map(country => (
-              <CommandItem
-                key={country}
-                onSelect={() => handleOriginSelect(country)}
-              >
-                <MapPinHouse className={cn('mr-2 h-4 w-4', origin === country ? 'opacity-100' : 'opacity-0')} />
-                {country}
+            {countries?.map(country => (
+              <CommandItem key={country.codigoISO} onSelect={() => handleOriginSelect(country)}>
+                <MapPinHouse className={cn('mr-2 h-4 w-4', origin === country.codigoISO ? 'opacity-100' : 'opacity-0')} />
+                {country.descripcion}
               </CommandItem>
             ))}
           </CommandGroup>
