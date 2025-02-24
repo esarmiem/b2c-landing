@@ -45,9 +45,9 @@ interface AuthResponse {
 export default function useHomeState() {
   // Obtener la función para establecer la sesión y la data del pedido.
   // Get the function to set the session and order data.
-  const { setSession } = useSession() || {};
-  const { setData } = useData() || {};
-  const masterContext = useMasters();
+  const { setSession } = useSession() || {}
+  const { setData } = useData() || {}
+  const masterContext = useMasters()
   // Efecto de inicialización: se ejecuta una vez al montar el componente.
   // Initialization effect: runs once when the component mounts.
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function useHomeState() {
       if (isAuthenticated) await getMasters()
     }
 
-    handleInitialization();
-  }, []);
+    handleInitialization()
+  }, [])
   /**
    * validateOrGetAuthentication
    *
@@ -90,8 +90,8 @@ export default function useHomeState() {
     } catch (error) {
       console.error('Error durante la autenticación:', error)
     }
-    return false;
-  };
+    return false
+  }
   /**
    * getMasters
    *
@@ -133,7 +133,7 @@ export default function useHomeState() {
     } catch (error) {
       console.error('Failed to load master data:', error)
     }
-  };
+  }
   /**
    * HandleGetOrder
    *
@@ -161,11 +161,11 @@ export default function useHomeState() {
         }))
         return response.data.idProspecto
       }
-      return null;
+      return null
     } catch (error) {
       console.error('Failed to get order:', error)
     }
-  };
+  }
 
   const isDataOrderValid = (order: dataOrder): boolean => {
     return Object.values(order).every(value => {

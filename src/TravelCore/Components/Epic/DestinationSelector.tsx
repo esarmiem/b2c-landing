@@ -1,6 +1,8 @@
+import { OriginPopover } from '@/TravelCore/Components/Epic/OriginPopover'
 import useData from '@/TravelCore/Hooks/useData'
 import useMasters from '@/TravelCore/Hooks/useMasters'
-import type { ArrivalsItems } from '@/TravelCore/Utils/interfaces/Arrivals.ts'
+import type { ArrivalsItems } from '@/TravelCore/Utils/interfaces/Arrivals'
+import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -9,7 +11,6 @@ import { cn } from '@/lib/utils'
 import type { TFunction } from 'i18next'
 import { Check, ChevronsUpDown, Info, MapPin, MapPinHouse } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { OriginPopover } from '@/TravelCore/Components/Epic/OriginPopover'
 
 interface DestinationSelectorProps {
   activeTooltip: string | null
@@ -22,28 +23,15 @@ interface DestinationSelectorProps {
 export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChange, errors }: DestinationSelectorProps) {
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
+  const countries = master?.countries?.data?.items as CountriesItems[]
+
   const { data, setData } = useData() || {}
   const payloadOrder = data?.payloadOrder
+  const origin = countries?.find(country => country.codigoISO === (payloadOrder?.pais ? payloadOrder?.pais : 'CO'))?.descripcion
+
   const selectDestination = arrivals?.find(dest => dest.idDestino === payloadOrder?.destino)?.descripcion
   const [open, setOpen] = useState(false)
-  const [origin, setOrigin] = useState<string>('')
-  const [originPopoverOpen, setOriginPopoverOpen] = useState(false) // Estado para controlar la visibilidad del OriginPopover
-
-  useEffect(() => {
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(payloadOrder => {
-        setOrigin(payloadOrder.country_name)
-      })
-      .catch(() => {
-        setOrigin('Unknown')
-      })
-  }, [])
-
-  const handleOriginChange = (newOrigin: string) => {
-    setOrigin(newOrigin)
-    setOriginPopoverOpen(false) // Cierra el OriginPopover después de seleccionar un origen
-  }
+  const [originPopoverOpen, setOriginPopoverOpen] = useState(false)
 
   const handleSelectDestination = (dest: ArrivalsItems) => {
     onChange(dest.descripcion)
@@ -52,20 +40,40 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
       payloadOrder: {
         ...prevData?.payloadOrder,
         destino: dest.idDestino,
-        pais: 'CO',
         idUser: '5'
       }
     }))
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (payloadOrder?.destino) {
       onChange(selectDestination || '')
     }
   }, [payloadOrder?.destino])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!payloadOrder?.pais) {
+      setData?.(prevData => ({
+        ...prevData,
+        payloadOrder: {
+          ...prevData?.payloadOrder,
+          pais: 'CO'
+        }
+      }))
+    }
+  }, [])
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={isOpen => {
+        setOpen(isOpen)
+        if (!isOpen) {
+          setOriginPopoverOpen(false)
+        }
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -96,7 +104,7 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
               <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
             </div>
             <span
-              className={`flex items-center gap-2 sm:hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}
+              className={`items-center gap-2 hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500 flex sm:hidden' : ''}`}
             >
               <Info className={`h-4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
               {errors && errors?.length > 0 ? errors : ''}
@@ -106,14 +114,8 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         {originPopoverOpen ? (
-          // Mostrar el contenido de OriginPopover si originPopoverOpen es true
-          <OriginPopover
-            origin={origin}
-            onOriginChange={handleOriginChange}
-            t={t}
-          />
+          <OriginPopover setOriginPopoverOpen={setOriginPopoverOpen} t={t} />
         ) : (
-          // Mostrar el contenido normal del Popover si originPopoverOpen es false
           <Command>
             <CommandInput placeholder={t('placeholder-dropdown-destination')} />
             <CommandList>
@@ -122,7 +124,7 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
                 <CommandItem
                   className="font-semibold"
                   onSelect={() => {
-                    setOriginPopoverOpen(true) // Abre el OriginPopover
+                    setOriginPopoverOpen(true)
                   }}
                 >
                   <MapPinHouse className={cn('mr-2 h-4 w-4', origin ? 'opacity-100' : 'opacity-0')} />

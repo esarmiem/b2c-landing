@@ -4,17 +4,16 @@ import { getPersisted, savePersistense } from './Persistence/data'
 
 // Clave de almacenamiento para persistencia en localStorage.
 // Storage key for persistence in localStorage.
-const STORAGE_KEY = "tk-data";
+const STORAGE_KEY = 'tk-data'
 
 // Definición del estado, que puede ser GlobalData o null.
 // Definition of the state, which can be GlobalData or null.
-type State = GlobalData | null;
 
 // Definición del tipo del contexto que provee el estado y la función para actualizarlo.
 // Definition of the context type that provides the state and the function to update it.
 type DataContextType = {
-  data: State
-  setData: Dispatch<SetStateAction<State>>
+  data: GlobalData
+  setData: Dispatch<SetStateAction<GlobalData>>
 }
 
 // Creación del contexto con un valor inicial undefined.
@@ -48,8 +47,8 @@ interface DataProviderProps {
 export function DataProvider({ children }: DataProviderProps): JSX.Element {
   // Inicializa el estado con datos persistidos (si existen) a partir de STORAGE_KEY.
   // Initializes the state with persisted data (if available) from STORAGE_KEY.
-  const [data, setData] = useState<State>(() => {
-    const cachedData = getPersisted(STORAGE_KEY) as GlobalData | null
+  const [data, setData] = useState<GlobalData>(() => {
+    const cachedData = getPersisted(STORAGE_KEY) as GlobalData
     return cachedData
   })
 

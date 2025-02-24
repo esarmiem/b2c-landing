@@ -8,6 +8,7 @@ import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
 import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
 import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
 import useData from '@/TravelCore/Hooks/useData.ts'
+import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,11 +38,11 @@ export default function HomePage() {
   const handleGetQuote = async () => {
     setIsLoadingOrders(true)
     try {
-      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder)) {
+      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
         throw new Error('Invalid order data')
       }
 
-      const resp = await HandleGetOrder(data.payloadOrder)
+      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
 
       if (resp && resp > 0) {
         setTimeout(() => {

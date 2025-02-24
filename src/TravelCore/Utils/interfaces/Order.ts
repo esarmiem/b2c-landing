@@ -50,8 +50,8 @@ export interface Condiciones {
   name: string
   terms: string
 }
-//Upgrades
-interface Upgrade {
+
+export interface Upgrade {
   type_raider: string
   rd_calc_type: string
   id_raider: string
@@ -93,6 +93,13 @@ export interface PaxForm {
   countryCode: string
 }
 
+export interface EmergencyContactType {
+  firstName: string
+  lastName: string
+  phone1: string
+  phone2: string
+}
+
 /**
  * Plan
  *
@@ -117,9 +124,9 @@ export interface Plan {
   DescripcionDescuentosDolares: DescripcionDescuentos
   DescripcionDescuentosPesos: DescripcionDescuentos
   Valor: string
-  ValorPesos: string
   ValorPax: string
   ValorPaxPesos: string
+  ValorPesos: string
   upgrade: Upgrade[]
   cobertura: Cobertura[]
   Condiciones: Condiciones
@@ -212,6 +219,20 @@ export interface dataIslOrder {
   valorViajeroPesos: string
 }
 
+export interface TravellerQuotation {
+  id: number
+  ValorPesos: string // al que se le suman las upgrades en dolares
+  valorUpgradesPesos: string // en pesos
+  valorUpgradesDolares: string // en dolares
+  upgrades: string[]
+  totalPlan: string
+}
+
+export type Quotation = {
+  productId: number
+  travellers: TravellerQuotation[]
+  total: string
+}
 /**
  * dataPreorder
  *
@@ -272,4 +293,11 @@ export interface CheckPreorderISLResponse {
     El_valor_de_cambio_fue_ajustado_a: string
   }
   idCliente: number
+}
+
+export interface Product {
+  description: string
+  id: number
+  name: string
+  price: number
 }

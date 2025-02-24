@@ -1,4 +1,5 @@
-import { validateForm } from '@/TravelCore/Utils/formValidations.ts'
+import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
+import { useMessageTranslations } from '@/TravelCore/Utils/validations/useMessageTranslations.ts'
 import type { MouseEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,10 +14,10 @@ interface SearchFormContentProps {
 
 export function SearchFormContent({ onClick }: SearchFormContentProps) {
   const { t } = useTranslation(['home'])
+  const msg = useMessageTranslations()
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     destination: '',
-    //origin: '',
     travelDate: '',
     travelers: ''
   })
@@ -24,7 +25,6 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
 
   const validationRules = {
     destination: { required: true },
-    //origin: { required: true },
     travelDate: {
       required: true,
       isDateRange: true
@@ -35,7 +35,7 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
 
-    const validationResult = validateForm({ [field]: value }, { [field]: validationRules[field] })
+    const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
     setErrors(prev => ({
       ...prev,
       [field]: validationResult.errors[field] || []
@@ -44,18 +44,14 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
 
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    const validationResult = validateForm(formData, validationRules)
+    const validationResult = validateForm(formData, msg, validationRules)
 
     if (!validationResult.isValid) {
       setErrors(validationResult.errors)
       return
     }
-
-    console.log('Formulario válido:', formData)
     onClick(event)
   }
-
-  console.log('formData: ', formData)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-red-700 rounded-lg lg:rounded-full shadow-xl p-4 -mt-7">

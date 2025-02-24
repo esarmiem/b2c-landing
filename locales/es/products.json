@@ -36,7 +36,12 @@
   "label-cop-per-person": "COP por persona",
   "label-number-of-travelers": "Número de viajeros:",
   "label-product-value-per-traveler": "Valor producto por viajero:",
+  "label-product-value-per-traveler-upgrades": "Valor producto por viajero con upgrades:",
   "label-total-upgrades": "Total Upgrades:",
   "label-total": "TOTAL:",
-  "button-continue": "Continuar"
+  "button-continue": "Continuar",
+  "label-traveler": "Viajero",
+  "label-coverage": "COBERTURA",
+  "label-ideal-for": "Ideal para",
+  "label-benefits": "BENEFICIOS"
 }
