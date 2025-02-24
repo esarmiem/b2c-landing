@@ -51,6 +51,18 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
       onChange(selectDestination || '')
     }
   }, [payloadOrder?.destino])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!payloadOrder?.pais) {
+      setData?.(prevData => ({
+        ...prevData,
+        payloadOrder: {
+          ...prevData?.payloadOrder,
+          pais: 'CO'
+        }
+      }))
+    }
+  }, [])
 
   return (
     <Popover

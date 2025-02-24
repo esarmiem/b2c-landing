@@ -18,7 +18,6 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     destination: '',
-    //origin: '',
     travelDate: '',
     travelers: ''
   })
@@ -26,7 +25,6 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
 
   const validationRules = {
     destination: { required: true },
-    //origin: { required: true },
     travelDate: {
       required: true,
       isDateRange: true

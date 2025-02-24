@@ -1,9 +1,9 @@
 import Loader from '@/TravelCore/Components/Raw/Loader'
-import useData from '@/TravelCore/Hooks/useData.ts'
-import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday.ts'
+import useData from '@/TravelCore/Hooks/useData'
+import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
 import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
-import { formatCurrency } from '@/TravelCore/Utils/format.ts'
-import type { Product, Quotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order.ts'
+import { formatCurrency } from '@/TravelCore/Utils/format'
+import type { Product, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Check, HandHeart, Plus, UserRoundCog } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -28,90 +28,87 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
   const { fetchTRM } = useTRMToday()
 
   useEffect(() => {
-    if (!travelerQuotation || travelerQuotation.productId !== product.id) {
-      const initialQuotation: Quotation = {
-        travellers: Array.from({ length: numberTravellers }, (_, index) => ({
-          id: index + 1,
-          ValorPesos: product?.price.toString() || '0',
-          valorUpgradesPesos: '0',
-          valorUpgradesDolares: '0',
-          upgrades: [],
-          totalPlan: product?.price.toString() || '0'
-        })),
-        total: (product?.price * numberTravellers).toString() || '0',
-        productId: product.id
-      }
-      if (setData) {
-        setData(prevData => ({
-          ...prevData,
-          travelerQuotation: initialQuotation
-        }))
-      }
-    }
-  }, [travelerQuotation, setData, numberTravellers, product])
+    const shouldInitialize =
+      !travelerQuotation || travelerQuotation.productId !== product.id || travelerQuotation.travellers.length !== numberTravellers
 
-  // Get TRM for today
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    if (shouldInitialize) {
+      const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
+        id: index + 1,
+        ValorPesos: product?.price.toString() || '0',
+        valorUpgradesPesos: '0',
+        valorUpgradesDolares: '0',
+        upgrades: [],
+        totalPlan: product?.price.toString() || '0'
+      }))
+
+      const initialQuotation: Quotation = {
+        productId: product.id,
+        travellers: initialTravellers,
+        total: (product?.price * numberTravellers).toString() || '0'
+      }
+
+      setData?.(prevData => ({
+        ...prevData,
+        travelerQuotation: initialQuotation
+      }))
+    }
+  }, [travelerQuotation, numberTravellers, product.id, product.price, setData])
+
   useEffect(() => {
     fetchTRM()
       .then(trmData => {
         setTRM(trmData)
-        console.log(`La TRM para hoy es: ${trmData}`)
       })
       .catch(error => {
         console.error('Error al consultar la TRM:', error)
       })
-  }, [])
+  }, [fetchTRM])
 
   const toggleUpgrade = (id_raider: string) => {
-    if (travelerQuotation && setData) {
-      const newTravellers = [...travelerQuotation.travellers]
-      const travelerIndex = currentTraveler - 1
+    if (!travelerQuotation || !setData) return
 
-      const upgrade = productUpgrades.find(u => u.id_raider === id_raider)
-      const currentUpgrades = new Set(newTravellers[travelerIndex].upgrades)
+    const newTravellers = [...travelerQuotation.travellers]
+    const travelerIndex = currentTraveler - 1
+    const upgrade = productUpgrades.find(u => u.id_raider === id_raider)
 
-      if (upgrade) {
-        if (currentUpgrades.has(upgrade.name_raider)) {
-          currentUpgrades.delete(upgrade.name_raider)
-        } else {
-          currentUpgrades.add(upgrade.name_raider)
-        }
-      }
+    if (!upgrade) return
 
-      // Calculate new upgrade values
-      const upgradesCost = Array.from(currentUpgrades).reduce((total, upgradeName) => {
-        const upgrade = productUpgrades.find(u => u.name_raider === upgradeName)
-        const floatNumber = upgrade?.cost_raider.replace('.', '')
-        return total + (upgrade ? Number.parseFloat(floatNumber as string) : 0)
-      }, 0)
-      const upgradesCostinDollars = Number.parseFloat((upgradesCost / TRM).toFixed(2))
+    const currentUpgrades = new Set(newTravellers[travelerIndex].upgrades)
 
-      const totalPlanPerTraveler = product.price + upgradesCost
-      const totalPlanPerTravelerDollars = product.price + upgradesCostinDollars
-
-      newTravellers[travelerIndex] = {
-        ...newTravellers[travelerIndex],
-        upgrades: Array.from(currentUpgrades),
-        valorUpgradesPesos: upgradesCost.toString(),
-        valorUpgradesDolares: upgradesCostinDollars.toString(),
-        totalPlan: (i18n.language === 'es' ? totalPlanPerTraveler : totalPlanPerTravelerDollars).toString()
-      }
-      // Calculate total for all travelers
-      const newTotal = newTravellers.reduce((sum, traveler) => sum + Number.parseFloat(traveler.totalPlan), 0).toString()
-
-      const newQuotation = {
-        travellers: newTravellers,
-        total: newTotal,
-        productId: product.id
-      }
-
-      // Save the new quotation in local storage
-      setData(prevData => ({
-        ...prevData,
-        travelerQuotation: newQuotation
-      }))
+    if (currentUpgrades.has(upgrade.name_raider)) {
+      currentUpgrades.delete(upgrade.name_raider)
+    } else {
+      currentUpgrades.add(upgrade.name_raider)
     }
+
+    const upgradesCost = Array.from(currentUpgrades).reduce((total, upgradeName) => {
+      const foundUpgrade = productUpgrades.find(u => u.name_raider === upgradeName)
+      const floatNumber = foundUpgrade?.cost_raider.replace('.', '')
+      return total + (foundUpgrade ? Number.parseFloat(floatNumber as string) : 0)
+    }, 0)
+
+    const upgradesCostInDollars = Number.parseFloat((upgradesCost / TRM).toFixed(2))
+    const totalPlanPerTraveler = product.price + upgradesCost
+    const totalPlanPerTravelerDollars = product.price + upgradesCostInDollars
+
+    newTravellers[travelerIndex] = {
+      ...newTravellers[travelerIndex],
+      upgrades: Array.from(currentUpgrades),
+      valorUpgradesPesos: upgradesCost.toString(),
+      valorUpgradesDolares: upgradesCostInDollars.toString(),
+      totalPlan: (i18n.language === 'es' ? totalPlanPerTraveler : totalPlanPerTravelerDollars).toString()
+    }
+
+    const newTotal = newTravellers.reduce((sum, traveler) => sum + Number.parseFloat(traveler.totalPlan), 0).toString()
+
+    setData(prevData => ({
+      ...prevData,
+      travelerQuotation: {
+        productId: product.id,
+        travellers: newTravellers,
+        total: newTotal
+      }
+    }))
   }
 
   useEffect(() => {
@@ -119,7 +116,7 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
       setIsLoading(true)
       try {
         const response = await getProductUpdates({
-          id_plan: product?.id as unknown as string,
+          id_plan: product?.id.toString(),
           language: i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
         })
         setProductUpgrades(response)
@@ -130,7 +127,7 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
       }
     }
     updateProduct()
-  }, [product, i18n.language])
+  }, [product.id, i18n.language])
 
   const currentTravellerData = travelerQuotation?.travellers[currentTraveler - 1]
   const allTravellers = travelerQuotation?.travellers
@@ -147,7 +144,9 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
                   key={traveller.id}
                   type="button"
                   onClick={() => setCurrentTraveler(index + 1)}
-                  className={`flex items-center p-1 rounded-lg hover:bg-gray-200 hover:text-gray-700 ${currentTraveler === index + 1 ? 'bg-red-500 text-white' : ''}`}
+                  className={`flex items-center p-1 rounded-lg hover:bg-gray-200 hover:text-gray-700 ${
+                    currentTraveler === index + 1 ? 'bg-red-500 text-white' : ''
+                  }`}
                 >
                   <UserRoundCog className="w-4 h-4" />
                   <span className="text-xs font-medium ml-1">
@@ -213,8 +212,11 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
             <p className="text-sm font-bold text-red-500">{t('label-upgrades')}</p>
             <p className="font-bold text-red-500">
               {currentTravellerData?.valorUpgradesPesos
-                ? formatCurrency(currentTravellerData.valorUpgradesPesos, i18n.language === 'es' ? 'COP' : 'USD')
-                : 'N/A'}
+                ? formatCurrency(
+                    i18n.language === 'es' ? currentTravellerData.valorUpgradesPesos : currentTravellerData.valorUpgradesDolares,
+                    i18n.language === 'es' ? 'COP' : 'USD'
+                  )
+                : 'N/A'}{' '}
               {i18n.language === 'es' ? 'COP' : 'USD'}
             </p>
           </div>
