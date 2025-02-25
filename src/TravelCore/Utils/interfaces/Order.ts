@@ -79,18 +79,22 @@ export interface Pax {
 }
 
 export interface PaxForm {
-  firstName: string
-  lastName: string
-  documentType: string
-  documentNumber: string
-  birthdate: string
-  age: number
-  gender: any
-  nationality: number
-  residenceCountry: number
-  email: string
-  phone: string
-  countryCode: string
+  firstName: string;
+  lastName: string;
+  documentType: string;
+  documentNumber: string;
+  birthdate: string;
+  age: number;
+  gender: any;
+  nationality: number;
+  residenceCountry: number;
+  email: string;
+  phone: string;
+  countryCode: string;
+  billingCountry: string; // Propiedad añadida.
+  billingCity: string; // Propiedad añadida.
+  address: string; // Propiedad añadida.
+  additional: string; // Propiedad añadida.
 }
 
 export interface EmergencyContactType {

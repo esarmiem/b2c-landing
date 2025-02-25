@@ -47,14 +47,11 @@ import { Certifications } from "@/TravelCore/Components/Epic/Certifications";
 import { Features } from "@/TravelCore/Components/Epic/Features";
 import { Testimonials } from "@/TravelCore/Components/Epic/Testimonials";
 import { Stats } from "@/TravelCore/Components/Epic/Stats";
-import { HeroCarousel } from "@/TravelCore/Components/Epic/HeroCarousel";
-import { TravelForm } from "@/TravelCore/Components/Epic/TravelForm"
+
 
 const ProductsPage = () => {
   return (
     <>
-      <HeroCarousel />
-      <TravelForm />
       <WhyChooseUs />
       <Certifications />
       <Features />
