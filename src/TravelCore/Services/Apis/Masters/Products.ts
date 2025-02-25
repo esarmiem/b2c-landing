@@ -20,6 +20,21 @@ interface ApiResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a la función `getProducts`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to the `getProducts` function.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * PRODUCTS_API
  *
  * Spanish:
@@ -42,12 +57,12 @@ export const PRODUCTS_API = {
    * Performs a GET request to retrieve products.
    * Products are filtered using the "isActive" parameter provided in the "data" object.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar los productos.
-   *                     / Object that should include the "isActive" property to filter products.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar los productos.
+   *                            / Object that should include the "isActive" property to filter products.
    * @returns {Promise<ApiResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                 / A promise that resolves with the API response.
    */
-  getProducts: (data): Promise<ApiResponse> => {
+  getProducts: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_PRODUCTS}?isActive=${data.isActive}`,
       method: "GET",

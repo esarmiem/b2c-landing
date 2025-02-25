@@ -20,6 +20,21 @@ interface ApiResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a la función `getDocumentTypes`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to the `getDocumentTypes` function.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * DOCUMENT_TYPE_API
  *
  * Spanish:
@@ -40,12 +55,12 @@ export const DOCUMENT_TYPE_API = {
    * English:
    * Performs a GET request to retrieve document types, filtering by the "isActive" parameter.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar los tipos de documento.
-   *                     / Object that should include the "isActive" property to filter document types.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar los tipos de documento.
+   *                            / Object that should include the "isActive" property to filter document types.
    * @returns {Promise<ApiResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                 / A promise that resolves with the API response.
    */
-  getDocumentTypes: (data): Promise<ApiResponse> => {
+  getDocumentTypes: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_DOCUMENT_TYPE}?isActive=${data.isActive}`,
       method: "GET",
