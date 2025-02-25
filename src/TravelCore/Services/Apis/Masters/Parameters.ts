@@ -20,6 +20,21 @@ interface ApiResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a la función `getParameters`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to the `getParameters` function.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * PARAMETERS_API
  *
  * Spanish:
@@ -42,12 +57,12 @@ export const PARAMETERS_API = {
    * Performs a GET request to retrieve a list of parameters.
    * It uses the "isActive" property from the data object to filter the results.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar los parámetros.
-   *                     / Object that should include the "isActive" property to filter parameters.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar los parámetros.
+   *                            / Object that should include the "isActive" property to filter parameters.
    * @returns {Promise<ApiResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                 / A promise that resolves with the API response.
    */
-  getParameters: (data): Promise<ApiResponse> => {
+  getParameters: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_PARAMETERS}?isActive=${data.isActive}`,
       method: "GET",

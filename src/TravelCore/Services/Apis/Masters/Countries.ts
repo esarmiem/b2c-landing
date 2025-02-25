@@ -42,6 +42,21 @@ interface citiesByCountryResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a las funciones `getCountries` y `getCitiesByCountry`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to `getCountries` and `getCitiesByCountry` functions.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * COUNTRIES_API
  *
  * Spanish:
@@ -62,18 +77,19 @@ export const COUNTRIES_API = {
    * English:
    * Performs a GET request to retrieve the list of countries, filtering by active status.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar los países.
-   *                     / Object that should include the "isActive" property to filter countries.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar los países.
+   *                            / Object that should include the "isActive" property to filter countries.
    * @returns {Promise<countriesResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                       / A promise that resolves with the API response.
    */
-  getCountries: (data): Promise<countriesResponse> => {
+  getCountries: (data: FilterData): Promise<countriesResponse> => {
     return axiosHttp({
       path: `${SERVICE_COUNTRIES}?isActive=${data.isActive}`,
       method: "GET",
       session: { token: GET_TOKEN },
     });
   },
+
   /**
    * getCitiesByCountry
    *
@@ -83,12 +99,12 @@ export const COUNTRIES_API = {
    * English:
    * Performs a GET request to retrieve the list of cities for a country, filtering by active status.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar las ciudades.
-   *                     / Object that should include the "isActive" property to filter cities.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar las ciudades.
+   *                            / Object that should include the "isActive" property to filter cities.
    * @returns {Promise<citiesByCountryResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                             / A promise that resolves with the API response.
    */
-  getCitiesByCountry: (data): Promise<citiesByCountryResponse> => {
+  getCitiesByCountry: (data: FilterData): Promise<citiesByCountryResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_CITIES_BY_COUNTRY}?isActive=${data.isActive}`,
       method: "GET",

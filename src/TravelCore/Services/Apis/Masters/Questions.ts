@@ -20,6 +20,21 @@ interface ApiResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a la función `getQuestions`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to the `getQuestions` function.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * QUESTIONS_API
  *
  * Spanish:
@@ -42,12 +57,12 @@ export const QUESTIONS_API = {
    * Performs a GET request to retrieve questions.
    * Questions are filtered using the "isActive" parameter provided in the "data" object.
    *
-   * @param {any} data - Objeto que debe incluir la propiedad "isActive" para filtrar las preguntas.
-   *                     / Object that should include the "isActive" property to filter questions.
+   * @param {FilterData} data - Objeto que debe incluir la propiedad "isActive" para filtrar las preguntas.
+   *                            / Object that should include the "isActive" property to filter questions.
    * @returns {Promise<ApiResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                 / A promise that resolves with the API response.
    */
-  getQuestions: (data): Promise<ApiResponse> => {
+  getQuestions: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_QUESTIONS}?isActive=${data.isActive}`,
       method: "GET",

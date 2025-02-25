@@ -20,6 +20,21 @@ interface ApiResponse {
 }
 
 /**
+ * FilterData
+ *
+ * Spanish:
+ * Define la estructura del objeto `data` que se pasa a la función `getMedicalConditions`.
+ * Contiene la propiedad `isActive` para filtrar los resultados.
+ *
+ * English:
+ * Defines the structure of the `data` object passed to the `getMedicalConditions` function.
+ * It contains the `isActive` property to filter results.
+ */
+interface FilterData {
+  isActive: boolean;
+}
+
+/**
  * MEDICAL_CONDITIONS_API
  *
  * Spanish:
@@ -42,12 +57,12 @@ export const MEDICAL_CONDITIONS_API = {
    * Performs a GET request to retrieve medical conditions.
    * It filters the results using the "isActive" parameter provided in the "data" object.
    *
-   * @param {any} data - Objeto que debe contener la propiedad "isActive" para filtrar las condiciones médicas.
-   *                     / Object that should include the "isActive" property to filter medical conditions.
+   * @param {FilterData} data - Objeto que debe contener la propiedad "isActive" para filtrar las condiciones médicas.
+   *                            / Object that should include the "isActive" property to filter medical conditions.
    * @returns {Promise<ApiResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                 / A promise that resolves with the API response.
    */
-  getMedicalConditions: (data): Promise<ApiResponse> => {
+  getMedicalConditions: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_MEDICAL_CONDITIONS}?isActive=${data.isActive}`,
       method: "GET",

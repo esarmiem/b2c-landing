@@ -19,7 +19,7 @@ export function BillingForm({ onChangeField, data }: BillingFormProps) {
   const master = useMasters();
 
   // Asegúrate de que `cities` y `documentType` no sean `undefined`
-  const cities = (master?.cities?.data as CitiesItems[]) || [];
+  const cities = (master?.cities?.data as unknown as CitiesItems[]) || [];
   const documentType = (master?.documents.data?.items as DocumentTypeItems[]) || [];
 
   // Filtra las ciudades y tipos de documento activos
