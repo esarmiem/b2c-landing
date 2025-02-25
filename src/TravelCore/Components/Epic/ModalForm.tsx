@@ -2,15 +2,13 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ChevronRight, Loader2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+//import { useTranslation } from "react-i18next";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {useState}  from "react";
 
@@ -21,7 +19,6 @@ interface ModalProps {
 }
 
 export const ModalForm = ({ isOpen, toggleModal, onClick }: ModalProps) => {
-  const { t } = useTranslation(["home"]);
   const {setData} = useData() || {};
   const [modalForm, setModalForm] = useState({"phone": "", "email":""})
   const [loadingSave, setLoadingSave] = useState(false)

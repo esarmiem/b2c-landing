@@ -1,6 +1,6 @@
 import { AUTH_ISL_API } from '@/TravelCore/Services/Apis/AuthenticationISL'
 import type { CheckPreorderISLResponse, ResponseData, dataOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
-import type { Upgrades } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { Upgrade } from '@/TravelCore/Utils/interfaces/Order.ts' // Cambio aquí
 import { ISL_APP_SERVICE_UPGRADES, SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
@@ -67,26 +67,16 @@ interface PayloadUpgrades {
  * @returns {Promise<any>} La respuesta de la API, extraída de la propiedad "data".
  *                         / The API response, extracted from the "data" property.
  */
-export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrades[]> => {
-  // Autenticación en ISL para obtener el token necesario.
-  // Authenticate with ISL to obtain the required token.
+export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => { // Cambio aquí
   const authISL = await AUTH_ISL_API.loginISL();
-  // Construcción de los parámetros de consulta para la petición.
-  // Build query parameters for the request.
   const queryParams = new URLSearchParams({
     request: "get_upgrade",
     token: authISL?.data?.result?.token,
     id_plan: payload.id_plan.toString(),
     language: payload.language
   }).toString()
-
-  // Construcción de la URL completa para la petición ISL.
-  // Construct the full URL for the ISL request.
   const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`;
-
   try {
-    // Realiza la petición GET utilizando axiosHttp.
-    // Make the GET request using axiosHttp.
     const response = await axiosHttp({
       method: "GET",
       pathISL: url,
