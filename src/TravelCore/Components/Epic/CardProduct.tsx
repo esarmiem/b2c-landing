@@ -45,7 +45,6 @@ const rawPrice = i18n.language === "es" ? ValorPesos : Valor
     setIsModalOpen(true);
   };
 
-  // 🔹 Función para cerrar el modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
