@@ -5,52 +5,37 @@ import { BillingForm } from "@/TravelCore/Components/Epic/BillingForm.tsx";
 import { PurchaseDetails } from "@/TravelCore/Components/Epic/PurchaseDetails.tsx";
 import { ProcessButton } from "@/TravelCore/Components/Epic/ProcessButton.tsx";
 import useData from "@/TravelCore/Hooks/useData.ts";
-import {useCallback, useState} from "react";
-import {PaxForm} from "@/TravelCore/Utils/interfaces/Order.ts";
-import {Masters} from "@/TravelFeatures/Traveler/model/masters_entity.ts";
-import useMasters from "@/TravelCore/Hooks/useMasters.ts";
+import { useCallback, useState } from "react";
+import { PaxForm } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 export default function InvoicePage() {
-    const {data, setData} = useData() || {};
-    const [billingData, setBillingData] = useState<PaxForm[]>([])
-
-    const handleChangeReuseInfo = (name, value) => {
-        /*setEmergencyContact((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));*/
-
-    };
+    const { setData } = useData() || {};
+    const [billingData, setBillingData] = useState<PaxForm[]>([{} as PaxForm]); // Inicializa con un objeto vacío
 
     const handleSendBilling = async () => {
-        //const masters = new Masters();
-        //const resp = await masters.getCitiesByCountry({countryId: travelersData.filter((item) => item !== undefined)[0].residenceCountry})
-
-        //TODO: Mapping data object and send data traveler and billing
-
+        // Guarda los datos de facturación en el contexto o estado global
         setData?.((prevData: any) => ({
-                ...prevData,
-                billingData: billingData
-            })
-        )
-        alert('Se envia a pasarela de pagos ePayco.... En proceso')
-        /*setTimeout(() => {
-            console.log('redirigiendo a /invoice')
-            //navigate('/invoice/billingResult'); // Navegar a la siguiente pantalla
-        }, 1000);*/
-
-    }
-
-    const handleChangeBilling = useCallback( (name: string, value: string) => {
-        setBillingData((prevData) => ({
             ...prevData,
-            [name]: value,
+            billingData: billingData,
         }));
+        alert('Se envia a pasarela de pagos ePayco.... En proceso');
+    };
 
-    }, [])
+    // Función para manejar cambios en los campos del formulario
+    const handleChangeBilling = useCallback((index: number, name: string, value: string) => {
+        setBillingData((prevData) => {
+            const newData = [...prevData];
+            newData[index] = {
+                ...newData[index],
+                [name]: value,
+            };
+            return newData;
+        });
+    }, []);
 
-console.log('billingData', billingData)
-        return (
+    console.log('billingData', billingData); // Para depuración
+
+    return (
         <>
             <Breadcrumb />
             <main className="max-w-6xl mx-auto p-4 my-6">
@@ -59,15 +44,13 @@ console.log('billingData', billingData)
                     <section className="space-y-4 items-center">
                         <HeaderBilling />
                         <form className="border border-gray-200 rounded-2xl space-y-4">
-                            <BillingForm onChangeField={handleChangeBilling} data={billingData}/>
+                            {/* Pasa la función handleChangeBilling y los datos actuales */}
+                            <BillingForm onChangeField={handleChangeBilling} data={billingData} />
                         </form>
                     </section>
                     <PurchaseDetails button={<ProcessButton onClick={handleSendBilling} />} />
                 </section>
             </main>
-            {/*<p>Facturacion y pago</p>*/}
-            {/*<button onClick={handleCheckPreOrder}>Confirmar</button>*/}
-            {/*<button onClick={handleAddOrder}>Pagar</button>*/}
         </>
     );
 }
