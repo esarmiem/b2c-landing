@@ -221,17 +221,20 @@ export interface dataIslOrder {
 
 export interface TravellerQuotation {
   id: number
-  ValorPesos: string // al que se le suman las upgrades en dolares
-  valorUpgradesPesos: string // en pesos
-  valorUpgradesDolares: string // en dolares
-  upgrades: string[]
-  totalPlan: string
+  totalPlanTravelerPesos: string
+  totalPlanTravelerDolar: string
+  totalPlanWhitUpgradesPerTravelerPeso: string
+  totalPlanWhitUpgradesPerTravelerDolar: string
+  valorUpgradesPesos: string
+  valorUpgradesDolar: string
+  upgrades: { id: string; name: string }[]
 }
 
 export type Quotation = {
-  productId: number
+  planId: number
+  totalAllTravelersPesos: string
+  totalAllTravelersDolar: string
   travellers: TravellerQuotation[]
-  total: string
 }
 /**
  * dataPreorder

@@ -70,6 +70,7 @@
     "requiredAge": "Age is required",
     "email": "Enter a valid email",
     "phone": "Enter a valid phone number",
+    "minAge": "The minimum age is 18",
     "password": "Password must have at least 8 characters, one letter and one number",
     "url": "Enter a valid URL",
     "numbers": "This field only accepts numbers",

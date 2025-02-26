@@ -3,134 +3,214 @@ import useData from '@/TravelCore/Hooks/useData'
 import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
 import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
 import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { Product, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import type { Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Check, HandHeart, Plus, UserRoundCog } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface ModalUpgradesProps {
   isOpen: boolean
   onClose: () => void
-  product: Product
+  plan: Plan
 }
 
-const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
+const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
   const { t } = useTranslation(['products'])
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
   const numberTravellers = data?.payloadOrder?.cantidadPax || 1
+
   const [isLoading, setIsLoading] = useState(false)
   const [currentTraveler, setCurrentTraveler] = useState(1)
   const [productUpgrades, setProductUpgrades] = useState<Upgrade[]>([])
   const [TRM, setTRM] = useState<number>(0)
   const { fetchTRM } = useTRMToday()
 
+  const fetchedRef = useRef(false)
+  const productIdRef = useRef<string | number | null>(null)
+  const languageRef = useRef<string | null>(null)
+
+  const currentLanguage = i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
+
+  // Inicialización de la cotización - solo cuando es necesario
   useEffect(() => {
     const shouldInitialize =
-      !travelerQuotation || travelerQuotation.productId !== product.id || travelerQuotation.travellers.length !== numberTravellers
+      !travelerQuotation || travelerQuotation.planId !== plan.IdPlan || travelerQuotation.travellers.length !== numberTravellers
 
-    if (shouldInitialize) {
+    if (shouldInitialize && setData) {
       const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
         id: index + 1,
-        ValorPesos: product?.price.toString() || '0',
+        totalPlanTravelerPesos: plan.ValorPaxPesos || '0',
+        totalPlanTravelerDolar: plan.ValorPax || '0',
+        totalPlanWhitUpgradesPerTravelerPeso: plan.ValorPaxPesos || '0',
+        totalPlanWhitUpgradesPerTravelerDolar: plan.ValorPax || '0',
         valorUpgradesPesos: '0',
-        valorUpgradesDolares: '0',
-        upgrades: [],
-        totalPlan: product?.price.toString() || '0'
+        valorUpgradesDolar: '0',
+        upgrades: []
       }))
 
       const initialQuotation: Quotation = {
-        productId: product.id,
-        travellers: initialTravellers,
-        total: (product?.price * numberTravellers).toString() || '0'
+        planId: plan.IdPlan,
+        totalAllTravelersPesos: plan.ValorPesos || '0',
+        totalAllTravelersDolar: plan.Valor || '0',
+        travellers: initialTravellers
       }
 
-      setData?.(prevData => ({
+      setData(prevData => ({
         ...prevData,
         travelerQuotation: initialQuotation
       }))
     }
-  }, [travelerQuotation, numberTravellers, product.id, product.price, setData])
+  }, [travelerQuotation, numberTravellers, plan.IdPlan, plan.ValorPesos, plan.Valor, setData])
 
+  // Obtener TRM una sola vez
   useEffect(() => {
-    fetchTRM()
-      .then(trmData => {
-        setTRM(trmData)
-      })
-      .catch(error => {
-        console.error('Error al consultar la TRM:', error)
-      })
-  }, [fetchTRM])
-
-  const toggleUpgrade = (id_raider: string) => {
-    if (!travelerQuotation || !setData) return
-
-    const newTravellers = [...travelerQuotation.travellers]
-    const travelerIndex = currentTraveler - 1
-    const upgrade = productUpgrades.find(u => u.id_raider === id_raider)
-
-    if (!upgrade) return
-
-    const currentUpgrades = new Set(newTravellers[travelerIndex].upgrades)
-
-    if (currentUpgrades.has(upgrade.name_raider)) {
-      currentUpgrades.delete(upgrade.name_raider)
-    } else {
-      currentUpgrades.add(upgrade.name_raider)
-    }
-
-    const upgradesCost = Array.from(currentUpgrades).reduce((total, upgradeName) => {
-      const foundUpgrade = productUpgrades.find(u => u.name_raider === upgradeName)
-      const floatNumber = foundUpgrade?.cost_raider.replace('.', '')
-      return total + (foundUpgrade ? Number.parseFloat(floatNumber as string) : 0)
-    }, 0)
-
-    const upgradesCostInDollars = Number.parseFloat((upgradesCost / TRM).toFixed(2))
-    const totalPlanPerTraveler = product.price + upgradesCost
-    const totalPlanPerTravelerDollars = product.price + upgradesCostInDollars
-
-    newTravellers[travelerIndex] = {
-      ...newTravellers[travelerIndex],
-      upgrades: Array.from(currentUpgrades),
-      valorUpgradesPesos: upgradesCost.toString(),
-      valorUpgradesDolares: upgradesCostInDollars.toString(),
-      totalPlan: (i18n.language === 'es' ? totalPlanPerTraveler : totalPlanPerTravelerDollars).toString()
-    }
-
-    const newTotal = newTravellers.reduce((sum, traveler) => sum + Number.parseFloat(traveler.totalPlan), 0).toString()
-
-    setData(prevData => ({
-      ...prevData,
-      travelerQuotation: {
-        productId: product.id,
-        travellers: newTravellers,
-        total: newTotal
-      }
-    }))
-  }
-
-  useEffect(() => {
-    const updateProduct = async () => {
-      setIsLoading(true)
-      try {
-        const response = await getProductUpdates({
-          id_plan: product?.id.toString(),
-          language: i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
+    if (TRM === 0) {
+      fetchTRM()
+        .then(trmData => {
+          setTRM(trmData)
         })
-        setProductUpgrades(response)
-      } catch (error) {
-        console.error('Error loading upgrades:', error)
-      } finally {
-        setIsLoading(false)
-      }
+        .catch(error => {
+          console.error('Error al consultar la TRM:', error)
+        })
     }
-    updateProduct()
-  }, [product.id, i18n.language])
+  }, [fetchTRM, TRM])
+
+  // Función para cargar upgrades
+  const loadProductUpgrades = useCallback(async () => {
+    if (!isOpen || isLoading) return
+
+    // Verificamos si ya hemos cargado para este producto e idioma
+    if (
+      fetchedRef.current &&
+      productIdRef.current === plan.IdPlan &&
+      languageRef.current === currentLanguage &&
+      productUpgrades.length > 0
+    ) {
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const response = await getProductUpdates({
+        id_plan: plan.IdPlan.toString(),
+        language: currentLanguage
+      })
+
+      setProductUpgrades(response)
+
+      fetchedRef.current = true
+      productIdRef.current = plan.IdPlan
+      languageRef.current = currentLanguage
+    } catch (error) {
+      console.error('Error loading upgrades:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [isOpen, isLoading, plan.IdPlan, currentLanguage, productUpgrades.length])
+
+  useEffect(() => {
+    if (isOpen) {
+      if (productIdRef.current !== plan.IdPlan || languageRef.current !== currentLanguage) {
+        fetchedRef.current = false
+      }
+
+      loadProductUpgrades()
+    }
+    return () => {
+      if (!isOpen) fetchedRef.current = false
+    }
+  }, [isOpen, loadProductUpgrades, plan.IdPlan, currentLanguage])
+
+  const toggleUpgrade = useCallback(
+    (id_raider: string, name_raider: string) => {
+      if (!travelerQuotation || !setData) return
+
+      const newTravellers = [...travelerQuotation.travellers]
+      const travelerIndex = currentTraveler - 1
+      const upgrade = productUpgrades.find(u => u.id_raider === id_raider)
+
+      if (!upgrade) return
+
+      const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
+      const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
+
+      if (existingUpgradeIndex === -1) {
+        currentUpgrades.push({ id: id_raider, name: name_raider })
+      } else {
+        currentUpgrades.splice(existingUpgradeIndex, 1)
+      }
+
+      // Corregir cálculos
+      const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
+        const foundUpgrade = productUpgrades.find(u => u.id_raider === upgrade.id)
+        const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
+        return total + Number.parseInt(cost, 10)
+      }, 0)
+
+      const upgradesCostInDollars = Number((upgradesCost / TRM).toFixed(2))
+      const totalPlanTravelerDolar = Number(plan.ValorPax || 0)
+      const totalPlanTravelerPesos = Number(plan.ValorPaxPesos || 0)
+      const totalPlanWhitUpgradesPerTravelerPeso = totalPlanTravelerPesos + upgradesCost
+      const totalPlanWhitUpgradesPerTravelerDolar = totalPlanTravelerDolar + upgradesCostInDollars
+
+      newTravellers[travelerIndex] = {
+        ...newTravellers[travelerIndex],
+        upgrades: currentUpgrades,
+        valorUpgradesPesos: upgradesCost.toString(),
+        valorUpgradesDolar: upgradesCostInDollars.toString(),
+        totalPlanTravelerPesos: totalPlanTravelerPesos.toString(),
+        totalPlanTravelerDolar: totalPlanTravelerDolar.toString(),
+        totalPlanWhitUpgradesPerTravelerPeso: totalPlanWhitUpgradesPerTravelerPeso.toString(),
+        totalPlanWhitUpgradesPerTravelerDolar: totalPlanWhitUpgradesPerTravelerDolar.toString()
+      }
+
+      // Calcular totales
+      const newTotalPesos = newTravellers
+        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerPeso), 0)
+        .toString()
+
+      const newTotalDolar = newTravellers
+        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerDolar), 0)
+        .toString()
+
+      setData(prevData => ({
+        ...prevData,
+        travelerQuotation: {
+          planId: plan.IdPlan,
+          totalAllTravelersPesos: newTotalPesos,
+          totalAllTravelersDolar: newTotalDolar,
+          travellers: newTravellers
+        }
+      }))
+    },
+    [travelerQuotation, setData, currentTraveler, productUpgrades, TRM, plan]
+  )
 
   const currentTravellerData = travelerQuotation?.travellers[currentTraveler - 1]
   const allTravellers = travelerQuotation?.travellers
+
+  const totalTravelersPerPlan =
+    i18n.language === 'es'
+      ? formatCurrency(currentTravellerData?.totalPlanTravelerPesos || '0', 'COP')
+      : formatCurrency(currentTravellerData?.totalPlanTravelerDolar || '0', 'USD')
+
+  const totalTravelerUpgrades =
+    i18n.language === 'es'
+      ? formatCurrency(currentTravellerData?.valorUpgradesPesos || '0', 'COP')
+      : formatCurrency(currentTravellerData?.valorUpgradesDolar || '0', 'USD')
+
+  const totalTravelerPlanWithUpgrades =
+    i18n.language === 'es'
+      ? formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerPeso || '0', 'COP')
+      : formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerDolar || '0', 'USD')
+
+  const totalAllTravelers =
+    i18n.language === 'es'
+      ? formatCurrency(travelerQuotation?.totalAllTravelersPesos || '0', 'COP')
+      : formatCurrency(travelerQuotation?.totalAllTravelersDolar || '0', 'USD')
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -170,11 +250,11 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
               type="button"
               key={upgrade.id_raider}
               className={`w-full flex items-center justify-between p-3 rounded-lg border transition ${
-                currentTravellerData?.upgrades.includes(upgrade.name_raider)
+                currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider)
                   ? 'bg-green-100 border-green-500'
                   : 'bg-gray-100 hover:bg-gray-200'
               }`}
-              onClick={() => toggleUpgrade(upgrade.id_raider)}
+              onClick={() => toggleUpgrade(upgrade.id_raider, upgrade.name_raider)}
             >
               <div className="flex items-center text-start gap-3 w-full">
                 <span className="text-xl">
@@ -187,7 +267,7 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
                   </p>
                 </div>
                 <span className="text-xl">
-                  {currentTravellerData?.upgrades.includes(upgrade.name_raider) ? (
+                  {currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider) ? (
                     <Check className="text-green-600" />
                   ) : (
                     <Plus className="text-gray-600" />
@@ -202,37 +282,28 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
           <div className="flex justify-between">
             <p className="text-sm font-medium">{t('label-product-value-per-traveler')}</p>
             <p className="font-bold text-red-950">
-              {currentTravellerData?.ValorPesos
-                ? formatCurrency(currentTravellerData.ValorPesos, i18n.language === 'es' ? 'COP' : 'USD')
-                : 'N/A'}{' '}
+              {totalTravelersPerPlan}
               {i18n.language === 'es' ? 'COP' : 'USD'}
             </p>
           </div>
           <div className="flex justify-between">
             <p className="text-sm font-bold text-red-500">{t('label-upgrades')}</p>
             <p className="font-bold text-red-500">
-              {currentTravellerData?.valorUpgradesPesos
-                ? formatCurrency(
-                    i18n.language === 'es' ? currentTravellerData.valorUpgradesPesos : currentTravellerData.valorUpgradesDolares,
-                    i18n.language === 'es' ? 'COP' : 'USD'
-                  )
-                : 'N/A'}{' '}
+              {totalTravelerUpgrades}
               {i18n.language === 'es' ? 'COP' : 'USD'}
             </p>
           </div>
           <div className={`flex justify-between ${numberTravellers === 1 ? 'hidden' : ''}`}>
             <p className="text-sm font-medium">{t('label-product-value-per-traveler-upgrades')}</p>
             <p className="font-bold text-red-950">
-              {currentTravellerData?.totalPlan
-                ? formatCurrency(currentTravellerData.totalPlan, i18n.language === 'es' ? 'COP' : 'USD')
-                : 'N/A'}{' '}
+              {totalTravelerPlanWithUpgrades}
               {i18n.language === 'es' ? 'COP' : 'USD'}
             </p>
           </div>
           <div className="flex justify-between text-lg font-bold border-t pt-2">
             <p>{t('label-total')}</p>
             <p className="text-red-950">
-              {travelerQuotation?.total ? formatCurrency(travelerQuotation.total, i18n.language === 'es' ? 'COP' : 'USD') : 'N/A'}{' '}
+              {totalAllTravelers}
               {i18n.language === 'es' ? 'COP' : 'USD'}
             </p>
           </div>
