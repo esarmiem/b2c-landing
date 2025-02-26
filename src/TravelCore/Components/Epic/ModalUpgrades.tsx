@@ -138,7 +138,7 @@ const ModalUpgrades = ({ isOpen, onClose, product }: ModalUpgradesProps) => {
         <DialogHeader>
           <div className="grid items-center justify-between w-full space-y-2">
             <DialogTitle className="text-2xl font-bold">{t('label-upgrades')}</DialogTitle>
-            <div className={`flex items-center gap-2 ${numberTravellers === 1 ? 'hidden' : ''}`}>
+            <div className={`flex flex-wrap items-center gap-2 ${numberTravellers === 1 ? 'hidden' : ''}`}>
               {allTravellers?.map((traveller, index) => (
                 <button
                   key={traveller.id}
