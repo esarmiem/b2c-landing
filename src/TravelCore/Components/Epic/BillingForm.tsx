@@ -10,11 +10,12 @@ import {PaxForm} from "@/TravelCore/Utils/interfaces/Order.ts";
 import {calculateAndCompareAge} from "@/TravelCore/Utils/dates.ts";
 
 interface BillingFormProps {
+  onCheck?: (value: string) => void;
   onChangeField?: (index: number, name: string, value: string) => void;
   data: PaxForm[];
 }
 
-export function BillingForm({ onChangeField, data }: BillingFormProps) {
+export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) {
   const { t } = useTranslation(["invoice"]); 
   const [usePassengerInfo, setUsePassengerInfo] = useState(false);
   const master = useMasters();
@@ -28,6 +29,7 @@ export function BillingForm({ onChangeField, data }: BillingFormProps) {
         {city.descripcion}
       </SelectItem>
   ));
+
   const documentTypeOptions = activeDocumentType.map(type => (
       <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
         {type.abreviacion} - {type.nombre}
@@ -43,6 +45,11 @@ export function BillingForm({ onChangeField, data }: BillingFormProps) {
     onChangeField?.(name, value);
   }, [onChangeField]);
 
+  const handleCheckChange = React.useCallback((value: string) => {
+    setUsePassengerInfo(value.target.checked)
+    onCheck?.(value.target.checked);
+  }, [onCheck]);
+
   return (
     <>
       <section className="p-4">
@@ -54,7 +61,7 @@ export function BillingForm({ onChangeField, data }: BillingFormProps) {
             type="checkbox"
             id="usePassengerInfo"
             checked={usePassengerInfo}
-            onChange={(e) => setUsePassengerInfo(e.target.checked)}
+            onChange={handleCheckChange}
             className="h-3 w-3 rounded border-gray-300"
           />
           <label htmlFor="usePassengerInfo" className="text-sm font-medium text-gray-700">

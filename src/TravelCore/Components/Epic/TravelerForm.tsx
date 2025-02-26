@@ -1,4 +1,4 @@
-import React, {memo, useState} from "react";
+import React, {memo, useEffect, useState} from "react";
 import { SquareUser } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
@@ -14,10 +14,10 @@ import {calculateAndCompareAge} from "@/TravelCore/Utils/dates.ts"
 interface TravelFormProps {
   onChangeField?: (index: number, name: string, value: string) => void;
   traveler: { id: number; age: string; phone: string };
-  data: PaxForm[];
+  dataTraveler: PaxForm;
 }
 
-export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormProps) => {
+export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: TravelFormProps) => {
   const { t } = useTranslation(["traveler"]);
   const [ageError, setAgeError] = useState<string>("")
   const master = useMasters();
@@ -36,8 +36,6 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
       </SelectItem>
   ));
 
-console.log('travelerData =====', data)
-  const travelerData = data.length > 0 ? data[traveler.id] : {}
   const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if(name === 'birthdate') {
@@ -59,7 +57,7 @@ console.log('travelerData =====', data)
         <div className="bg-[#B91C1C] text-white px-8 py-2 text-sm flex items-center gap-2 rounded-t-xl">
           <SquareUser className="w-6 h-6" />
           <h1 className="font-semibold text-xl">
-            {t("label-traveler")} {traveler.id} - {traveler.age} {t("label-years")}
+            {t("label-traveler")} {traveler.id + 1} - {traveler.age} {t("label-years")}
           </h1>
         </div>
 
@@ -69,7 +67,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-first-name")}</label>
               <Input
                   name="firstName"
-                  value={travelerData.firstName || ""}
+                  value={dataTraveler.firstName || ""}
                   placeholder={t("placeholder-first-name")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -79,7 +77,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-last-name")}</label>
               <Input
                   name="lastName"
-                  value={travelerData.lastName || ""}
+                  value={dataTraveler.lastName || ""}
                   placeholder={t("placeholder-last-name")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -89,7 +87,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-type")}</label>
               <Select
                   name="documentType"
-                  value={travelerData.documentType || ""}
+                  value={dataTraveler.documentType || ""}
                   onValueChange={(value) => handleSelectChange("documentType", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -104,7 +102,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-number")}</label>
               <Input
                   name="documentNumber"
-                  value={travelerData.documentNumber || ""}
+                  value={dataTraveler.documentNumber || ""}
                   placeholder={t("placeholder-document-number")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -114,7 +112,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-birthdate")}</label>
               <Input
                   name="birthdate"
-                  value={travelerData.birthdate || ""}
+                  value={dataTraveler.birthdate || ""}
                   type="date"
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -135,7 +133,7 @@ console.log('travelerData =====', data)
                 <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-gender")}</label>
                 <Select
                     name="gender"
-                    value={travelerData.gender || ""}
+                    value={dataTraveler.gender || ""}
                     onValueChange={(value) => handleSelectChange("gender", value)}
                 >
                   <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -152,7 +150,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-nationality")}</label>
               <Select
                   name="nationality"
-                  value={travelerData.nationality || ""}
+                  value={dataTraveler.nationality || ""}
                   onValueChange={(value) => handleSelectChange("nationality", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -167,7 +165,7 @@ console.log('travelerData =====', data)
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-residence-country")}</label>
               <Select
                   name="residenceCountry"
-                  value={travelerData.residenceCountry || ""}
+                  value={dataTraveler.residenceCountry || ""}
                   onValueChange={(value) => handleSelectChange("residenceCountry", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -178,12 +176,12 @@ console.log('travelerData =====', data)
                 </SelectContent>
               </Select>
             </div>
-            <PhoneNumberForm celType={traveler.phone} value={{phone: travelerData.phone, countryCode: travelerData.countryCode }} onChange={handleInputChange} />
+            <PhoneNumberForm celType={traveler.phone} value={{phone: dataTraveler.phone, countryCode: dataTraveler.countryCode }} onChange={handleInputChange} />
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-email")}</label>
               <Input
                   name="email"
-                  value={travelerData.email || ""}
+                  value={dataTraveler.email || ""}
                   type="email"
                   placeholder={t("placeholder-email")}
                   className="rounded-3xl border-gray-300 p-6"

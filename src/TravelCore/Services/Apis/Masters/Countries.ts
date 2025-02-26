@@ -90,7 +90,7 @@ export const COUNTRIES_API = {
    */
   getCitiesByCountry: (data): Promise<citiesByCountryResponse> => {
     return axiosHttp({
-      path: `${SERVICE_GET_CITIES_BY_COUNTRY}?isActive=${data.isActive}`,
+      path: `${SERVICE_GET_CITIES_BY_COUNTRY}?idPais=${data.countryId}`,
       method: "GET",
       session: { token: GET_TOKEN },
     });

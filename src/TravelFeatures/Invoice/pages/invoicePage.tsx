@@ -4,35 +4,80 @@ import { HeaderBilling } from "@/TravelCore/Components/Epic/HeaderBilling.tsx";
 import { BillingForm } from "@/TravelCore/Components/Epic/BillingForm.tsx";
 import { PurchaseDetails } from "@/TravelCore/Components/Epic/PurchaseDetails.tsx";
 import { ProcessButton } from "@/TravelCore/Components/Epic/ProcessButton.tsx";
+import { ModalLoadingProcess } from "@/TravelCore/Components/Epic/LoadingProcess.tsx";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {useCallback, useState} from "react";
-import {PaxForm} from "@/TravelCore/Utils/interfaces/Order.ts";
-import {Masters} from "@/TravelFeatures/Traveler/model/masters_entity.ts";
-import useMasters from "@/TravelCore/Hooks/useMasters.ts";
+import {PaxForm, Billing, dataPreorder, dataIslOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {Order} from "@/TravelFeatures/Invoice/model/order_entity.ts";
+import useInvoiceState from "@/TravelFeatures/Invoice/adapterHelper";
 
 export default function InvoicePage() {
     const {data, setData} = useData() || {};
-    const [billingData, setBillingData] = useState<PaxForm[]>([])
+    const { mapperPreorder, mapperAddOrder } = useInvoiceState()
+    const [billingData, setBillingData] = useState<Billing>({})
+    const [loading, setLoading] = useState<object>({
+        isOpen: true,
+        title: '',
+        text: ''
+    })
 
-    const handleChangeReuseInfo = (name, value) => {
-        /*setEmergencyContact((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));*/
-
+    const handleChangeReuseInfo = (check: boolean) => {
+        if (check) {
+            const firstTraveler: PaxForm = data.travelersData[0]
+            setBillingData({
+                billingCountry: firstTraveler.residenceCountry.toString(),
+                countryCode: firstTraveler.countryCode,
+                documentNumber: firstTraveler.documentNumber,
+                documentType: firstTraveler.documentType,
+                email: firstTraveler.email,
+                firstName: firstTraveler.firstName,
+                lastName: firstTraveler.lastName,
+                phone: firstTraveler.phone
+            })
+        } else {
+            setBillingData({})
+        }
     };
 
     const handleSendBilling = async () => {
-        //const masters = new Masters();
-        //const resp = await masters.getCitiesByCountry({countryId: travelersData.filter((item) => item !== undefined)[0].residenceCountry})
+        setLoading({
+            isOpen: true,
+            title: 'Espere un momento por favor',
+            text: 'Estamos preparando los datos para el pago...'
+        })
+        const mapPreorder: dataPreorder = mapperPreorder()
 
-        //TODO: Mapping data object and send data traveler and billing
+        const order = new Order();
+        const respPre = await order.checkPreOrder(mapPreorder)
+        if (respPre && respPre.data) {
+            setLoading({
+                isOpen: true,
+                title: 'Espere un momento por favor',
+                text: 'Estamos agregando la orden de compra...'
+            })
+            const mapAddOrder: dataIslOrder = mapperAddOrder(respPre)
+
+            const respAdd = await order.addOrder(mapAddOrder)
+            if (respAdd && respAdd.data) {
+                setLoading({
+                    isOpen: true,
+                    title: 'Un momento más',
+                    text: 'Estamos redirigiendo a pasarela de pago...'
+                })
+
+                const respIP = await order.getIP()
+                if (respAdd && respAdd.data) {
+                    //TODO: consumir servicio epayco y configurarle la redireccion
+                }
+            }
+        }
 
         setData?.((prevData: any) => ({
                 ...prevData,
                 billingData: billingData
             })
         )
+
         alert('Se envia a pasarela de pagos ePayco.... En proceso')
         /*setTimeout(() => {
             console.log('redirigiendo a /invoice')
@@ -50,6 +95,7 @@ export default function InvoicePage() {
     }, [])
 
 console.log('billingData', billingData)
+
         return (
         <>
             <Breadcrumb />
@@ -59,11 +105,12 @@ console.log('billingData', billingData)
                     <section className="space-y-4 items-center">
                         <HeaderBilling />
                         <form className="border border-gray-200 rounded-2xl space-y-4">
-                            <BillingForm onChangeField={handleChangeBilling} data={billingData}/>
+                            <BillingForm onChangeField={handleChangeBilling} data={billingData} onCheck={handleChangeReuseInfo}/>
                         </form>
                     </section>
                     <PurchaseDetails button={<ProcessButton onClick={handleSendBilling} />} />
                 </section>
+                <ModalLoadingProcess isOpen={loading.isOpen} title={loading.title} text={loading.text} />
             </main>
             {/*<p>Facturacion y pago</p>*/}
             {/*<button onClick={handleCheckPreOrder}>Confirmar</button>*/}
