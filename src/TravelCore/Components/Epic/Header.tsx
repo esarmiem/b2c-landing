@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
           </div>
 
           <div className="items-center hidden lg:flex">
-            <Link href={'#'} className="text-sm font-medium text-gray-600 hover:text-gray-900">
+            <Link href={'javascript:void(0)'} className="text-sm font-medium text-gray-600 hover:text-gray-900">
               Blogs
             </Link>
           </div>
