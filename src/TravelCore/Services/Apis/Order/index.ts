@@ -1,9 +1,18 @@
 import { AUTH_ISL_API } from '@/TravelCore/Services/Apis/AuthenticationISL'
-import type { CheckPreorderISLResponse, ResponseData, dataOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
-import type { Upgrade } from '@/TravelCore/Utils/interfaces/Order.ts' // Cambio aquí
-import { ISL_APP_SERVICE_UPGRADES, SERVICE_CHECK_PREORDER_ISL, SERVICE_GET_ORDER_PRICE_EDAD } from '../../../Utils/constants.ts'
+import type { CheckPreorderISLResponse, AddOrderISLResponse, ResponseData, dataOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { Upgrades } from '@/TravelCore/Utils/interfaces/Order.ts'
+import {
+  ISL_APP_SERVICE_UPGRADES,
+  SERVICE_ADD_ORDER_ISL,
+  SERVICE_CHECK_PREORDER_ISL,
+  SERVICE_ADD_ORDER_ISL,
+  SERVICE_GET_ORDER_PRICE_EDAD,
+  API_URL_EPAYCO,
+  SERVICE_GET_IP
+} from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
+import {AddOrderISLResponse, dataIslOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 /**
  * ApiResponse
@@ -30,6 +39,20 @@ interface ApiResponse {
  */
 interface ApiCheckPreOrderResponse {
   data: CheckPreorderISLResponse
+  error: string | null
+}
+
+/**
+ * ApiOrderResponse
+ *
+ * Spanish:
+ * Define la estructura de la respuesta de la API para la verificación de orden ISL.
+ *
+ * English:
+ * Defines the structure of the API response for checking ISL orders.
+ */
+interface ApiOrderResponse {
+  data: AddOrderISLResponse
   error: string | null
 }
 
@@ -151,6 +174,55 @@ export const ASSISTANCE_API = {
       path: `${SERVICE_CHECK_PREORDER_ISL}`,
       method: "POST",
       data: JSON.stringify(data),
+      session: { token: GET_TOKEN }
+    })
+  },
+
+  /**
+   * addOrderISL
+   *
+   * Spanish:
+   * Realiza una petición POST para verificar una preorden en el sistema ISL.
+   * Envía los datos de preorden en formato JSON y utiliza un token de sesión para la autenticación.
+   *
+   * English:
+   * Performs a POST request to check a preorder in the ISL system.
+   * It sends the preorder data as JSON and uses a session token for authentication.
+   *
+   * @param {dataPreorder} data - Datos de la preorden que se deben verificar.
+   *                              / Preorder data that needs to be checked.
+   * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
+   *                                              / A promise that resolves with the API response.
+   */
+  addOrderISL: (data: dataIslOrder): Promise<ApiOrderResponse> => {
+    return axiosHttp({
+      path: `${SERVICE_ADD_ORDER_ISL}`,
+      method: "POST",
+      data: JSON.stringify(data),
+      session: { token: GET_TOKEN }
+    })
+  },
+  /**
+   * getIpEpayco
+   *
+   * Spanish:
+   * Realiza una petición POST para verificar una preorden en el sistema ISL.
+   * Envía los datos de preorden en formato JSON y utiliza un token de sesión para la autenticación.
+   *
+   * English:
+   * Performs a POST request to check a preorder in the ISL system.
+   * It sends the preorder data as JSON and uses a session token for authentication.
+   *
+   * @param {dataPreorder} data - Datos de la preorden que se deben verificar.
+   *                              / Preorder data that needs to be checked.
+   * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
+   *                                              / A promise that resolves with the API response.
+   */
+  getIpEpayco: (): Promise<ApiOrderResponse> => {
+    return axiosHttp({
+      pathEpayco: `${API_URL_EPAYCO}/${SERVICE_GET_IP}`,
+      method: "GET",
+      data: null,
       session: { token: GET_TOKEN }
     })
   }

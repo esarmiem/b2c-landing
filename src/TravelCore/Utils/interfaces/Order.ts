@@ -104,6 +104,20 @@ export interface EmergencyContactType {
   phone2: string
 }
 
+export interface Billing {
+  additional: string
+  address: string
+  billingCity: string
+  billingCountry: string
+  countryCode: string
+  documentNumber: string
+  documentType: string
+  email: string
+  firstName: string
+  lastName: string
+  phone: string
+}
+
 /**
  * Plan
  *
@@ -204,8 +218,8 @@ export interface dataIslOrder {
   idProspecto: number
   idUser: number
   idplan: number
-  moneda: number
-  nombrecontacto: number
+  moneda: string
+  nombrecontacto: string
   numeroViajeros: number
   paisdestino: number
   paisorigen: number
@@ -300,6 +314,27 @@ export interface CheckPreorderISLResponse {
     El_valor_de_cambio_fue_ajustado_a: string
   }
   idCliente: number
+}
+/**
+ * AddOrderISLResponse
+ *
+ * Spanish:
+ * Define la estructura de la respuesta de la API para la agregacion de una orden ISL.
+ * Contiene un objeto con diversos campos informativos y el identificador de la venta.
+ *
+ * English:
+ * Defines the structure of the API response for adding an ISL order.
+ * It contains a object with various informative fields and the sale's identifier.
+ */
+export interface AddOrderISLResponse {
+  "": string
+  El_valor_de_cambio_fue_ajustado_a: string
+  codigo: string
+  documento: string
+  idVenta: number
+  referencia: string
+  status: string
+  valor: string
 }
 
 export interface Product {
