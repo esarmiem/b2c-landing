@@ -92,7 +92,7 @@ export const MenuSheet = () => {
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    className="lucide lucide-card-sd"
+                    className="lucide lucide-card-sd mr-2"
                   >
                     <path d="M6 22a2 2 0 0 1-2-2V6l4-4h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2Z" />
                     <path d="M8 10V7.5" />
@@ -214,7 +214,7 @@ export const MenuSheet = () => {
               className="text-white hover:text-red-600 flex items-center gap-2"
             >
               <Mail className="h-4 w-4" />
-              Info@Mitravelkit
+              Info@Mitravelkit.com
             </Link>
           </div>
         </div>
