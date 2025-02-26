@@ -16,9 +16,15 @@ interface OriginPopoverProps {
 export function OriginPopover({ t, setOriginPopoverOpen }: OriginPopoverProps) {
   const master = useMasters()
   const countries = master?.countries?.data?.items as CountriesItems[]
-
   const { data, setData } = useData() || {}
   const origin = data?.payloadOrder?.pais
+
+  // Función para ordenar los países alfabéticamente por descripción
+  const sortedCountries = countries?.slice().sort((a, b) => {
+    if (a.descripcion < b.descripcion) return -1
+    if (a.descripcion > b.descripcion) return 1
+    return 0
+  })
 
   const handleOriginSelect = useCallback(
     (country: CountriesItems) => {
@@ -49,9 +55,11 @@ export function OriginPopover({ t, setOriginPopoverOpen }: OriginPopoverProps) {
         <CommandList>
           <CommandEmpty>{t('search-dropdown-origin-empty') || 'No country found'}</CommandEmpty>
           <CommandGroup>
-            {countries?.map(country => (
+            {sortedCountries?.map(country => (
               <CommandItem key={country.codigoISO} onSelect={() => handleOriginSelect(country)}>
-                <MapPinHouse className={cn('mr-2 h-4 w-4', origin === country.codigoISO ? 'opacity-100' : 'opacity-0')} />
+                <MapPinHouse
+                  className={cn('mr-2 h-4 w-4', origin === country.codigoISO ? 'opacity-100' : 'opacity-0')}
+                />
                 {country.descripcion}
               </CommandItem>
             ))}
