@@ -12,9 +12,10 @@ import {
 import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
 import { v4 as uuidv4 } from 'uuid';
 import {calculateAge} from "@/TravelCore/Utils/dates.ts";
+import {CONFIRM_PAY_PLATTFORM_URL, PAY_PLATTFORM_KEY, RESPONSE_PAY_PLATTFORM_URL} from "@/TravelCore/Utils/constants.ts";
 
 /**
- * useHomeState
+ * useInvoiceState
  *
  * Spanish:
  * Hook personalizado para gestionar el estado de la página de facturacion. Este hook se encarga de:
@@ -140,30 +141,35 @@ export default function useInvoiceState() {
       return preOrder
   }
 
-  const mapperPayment = (responseIp ): EpaycoData => {
+  const mapperPayment = (responseIp, responseAddOrder): EpaycoData => {
+      const savedBilling = data.billingData
+      const savedResponseOrder = data.responseOrder
+      const savedQuotation = data.travelerQuotation
+      const selectedPlan = savedResponseOrder.planes.find(plan => plan.IdPlan === savedQuotation.productId)
+
       const payment = {
-          epaycoName: "DISCOVER",
-          epaycoDescription: "Protección standard 35.000 USD",
-          epaycoInvoice: "TK-MGG5EF",
+          epaycoName: selectedPlan.Categoria,
+          epaycoDescription: selectedPlan.nombre,
+          epaycoInvoice: responseAddOrder.invoice,
           epaycoCurrency: "COP",
-          epaycoAmount: "1301030.5",
+          epaycoAmount: selectedPlan.ValorPesos,
           epaycoLang: "es",
           epaycoExternal: "true",
-          epaycoConfirmation: "https%3A%2F%2Fapi.mitravelkit.com%2Fapi%2Fv1%2Fepayco%2FConfirm",
-          epaycoResponse: "https%3A%2F%2Fb2c.mitravelkit.com%2Fpago%2Frespuesta",
-          epaycoNameBilling: "rerer Rivera",
-          epaycoAddressBilling: "av 26 # 52 - 200",
-          epaycoTypeDocBilling: "CC",
-          epaycoNumberDocBilling: "34567654",
-          epaycoExtra1: 520,
+          epaycoConfirmation: CONFIRM_PAY_PLATTFORM_URL,
+          epaycoResponse: RESPONSE_PAY_PLATTFORM_URL,
+          epaycoNameBilling: savedBilling.firstName + " " + savedBilling.lastName,
+          epaycoAddressBilling: savedBilling.address,
+          epaycoTypeDocBilling: savedBilling.documentType,
+          epaycoNumberDocBilling: savedBilling.documentNumber,
+          epaycoExtra1: responseAddOrder.idVenta,
           epaycoExtra2: "es",
           epaycoExtra3: true,
           epaycoMethod: "GET",
           epaycoConfig: "{}",
-          epaycoKey: "8acda82732dc75fb8ac738eab683104b",
+          epaycoKey: PAY_PLATTFORM_KEY,
           epaycoTest: "false",
           epaycoImplementationType: "handler",
-          epaycoIp: "38.156.230.163"
+          epaycoIp: responseIp
       }
       return payment
   }

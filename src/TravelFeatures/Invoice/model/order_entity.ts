@@ -25,7 +25,7 @@ export class Order {
    * @returns {Promise<any>} Una promesa que se resuelve con la respuesta de la API / A promise that resolves with the API response.
    */
   async checkPreOrder(data: any): Promise<any> {
-    return await ASSISTANCE_API.checkPreorderISL({ data });
+    return await ASSISTANCE_API.checkPreorderISL(data);
   }
   /**
    * addOrder
@@ -40,7 +40,7 @@ export class Order {
    * @returns {Promise<any>} Una promesa que se resuelve con la respuesta de la API / A promise that resolves with the API response.
    */
   async addOrder(data: any): Promise<any> {
-    return await ASSISTANCE_API.addOrderISL({ data });
+    return await ASSISTANCE_API.addOrderISL(data);
   }
   /**
    * getIP

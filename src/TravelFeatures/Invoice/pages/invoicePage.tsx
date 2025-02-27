@@ -58,6 +58,7 @@ export default function InvoicePage() {
             const order = new Order();
             const respPre = await order.checkPreOrder(mapPreorder)
             if (respPre && respPre.data) {
+                console.log('Respuesta de checkPreOrder: ', respPre.data)
                 setLoading({
                     isOpen: true,
                     title: 'Espere un momento por favor',
@@ -67,6 +68,7 @@ export default function InvoicePage() {
 
                 const respAdd = await order.addOrder(mapAddOrder)
                 if (respAdd && respAdd.data) {
+                    console.log('Respuesta de addOrder: ', respAdd.data)
                     setLoading({
                         isOpen: true,
                         title: 'Un momento más',
@@ -75,8 +77,9 @@ export default function InvoicePage() {
 
                     const respIP = await order.getIP()
                     if (respIP && respIP.data) {
-                        //const mapPayment = mapperPayment()
-                        //const respPayment = await order.payment(mapPayment)
+                        console.log('Respuesta de la ip: ', respIP.data)
+                        const mapPayment = mapperPayment(respIP.data, respAdd.data)
+                        const respPayment = await order.payment(mapPayment)
                         //TODO: consumir servicio epayco y configurarle la redireccion
                     }
                 }
