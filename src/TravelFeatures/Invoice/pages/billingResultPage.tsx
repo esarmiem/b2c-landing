@@ -1,4 +1,5 @@
 import { PaymentStatus } from "@/TravelCore/Components/Epic/PaymentStatus"
+import { useSearchParams } from "react-router-dom";
 
 // Simulated payment data
 const paymentData = {
@@ -14,6 +15,19 @@ const paymentData = {
 }
 
 export const BillingResultPage: React.FC = () => {
+    const [searchParams] = useSearchParams();
+    const refPayco = searchParams.get("ref_payco");
+
+    //estados, status: "Cotizado|Pendiente|Pagado|Rechazado"
+
+console.log('respuesta: ', searchParams)
+
+    //TODO: 1 consumir servicio: `${process.env.REACT_APP_API_URL}/api/v1/epayco/details/${refPayco}`
+    //TODO: 2 consumir servicio: `${process.env.REACT_APP_API_URL}/api/v1/asistencias/descargarVoucher/${idSale}`
+    //TODO: 3 consumir servicio: `${process.env.REACT_APP_API_URL}/api/v1/asistencias/resumenCompra/${idSale}`
+    //TODO: 4 dejar que el cliente copie la url de respuesta:   pathResponse = `${process.env.REACT_APP_RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${idSale}`;
+
+
     const handleDownloadVoucher = async () => {
       // Implement voucher download logic here
       console.log("Downloading voucher...");

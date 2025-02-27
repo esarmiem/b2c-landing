@@ -163,6 +163,39 @@ export const SERVICE_GET_IP: string =
 export const API_URL_EPAYCO: string =
     import.meta.env.VITE_REACT_APP_API_URL_EPAYCO || "";
 /**
+ * PAY_PLATTFORM_KEY
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const PAY_PLATTFORM_KEY: string =
+    import.meta.env.VITE_REACT_APP_PAY_PLATTFORM_KEY || "";
+/**
+ * CONFIRM_PAY_PLATTFORM_URL
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const CONFIRM_PAY_PLATTFORM_URL: string =
+    import.meta.env.VITE_REACT_APP_CONFIRM_PAY_PLATTFORM_URL || "";
+/**
+ * RESPONSE_PAY_PLATTFORM_URL
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const RESPONSE_PAY_PLATTFORM_URL: string =
+    import.meta.env.VITE_REACT_APP_RESPONSE_PAY_PLATTFORM_URL || "";
+/**
  * USER_NAME
  *
  * Spanish:
