@@ -114,6 +114,31 @@ export interface Billing {
   phone: string
 }
 
+interface EpaycoData {
+  epaycoName: string
+  epaycoDescription: string
+  epaycoInvoice: string
+  epaycoCurrency: string
+  epaycoAmount: string
+  epaycoLang: string
+  epaycoExternal: string
+  epaycoConfirmation: string
+  epaycoResponse: string
+  epaycoNameBilling: string
+  epaycoAddressBilling: string
+  epaycoTypeDocBilling: string
+  epaycoNumberDocBilling: string
+  epaycoExtra1: number
+  epaycoExtra2: string
+  epaycoExtra3: boolean
+  epaycoMethod: string
+  epaycoConfig: string
+  epaycoKey: string
+  epaycoTest: string
+  epaycoImplementationType: string
+  epaycoIp: string
+}
+
 /**
  * Plan
  *

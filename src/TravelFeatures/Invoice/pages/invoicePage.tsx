@@ -13,10 +13,10 @@ import useInvoiceState from "@/TravelFeatures/Invoice/adapterHelper";
 
 export default function InvoicePage() {
     const {data, setData} = useData() || {};
-    const { mapperPreorder, mapperAddOrder } = useInvoiceState()
+    const { mapperPreorder, mapperAddOrder, mapperPayment } = useInvoiceState()
     const [billingData, setBillingData] = useState<Billing>({})
     const [loading, setLoading] = useState<object>({
-        isOpen: true,
+        isOpen: false,
         title: '',
         text: ''
     })
@@ -40,45 +40,49 @@ export default function InvoicePage() {
     };
 
     const handleSendBilling = async () => {
-        setLoading({
-            isOpen: true,
-            title: 'Espere un momento por favor',
-            text: 'Estamos preparando los datos para el pago...'
-        })
-        const mapPreorder: dataPreorder = mapperPreorder()
-
-        const order = new Order();
-        const respPre = await order.checkPreOrder(mapPreorder)
-        if (respPre && respPre.data) {
-            setLoading({
-                isOpen: true,
-                title: 'Espere un momento por favor',
-                text: 'Estamos agregando la orden de compra...'
-            })
-            const mapAddOrder: dataIslOrder = mapperAddOrder(respPre)
-
-            const respAdd = await order.addOrder(mapAddOrder)
-            if (respAdd && respAdd.data) {
-                setLoading({
-                    isOpen: true,
-                    title: 'Un momento más',
-                    text: 'Estamos redirigiendo a pasarela de pago...'
-                })
-
-                const respIP = await order.getIP()
-                if (respAdd && respAdd.data) {
-                    //TODO: consumir servicio epayco y configurarle la redireccion
-                }
-            }
-        }
-
         setData?.((prevData: any) => ({
                 ...prevData,
                 billingData: billingData
             })
         )
 
-        alert('Se envia a pasarela de pagos ePayco.... En proceso')
+        setLoading({
+            isOpen: true,
+            title: 'Espere un momento por favor',
+            text: 'Estamos preparando los datos para el pago...'
+        })
+
+        setTimeout(async () => {
+            const mapPreorder: dataPreorder = mapperPreorder()
+
+            const order = new Order();
+            const respPre = await order.checkPreOrder(mapPreorder)
+            if (respPre && respPre.data) {
+                setLoading({
+                    isOpen: true,
+                    title: 'Espere un momento por favor',
+                    text: 'Estamos agregando la orden de compra...'
+                })
+                const mapAddOrder: dataIslOrder = mapperAddOrder(respPre)
+
+                const respAdd = await order.addOrder(mapAddOrder)
+                if (respAdd && respAdd.data) {
+                    setLoading({
+                        isOpen: true,
+                        title: 'Un momento más',
+                        text: 'Estamos redirigiendo a pasarela de pago...'
+                    })
+
+                    const respIP = await order.getIP()
+                    if (respIP && respIP.data) {
+                        //const mapPayment = mapperPayment()
+                        //const respPayment = await order.payment(mapPayment)
+                        //TODO: consumir servicio epayco y configurarle la redireccion
+                    }
+                }
+            }
+        }, 500)
+
         /*setTimeout(() => {
             console.log('redirigiendo a /invoice')
             //navigate('/invoice/billingResult'); // Navegar a la siguiente pantalla
