@@ -9,18 +9,31 @@ import { DocumentTypeItems } from "@/TravelCore/Utils/interfaces/Document.ts";
 import { PaxForm } from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface BillingFormProps {
-    onChangeField?: (index: number, name: string, value: string) => void;
-    data: PaxForm[]; // `data` es un array de PaxForm
+  onCheck?: (value: string) => void;
+  onChangeField?: (index: number, name: string, value: string) => void;
+  data: PaxForm[];
 }
 
-export function BillingForm({ onChangeField, data }: BillingFormProps) {
-    const { t } = useTranslation(["invoice"]);
-    const [usePassengerInfo, setUsePassengerInfo] = useState(false);
-    const master = useMasters();
+export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) {
+  const { t } = useTranslation(["invoice"]); 
+  const [usePassengerInfo, setUsePassengerInfo] = useState(false);
+  const master = useMasters();
+  const cities = master?.cities?.data as CitiesItems[];
+  const documentType = master?.documents.data?.items as DocumentTypeItems[];
+  const activeCities = cities.filter(city => city.estaActivo);
+  const activeDocumentType = documentType.filter(type => type.estaActivo);
 
-    // Asegúrate de que `cities` y `documentType` no sean `undefined`
-    const cities = (master?.cities?.data as unknown as CitiesItems[]) || [];
-    const documentType = (master?.documents.data?.items as DocumentTypeItems[]) || [];
+  const citiesOptions = activeCities.map(city => (
+      <SelectItem key={city.idCiudad} value={city.idCiudad.toString()}>
+        {city.descripcion}
+      </SelectItem>
+  ));
+
+  const documentTypeOptions = activeDocumentType.map(type => (
+      <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
+        {type.abreviacion} - {type.nombre}
+      </SelectItem>
+  ));
 
     // Filtra las ciudades y tipos de documento activos
     const activeCities = cities.filter(city => city.estaActivo);
@@ -33,11 +46,30 @@ export function BillingForm({ onChangeField, data }: BillingFormProps) {
         </SelectItem>
     ));
 
-    const documentTypeOptions = activeDocumentType.map(type => (
-        <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
-            {type.abreviacion} - {type.nombre}
-        </SelectItem>
-    ));
+  const handleCheckChange = React.useCallback((value: string) => {
+    setUsePassengerInfo(value.target.checked)
+    onCheck?.(value.target.checked);
+  }, [onCheck]);
+
+  return (
+    <>
+      <section className="p-4">
+        <h2 className="mb-4 font-bold text-lg">
+          {t("billing-select-passenger-title")} 
+        </h2>
+        <div className="flex items-center space-x-2">
+          <Input
+            type="checkbox"
+            id="usePassengerInfo"
+            checked={usePassengerInfo}
+            onChange={handleCheckChange}
+            className="h-3 w-3 rounded border-gray-300"
+          />
+          <label htmlFor="usePassengerInfo" className="text-sm font-medium text-gray-700">
+            {t("billing-use-passenger-info")} 
+          </label>
+        </div>
+      </section>
 
     // Maneja cambios en los inputs
     const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

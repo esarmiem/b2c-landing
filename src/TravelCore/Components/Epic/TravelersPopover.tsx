@@ -1,4 +1,4 @@
-import useData from '@/TravelCore/Hooks/useData.ts'
+import useData from '@/TravelCore/Hooks/useData'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -30,20 +30,21 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
     if (payloadOrder?.edades) {
       return payloadOrder.edades.split(',').map((age, index) => ({
         id: index + 1,
-        age: age.trim()
+        age: age.trim() || '0'
       }))
     }
-    return [{ id: 1, age: '' }]
+    return [{ id: 1, age: '0' }]
   }, [payloadOrder?.edades])
 
   const [ages, setAges] = useState<TravelerAge[]>(initialAges)
-  const formattedAges = useMemo(() => ages.map(age => age.age).join(','), [ages])
+  const formattedAges = ages.map(age => age.age).join(',')
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // Solo llamamos onChange si tenemos datos iniciales o si se han hecho cambios
+  //     if (payloadOrder?.edades || ages.some(age => age.age !== '' || '0')) {
   useEffect(() => {
-    // Solo llamamos onChange si tenemos datos iniciales o si se han hecho cambios
-    if (payloadOrder?.edades || ages.some(age => age.age !== '')) {
+    if (payloadOrder?.edades || ages.some(age => age.age !== '' && age.age !== '0')) {
       onChange(formattedAges)
+      console.log('excute')
     }
 
     if (setData) {
@@ -52,13 +53,12 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
         payloadOrder: {
           ...prevData?.payloadOrder,
           cantidadPax: travelers,
-          edades: formattedAges
+          edades: formattedAges !== '0' && formattedAges !== '' ? formattedAges : undefined
         }
       }))
     }
   }, [travelers, ages, formattedAges, payloadOrder?.edades])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (payloadOrder?.cantidadPax && !travelers) {
       setTravelers(payloadOrder.cantidadPax)
@@ -101,7 +101,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
               <Tooltip open={activeTooltip === 'travelers'} onOpenChange={open => setActiveTooltip(open ? 'travelers' : null)}>
                 <TooltipTrigger asChild>
                   <span onMouseEnter={() => setActiveTooltip('travelers')} onMouseLeave={() => setActiveTooltip(null)}>
-                    <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+                    <Info className={`h-4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -120,7 +120,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
             <span
               className={`items-center gap-2 hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500 flex sm:hidden' : ''}`}
             >
-              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              <Info className={`h-4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
               {errors && errors?.length > 0 ? errors : ''}
             </span>
           </div>
@@ -143,13 +143,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="min-w-8 text-center">{travelers}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={handleAddTraveler}
-                    disabled={travelers >= 9} // Agregamos esta propiedad
-                  >
+                  <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleAddTraveler} disabled={travelers >= 9}>
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
@@ -177,16 +171,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
                         min="0"
                         max="120"
                       />
-                      {/*<Input*/}
-                      {/*  type="number"*/}
-                      {/*  value={traveler.age}*/}
-                      {/*  onChange={e => handleAgeChange(traveler.id, e.target.value)}*/}
-                      {/*  className="w-20"*/}
-                      {/*  min="0"*/}
-                      {/*  max="120"*/}
-                      {/*/>*/}
                       <span>{t('label-input-age-travelers-sufix')}</span>
-                      {/* Botón siempre presente, pero invisible y no interactuable cuando travelers === 1 */}
                       <Button
                         variant="ghost"
                         size="icon"
