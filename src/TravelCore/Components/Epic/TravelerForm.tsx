@@ -22,13 +22,22 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
   const master = useMasters();
   const countries = master?.countries.data?.items as CountriesItems[];
   const documentType = master?.documents.data?.items as DocumentTypeItems[];
-  const activeCountries = countries.filter(country => country.estaActivo);
+
+  // Filtrar y ordenar los países activos
+  const activeCountries = countries
+    .filter(country => country.estaActivo)
+    .slice() // Crear una copia superficial para no modificar el array original
+    .sort((a, b) => a.descripcion.localeCompare(b.descripcion)); // Ordenar alfabéticamente
+
   const activeDocumentType = documentType.filter(type => type.estaActivo);
+
+  // Generar opciones de países ordenadas
   const countryOptions = activeCountries.map(country => (
     <SelectItem key={country.idPais} value={country.idPais.toString()}>
       {country.codigoISO} - {country.descripcion}
     </SelectItem>
   ));
+
   const documentTypeOptions = activeDocumentType.map(type => (
     <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
       {type.abreviacion} - {type.nombre}
@@ -37,25 +46,34 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
 
   const travelerData = data.length > 0 ? data[traveler.id] : {} as PaxForm;
 
-  const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'birthdate') {
-      if (!calculateAndCompareAge(value, parseInt(traveler.age))) {
-        setAgeError("La fecha de nacimiento debe coincidir con la edad del pasajero.");
-      } else {
-        setAgeError("");
+  const handleInputChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      if (name === 'birthdate') {
+        if (!calculateAndCompareAge(value, parseInt(traveler.age))) {
+          setAgeError("La fecha de nacimiento debe coincidir con la edad del pasajero.");
+        } else {
+          setAgeError("");
+        }
       }
-    }
-    onChangeField?.(traveler.id, name, value);
-  }, [traveler.id, onChangeField, traveler.age]);
+      onChangeField?.(traveler.id, name, value);
+    },
+    [traveler.id, onChangeField, traveler.age]
+  );
 
-  const handleSelectChange = React.useCallback((name: string, value: string) => {
-    onChangeField?.(traveler.id, name, value);
-  }, [traveler.id, onChangeField]);
+  const handleSelectChange = React.useCallback(
+    (name: string, value: string) => {
+      onChangeField?.(traveler.id, name, value);
+    },
+    [traveler.id, onChangeField]
+  );
 
-  const handlePhoneNumberChange = React.useCallback((name: string, value: string) => {
-    onChangeField?.(traveler.id, name, value);
-  }, [traveler.id, onChangeField]);
+  const handlePhoneNumberChange = React.useCallback(
+    (name: string, value: string) => {
+      onChangeField?.(traveler.id, name, value);
+    },
+    [traveler.id, onChangeField]
+  );
 
   return (
     <section key={traveler.id} className="space-y-4">
@@ -65,9 +83,9 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
           {t("label-traveler")} {traveler.id} - {traveler.age} {t("label-years")}
         </h1>
       </div>
-
       <div className="space-y-4 p-4">
         <div className="grid md:grid-cols-2 gap-4">
+          {/* Nombre */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-first-name")}</label>
             <Input
@@ -78,6 +96,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               onChange={handleInputChange}
             />
           </div>
+
+          {/* Apellido */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-last-name")}</label>
             <Input
@@ -88,6 +108,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               onChange={handleInputChange}
             />
           </div>
+
+          {/* Tipo de documento */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-type")}</label>
             <Select
@@ -103,6 +125,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               </SelectContent>
             </Select>
           </div>
+
+          {/* Número de documento */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-number")}</label>
             <Input
@@ -113,6 +137,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               onChange={handleInputChange}
             />
           </div>
+
+          {/* Fecha de nacimiento */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-birthdate")}</label>
             <Input
@@ -124,6 +150,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
             />
             <span className="text-xs text-red-500">{ageError}</span>
           </div>
+
+          {/* Edad */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-age")}</label>
@@ -134,6 +162,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
                 className="rounded-3xl border-gray-300 p-6"
               />
             </div>
+
+            {/* Género */}
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-gender")}</label>
               <Select
@@ -151,6 +181,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               </Select>
             </div>
           </div>
+
+          {/* Nacionalidad */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-nationality")}</label>
             <Select
@@ -166,6 +198,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               </SelectContent>
             </Select>
           </div>
+
+          {/* País de residencia */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-residence-country")}</label>
             <Select
@@ -181,11 +215,15 @@ export const TravelerForm = memo(({ traveler, onChangeField, data }: TravelFormP
               </SelectContent>
             </Select>
           </div>
+
+          {/* Teléfono */}
           <PhoneNumberForm
             celType={traveler.phone}
             value={{ phone: travelerData.phone, countryCode: travelerData.countryCode }}
             onChange={handlePhoneNumberChange}
           />
+
+          {/* Correo electrónico */}
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-email")}</label>
             <Input
