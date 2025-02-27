@@ -28,7 +28,7 @@ export default function HomePage() {
       const [isOpenContactModal, setIsOpenContactModal] = useState(false);
     */
 
-  const images = ['../../../../Assets/slide 1.webp', '../../../../Assets/slide 2.webp', '../../../../Assets/slide 3.webp']
+  const images = ['../../../../Assets/slide4.webp', '../../../../Assets/slide5.webp', '../../../../Assets/slide6.webp']
 
   /*  const handleSearch = () => {
     //Llamar al modal
