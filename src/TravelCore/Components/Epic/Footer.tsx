@@ -17,26 +17,26 @@ export const Footer = () => {
             <p className="text-sm mb-4">{t("label-title-social")}</p>
             <div className="flex justify-start sm:justify-start lg:justify-center gap-6">
               <Link
-                href="#"
+                href="javascript:void(0)"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Instagram className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
               <Link
-                href="#"
+                href="javascript:void(0)"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Facebook className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
               <Link
-                href="#"
+                href="javascript:void(0)"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Twitter className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
 
               <Link
-                href="#"
+                href="javascript:void(0)"
                 className="hover:text-white text-gray-300 transition-colors duration-200 h-9 w-9 sm:h-5 sm:w-5"
               >
                 <svg
@@ -58,7 +58,7 @@ export const Footer = () => {
               </Link>
 
               <Link
-                href="#"
+                href="javascript:void(0)"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Linkedin className="h-9 w-9 sm:h-5 sm:w-5" />
@@ -73,7 +73,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-assistance")}
@@ -81,7 +81,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-comms")}
@@ -97,7 +97,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-about")}
@@ -105,7 +105,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-faqs")}
@@ -113,7 +113,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-contact")}
@@ -129,7 +129,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-privacy")}
@@ -137,7 +137,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-terms")}
@@ -145,7 +145,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-cookies")}
@@ -153,7 +153,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="javascript:void(0)"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-conditions")}

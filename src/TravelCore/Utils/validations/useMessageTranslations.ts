@@ -6,6 +6,7 @@ export const useMessageTranslations = () => {
   const msg = {
     required: t('validation.required'),
     requiredAge: t('validation.requiredAge'),
+    minAge: t('validation.minAge'),
     email: t('validation.email'),
     phone: t('validation.phone'),
     password: t('validation.password'),

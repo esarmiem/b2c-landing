@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom'; // Importamos useLocation
 
 interface StepProps {
   number: number;
@@ -37,7 +38,14 @@ const Step: FC<StepProps> = ({ number, text, isActive = false, showDivider = fal
 };
 
 export const Breadcrumb: FC = () => {
-  const { t } = useTranslation(["products"]); 
+  const { t } = useTranslation(["products"]);
+  const location = useLocation(); // Obtenemos la ubicación actual
+
+  // Determinamos qué step está activo según la ruta
+  const currentPath = location.pathname;
+  const isStep1Active = currentPath === '/quote/travel';
+  const isStep2Active = currentPath === '/traveler';
+  const isStep3Active = currentPath === '/invoice';
 
   return (
     <div className="w-full bg-gray-50">
@@ -46,17 +54,19 @@ export const Breadcrumb: FC = () => {
           <Step
             number={1}
             text={t("label-step-1")}
-            isActive={true}
+            isActive={isStep1Active} // Activamos según la ruta
             showDivider={true}
           />
-          <Step 
-            number={2} 
+          <Step
+            number={2}
             text={t("label-step-2")}
-            showDivider={true} 
+            isActive={isStep2Active} // Activamos según la ruta
+            showDivider={true}
           />
-          <Step 
-            number={3} 
+          <Step
+            number={3}
             text={t("label-step-3")}
+            isActive={isStep3Active} // Activamos según la ruta
           />
         </div>
       </div>

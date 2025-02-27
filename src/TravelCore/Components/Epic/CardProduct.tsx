@@ -1,8 +1,8 @@
 import useData from '@/TravelCore/Hooks/useData.ts'
 import { formatCurrency } from '@/TravelCore/Utils/format.ts'
-import type { Cobertura, Plan, Product } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { Cobertura, Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { CircleCheck } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ModalProductDetails from './ModalProductDetails'
 import ModalUpgrades from './ModalUpgrades'
@@ -14,7 +14,6 @@ interface CardProductProps {
 
 const CardProduct = ({ plan, viewType }: CardProductProps) => {
   const { t } = useTranslation(['products'])
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { i18n } = useTranslation()
   const { setData } = useData() || {}
@@ -23,43 +22,45 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
   const rawPrice = i18n.language === 'es' ? plan.ValorPesos : plan.Valor
   const price = i18n.language === 'es' ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
   const recommended = plan.DescripcionDescuentosDolares.porcentaje !== '0'
-  const originalPrice = recommended
-    ? i18n.language === 'es'
+
+  const originalPrice = (() => {
+    if (!recommended) return ''
+    return i18n.language === 'es'
       ? formatCurrency(plan.DescripcionDescuentosPesos.valorTotal.toString(), 'COP')
       : formatCurrency(plan.DescripcionDescuentosDolares.valorTotal.toString(), 'USD')
-    : ''
+  })()
 
-  const openModal = () => {
-    setData?.(prevData => ({
-      ...prevData,
-      selectedPlan: plan.IdPlan
-    }))
-    setSelectedProduct({
-      id: plan.IdPlan,
-      name: plan.Categoria,
-      price: Number.parseFloat(rawPrice),
-      description: ''
-    })
+  const productDetails = {
+    name: plan.Categoria,
+    subtitle: plan.nombre,
+    typeOfProduct: plan.TipoViaje,
+    price: price,
+    originalPrice: originalPrice,
+    details: plan.cobertura.map((detail: Cobertura) => detail.name)
+  }
+
+  // Funciones de callback para evitar recreaciones
+  const openModal = useCallback(() => {
+    if (setData) {
+      setData(prevData => ({
+        ...prevData,
+        selectedPlan: plan.IdPlan
+      }))
+    }
     setIsModalOpen(true)
-  }
+  }, [plan.IdPlan, setData])
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false)
-  }
+  }, [])
 
-  const openDetailsModal = () => {
-    setSelectedProduct({
-      id: 1,
-      name: 'title',
-      price: Number.parseFloat(price.replace(/[^0-9.]/g, '')),
-      description: 'Detalles adicionales del producto y coberturas.'
-    })
+  const openDetailsModal = useCallback(() => {
     setIsDetailsModalOpen(true)
-  }
+  }, [])
 
-  const closeDetailsModal = () => {
+  const closeDetailsModal = useCallback(() => {
     setIsDetailsModalOpen(false)
-  }
+  }, [])
 
   return (
     <>
@@ -131,7 +132,7 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
               <p className={`my-0 ${recommended ? 'text-white' : 'text-neutral-800'}`}>{plan.nombre}</p>
               <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
-                {price} <span className="text-lg">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                {price} <span className="text-xs">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
               </h3>
               {recommended && (
                 <span className={`${recommended ? 'text-black' : 'text-neutral-400'} font-semibold line-through text-lg`}>
@@ -173,21 +174,8 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
           </section>
         </div>
       )}
-      {isModalOpen && selectedProduct && <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} product={selectedProduct} />}
-      {isDetailsModalOpen && (
-        <ModalProductDetails
-          isOpen={isDetailsModalOpen}
-          onClose={closeDetailsModal}
-          product={{
-            name: plan.Categoria,
-            subtitle: plan.nombre,
-            typeOfProduct: plan.TipoViaje,
-            price: price,
-            originalPrice: originalPrice,
-            details: plan.cobertura.map((detail: Cobertura) => detail.name)
-          }}
-        />
-      )}
+      {isModalOpen && <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} plan={plan} />}
+      {isDetailsModalOpen && <ModalProductDetails isOpen={isDetailsModalOpen} onClose={closeDetailsModal} product={productDetails} />}
     </>
   )
 }

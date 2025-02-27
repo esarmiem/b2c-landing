@@ -7,7 +7,8 @@ import { ContinuarButton } from '@/TravelCore/Components/Raw/ContinuarButton.tsx
 import { GoBack } from '@/TravelCore/Components/Raw/GoBack.tsx'
 import useData from '@/TravelCore/Hooks/useData.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters.ts'
-import type { EmergencyContactType, PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
+import { calculateAge } from '@/TravelCore/Utils/dates.ts'
+import type { EmergencyContactType, Pax, PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { createTravelers } from '@/TravelCore/Utils/object.ts'
 import { Masters } from '@/TravelFeatures/Traveler/model/masters_entity.ts'
 import { useCallback, useEffect, useState } from 'react'
@@ -59,32 +60,9 @@ export default function TravelForm() {
   }, [data])
 
   const travelers = createTravelers(data?.payloadOrder?.cantidadPax ?? 0, data?.payloadOrder?.edades ?? '')
-
+console.log('travelers', travelers)
   const handleSendTravelers = async () => {
     console.log(';;;;;;;;;;;;;;: ', travelersData)
-    /*
-      const paxArray: Pax[] = travelersData
-          .filter((item): item is NonNullable<typeof item> => item !== undefined)
-          .map((item) => ({
-              apellidos: item.lastName,
-              apellidosContactoEmergencia: emergencyContact.lastName,
-              document: item.documentNumber,
-              edad: calculateAge(item.birthdate),
-              email: item.email,
-              idNacionalidad: item.nationality,
-              idPais: item.residenceCountry,
-              idTipoDocumento: parseInt(item.documentType),
-              medical: "",
-              nacimientos: item.birthdate,
-              nombre: item.firstName,
-              nombresContactoEmergencia: emergencyContact.firstName,
-              sexo: item.gender,
-              telefono1ContactoEmergencia: emergencyContact.phone1,
-              telefonos: emergencyContact.phone2
-          }));
-
-      console.log('guardando travelersData: ', travelersData, paxArray);
-*/
 
     setData?.((prevData: any) => ({
       ...prevData,
@@ -107,6 +85,7 @@ export default function TravelForm() {
   }
 
   const handleChangeTravelers = useCallback((index: number, name: string, value: string) => {
+    console.log('index', index)
     setTravelersData(prevData => {
       const updatedTravelers = [...prevData]
       updatedTravelers[index] = {
@@ -134,7 +113,7 @@ export default function TravelForm() {
             <HeaderTraveler traveler={travelers} />
             <form className="border border-gray-200 rounded-2xl space-y-4">
               {travelers.map(traveler => (
-                <TravelerForm key={traveler.id} traveler={traveler} onChangeField={handleChangeTravelers} data={travelersData} />
+                <TravelerForm key={traveler.id} traveler={traveler} onChangeField={handleChangeTravelers} dataTraveler={travelersData[traveler?.id] ? travelersData[traveler?.id] : {}} />
               ))}
               <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency} />
             </form>

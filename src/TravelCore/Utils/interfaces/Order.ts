@@ -104,6 +104,45 @@ export interface EmergencyContactType {
   phone2: string
 }
 
+export interface Billing {
+  additional: string
+  address: string
+  billingCity: string
+  billingCountry: string
+  countryCode: string
+  documentNumber: string
+  documentType: string
+  email: string
+  firstName: string
+  lastName: string
+  phone: string
+}
+
+interface EpaycoData {
+  epaycoName: string
+  epaycoDescription: string
+  epaycoInvoice: string
+  epaycoCurrency: string
+  epaycoAmount: string
+  epaycoLang: string
+  epaycoExternal: string
+  epaycoConfirmation: string
+  epaycoResponse: string
+  epaycoNameBilling: string
+  epaycoAddressBilling: string
+  epaycoTypeDocBilling: string
+  epaycoNumberDocBilling: string
+  epaycoExtra1: number
+  epaycoExtra2: string
+  epaycoExtra3: boolean
+  epaycoMethod: string
+  epaycoConfig: string
+  epaycoKey: string
+  epaycoTest: string
+  epaycoImplementationType: string
+  epaycoIp: string
+}
+
 /**
  * Plan
  *
@@ -204,8 +243,8 @@ export interface dataIslOrder {
   idProspecto: number
   idUser: number
   idplan: number
-  moneda: number
-  nombrecontacto: number
+  moneda: string
+  nombrecontacto: string
   numeroViajeros: number
   paisdestino: number
   paisorigen: number
@@ -225,17 +264,20 @@ export interface dataIslOrder {
 
 export interface TravellerQuotation {
   id: number
-  ValorPesos: string // al que se le suman las upgrades en dolares
-  valorUpgradesPesos: string // en pesos
-  valorUpgradesDolares: string // en dolares
-  upgrades: string[]
-  totalPlan: string
+  totalPlanTravelerPesos: string
+  totalPlanTravelerDolar: string
+  totalPlanWhitUpgradesPerTravelerPeso: string
+  totalPlanWhitUpgradesPerTravelerDolar: string
+  valorUpgradesPesos: string
+  valorUpgradesDolar: string
+  upgrades: { id: string; name: string }[]
 }
 
 export type Quotation = {
-  productId: number
+  planId: number
+  totalAllTravelersPesos: string
+  totalAllTravelersDolar: string
   travellers: TravellerQuotation[]
-  total: string
 }
 /**
  * dataPreorder
@@ -297,6 +339,27 @@ export interface CheckPreorderISLResponse {
     El_valor_de_cambio_fue_ajustado_a: string
   }
   idCliente: number
+}
+/**
+ * AddOrderISLResponse
+ *
+ * Spanish:
+ * Define la estructura de la respuesta de la API para la agregacion de una orden ISL.
+ * Contiene un objeto con diversos campos informativos y el identificador de la venta.
+ *
+ * English:
+ * Defines the structure of the API response for adding an ISL order.
+ * It contains a object with various informative fields and the sale's identifier.
+ */
+export interface AddOrderISLResponse {
+  "": string
+  El_valor_de_cambio_fue_ajustado_a: string
+  codigo: string
+  documento: string
+  idVenta: number
+  referencia: string
+  status: string
+  valor: string
 }
 
 export interface Product {

@@ -19,10 +19,10 @@ import { useNavigate } from 'react-router-dom'
 
 export default function HomePage() {
   const { t } = useTranslation(['home'])
-
-  const { HandleGetOrder, isDataOrderValid } = useHomeState()
   const { data } = useData() || {}
   const navigate = useNavigate()
+
+  const { HandleGetOrder, isDataOrderValid } = useHomeState()
   const [isLoadingOrders, setIsLoadingOrders] = useState(false)
   /*
       const [isOpenContactModal, setIsOpenContactModal] = useState(false);
