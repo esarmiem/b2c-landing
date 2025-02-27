@@ -93,7 +93,7 @@ export const DropdownHeader: React.FC = () => {
                 <path d="M16 6v4" />
               </svg>
               <Link 
-                href="#"
+                href="javascript:void(0)"
                 target=""
                 rel="noopener noreferrer" 
                 className="text-sm font-medium ml-2 text-gray-600 hover:text-gray-900"
