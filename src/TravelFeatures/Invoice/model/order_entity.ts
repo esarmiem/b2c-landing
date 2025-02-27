@@ -57,4 +57,19 @@ export class Order {
   async getIP(): Promise<any> {
     return await ASSISTANCE_API.getIpEpayco();
   }
+  /**
+   * payment
+   *
+   * Spanish:
+   * Método asíncrono que se comunica con epayco. envia la operacion de pago a la API de epayco.
+   *
+   * English:
+   * Asynchronous method that epayco connect. It getting the data from the API epayco.
+   *
+   * @param {any} data - Los datos de la orden a agregar / The order data to be added.
+   * @returns {Promise<any>} Una promesa que se resuelve con la respuesta de la API / A promise that resolves with the API response.
+   */
+  async payment(data: any): Promise<any> {
+    return await ASSISTANCE_API.paymentEpayco(data);
+  }
 }

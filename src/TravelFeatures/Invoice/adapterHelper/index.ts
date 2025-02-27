@@ -6,7 +6,8 @@ import {
     dataIslOrder,
     dataPreorder,
     Pax,
-    Upgrade
+    Upgrade,
+    EpaycoData
 } from "@/TravelCore/Utils/interfaces/Order.ts";
 import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
 import { v4 as uuidv4 } from 'uuid';
@@ -139,5 +140,33 @@ export default function useInvoiceState() {
       return preOrder
   }
 
-  return { mapperPreorder, mapperAddOrder }
+  const mapperPayment = (responseIp ): EpaycoData => {
+      const payment = {
+          epaycoName: "DISCOVER",
+          epaycoDescription: "Protección standard 35.000 USD",
+          epaycoInvoice: "TK-MGG5EF",
+          epaycoCurrency: "COP",
+          epaycoAmount: "1301030.5",
+          epaycoLang: "es",
+          epaycoExternal: "true",
+          epaycoConfirmation: "https%3A%2F%2Fapi.mitravelkit.com%2Fapi%2Fv1%2Fepayco%2FConfirm",
+          epaycoResponse: "https%3A%2F%2Fb2c.mitravelkit.com%2Fpago%2Frespuesta",
+          epaycoNameBilling: "rerer Rivera",
+          epaycoAddressBilling: "av 26 # 52 - 200",
+          epaycoTypeDocBilling: "CC",
+          epaycoNumberDocBilling: "34567654",
+          epaycoExtra1: 520,
+          epaycoExtra2: "es",
+          epaycoExtra3: true,
+          epaycoMethod: "GET",
+          epaycoConfig: "{}",
+          epaycoKey: "8acda82732dc75fb8ac738eab683104b",
+          epaycoTest: "false",
+          epaycoImplementationType: "handler",
+          epaycoIp: "38.156.230.163"
+      }
+      return payment
+  }
+
+  return { mapperPreorder, mapperAddOrder, mapperPayment }
 }

@@ -225,5 +225,29 @@ export const ASSISTANCE_API = {
       data: null,
       session: { token: GET_TOKEN }
     })
+  },
+  /**
+   * paymentEpayco
+   *
+   * Spanish:
+   * Realiza una petición POST para verificar una preorden en el sistema ISL.
+   * Envía los datos de preorden en formato JSON y utiliza un token de sesión para la autenticación.
+   *
+   * English:
+   * Performs a POST request to check a preorder in the ISL system.
+   * It sends the preorder data as JSON and uses a session token for authentication.
+   *
+   * @param {dataPreorder} data - Datos de la preorden que se deben verificar.
+   *                              / Preorder data that needs to be checked.
+   * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
+   *                                              / A promise that resolves with the API response.
+   */
+  paymentEpayco: (data: any): Promise<any> => {
+    return axiosHttp({
+      pathEpayco: `${API_URL_EPAYCO}/${SERVICE_GET_IP}`,
+      method: "POST",
+      data: data,
+      session: { token: GET_TOKEN }
+    })
   }
 }
