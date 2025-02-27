@@ -90,25 +90,13 @@ export default function InvoicePage() {
 
     }
 
+    // Función para manejar cambios en los campos del formulario
     const handleChangeBilling = useCallback( (name: string, value: string) => {
         setBillingData((prevData) => ({
             ...prevData,
-            billingData: billingData,
+            [name]: value,
         }));
-        alert('Se envia a pasarela de pagos ePayco.... En proceso');
-    };
-
-    // Función para manejar cambios en los campos del formulario
-    const handleChangeBilling = useCallback((index: number, name: string, value: string) => {
-        setBillingData((prevData) => {
-            const newData = [...prevData];
-            newData[index] = {
-                ...newData[index],
-                [name]: value,
-            };
-            return newData;
-        });
-    }, []);
+    }, [])
 
 console.log('billingData', billingData)
 
