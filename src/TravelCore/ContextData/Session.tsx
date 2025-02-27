@@ -1,13 +1,5 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-  ReactElement,
-  Dispatch,
-  SetStateAction,
-  ReactNode,
-} from "react";
-import { getPersistedSession, saveSession } from "./Persistence/session.ts";
+import { type Dispatch, type ReactElement, type ReactNode, type SetStateAction, createContext, useEffect, useState } from 'react'
+import { getPersistedSession, saveSession } from './Persistence/session.ts'
 
 /**
  * SessionState
@@ -18,7 +10,7 @@ import { getPersistedSession, saveSession } from "./Persistence/session.ts";
  * English:
  * Defines the type for the session state, which is an object with string keys and values.
  */
-type SessionState = Record<string, string>;
+type SessionState = Record<string, string>
 
 /**
  * SessionContextType
@@ -32,10 +24,9 @@ type SessionState = Record<string, string>;
  * and optionally the tokens 'token' and 'token_isl'.
  */
 interface SessionContextType {
-  session: SessionState;
-  setSession: Dispatch<SetStateAction<SessionState>>;
-  token?: string;
-  token_isl?: string;
+  session: SessionState
+  setSession: Dispatch<SetStateAction<SessionState>>
+  token?: string
 }
 
 /**
@@ -47,9 +38,7 @@ interface SessionContextType {
  * English:
  * Creates the session context with an initial value of undefined.
  */
-export const SessionContext = createContext<SessionContextType | undefined>(
-  undefined,
-);
+export const SessionContext = createContext<SessionContextType | undefined>(undefined)
 
 /**
  * SessionProviderProps
@@ -61,7 +50,7 @@ export const SessionContext = createContext<SessionContextType | undefined>(
  * Defines the props for the session provider component, which requires child elements.
  */
 interface SessionProviderProps {
-  children: ReactNode | ReactNode[];
+  children: ReactNode | ReactNode[]
 }
 
 /**
@@ -81,17 +70,15 @@ interface SessionProviderProps {
  * @param {SessionProviderProps} props - Component properties including the child elements.
  * @returns {ReactElement} A React element that provides the session context to its children.
  */
-export function SessionProvider({
-  children,
-}: SessionProviderProps): ReactElement {
+export function SessionProvider({ children }: SessionProviderProps): ReactElement {
   // Inicializa el estado de la sesión utilizando los datos persistidos.
   // Initialize the session state using the persisted data.
-  const [session, setSession] = useState<SessionState>(getPersistedSession);
+  const [session, setSession] = useState<SessionState>(getPersistedSession)
   // Guarda en sessionStorage cada vez que el estado de la sesión cambia.
   // Save the session state to sessionStorage whenever it changes.
   useEffect(() => {
-    saveSession(session);
-  }, [session]);
+    saveSession(session)
+  }, [session])
   // Proporciona el contexto de sesión a los componentes hijos.
   // Provide the session context to child components.
   return (
@@ -99,11 +86,10 @@ export function SessionProvider({
       value={{
         session,
         setSession,
-        token: session.token,
-        token_isl: session.token_isl,
+        token: session.token
       }}
     >
       {children}
     </SessionContext.Provider>
-  );
+  )
 }

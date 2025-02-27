@@ -21,6 +21,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/plan-upgrades/, '')
       },
+      '/epayco': {
+        target: 'https://apify-private.epayco.co',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/epayco/, '')
+      },
     }
   },
   plugins: [react()],

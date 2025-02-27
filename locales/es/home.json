@@ -70,6 +70,7 @@
     "requiredAge": "La edad es requerida",
     "email": "Ingrese un email válido",
     "phone": "Ingrese un número de teléfono válido",
+    "minAge": "La edad mínima es 18",
     "password": "La contraseña debe tener al menos 8 caracteres, una letra y un número",
     "url": "Ingrese una URL válida",
     "numbers": "Este campo solo acepta números",

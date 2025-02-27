@@ -24,8 +24,9 @@ interface AuthResponse {
   }
   error?: boolean
 }
+
 /**
- * useHomeState
+ * index
  *
  * Spanish:
  * Hook personalizado para gestionar el estado de la página de inicio. Este hook se encarga de:
@@ -42,22 +43,23 @@ interface AuthResponse {
  * @returns {Object} Un objeto que contiene las funciones HandleGetOrder e isDataOrderValid.
  *                   / An object containing the HandleGetOrder and isDataOrderValid functions.
  */
-export default function useHomeState() {
+const useHomeState = () => {
   // Obtener la función para establecer la sesión y la data del pedido.
   // Get the function to set the session and order data.
   const { setSession } = useSession() || {}
   const { setData } = useData() || {}
   const masterContext = useMasters()
-  // Efecto de inicialización: se ejecuta una vez al montar el componente.
-  // Initialization effect: runs once when the component mounts.
-  useEffect(() => {
-    const handleInitialization = async () => {
-      const isAuthenticated = await validateOrGetAuthentication()
-      if (isAuthenticated) await getMasters()
-    }
 
-    handleInitialization()
+  useEffect(() => {
+    const initialize = async () => {
+      const isAuthenticated = await validateOrGetAuthentication()
+      if (isAuthenticated) {
+        await getMasters()
+      }
+    }
+    initialize()
   }, [])
+
   /**
    * validateOrGetAuthentication
    *
@@ -85,6 +87,7 @@ export default function useHomeState() {
         }
 
         setSession?.(sessionData)
+        sessionStorage.setItem('token', response.data.payload.accessToken)
         return true
       }
     } catch (error) {
@@ -150,7 +153,7 @@ export default function useHomeState() {
    * @returns {Promise<any>} Una promesa que se resuelve con el ID del prospecto si la orden es válida, de lo contrario null.
    *                         / A promise that resolves with the prospect ID if the order is valid, otherwise null.
    */
-  const HandleGetOrder = async (orderPayload: dataOrder) => {
+  const HandleGetOrder = async (orderPayload: dataOrder): Promise<any> => {
     const travelAssistance = new TravelAssistance()
     try {
       const response = await travelAssistance.getOrderPriceByAge(orderPayload)
@@ -184,3 +187,22 @@ export default function useHomeState() {
 
   return { HandleGetOrder, isDataOrderValid }
 }
+/**
+ * index
+ *
+ * Spanish:
+ * Hook personalizado para gestionar el estado de la página de inicio. Este hook se encarga de:
+ * - Ejecutar la autenticación del usuario y establecer la sesión.
+ * - Cargar los datos maestros (master data) si la autenticación es exitosa.
+ * - Proveer funciones para obtener datos de órdenes y validar la carga útil de una orden.
+ *
+ * English:
+ * Custom hook to manage the home page state. This hook is responsible for:
+ * - Executing user authentication and setting the session.
+ * - Loading master data if authentication is successful.
+ * - Providing functions to fetch order data and validate the order payload.
+ *
+ * @returns {Object} Un objeto que contiene las funciones HandleGetOrder e isDataOrderValid.
+ *                   / An object containing the HandleGetOrder and isDataOrderValid functions.
+ */
+export default useHomeState
