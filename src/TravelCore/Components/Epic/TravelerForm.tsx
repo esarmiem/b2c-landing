@@ -23,7 +23,10 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
   const master = useMasters();
   const countries = master?.countries.data?.items as CountriesItems[];
   const documentType = master?.documents.data?.items as DocumentTypeItems[];
-  const activeCountries = countries.filter(country => country.estaActivo);
+  const activeCountries = countries
+  .filter(country => country.estaActivo)
+  .slice() // Crear una copia superficial para no modificar el array original
+  .sort((a, b) => a.descripcion.localeCompare(b.descripcion)); // Ordenar alfabéticamente
   const activeDocumentType = documentType.filter(type => type.estaActivo);
   const countryOptions = activeCountries.map(country => (
       <SelectItem key={country.idPais} value={country.idPais.toString()}>
