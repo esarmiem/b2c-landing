@@ -21,7 +21,10 @@ export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) 
   const master = useMasters();
   const cities = master?.cities?.data as CitiesItems[];
   const documentType = master?.documents.data?.items as DocumentTypeItems[];
-  const activeCities = cities.filter(city => city.estaActivo);
+  const activeCities = cities
+  .filter(city => city.estaActivo)
+  .slice() // Crear una copia superficial para no modificar el array original
+  .sort((a, b) => a.descripcion.localeCompare(b.descripcion)); // Ordenar alfabéticamente
   const activeDocumentType = documentType.filter(type => type.estaActivo);
 
   const citiesOptions = activeCities.map(city => (
