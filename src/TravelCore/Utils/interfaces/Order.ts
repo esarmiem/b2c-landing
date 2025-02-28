@@ -102,6 +102,8 @@ export interface EmergencyContactType {
   lastName: string
   phone1: string
   phone2: string
+  indicative1: string
+  indicative2: string
 }
 
 export interface Billing {
@@ -118,7 +120,7 @@ export interface Billing {
   phone: string
 }
 
-interface EpaycoData {
+export interface EpaycoData {
   epaycoName: string
   epaycoDescription: string
   epaycoInvoice: string
@@ -314,7 +316,7 @@ export interface dataPreorder {
   paisdestino: number
   paisorigen: string
   referencia: string
-  telefonoCliente: number
+  telefonoCliente: string
   telefonocontacto: string
   upgrades: string
 }

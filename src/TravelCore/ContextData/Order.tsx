@@ -8,6 +8,7 @@ import {
 } from "react";
 import { getPersisted, savePersistense } from "./Persistence/data";
 import { ResponseData } from "@/TravelCore/Utils/interfaces/Order.ts";
+import type { GlobalData } from '@/TravelCore/Utils/interfaces/context.ts'
 
 // Clave de almacenamiento para el pedido en localStorage.
 // Storage key for the order in localStorage.
@@ -65,7 +66,7 @@ export function OrderProvider({ children }: OrderProviderProps): JSX.Element {
   // Save to localStorage whenever the order state changes.
   useEffect(() => {
     if (order !== null) {
-      savePersistense(order, STORAGE_KEY);
+      savePersistense(order as GlobalData, STORAGE_KEY);
     }
   }, [order]);
 

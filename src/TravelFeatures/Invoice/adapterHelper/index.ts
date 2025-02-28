@@ -6,7 +6,6 @@ import {
     dataIslOrder,
     dataPreorder,
     Pax,
-    Upgrade,
     EpaycoData
 } from "@/TravelCore/Utils/interfaces/Order.ts";
 import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
@@ -43,125 +42,125 @@ export default function useInvoiceState() {
         const paxArray: Pax[] = travelersData
             .filter((item): item is NonNullable<typeof item> => item !== undefined)
             .map((item) => ({
-                apellidos: item.lastName,
-                apellidosContactoEmergencia: emergencyContact.lastName,
-                document: item.documentNumber,
-                edad: calculateAge(item.birthdate),
-                email: item.email,
-                idNacionalidad: item.nationality,
-                idPais: item.residenceCountry,
-                idTipoDocumento: parseInt(item.documentType),
+                apellidos: item?.lastName,
+                apellidosContactoEmergencia: emergencyContact?.lastName,
+                document: item?.documentNumber,
+                edad: calculateAge(item?.birthdate),
+                email: item?.email,
+                idNacionalidad: item?.nationality,
+                idPais: item?.residenceCountry,
+                idTipoDocumento: parseInt(item?.documentType),
                 medical: "",
-                nacimientos: item.birthdate,
-                nombre: item.firstName,
-                nombresContactoEmergencia: emergencyContact.firstName,
-                sexo: item.gender,
-                telefono1ContactoEmergencia: emergencyContact.phone1,
-                telefonos: emergencyContact.phone2
+                nacimientos: item?.birthdate,
+                nombre: item?.firstName,
+                nombresContactoEmergencia: emergencyContact?.firstName,
+                sexo: item?.gender,
+                telefono1ContactoEmergencia: emergencyContact?.phone1,
+                telefonos: emergencyContact?.phone2
             }));
         return paxArray
     }
 
   const mapperAddOrder = (preResponse: CheckPreorderISLResponse):dataIslOrder => {
-      const savedTravelers = data.travelersData[0]
-      const savedOrder = data.payloadOrder
-      const savedResponseOrder = data.responseOrder
-      const savedQuotation = data.travelerQuotation
-      const selectedPlan = savedResponseOrder.planes.find(plan => plan.IdPlan === savedQuotation.productId)
+      const savedTravelers = data?.travelersData[0]
+      const savedOrder = data?.payloadOrder
+      const savedResponseOrder = data?.responseOrder
+      const savedQuotation = data?.travelerQuotation
+      const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedQuotation.productId)
 
       const order: dataIslOrder = {
-          ValorTotalSinDescuentoDolares: selectedPlan.DescripcionDescuentosDolares.valorTotal,
-          ValorTotalSinDescuentoPesos: selectedPlan.DescripcionDescuentosPesos.valorTotal,
+          ValorTotalSinDescuentoDolares: selectedPlan?.DescripcionDescuentosDolares?.valorTotal,
+          ValorTotalSinDescuentoPesos: selectedPlan?.DescripcionDescuentosPesos?.valorTotal,
           consideracionesgenerales: "ninguna",
           detalleUpgrades: [],
-          emailcontacto: savedTravelers.email,
-          fechallegada: savedOrder.llegada,
-          fechasalida: savedOrder.salida,
-          idCliente: preResponse.idCliente,
-          idDestino: savedOrder.destino,
-          idOrigen: savedOrder.pais,
-          idProducto: savedOrder.numeroPregunta,
-          idProspecto: savedResponseOrder.idProspecto,
-          idUser: savedOrder.idUser,
-          idplan: savedQuotation.productId,
+          emailcontacto: savedTravelers?.email,
+          fechallegada: savedOrder?.llegada,
+          fechasalida: savedOrder?.salida,
+          idCliente: preResponse?.idCliente,
+          idDestino: savedOrder?.destino,
+          idOrigen: savedOrder?.pais,
+          idProducto: savedOrder?.numeroPregunta,
+          idProspecto: savedResponseOrder?.idProspecto,
+          idUser: savedOrder?.idUser,
+          idplan: savedQuotation?.productId,
           moneda: "COP",
-          nombrecontacto: savedTravelers.firstName + " " + savedTravelers.lastName,
-          numeroViajeros: savedOrder.cantidadPax,
-          paisdestino: savedOrder.destino,
-          paisorigen: savedOrder.pais,
-          pax: mapperArrayPax(data.travelersData, data.emergencyContactData),
-          referencia: preResponse.mensaje.referencia,
-          telefonocontacto: savedTravelers.countryCode.replace("+", "") + savedTravelers.phone,
+          nombrecontacto: savedTravelers?.firstName + " " + savedTravelers?.lastName,
+          numeroViajeros: savedOrder?.cantidadPax,
+          paisdestino: savedOrder?.destino,
+          paisorigen: savedOrder?.pais,
+          pax: mapperArrayPax(data?.travelersData, data?.emergencyContactData),
+          referencia: preResponse?.mensaje?.referencia,
+          telefonocontacto: savedTravelers?.countryCode.replace("+", "") + savedTravelers?.phone,
           totalUpgradesPesos: 0,
-          totalVenta: selectedPlan.ValorPesos,
-          totalVentaDolares: selectedPlan.Valor,
-          totalVentaPesos: selectedPlan.ValorPesos,
+          totalVenta: selectedPlan?.ValorPesos,
+          totalVentaDolares: selectedPlan?.Valor,
+          totalVentaPesos: selectedPlan?.ValorPesos,
           upgrades: "",
-          valorProductoDolares: selectedPlan.Valor,
-          valorProductoPesos: selectedPlan.ValorPesos,
-          valorViajeroDolares: selectedPlan.ValorPax,
-          valorViajeroPesos: selectedPlan.ValorPaxPesos
+          valorProductoDolares: selectedPlan?.Valor,
+          valorProductoPesos: selectedPlan?.ValorPesos,
+          valorViajeroDolares: selectedPlan?.ValorPax,
+          valorViajeroPesos: selectedPlan?.ValorPaxPesos
       }
       return order
   }
 
   const mapperPreorder = (): dataPreorder => {
-      const savedTravelers = data.travelersData[0]
-      const savedBilling = data.billingData
-      const savedOrder = data.payloadOrder
-      const savedResponseOrder = data.responseOrder
-      const savedQuotation = data.travelerQuotation
+      const savedTravelers = data?.travelersData[0]
+      const savedBilling = data?.billingData
+      const savedOrder = data?.payloadOrder
+      const savedResponseOrder = data?.responseOrder
+      const savedSelectedPlan = data?.selectedPlan
 
       const preOrder: dataPreorder = {
           consideracionesgenerales: "ninguna",
-          correoCliente: savedTravelers.email,
-          direccionCliente: savedBilling.address,
-          edad: savedOrder.edades,
-          emailcontacto: savedTravelers.email,
-          fechallegada: savedOrder.llegada,
-          fechasalida: savedOrder.salida,
-          idCiudadCliente: savedBilling.billingCity,
-          idPaisCliente: savedBilling.billingCountry,
-          idProspecto: savedResponseOrder.idProspecto,
-          idTipoDocumentoCliente: documentType.filter(type => type.estaActivo && type.abreviacion === savedTravelers.documentType)[0]?.idTipoDocumento,
-          idUser: savedOrder.idUser,
-          idplan: savedQuotation.productId,
+          correoCliente: savedTravelers?.email || "",
+          direccionCliente: savedBilling?.address || "",
+          edad: savedOrder?.edades || "",
+          emailcontacto: savedTravelers?.email || "",
+          fechallegada: savedOrder?.llegada || "",
+          fechasalida: savedOrder?.salida || "",
+          idCiudadCliente: savedBilling?.billingCity || 0,
+          idPaisCliente: parseInt(savedBilling?.billingCountry || 0) ,
+          idProspecto: savedResponseOrder?.idProspecto || 0,
+          idTipoDocumentoCliente: documentType.filter(type => type?.estaActivo && type?.abreviacion === savedTravelers?.documentType)[0]?.idTipoDocumento,
+          idUser: savedOrder?.idUser || "",
+          idplan: savedSelectedPlan || 0,
           informacionAdicionalCliente: "",
           moneda: "COP",
-          nombreCliente: savedTravelers.firstName + " " + savedTravelers.lastName,
-          nombrecontacto: savedTravelers.firstName + " " + savedTravelers.lastName,
-          numeroDocumentoCliente: savedTravelers.documentNumber,
-          paisdestino: savedOrder.destino,
-          paisorigen: savedOrder.pais,
+          nombreCliente: savedTravelers?.firstName || "" + " " + savedTravelers?.lastName || "",
+          nombrecontacto: savedTravelers?.firstName || "" + " " + savedTravelers?.lastName || "",
+          numeroDocumentoCliente: savedTravelers?.documentNumber || "",
+          paisdestino: savedOrder?.destino || 0,
+          paisorigen: savedOrder?.pais || "",
           referencia: uuidv4(),
-          telefonoCliente: savedTravelers.countryCode + savedTravelers.phone,
-          telefonocontacto: savedTravelers.countryCode.replace("+", "") + savedTravelers.phone,
+          telefonoCliente: savedTravelers?.countryCode || "" + savedTravelers?.phone || "",
+          telefonocontacto: savedTravelers?.countryCode.replace("+", "") || "" + savedTravelers?.phone || "",
           upgrades: ""
       }
       return preOrder
   }
 
-  const mapperPayment = (responseIp, responseAddOrder): EpaycoData => {
-      const savedBilling = data.billingData
-      const savedResponseOrder = data.responseOrder
-      const savedQuotation = data.travelerQuotation
-      const selectedPlan = savedResponseOrder.planes.find(plan => plan.IdPlan === savedQuotation.productId)
+  const mapperPayment = (responseIp: string, responseAddOrder: any): EpaycoData => {
+      const savedBilling = data?.billingData
+      const savedResponseOrder = data?.responseOrder
+      const savedSelectedPlan = data?.selectedPlan
+      const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedSelectedPlan)
 
-      const payment = {
-          epaycoName: selectedPlan.Categoria,
-          epaycoDescription: selectedPlan.nombre,
-          epaycoInvoice: responseAddOrder.invoice,
+      const payment: EpaycoData = {
+          epaycoName: selectedPlan?.Categoria || "",
+          epaycoDescription: selectedPlan?.nombre || "",
+          epaycoInvoice: responseAddOrder?.invoice || "",
           epaycoCurrency: "COP",
-          epaycoAmount: selectedPlan.ValorPesos,
+          epaycoAmount: selectedPlan?.ValorPesos || "",
           epaycoLang: "es",
           epaycoExternal: "true",
           epaycoConfirmation: CONFIRM_PAY_PLATTFORM_URL,
           epaycoResponse: RESPONSE_PAY_PLATTFORM_URL,
-          epaycoNameBilling: savedBilling.firstName + " " + savedBilling.lastName,
-          epaycoAddressBilling: savedBilling.address,
-          epaycoTypeDocBilling: savedBilling.documentType,
-          epaycoNumberDocBilling: savedBilling.documentNumber,
-          epaycoExtra1: responseAddOrder.idVenta,
+          epaycoNameBilling: savedBilling?.firstName || "" + " " + savedBilling?.lastName || "",
+          epaycoAddressBilling: savedBilling?.address || "",
+          epaycoTypeDocBilling: savedBilling?.documentType || "",
+          epaycoNumberDocBilling: savedBilling?.documentNumber || "",
+          epaycoExtra1: responseAddOrder?.idVenta || "",
           epaycoExtra2: "es",
           epaycoExtra3: true,
           epaycoMethod: "GET",

@@ -11,31 +11,63 @@ import {PaxForm, Billing, dataPreorder, dataIslOrder} from "@/TravelCore/Utils/i
 import {Order} from "@/TravelFeatures/Invoice/model/order_entity.ts";
 import useInvoiceState from "@/TravelFeatures/Invoice/adapterHelper";
 
+interface loading {
+    isOpen: boolean,
+    title: string,
+    text: string
+}
 export default function InvoicePage() {
     const {data, setData} = useData() || {};
     const { mapperPreorder, mapperAddOrder, mapperPayment } = useInvoiceState()
-    const [billingData, setBillingData] = useState<Billing>({})
-    const [loading, setLoading] = useState<object>({
+    const [billingData, setBillingData] = useState<Billing>({
+        additional: '',
+        address: '',
+        billingCity: '',
+        billingCountry: '',
+        countryCode: '',
+        documentNumber: '',
+        documentType: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phone: ''
+    })
+    const [loading, setLoading] = useState<loading>({
         isOpen: false,
         title: '',
         text: ''
     })
 
     const handleChangeReuseInfo = (check: boolean) => {
-        if (check) {
-            const firstTraveler: PaxForm = data.travelersData[0]
+        const firstTraveler: PaxForm[] = data?.travelersData || []
+        if (check && firstTraveler.length > 0 ) {
             setBillingData({
-                billingCountry: firstTraveler.residenceCountry.toString(),
-                countryCode: firstTraveler.countryCode,
-                documentNumber: firstTraveler.documentNumber,
-                documentType: firstTraveler.documentType,
-                email: firstTraveler.email,
-                firstName: firstTraveler.firstName,
-                lastName: firstTraveler.lastName,
-                phone: firstTraveler.phone
+                billingCountry: firstTraveler?.[0].residenceCountry.toString(),
+                countryCode: firstTraveler?.[0].countryCode,
+                documentNumber: firstTraveler?.[0].documentNumber,
+                documentType: firstTraveler?.[0].documentType,
+                email: firstTraveler?.[0].email,
+                firstName: firstTraveler?.[0].firstName,
+                lastName: firstTraveler?.[0].lastName,
+                phone: firstTraveler?.[0].phone,
+                additional: "",
+                address: "",
+                billingCity: ""
             })
         } else {
-            setBillingData({})
+            setBillingData({
+                billingCountry: "",
+                countryCode: "",
+                documentNumber: "",
+                documentType: "",
+                email: "",
+                firstName: "",
+                lastName: "",
+                phone: "",
+                additional: "",
+                address: "",
+                billingCity: ""
+            })
         }
     };
 
@@ -80,7 +112,7 @@ export default function InvoicePage() {
                         console.log('Respuesta de la ip: ', respIP.data)
                         const mapPayment = mapperPayment(respIP.data, respAdd.data)
                         const respPayment = await order.payment(mapPayment)
-                        //TODO: consumir servicio epayco y configurarle la redireccion
+                        console.log("respPayment: ",respPayment)
                     }
                 }
             }
