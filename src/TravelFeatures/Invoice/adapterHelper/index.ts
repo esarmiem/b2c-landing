@@ -152,7 +152,7 @@ export default function useInvoiceState() {
           referencia: uuidv4(),
           telefonoCliente: savedTravelers?.countryCode || "" + savedTravelers?.phone || "",
           telefonocontacto: savedTravelers?.countryCode?.replace("+", "") || "" + savedTravelers?.phone || "",
-          upgrades: ""
+          upgrades: "1;2"
       }
       return preOrder
   }
