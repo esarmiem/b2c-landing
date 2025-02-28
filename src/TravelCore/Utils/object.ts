@@ -1,4 +1,4 @@
-export const createTravelers = (numberOfPassengers: number, agesString: string): { id: number; age: string }[] => {
+export const createTravelers = (numberOfPassengers: number, agesString: string): { id: number; age: string; phone: string }[] => {
   // const agesArray = agesString.split(';')
   const agesArray = agesString.split(',').map(age => Number.parseInt(age))
   if (agesArray.length !== numberOfPassengers) {
@@ -6,7 +6,8 @@ export const createTravelers = (numberOfPassengers: number, agesString: string):
   }
   const travelers = agesArray.map((age, index) => ({
     id: index,
-    age: `${age}`
+    age: `${age}`,
+    phone: ""
   }))
   return travelers
 }

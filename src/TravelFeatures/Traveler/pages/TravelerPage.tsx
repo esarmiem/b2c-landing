@@ -7,8 +7,7 @@ import { ContinuarButton } from '@/TravelCore/Components/Raw/ContinuarButton.tsx
 import { GoBack } from '@/TravelCore/Components/Raw/GoBack.tsx'
 import useData from '@/TravelCore/Hooks/useData.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters.ts'
-import { calculateAge } from '@/TravelCore/Utils/dates.ts'
-import type { EmergencyContactType, Pax, PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { EmergencyContactType, PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { createTravelers } from '@/TravelCore/Utils/object.ts'
 import { Masters } from '@/TravelFeatures/Traveler/model/masters_entity.ts'
 import { useCallback, useEffect, useState } from 'react'
@@ -48,13 +47,15 @@ export default function TravelForm() {
     firstName: '',
     lastName: '',
     phone1: '',
-    phone2: ''
+    phone2: '',
+    indicative1: '',
+    indicative2: ''
   })
 
   useEffect(() => {
     if (data) {
       setTravelersData(data.travelersData || [])
-      setEmergencyContact(data.emergencyContactData || { firstName: '', lastName: '', phone1: '', phone2: '' })
+      setEmergencyContact(data.emergencyContactData || { firstName: '', lastName: '', phone1: '', phone2: '', indicative1: '', indicative2: ''})
       console.log('rescatando el estado', travelersData, data.travelersData)
     }
   }, [data])
@@ -96,7 +97,7 @@ console.log('travelers', travelers)
     })
   }, [])
 
-  const handleChangeEmergency = (name, value) => {
+  const handleChangeEmergency = (name: string, value: any) => {
     setEmergencyContact(prevData => ({
       ...prevData,
       [name]: value
@@ -113,7 +114,7 @@ console.log('travelers', travelers)
             <HeaderTraveler traveler={travelers} />
             <form className="border border-gray-200 rounded-2xl space-y-4">
               {travelers.map(traveler => (
-                <TravelerForm key={traveler.id} traveler={traveler} onChangeField={handleChangeTravelers} dataTraveler={travelersData[traveler?.id] ? travelersData[traveler?.id] : {}} />
+                <TravelerForm key={traveler?.id} traveler={traveler} onChangeField={handleChangeTravelers} dataTraveler={travelersData[traveler?.id]} />
               ))}
               <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency} />
             </form>

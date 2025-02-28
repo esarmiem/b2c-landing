@@ -4,20 +4,33 @@ import { Input } from "@/components/ui/input.tsx";
 import { useTranslation } from "react-i18next";
 
 interface PhoneNumberFormProps {
-    celType: string;
-    value?: { countryCode: string; phone: string };
-  onChange?: () => void;
+    celType: string
+    value?: { countryCode: string; phone: string }
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const PhoneNumberForm = React.memo(
     ({ celType, value = { countryCode: "", phone: "" }, onChange }: PhoneNumberFormProps) => {
 
-      const { t } = useTranslation(["traveler"], { useSuspense: false });
+        const { t } = useTranslation(["traveler"], { useSuspense: false });
+
+        const onChangeLocal = (name: string, value: string) => {
+            const e = {
+                target: {
+                    name: name,
+                    value: value
+                },
+            } as React.ChangeEvent<HTMLInputElement>;
+            if (onChange) {
+                onChange(e)
+            }
+        }
+
       return (
           <div>
             <label className="block font-semibold text-gray-500 text-sm mb-1">{celType ? celType : t("label-phone")}</label>
             <div className="flex border border-gray-300 rounded-3xl">
-              <Select name="countryCode" value={value.countryCode} onValueChange={(val) => onChange({ target:{ name:"countryCode", value: val}})}>
+              <Select name="countryCode" value={value.countryCode} onValueChange={(val) => onChangeLocal("countryCode", val)}>
                 <SelectTrigger className="w-[80px] p-6 border-none focus:outline-none focus:ring-0">
                   <SelectValue placeholder="🇨🇴" />
                 </SelectTrigger>
