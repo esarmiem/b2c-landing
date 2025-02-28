@@ -2,19 +2,11 @@ import React from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
 import { useTranslation } from "react-i18next";
-
-interface EmergencyContactForm {
-  firstName: string;
-  lastName: string;
-  phone1: string;
-  phone2: string;
-  indicative1: string;
-  indicative2: string;
-}
+import type {EmergencyContactType} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface TravelFormProps {
   onChangeField?: (name: string, value: string) => void;
-  data: EmergencyContactForm;
+  data: EmergencyContactType;
 }
 
 export const EmergencyContact = React.memo(
