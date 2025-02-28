@@ -1,18 +1,16 @@
 import { AUTH_ISL_API } from '@/TravelCore/Services/Apis/AuthenticationISL'
-import type { CheckPreorderISLResponse, AddOrderISLResponse, ResponseData, dataOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
-import type { Upgrades } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { CheckPreorderISLResponse, AddOrderISLResponse, ResponseData, dataOrder, dataIslOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import {
   ISL_APP_SERVICE_UPGRADES,
   SERVICE_ADD_ORDER_ISL,
   SERVICE_CHECK_PREORDER_ISL,
-  SERVICE_ADD_ORDER_ISL,
   SERVICE_GET_ORDER_PRICE_EDAD,
   API_URL_EPAYCO,
   SERVICE_GET_IP
 } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
-import {AddOrderISLResponse, dataIslOrder} from "@/TravelCore/Utils/interfaces/Order.ts";
+import {Upgrade} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 /**
  * ApiResponse

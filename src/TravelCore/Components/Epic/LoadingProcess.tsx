@@ -1,14 +1,11 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 
 import { Loader2 } from "lucide-react";
-import useData from "@/TravelCore/Hooks/useData.ts";
 
 interface ModalLoadingProcessProps {
   isOpen: boolean,
@@ -17,7 +14,6 @@ interface ModalLoadingProcessProps {
 }
 
 export const ModalLoadingProcess = ({ isOpen, title, text }: ModalLoadingProcessProps) => {
-  const {setData} = useData() || {};
 
   return (
       <Dialog open={isOpen}>

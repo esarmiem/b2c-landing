@@ -61,21 +61,21 @@ export interface Upgrade {
 }
 
 export interface Pax {
-  apellidos: string
-  apellidosContactoEmergencia: string
-  document: string
-  edad: number
-  email: string
-  idNacionalidad: number
-  idPais: number
-  idTipoDocumento: number
-  medical: string
-  nacimientos: string
-  nombre: string
-  nombresContactoEmergencia: string
-  sexo: any
-  telefono1ContactoEmergencia: string
-  telefonos: string
+  apellidos?: string
+  apellidosContactoEmergencia?: string
+  document?: string
+  edad?: number
+  email?: string
+  idNacionalidad?: number
+  idPais?: number
+  idTipoDocumento?: number
+  medical?: string
+  nacimientos?: string
+  nombre?: string
+  nombresContactoEmergencia?: string
+  sexo?: any
+  telefono1ContactoEmergencia?: string
+  telefonos?: string
 }
 
 export interface PaxForm {
@@ -102,6 +102,8 @@ export interface EmergencyContactType {
   lastName: string
   phone1: string
   phone2: string
+  indicative1: string
+  indicative2: string
 }
 
 export interface Billing {
@@ -118,7 +120,7 @@ export interface Billing {
   phone: string
 }
 
-interface EpaycoData {
+export interface EpaycoData {
   epaycoName: string
   epaycoDescription: string
   epaycoInvoice: string
@@ -229,11 +231,11 @@ export interface dataOrder {
 }
 //Order Isl Payload
 export interface dataIslOrder {
-  ValorTotalSinDescuentoDolares: number
-  ValorTotalSinDescuentoPesos: number
+  ValorTotalSinDescuentoDolares?: number
+  ValorTotalSinDescuentoPesos?: number
   consideracionesgenerales: string
   detalleUpgrades: Upgrade[]
-  emailcontacto: string
+  emailcontacto?: string
   fechallegada: string
   fechasalida: string
   idCliente: number
@@ -293,14 +295,14 @@ export type Quotation = {
  * document data, additional information, currency, name, and phone number, among others.
  */
 export interface dataPreorder {
-  consideracionesgenerales: string
-  correoCliente: string
-  direccionCliente: string
-  edad: string
-  emailcontacto: string
-  fechallegada: string
-  fechasalida: string
-  idCiudadCliente: number
+  consideracionesgenerales?: string
+  correoCliente?: string
+  direccionCliente?: string
+  edad?: string
+  emailcontacto?: string
+  fechallegada?: string
+  fechasalida?: string
+  idCiudadCliente?: number
   idPaisCliente: number
   idProspecto: number
   idTipoDocumentoCliente: number
@@ -314,7 +316,7 @@ export interface dataPreorder {
   paisdestino: number
   paisorigen: string
   referencia: string
-  telefonoCliente: number
+  telefonoCliente: string
   telefonocontacto: string
   upgrades: string
 }

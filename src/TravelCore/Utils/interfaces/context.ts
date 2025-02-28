@@ -1,6 +1,7 @@
 import type { MASTER_CONST_STORAGE_KEYS } from '@/TravelCore/Utils/ConstStorageKeys.ts'
 import type { Data, EmergencyContactType, PaxForm, Quotation, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import type { Dispatch, SetStateAction } from 'react'
+import {Billing} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 /**
  * GenericItem
@@ -71,7 +72,9 @@ export interface StorageData<T = any> {
  */
 export interface GlobalData {
   payloadOrder?: Partial<dataOrder>
+  billingData?: Billing
   responseOrder?: Data
+  selectedPlan?: number
   travelersData?: PaxForm[]
   emergencyContactData?: EmergencyContactType
   travelerQuotation?: Quotation

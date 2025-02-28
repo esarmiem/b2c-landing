@@ -104,7 +104,7 @@ export const COUNTRIES_API = {
    * @returns {Promise<citiesByCountryResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                             / A promise that resolves with the API response.
    */
-  getCitiesByCountry: (data: FilterData): Promise<citiesByCountryResponse> => {
+  getCitiesByCountry: (data: any): Promise<citiesByCountryResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_CITIES_BY_COUNTRY}?idPais=${data.countryId}`,
       method: "GET",

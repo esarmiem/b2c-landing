@@ -74,7 +74,7 @@ export const HeroCarousel: React.FC<CarouselProps> = ({
                   style={{ display: 'block' }} // Asegura que la imagen no tenga espacio inferior
                 />
                 {/* Overlay para mejorar la visibilidad en imágenes claras */}
-                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="absolute inset-0 bg-black/40"></div>
               </div>
             </div>
           ))}

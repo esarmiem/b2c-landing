@@ -20,7 +20,7 @@ export const BillingResultPage: React.FC = () => {
 
     //estados, status: "Cotizado|Pendiente|Pagado|Rechazado"
 
-console.log('respuesta: ', searchParams)
+console.log('respuesta: ', searchParams, refPayco)
 
     //TODO: 1 consumir servicio: `${process.env.REACT_APP_API_URL}/api/v1/epayco/details/${refPayco}`
     //TODO: 2 consumir servicio: `${process.env.REACT_APP_API_URL}/api/v1/asistencias/descargarVoucher/${idSale}`

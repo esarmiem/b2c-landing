@@ -6,22 +6,27 @@ import { useTranslation } from "react-i18next";
 import useMasters from "@/TravelCore/Hooks/useMasters";
 import {CitiesItems} from "@/TravelCore/Utils/interfaces/Cities.ts";
 import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
-import {PaxForm} from "@/TravelCore/Utils/interfaces/Order.ts";
-import {calculateAndCompareAge} from "@/TravelCore/Utils/dates.ts";
+import {Billing} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 interface BillingFormProps {
-  onCheck?: (value: string) => void;
-  onChangeField?: (index: number, name: string, value: string) => void;
-  data: PaxForm[];
+  onCheck?: (value: boolean) => void;
+  onChangeField?: (name: string, value: string) => void;
+  data: Billing;
 }
 
 export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) {
   const { t } = useTranslation(["invoice"]); 
   const [usePassengerInfo, setUsePassengerInfo] = useState(false);
   const master = useMasters();
-  const cities = master?.cities?.data as CitiesItems[];
-  const documentType = master?.documents.data?.items as DocumentTypeItems[];
-  const activeCities = cities.filter(city => city.estaActivo);
+
+  const cities = (master?.cities?.data?.items ?? []) as CitiesItems[];
+  const documentType = (master?.documents?.data?.items ?? []) as DocumentTypeItems[];
+
+const activeCities = cities
+  .filter(city => city.estaActivo)
+  .slice() // Crear una copia superficial para no modificar el array original
+  .sort((a, b) => a.descripcion.localeCompare(b.descripcion)); // Ordenar alfabéticamente
+
   const activeDocumentType = documentType.filter(type => type.estaActivo);
 
   const citiesOptions = activeCities.map(city => (
@@ -45,9 +50,9 @@ export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) 
     onChangeField?.(name, value);
   }, [onChangeField]);
 
-  const handleCheckChange = React.useCallback((value: string) => {
-    setUsePassengerInfo(value.target.checked)
-    onCheck?.(value.target.checked);
+  const handleCheckChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsePassengerInfo(event.target.checked)
+    onCheck?.(event.target.checked);
   }, [onCheck]);
 
   return (
@@ -103,7 +108,7 @@ export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) 
                         <Select
                             name="documentType"
                             value={data.documentType || ""}
-                            onValueChange={(value) => handleSelectChange("documentType", value)}
+                            onValueChange={(value: string) => handleSelectChange("documentType", value)}
                         >
                             <SelectTrigger className="rounded-3xl border-gray-300 p-6">
                                 <SelectValue placeholder={t("billing-placeholder-select-document-type")} />
