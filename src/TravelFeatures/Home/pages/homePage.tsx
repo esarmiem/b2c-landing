@@ -17,6 +17,12 @@ import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
 */
 import { useNavigate } from 'react-router-dom'
 
+import slide4 from '../../../../Assets/slide4.webp';
+import slide5 from '../../../../Assets/slide5.webp';
+import slide6 from '../../../../Assets/slide6.webp';
+
+const images = [slide4, slide5, slide6];
+
 export default function HomePage() {
   const { t } = useTranslation(['home'])
   const { data } = useData() || {}
@@ -27,8 +33,6 @@ export default function HomePage() {
   /*
       const [isOpenContactModal, setIsOpenContactModal] = useState(false);
     */
-
-  const images = ['../../../../Assets/slide4.webp', '../../../../Assets/slide5.webp', '../../../../Assets/slide6.webp']
 
   /*  const handleSearch = () => {
     //Llamar al modal
