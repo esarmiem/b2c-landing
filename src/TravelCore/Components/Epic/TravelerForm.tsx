@@ -70,7 +70,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-first-name")}</label>
               <Input
                   name="firstName"
-                  value={dataTraveler.firstName || ""}
+                  value={dataTraveler?.firstName || ""}
                   placeholder={t("placeholder-first-name")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -80,7 +80,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-last-name")}</label>
               <Input
                   name="lastName"
-                  value={dataTraveler.lastName || ""}
+                  value={dataTraveler?.lastName || ""}
                   placeholder={t("placeholder-last-name")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -90,7 +90,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-type")}</label>
               <Select
                   name="documentType"
-                  value={dataTraveler.documentType || ""}
+                  value={dataTraveler?.documentType || ""}
                   onValueChange={(value) => handleSelectChange("documentType", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -105,7 +105,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-document-number")}</label>
               <Input
                   name="documentNumber"
-                  value={dataTraveler.documentNumber || ""}
+                  value={dataTraveler?.documentNumber || ""}
                   placeholder={t("placeholder-document-number")}
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -115,7 +115,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-birthdate")}</label>
               <Input
                   name="birthdate"
-                  value={dataTraveler.birthdate || ""}
+                  value={dataTraveler?.birthdate || ""}
                   type="date"
                   className="rounded-3xl border-gray-300 p-6"
                   onChange={handleInputChange}
@@ -127,7 +127,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
                 <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-age")}</label>
                 <Input
                     name="age"
-                    value={traveler.age}
+                    value={traveler?.age}
                     disabled
                     className="rounded-3xl border-gray-300 p-6"
                 />
@@ -136,7 +136,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
                 <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-gender")}</label>
                 <Select
                     name="gender"
-                    value={dataTraveler.gender || ""}
+                    value={dataTraveler?.gender || ""}
                     onValueChange={(value) => handleSelectChange("gender", value)}
                 >
                   <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -153,7 +153,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-nationality")}</label>
               <Select
                   name="nationality"
-                  value={dataTraveler.nationality.toString() || ""}
+                  value={dataTraveler?.nationality.toString() || ""}
                   onValueChange={(value) => handleSelectChange("nationality", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -168,7 +168,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-residence-country")}</label>
               <Select
                   name="residenceCountry"
-                  value={dataTraveler.residenceCountry.toString() || ""}
+                  value={dataTraveler?.residenceCountry.toString() || ""}
                   onValueChange={(value) => handleSelectChange("residenceCountry", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -179,12 +179,12 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
                 </SelectContent>
               </Select>
             </div>
-            <PhoneNumberForm celType={traveler.phone} value={{phone: dataTraveler.phone, countryCode: dataTraveler.countryCode }} onChange={handleInputChange} />
+            <PhoneNumberForm celType={traveler?.phone} value={{phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }} onChange={handleInputChange} />
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-email")}</label>
               <Input
                   name="email"
-                  value={dataTraveler.email || ""}
+                  value={dataTraveler?.email || ""}
                   type="email"
                   placeholder={t("placeholder-email")}
                   className="rounded-3xl border-gray-300 p-6"
