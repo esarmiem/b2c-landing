@@ -14,7 +14,7 @@ interface TravelerAge {
 }
 
 interface TravelersPopoverProps {
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
   errors?: string[]
 }
 
@@ -43,7 +43,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
   //     if (payloadOrder?.edades || ages.some(age => age.age !== '' || '0')) {
   useEffect(() => {
     if (payloadOrder?.edades || ages.some(age => age.age !== '' && age.age !== '0')) {
-      onChange(formattedAges)
+      onChange?.(formattedAges)
       console.log('excute')
     }
 
