@@ -1,5 +1,5 @@
 import { Link } from "../Raw/Link";
-import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
@@ -17,26 +17,25 @@ export const Footer = () => {
             <p className="text-sm mb-4">{t("label-title-social")}</p>
             <div className="flex justify-start sm:justify-start lg:justify-center gap-6">
               <Link
-                href="javascript:void(0)"
+                href="https://www.instagram.com/travelkit.oficial/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Instagram className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
               <Link
-                href="javascript:void(0)"
+                href="https://web.facebook.com/profile.php?id=61552513305649"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Facebook className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
               <Link
-                href="javascript:void(0)"
-                className="hover:text-white transition-colors duration-200"
-              >
-                <Twitter className="h-9 w-9 sm:h-5 sm:w-5" />
-              </Link>
-
-              <Link
-                href="javascript:void(0)"
+                href="https://wa.me/573175032200"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-white text-gray-300 transition-colors duration-200 h-9 w-9 sm:h-5 sm:w-5"
               >
                 <svg
@@ -58,7 +57,9 @@ export const Footer = () => {
               </Link>
 
               <Link
-                href="javascript:void(0)"
+                href="https://www.linkedin.com/company/83526212/admin/page-posts/published/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-white transition-colors duration-200"
               >
                 <Linkedin className="h-9 w-9 sm:h-5 sm:w-5" />
@@ -73,7 +74,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://wc.mitravelkit.com/asistencia-al-viajero/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-assistance")}
@@ -81,7 +84,9 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://wc.mitravelkit.com/?page_id=3547"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-comms")}
@@ -97,7 +102,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://wc.mitravelkit.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-about")}
@@ -105,15 +112,9 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="javascript:void(0)"
-                  className="hover:text-white transition-colors duration-200"
-                >
-                  {t("label-link-faqs")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="javascript:void(0)"
+                  href="https://wa.me/573152888484"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-contact")}
@@ -130,6 +131,8 @@ export const Footer = () => {
               <li>
                 <Link
                   href="javascript:void(0)"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-privacy")}
@@ -138,6 +141,8 @@ export const Footer = () => {
               <li>
                 <Link
                   href="javascript:void(0)"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-terms")}
@@ -146,6 +151,8 @@ export const Footer = () => {
               <li>
                 <Link
                   href="javascript:void(0)"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-cookies")}
@@ -154,6 +161,8 @@ export const Footer = () => {
               <li>
                 <Link
                   href="javascript:void(0)"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-conditions")}
