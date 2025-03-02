@@ -14,5 +14,10 @@ i18n.use(Backend)
     detection: {
         order: ["localStorage", "cookie", "navigator", "htmlTag"],
         caches: ["localStorage", "cookie"], // Guarda el idioma en localStorage y cookies
-    }
-})
+    },
+    backend: {
+        loadPath: "/locales/{{lng}}/{{ns}}.json", // Ruta base para cargar los archivos de idiomas
+    },
+});
+
+export default i18n;
