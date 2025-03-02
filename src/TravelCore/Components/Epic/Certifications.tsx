@@ -1,4 +1,8 @@
 import {useTranslation} from "react-i18next";
+import certification1 from '../../../../Assets/certifications (1).webp';
+import certification2 from '../../../../Assets/certifications (4).webp';
+import certification3 from '../../../../Assets/certifications (2).webp';
+import certification4 from '../../../../Assets/certifications (3).webp';
 
 
 interface Certification {
@@ -10,24 +14,24 @@ interface Certification {
 const certifications: Certification[] = [
   {
     id: 1,
-    imageUrl: '../../../../Assets/certifications (1).webp',
-    title: 'Certificación ISO 9001'
+    imageUrl: certification1, 
+    title: 'Certificación ISO 9001',
   },
   {
     id: 2,
-    imageUrl: '../../../../Assets/certifications (4).webp',
-    title: 'Certificación ISO 14001'
+    imageUrl: certification2, 
+    title: 'Certificación ISO 14001',
   },
   {
     id: 3,
-    imageUrl: '../../../../Assets/certifications (2).webp',
-    title: 'Certificación ISO 45001'
+    imageUrl: certification3, 
+    title: 'Certificación ISO 45001',
   },
   {
     id: 4,
-    imageUrl: '../../../../Assets/certifications (3).webp',
-    title: 'Certificación ISO 27001'
-  }
+    imageUrl: certification4, 
+    title: 'Certificación ISO 27001',
+  },
 ];
 
 export const Certifications = () => {
