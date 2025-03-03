@@ -6,7 +6,7 @@ import {
     dataIslOrder,
     dataPreorder,
     Pax,
-    EpaycoData, PaxForm
+    EpaycoData, PaxForm, Billing
 } from "@/TravelCore/Utils/interfaces/Order.ts";
 import {DocumentTypeItems} from "@/TravelCore/Utils/interfaces/Document.ts";
 import { v4 as uuidv4 } from 'uuid';
@@ -121,43 +121,49 @@ export default function useInvoiceState() {
       return order
   }
 
-  const mapperPreorder = (): dataPreorder => {
+  const mapperPreorder = (billing: Billing ): dataPreorder => {
       const savedTravelers = data?.travelersData?.[0]
-      const savedBilling = data?.billingData
       const savedOrder = data?.payloadOrder
       const savedResponseOrder = data?.responseOrder
       const savedSelectedPlan = data?.selectedPlan
 
+console.log("savedTravelers", savedTravelers)
+
       const preOrder: dataPreorder = {
           consideracionesgenerales: "ninguna",
           correoCliente: savedTravelers?.email,
-          direccionCliente: savedBilling?.address,
+          direccionCliente: billing?.address,
           edad: savedOrder?.edades,
           emailcontacto: savedTravelers?.email,
           fechallegada: savedOrder?.llegada,
           fechasalida: savedOrder?.salida ,
-          idCiudadCliente: parseInt(savedBilling?.billingCity || "0"),
-          idPaisCliente: parseInt(savedBilling?.billingCountry || "0") ,
+          idCiudadCliente: parseInt(billing?.billingCity || "0"),
+          idPaisCliente: parseInt(billing?.billingCountry || "0"),
           idProspecto: savedResponseOrder?.idProspecto || 0,
           idTipoDocumentoCliente: documentType.filter(type => type?.estaActivo && type?.abreviacion === savedTravelers?.documentType)[0]?.idTipoDocumento,
           idUser: savedOrder?.idUser || "",
           idplan: savedSelectedPlan || 0,
           informacionAdicionalCliente: "",
           moneda: "COP",
-          nombreCliente: savedTravelers?.firstName || "" + " " + savedTravelers?.lastName || "",
-          nombrecontacto: savedTravelers?.firstName || "" + " " + savedTravelers?.lastName || "",
+          nombreCliente: (savedTravelers?.firstName + " " + savedTravelers?.lastName),
+          nombrecontacto: (savedTravelers?.firstName + " " + savedTravelers?.lastName),
           numeroDocumentoCliente: savedTravelers?.documentNumber || "",
           paisdestino: savedOrder?.destino || 0,
           paisorigen: savedOrder?.pais || "",
           referencia: uuidv4(),
-          telefonoCliente: savedTravelers?.countryCode || "" + savedTravelers?.phone || "",
-          telefonocontacto: savedTravelers?.countryCode?.replace("+", "") || "" + savedTravelers?.phone || "",
+          telefonoCliente: parseInt(savedTravelers?.phone || "0"), //savedTravelers?.countryCode + savedTravelers?.phone,
+          telefonocontacto: savedTravelers?.phone || "", //savedTravelers?.countryCode?.replace("+", "") + savedTravelers?.phone,
           upgrades: "1;2"
       }
       return preOrder
   }
 
-  const mapperPayment = (responseIp: string, responseAddOrder: any): EpaycoData => {
+    interface mapperPaymentResult {
+        mapPayment: EpaycoData
+        transactionId: string
+    }
+
+  const mapperPayment = (responseIp: string, responseAddOrder: any): mapperPaymentResult => {
       const savedBilling = data?.billingData
       const savedResponseOrder = data?.responseOrder
       const savedSelectedPlan = data?.selectedPlan
@@ -187,7 +193,7 @@ export default function useInvoiceState() {
           epaycoImplementationType: "handler",
           epaycoIp: responseIp
       }
-      return payment
+      return { mapPayment: payment, transactionId: uuidv4() }
   }
 
   return { mapperPreorder, mapperAddOrder, mapperPayment }

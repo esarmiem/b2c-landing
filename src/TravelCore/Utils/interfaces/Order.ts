@@ -121,6 +121,7 @@ export interface Billing {
 }
 
 export interface EpaycoData {
+  [key: string]: string | number | boolean;
   epaycoName: string
   epaycoDescription: string
   epaycoInvoice: string
@@ -316,7 +317,7 @@ export interface dataPreorder {
   paisdestino: number
   paisorigen: string
   referencia: string
-  telefonoCliente: string
+  telefonoCliente: number
   telefonocontacto: string
   upgrades: string
 }

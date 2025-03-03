@@ -5,8 +5,8 @@ import {
   SERVICE_ADD_ORDER_ISL,
   SERVICE_CHECK_PREORDER_ISL,
   SERVICE_GET_ORDER_PRICE_EDAD,
-  API_URL_EPAYCO,
-  SERVICE_GET_IP
+  PAY_PLATTFORM_KEY,
+  SERVICE_GET_IP, API_URL_EPAYCO_IP, API_URL_EPAYCO_PAYMENT
 } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
@@ -218,7 +218,7 @@ export const ASSISTANCE_API = {
    */
   getIpEpayco: (): Promise<ApiOrderResponse> => {
     return axiosHttp({
-      pathEpayco: `${API_URL_EPAYCO}/${SERVICE_GET_IP}`,
+      pathEpayco: `${API_URL_EPAYCO_IP}/${SERVICE_GET_IP}`,
       method: "GET",
       data: null,
       session: { token: GET_TOKEN }
@@ -240,11 +240,14 @@ export const ASSISTANCE_API = {
    * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                              / A promise that resolves with the API response.
    */
-  paymentEpayco: (data: any): Promise<any> => {
+  paymentEpayco: (data: any, transactionId: string): Promise<any> => {
     return axiosHttp({
-      pathEpayco: `${API_URL_EPAYCO}/${SERVICE_GET_IP}`,
+      pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${PAY_PLATTFORM_KEY}/${transactionId}/${data}`,
       method: "POST",
       data: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       session: { token: GET_TOKEN }
     })
   }
