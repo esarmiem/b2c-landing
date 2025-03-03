@@ -4,16 +4,16 @@ import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { PopoverContent } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import type { TFunction } from 'i18next'
 import { MapPinHouse } from 'lucide-react'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface OriginPopoverProps {
-  t: TFunction
   setOriginPopoverOpen: (open: boolean) => void
 }
 
-export function OriginPopover({ t, setOriginPopoverOpen }: OriginPopoverProps) {
+export function OriginPopover({ setOriginPopoverOpen }: OriginPopoverProps) {
+  const { t } = useTranslation(['home'])
   const master = useMasters()
   const countries = master?.countries?.data?.items as CountriesItems[]
   const { data, setData } = useData() || {}
@@ -57,9 +57,7 @@ export function OriginPopover({ t, setOriginPopoverOpen }: OriginPopoverProps) {
           <CommandGroup>
             {sortedCountries?.map(country => (
               <CommandItem key={country.codigoISO} onSelect={() => handleOriginSelect(country)}>
-                <MapPinHouse
-                  className={cn('mr-2 h-4 w-4', origin === country.codigoISO ? 'opacity-100' : 'opacity-0')}
-                />
+                <MapPinHouse className={cn('mr-2 h-4 w-4', origin === country.codigoISO ? 'opacity-100' : 'opacity-0')} />
                 {country.descripcion}
               </CommandItem>
             ))}
