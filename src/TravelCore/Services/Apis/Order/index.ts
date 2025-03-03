@@ -1,16 +1,25 @@
 import { AUTH_ISL_API } from '@/TravelCore/Services/Apis/AuthenticationISL'
-import type { CheckPreorderISLResponse, AddOrderISLResponse, ResponseData, dataOrder, dataIslOrder, dataPreorder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type {
+  AddOrderISLResponse,
+  CheckPreorderISLResponse,
+  dataIslOrder,
+  dataOrder,
+  dataPreorder,
+  ResponseData,
+  Upgrade
+} from '@/TravelCore/Utils/interfaces/Order.ts'
 import {
+  API_URL_EPAYCO_IP,
+  API_URL_EPAYCO_PAYMENT,
   ISL_APP_SERVICE_UPGRADES,
+  PAY_PLATTFORM_KEY,
   SERVICE_ADD_ORDER_ISL,
   SERVICE_CHECK_PREORDER_ISL,
-  SERVICE_GET_ORDER_PRICE_EDAD,
-  PAY_PLATTFORM_KEY,
-  SERVICE_GET_IP, API_URL_EPAYCO_IP, API_URL_EPAYCO_PAYMENT
+  SERVICE_GET_IP_EPAYCO,
+  SERVICE_GET_ORDER_PRICE_EDAD
 } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
-import {Upgrade} from "@/TravelCore/Utils/interfaces/Order.ts";
 
 /**
  * ApiResponse
@@ -66,8 +75,8 @@ interface ApiOrderResponse {
  * including the plan ID and the language.
  */
 interface PayloadUpgrades {
-  id_plan : string
-  language : string
+  id_plan: string
+  language: string
 }
 
 /**
@@ -88,18 +97,19 @@ interface PayloadUpgrades {
  * @returns {Promise<any>} La respuesta de la API, extraída de la propiedad "data".
  *                         / The API response, extracted from the "data" property.
  */
-export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => { // Cambio aquí
-  const authISL = await AUTH_ISL_API.loginISL();
+export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => {
+  // Cambio aquí
+  const authISL = await AUTH_ISL_API.loginISL()
   const queryParams = new URLSearchParams({
-    request: "get_upgrade",
+    request: 'get_upgrade',
     token: authISL?.data?.result?.token,
     id_plan: payload.id_plan.toString(),
     language: payload.language
   }).toString()
-  const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`;
+  const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`
   try {
     const response = await axiosHttp({
-      method: "GET",
+      method: 'GET',
       pathISL: url,
       customConfig: {
         headers: {
@@ -112,7 +122,7 @@ export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgra
     console.error('Error fetching product updates:', error)
     throw error
   }
-};
+}
 
 /**
  * ASSISTANCE_API
@@ -145,7 +155,7 @@ export const ASSISTANCE_API = {
   getOrderPriceEdad: (data: dataOrder): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_GET_ORDER_PRICE_EDAD}`,
-      method: "POST",
+      method: 'POST',
       data: JSON.stringify(data),
       session: { token: GET_TOKEN }
     })
@@ -170,7 +180,7 @@ export const ASSISTANCE_API = {
   checkPreorderISL: (data: dataPreorder): Promise<ApiCheckPreOrderResponse> => {
     return axiosHttp({
       path: `${SERVICE_CHECK_PREORDER_ISL}`,
-      method: "POST",
+      method: 'POST',
       data: JSON.stringify(data),
       session: { token: GET_TOKEN }
     })
@@ -195,7 +205,7 @@ export const ASSISTANCE_API = {
   addOrderISL: (data: dataIslOrder): Promise<ApiOrderResponse> => {
     return axiosHttp({
       path: `${SERVICE_ADD_ORDER_ISL}`,
-      method: "POST",
+      method: 'POST',
       data: JSON.stringify(data),
       session: { token: GET_TOKEN }
     })
@@ -218,8 +228,8 @@ export const ASSISTANCE_API = {
    */
   getIpEpayco: (): Promise<ApiOrderResponse> => {
     return axiosHttp({
-      pathEpayco: `${API_URL_EPAYCO_IP}/${SERVICE_GET_IP}`,
-      method: "GET",
+      pathEpayco: `${API_URL_EPAYCO_IP}/${SERVICE_GET_IP_EPAYCO}`,
+      method: 'GET',
       data: null,
       session: { token: GET_TOKEN }
     })
@@ -241,9 +251,10 @@ export const ASSISTANCE_API = {
    *                                              / A promise that resolves with the API response.
    */
   paymentEpayco: (data: any, transactionId: string): Promise<any> => {
+    console.log('data en epayco: ', data)
     return axiosHttp({
-      pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${PAY_PLATTFORM_KEY}/${transactionId}/${data}`,
-      method: "POST",
+      pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${PAY_PLATTFORM_KEY}/${transactionId}`,
+      method: 'POST',
       data: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
