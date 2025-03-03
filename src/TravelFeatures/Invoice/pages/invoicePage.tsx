@@ -42,7 +42,7 @@ export default function InvoicePage() {
         const firstTraveler: PaxForm[] = data?.travelersData || []
         if (check && firstTraveler.length > 0 ) {
             setBillingData({
-                billingCountry: firstTraveler?.[0].residenceCountry.toString(),
+                billingCountry: firstTraveler?.[0].residenceCountry?.toString(),
                 countryCode: firstTraveler?.[0].countryCode,
                 documentNumber: firstTraveler?.[0].documentNumber,
                 documentType: firstTraveler?.[0].documentType,

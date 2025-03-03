@@ -6,6 +6,10 @@ import {
   Stamp as Passport,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import steps1 from '../../../../Assets/steps1.webp';
+import steps2 from '../../../../Assets/steps2.webp';
+import steps3 from '../../../../Assets/steps3.webp';
+import steps4 from '../../../../Assets/steps4.webp';
 
 export const TravelSteps = () => {
   const { t } = useTranslation(["home"]);
@@ -22,28 +26,28 @@ export const TravelSteps = () => {
       number: "1",
       title: t("label-title-content-step-1"),
       description: t("label-text-content-step-1"),
-      image: "../../../../Assets/steps1.webp",
+      image: steps1, 
       icon: ClipboardList,
     },
     {
       number: "2",
       title: t("label-title-content-step-2"),
       description: t("label-text-content-step-2"),
-      image: "../../../../Assets/steps2.webp",
+      image: steps2, 
       icon: FileText,
     },
     {
       number: "3",
       title: t("label-title-content-step-3"),
       description: t("label-text-content-step-3"),
-      image: "../../../../Assets/steps3.webp",
+      image: steps3, 
       icon: CreditCard,
     },
     {
       number: "4",
       title: t("label-title-content-step-4"),
       description: t("label-text-content-step-4"),
-      image: "../../../../Assets/steps4.webp",
+      image: steps4,
       icon: Passport,
     },
   ];

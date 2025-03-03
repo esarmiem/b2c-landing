@@ -3,7 +3,6 @@ import { MasterProvider } from "./Masters.tsx";
 import { SessionProvider } from "./Session.tsx";
 import { DataProvider } from "@/TravelCore/ContextData/Data.tsx";
 import { OrderProvider } from "@/TravelCore/ContextData/Order.tsx";
-import { UserPreferencesProvider } from "@/TravelCore/ContextData/UserPreferences.tsx";
 
 /**
  * ProviderProps
@@ -34,7 +33,6 @@ const providers = [
   SessionProvider,
   DataProvider,
   OrderProvider,
-  UserPreferencesProvider,
 ];
 /**
  * Providers
