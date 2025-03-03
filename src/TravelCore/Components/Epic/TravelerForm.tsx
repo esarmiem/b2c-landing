@@ -153,7 +153,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-nationality")}</label>
               <Select
                   name="nationality"
-                  value={dataTraveler?.nationality.toString() || ""}
+                  value={dataTraveler?.nationality?.toString() || ""}
                   onValueChange={(value) => handleSelectChange("nationality", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
@@ -168,7 +168,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-residence-country")}</label>
               <Select
                   name="residenceCountry"
-                  value={dataTraveler?.residenceCountry.toString() || ""}
+                  value={dataTraveler?.residenceCountry?.toString() || ""}
                   onValueChange={(value) => handleSelectChange("residenceCountry", value)}
               >
                 <SelectTrigger className="rounded-3xl border-gray-300 p-6">
