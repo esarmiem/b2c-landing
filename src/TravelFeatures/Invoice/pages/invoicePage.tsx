@@ -85,7 +85,7 @@ export default function InvoicePage() {
         })
 
         setTimeout(async () => {
-            const mapPreorder: dataPreorder = mapperPreorder()
+            const mapPreorder: dataPreorder = mapperPreorder(billingData)
 
             const order = new Order();
             const respPre = await order.checkPreOrder(mapPreorder)
@@ -110,9 +110,15 @@ export default function InvoicePage() {
                     const respIP = await order.getIP()
                     if (respIP && respIP.data) {
                         console.log('Respuesta de la ip: ', respIP.data)
-                        const mapPayment = mapperPayment(respIP.data, respAdd.data)
-                        const respPayment = await order.payment(mapPayment)
-                        console.log("respPayment: ",respPayment)
+                        const { mapPayment, transactionId } = mapperPayment(respIP.data, respAdd.data)
+                        const params = new URLSearchParams();
+                        for (const key in mapPayment) {
+                            if (mapPayment.hasOwnProperty(key)) {
+                                params.append(key, String(mapPayment[key]));
+                            }
+                        }
+                        const respPayment = await order.payment(params.toString(), transactionId)
+                        console.log("respPayment: ", respPayment)
                     }
                 }
             }
@@ -127,6 +133,7 @@ export default function InvoicePage() {
 
     // Función para manejar cambios en los campos del formulario
     const handleChangeBilling = useCallback( (name: string, value: string) => {
+        console.log('cambiando la city', name, value)
         setBillingData((prevData) => ({
             ...prevData,
             [name]: value,
