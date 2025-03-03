@@ -19,7 +19,7 @@ export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) 
   const [usePassengerInfo, setUsePassengerInfo] = useState(false);
   const master = useMasters();
 
-  const cities = (master?.cities?.data?.items ?? []) as CitiesItems[];
+  const cities = (master?.cities?.data ?? []) as CitiesItems[];
   const documentType = (master?.documents?.data?.items ?? []) as DocumentTypeItems[];
 
 const activeCities = cities

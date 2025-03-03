@@ -29,6 +29,7 @@ interface AxiosHttpArgs {
   path?: string
   pathISL?: string
   pathEpayco?: string
+  pathEpaycoPayment?: string
   session?: Session | null
   headers?: Record<string, string>
   data?: any
@@ -89,7 +90,8 @@ export const axiosHttp = async (
   args: AxiosHttpArgs,
 ): Promise<{ data: any; error: string | null }> => {
   // Si se proporciona pathISL, se utiliza esa URL; de lo contrario, se construye la URL a partir de BASE_URL y path.
-  const url = args.pathISL ? args.pathISL : args.pathEpayco ? args.pathEpayco : `${BASE_URL}/${args.path}`;
+  const base_url = getBasePath(args)
+  const url = `${base_url}/${args.path}`;
   // Combina los encabezados por defecto con los encabezados personalizados, si se proporciona una sesión.
   const headers = args.session
     ? { ...getDefaultHeaders(args.session), ...args.headers }
@@ -118,3 +120,15 @@ export const axiosHttp = async (
     };
   }
 };
+
+const  getBasePath = (args: AxiosHttpArgs): string | undefined => {
+  const pathKeys: (keyof AxiosHttpArgs)[] = ['pathISL', 'pathEpayco', 'pathEpaycoPayment'];
+
+  for (const key of pathKeys) {
+    if (args[key]) {
+      return args[key] as string;
+    }
+  }
+
+  return BASE_URL;
+}

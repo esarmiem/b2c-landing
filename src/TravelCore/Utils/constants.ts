@@ -160,8 +160,19 @@ export const SERVICE_GET_IP: string =
  * English:
  * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
  */
-export const API_URL_EPAYCO: string =
-    import.meta.env.VITE_REACT_APP_API_URL_EPAYCO || "";
+export const API_URL_EPAYCO_IP: string =
+    import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_IP || "";
+/**
+ * API_URL_EPAYCO
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const API_URL_EPAYCO_PAYMENT: string =
+    import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_PAYMENT || "";
 /**
  * PAY_PLATTFORM_KEY
  *
