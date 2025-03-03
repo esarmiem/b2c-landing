@@ -13,12 +13,11 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import { DestinationPopover } from '@/TravelCore/Components/Epic/DestinationPopover.tsx'
 import { format, parse } from 'date-fns'
+import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order'
+import useHomeState from '@/TravelFeatures/Home/stateHelper'
 
-interface FilterFormProps {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
-}
-
-export const FilterForm = ({ onClick }: FilterFormProps) => {
+export const FilterForm = () => {
+  const { HandleGetOrder } = useHomeState()
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
   const countries = master?.countries?.data?.items as CountriesItems[]
@@ -62,9 +61,9 @@ export const FilterForm = ({ onClick }: FilterFormProps) => {
         setReturnOpen(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside as unknown as EventListener)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOutside as unknown as EventListener)
     }
   }, [departureOpen, returnOpen])
 
@@ -114,15 +113,11 @@ export const FilterForm = ({ onClick }: FilterFormProps) => {
     return console.log(field, value)
   }
 
-  const toggleEditing = () => {
-    setIsEditing(!isEditing)
-  }
-
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsEditing(!isEditing)
 
     if (isEditing) {
-      onClick
+      await HandleGetOrder(payloadOrder as dataOrder)
       console.log('actualizando Planes: ', payloadOrder)
     }
   }
