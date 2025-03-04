@@ -1,6 +1,6 @@
 import React from "react";
 import { Input } from "@/components/ui/input.tsx";
-import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+import { PhoneNumberForm2 } from "@/TravelCore/Components/Epic/PhoneNumberForm2.tsx";
 import { useTranslation } from "react-i18next";
 import type {EmergencyContactType} from "@/TravelCore/Utils/interfaces/Order.ts";
 
@@ -74,7 +74,7 @@ console.log("data", data, namePhone)
                 </div>
                 {namePhone.map((phone) => (
                     <div key={phone.id}>
-                      <PhoneNumberForm
+                      <PhoneNumberForm2
                           celType={phone.phone}
                           value={{ countryCode: phone.indicative, phone: phone.value }}
                           onChange={(val) => handlePhoneChange(phone.id, val)}
