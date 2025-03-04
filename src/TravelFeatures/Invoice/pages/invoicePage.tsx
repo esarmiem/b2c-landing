@@ -111,14 +111,11 @@ export default function InvoicePage() {
             console.log('Respuesta de la ip: ', respIP.data)
             const { mapPayment, transactionId } = mapperPayment(respIP.data, respAdd.data)
 
-            const params = new URLSearchParams()
-            for (const key in mapPayment) {
-              if (mapPayment.hasOwnProperty(key)) {
-                formData.append(key, String(mapPayment[key]))
-                // params.append(key, String(mapPayment[key]))
-              }
-            }
-            const respPayment = await order.payment(params, transactionId)
+            const payloadString = JSON.stringify(mapPayment);
+            const encodedPayload = encodeURIComponent(payloadString);
+            const params = new URLSearchParams();
+            params.append("fname", encodedPayload);
+            const respPayment = await order.payment(params.toString(), transactionId)
             console.log('respPayment: ', respPayment)
           }
         }

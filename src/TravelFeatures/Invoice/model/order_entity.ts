@@ -70,7 +70,7 @@ export class Order {
    * @param {string} transactionId - El id de la transaccion a epayco / The order data to be added.
    * @returns {Promise<any>} Una promesa que se resuelve con la respuesta de la API / A promise that resolves with the API response.
    */
-  async payment(data: any, transactionId: string): Promise<any> {
+  async payment(data: string, transactionId: string): Promise<any> {
     return await ASSISTANCE_API.paymentEpayco(data, transactionId);
   }
 }

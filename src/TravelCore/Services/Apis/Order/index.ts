@@ -250,7 +250,7 @@ export const ASSISTANCE_API = {
    * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
    *                                              / A promise that resolves with the API response.
    */
-  paymentEpayco: (data: any, transactionId: string): Promise<any> => {
+  paymentEpayco: (data: string, transactionId: string): Promise<any> => {
     console.log('data en epayco: ', data)
     return axiosHttp({
       pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${PAY_PLATTFORM_KEY}/${transactionId}`,
