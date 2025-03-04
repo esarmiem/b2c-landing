@@ -176,7 +176,7 @@ export default function useInvoiceState() {
     const payment: EpaycoData = {
       epaycoName: selectedPlan?.Categoria || '',
       epaycoDescription: selectedPlan?.nombre || '',
-      epaycoInvoice: responseAddOrder?.invoice || '',
+      epaycoInvoice: responseAddOrder?.codigo || '',
       epaycoCurrency: 'COP',
       epaycoAmount: selectedPlan?.ValorPesos || '',
       epaycoLang: 'es',

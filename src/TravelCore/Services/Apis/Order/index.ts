@@ -259,7 +259,7 @@ export const ASSISTANCE_API = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      session: { token: GET_TOKEN }
+      session: null
     })
   }
 }
