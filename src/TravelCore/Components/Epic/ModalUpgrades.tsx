@@ -130,7 +130,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
       const newTravellers = [...travelerQuotation.travellers]
       const travelerIndex = currentTraveler - 1
-      const upgrade = productUpgrades.find(u => u.id_raider === id_raider)
+      const upgrade = productUpgrades?.find(u => u.id_raider === id_raider)
 
       if (!upgrade) return
 
@@ -145,7 +145,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
       // Corregir cálculos
       const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades.find(u => u.id_raider === upgrade.id)
+        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
         const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
         return total + Number.parseInt(cost, 10)
       }, 0)
@@ -245,7 +245,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
               <Loader />
             </div>
           )}
-          {productUpgrades.map(upgrade => (
+          {productUpgrades?.map(upgrade => (
             <button
               type="button"
               key={upgrade.id_raider}

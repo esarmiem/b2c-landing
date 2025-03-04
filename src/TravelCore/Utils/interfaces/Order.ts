@@ -79,22 +79,22 @@ export interface Pax {
 }
 
 export interface PaxForm {
-  firstName: string;
-  lastName: string;
-  documentType: string;
-  documentNumber: string;
-  birthdate: string;
-  age: number;
-  gender: any;
-  nationality: number;
-  residenceCountry: number;
-  email: string;
-  phone: string;
-  countryCode: string;
-  billingCountry: string; // Propiedad añadida.
-  billingCity: string; // Propiedad añadida.
-  address: string; // Propiedad añadida.
-  additional: string; // Propiedad añadida.
+  firstName: string
+  lastName: string
+  documentType: string
+  documentNumber: string
+  birthdate: string
+  age: number
+  gender: any
+  nationality: number
+  residenceCountry: number
+  email: string
+  phone: string
+  countryCode: string
+  billingCountry: string // Propiedad añadida.
+  billingCity: string // Propiedad añadida.
+  address: string // Propiedad añadida.
+  additional: string // Propiedad añadida.
 }
 
 export interface EmergencyContactType {
@@ -121,6 +121,7 @@ export interface Billing {
 }
 
 export interface EpaycoData {
+  [key: string]: string | number | boolean
   epaycoName: string
   epaycoDescription: string
   epaycoInvoice: string
@@ -243,13 +244,13 @@ export interface dataIslOrder {
   idOrigen: number
   idProducto: number
   idProspecto: number
-  idUser: number
+  idUser: string
   idplan: number
   moneda: string
   nombrecontacto: string
   numeroViajeros: number
   paisdestino: number
-  paisorigen: number
+  paisorigen: string
   pax: Pax[]
   referencia: string
   telefonocontacto: string
@@ -316,7 +317,7 @@ export interface dataPreorder {
   paisdestino: number
   paisorigen: string
   referencia: string
-  telefonoCliente: string
+  telefonoCliente: number
   telefonocontacto: string
   upgrades: string
 }
@@ -354,7 +355,7 @@ export interface CheckPreorderISLResponse {
  * It contains a object with various informative fields and the sale's identifier.
  */
 export interface AddOrderISLResponse {
-  "": string
+  '': string
   El_valor_de_cambio_fue_ajustado_a: string
   codigo: string
   documento: string

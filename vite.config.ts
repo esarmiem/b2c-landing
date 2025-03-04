@@ -21,10 +21,15 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/plan-upgrades/, '')
       },
-      '/epayco': {
+      '/epayco-ip': {
         target: 'https://apify-private.epayco.co',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/epayco/, '')
+        rewrite: (path) => path.replace(/^\/epayco-ip/, '')
+      },
+      '/epayco-payment': {
+        target: 'https://secure.epayco.co/create/transaction',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/epayco-payment/, '')
       },
     }
   },

@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input.tsx";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
-import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+//import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+import { PhoneNumberForm2 } from "@/TravelCore/Components/Epic/PhoneNumberForm2.tsx";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useMasters from "@/TravelCore/Hooks/useMasters";
@@ -19,7 +20,7 @@ export function BillingForm({ onCheck, onChangeField, data }: BillingFormProps) 
   const [usePassengerInfo, setUsePassengerInfo] = useState(false);
   const master = useMasters();
 
-  const cities = (master?.cities?.data?.items ?? []) as CitiesItems[];
+  const cities = (master?.cities?.data ?? []) as CitiesItems[];
   const documentType = (master?.documents?.data?.items ?? []) as DocumentTypeItems[];
 
 const activeCities = cities
@@ -130,8 +131,8 @@ const activeCities = cities
                             onChange={handleInputChange}
                         />
                     </div>
-                    <PhoneNumberForm celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>
-
+                    {/*<PhoneNumberForm celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>*/}
+                    <PhoneNumberForm2 celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>
                     <div>
                         <label className="block font-semibold text-gray-500 text-sm mb-1">
                             {t("billing-email")}

@@ -29,6 +29,7 @@ interface AxiosHttpArgs {
   path?: string
   pathISL?: string
   pathEpayco?: string
+  pathEpaycoPayment?: string
   session?: Session | null
   headers?: Record<string, string>
   data?: any
@@ -85,15 +86,12 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
  *                                                         los datos de la respuesta o un mensaje de error.
  *                                                         / A promise that resolves with an object containing the response data or an error message.
  */
-export const axiosHttp = async (
-  args: AxiosHttpArgs,
-): Promise<{ data: any; error: string | null }> => {
+export const axiosHttp = async (args: AxiosHttpArgs): Promise<{ data: any; error: string | null }> => {
   // Si se proporciona pathISL, se utiliza esa URL; de lo contrario, se construye la URL a partir de BASE_URL y path.
-  const url = args.pathISL ? args.pathISL : args.pathEpayco ? args.pathEpayco : `${BASE_URL}/${args.path}`;
+  const base_url = getBasePath(args)
+  const url = args.path ? `${base_url}/${args.path}` : base_url
   // Combina los encabezados por defecto con los encabezados personalizados, si se proporciona una sesión.
-  const headers = args.session
-    ? { ...getDefaultHeaders(args.session), ...args.headers }
-    : args.headers;
+  const headers = args.session ? { ...getDefaultHeaders(args.session), ...args.headers } : args.headers
 
   // Configuración base para la solicitud HTTP.
   const config: AxiosRequestConfig = {
@@ -101,20 +99,32 @@ export const axiosHttp = async (
     url: url,
     headers: headers,
     data: args.data,
-    timeout: args.timeout || 60000,
-  };
+    timeout: args.timeout || 60000
+  }
   try {
     // Realiza la solicitud HTTP usando axios, fusionando la configuración base con cualquier configuración personalizada.
     const response: AxiosResponse = await axios({
       ...config,
-      ...args.customConfig,
-    });
-    return { data: response.data, error: null };
+      ...args.customConfig
+    })
+    return { data: response.data, error: null }
   } catch (error: any) {
     // En caso de error, retorna data null y extrae un mensaje de error si está disponible.
     return {
       data: null,
-      error: error?.response?.data?.message || "Unknown error",
-    };
+      error: error?.response?.data?.message || 'Unknown error'
+    }
   }
-};
+}
+
+const getBasePath = (args: AxiosHttpArgs): string | undefined => {
+  const pathKeys: (keyof AxiosHttpArgs)[] = ['pathISL', 'pathEpayco', 'pathEpaycoPayment']
+
+  for (const key of pathKeys) {
+    if (args[key]) {
+      return args[key] as string
+    }
+  }
+
+  return BASE_URL
+}
