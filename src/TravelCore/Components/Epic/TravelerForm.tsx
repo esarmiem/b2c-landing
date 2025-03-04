@@ -2,7 +2,8 @@ import React, {memo, useState} from "react";
 import { SquareUser } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
-import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+//import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
+import { PhoneNumberForm2 } from "@/TravelCore/Components/Epic/PhoneNumberForm2";
 import { useTranslation } from "react-i18next";
 import { PaxForm } from "@/TravelCore/Utils/interfaces/Order.ts";
 import useMasters from "@/TravelCore/Hooks/useMasters";
@@ -179,7 +180,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
                 </SelectContent>
               </Select>
             </div>
-            <PhoneNumberForm celType={traveler?.phone} value={{phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }} onChange={handleInputChange} />
+            {/*<PhoneNumberForm celType={traveler?.phone} value={{phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }} onChange={handleInputChange} />*/}
+            <PhoneNumberForm2 celType={traveler?.phone} value={{phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }} onChange={handleInputChange} />
             <div>
               <label className="block font-semibold text-gray-500 text-sm mb-1">{t("label-email")}</label>
               <Input
