@@ -27,6 +27,7 @@ interface SessionContextType {
   session: SessionState
   setSession: Dispatch<SetStateAction<SessionState>>
   token?: string
+  user_id?: string
 }
 
 /**
