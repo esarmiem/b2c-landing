@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from "path"
 
 export default defineConfig({
-  /*server: {
+  server: {
     proxy: {
       '/isl-login': {
         target: 'https://dtravelassist.com/apirest_v1/auth',
@@ -32,7 +32,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/epayco-payment/, '')
       },
     }
-  },*/
+  },
   plugins: [react()],
   build: {
     rollupOptions: {
