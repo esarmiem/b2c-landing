@@ -17,11 +17,13 @@ import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
 */
 import { useNavigate } from 'react-router-dom'
 
+import slide1 from '../../../../Assets/slide1.webp';
+import slide2 from '../../../../Assets/slide2.webp';
 import slide4 from '../../../../Assets/slide4.webp';
 import slide5 from '../../../../Assets/slide5.webp';
 import slide6 from '../../../../Assets/slide6.webp';
 
-const images = [slide4, slide5, slide6];
+const images = [slide1, slide2, slide4, slide5, slide6];
 
 export default function HomePage() {
   const { t } = useTranslation(['home'])
