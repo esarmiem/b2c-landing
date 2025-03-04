@@ -2,13 +2,13 @@ import React, { memo, useState } from 'react'
 import { SquareUser } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
-import { PhoneNumberForm } from '@/TravelCore/Components/Epic/PhoneNumberForm.tsx'
 import { useTranslation } from 'react-i18next'
 import type { PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters'
 import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries.ts'
 import type { DocumentTypeItems } from '@/TravelCore/Utils/interfaces/Document.ts'
 import { calculateAndCompareAge } from '@/TravelCore/Utils/dates.ts'
+import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2'
 
 interface TravelFormProps {
   onChangeField?: (index: number, name: string, value: string) => void
@@ -191,7 +191,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
               <SelectContent>{countryOptions}</SelectContent>
             </Select>
           </div>
-          <PhoneNumberForm
+          <PhoneNumberForm2
             celType={traveler?.phone}
             value={{ phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }}
             onChange={handleInputChange}
