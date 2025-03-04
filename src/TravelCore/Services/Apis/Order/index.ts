@@ -98,7 +98,6 @@ interface PayloadUpgrades {
  *                         / The API response, extracted from the "data" property.
  */
 export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => {
-  // Cambio aquí
   const authISL = await AUTH_ISL_API.loginISL()
   const queryParams = new URLSearchParams({
     request: 'get_upgrade',

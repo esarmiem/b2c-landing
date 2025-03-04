@@ -1,7 +1,7 @@
 import useData from '@/TravelCore/Hooks/useData.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters.ts'
 import useSession from '@/TravelCore/Hooks/useSession.ts'
-import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { dataOrder, Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
 import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
 import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
 import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
@@ -153,20 +153,80 @@ const useHomeState = () => {
    * @returns {Promise<any>} Una promesa que se resuelve con el ID del prospecto si la orden es válida, de lo contrario null.
    *                         / A promise that resolves with the prospect ID if the order is valid, otherwise null.
    */
-  const HandleGetOrder = async (orderPayload: dataOrder): Promise<any> => {
+
+  const HandleGetOrder = async (orderPayload: dataOrder): Promise<string | null> => {
     const travelAssistance = new TravelAssistance()
     try {
-      const response = await travelAssistance.getOrderPriceByAge(orderPayload)
-      if (response?.data?.planes.length > 0 && response?.data?.idProspecto) {
+      // Calculate the difference in days between the departure and arrival dates
+      const salida = orderPayload.salida ? new Date(orderPayload.salida.split('/').reverse().join('-')) : null
+      const llegada = orderPayload.llegada ? new Date(orderPayload.llegada.split('/').reverse().join('-')) : null
+      const daysDifference = salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
+
+      console.log('day difference: ', daysDifference)
+
+      // Determinate the question number based on the days difference
+      const numerosPreguntas = []
+      if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
+      if (daysDifference >= 30 && daysDifference < 364) numerosPreguntas.push(2)
+      if (daysDifference >= 90 && daysDifference <= 364) numerosPreguntas.push(3)
+      if (daysDifference === 364) numerosPreguntas.push(4)
+
+      // There are no valid questions
+      if (numerosPreguntas.length === 0) return null
+
+      // Create a combined data object
+      const combinedData = {
+        planes: [] as Plan[],
+        idProspecto: 0
+      }
+
+      // Procesar cada pregunta secuencialmente en lugar de en paralelo
+      for (const numeroPregunta of numerosPreguntas) {
+        let attempts = numeroPregunta === numerosPreguntas[0] ? 3 : 1
+        let success = false
+
+        while (attempts > 0 && !success) {
+          try {
+            if (attempts < 3 && numeroPregunta === numerosPreguntas[0]) {
+              await new Promise(resolve => setTimeout(resolve, 1000))
+            }
+
+            const response = await travelAssistance.getOrderPriceByAge({ ...orderPayload, numeroPregunta })
+
+            if (response?.data?.planes && response.data.planes.length > 0) {
+              // Save the prospect ID in the first response
+              if (!combinedData.idProspecto && response.data.idProspecto) {
+                combinedData.idProspecto = response.data.idProspecto
+              }
+
+              // Add plans that are not already in the combined data
+              const existingPlaneIds = new Set(combinedData.planes.map(p => p.IdPlan))
+              const newPlanes = response.data.planes.filter(p => !existingPlaneIds.has(p.IdPlan))
+              combinedData.planes.push(...newPlanes)
+              success = true
+            }
+          } catch (requestError) {
+            console.error(`Error en solicitud para numeroPregunta=${numeroPregunta}, intento ${4 - attempts}:`, requestError)
+            attempts--
+            if (attempts === 0) {
+              console.log(`Todos los intentos fallaron para numeroPregunta=${numeroPregunta}`)
+            }
+          }
+        }
+      }
+
+      // Verify that the combined data is valid
+      if (combinedData.planes.length > 0 && combinedData.idProspecto) {
         setData?.(prevData => ({
           ...prevData,
-          responseOrder: response?.data
+          responseOrder: combinedData
         }))
-        return response.data.idProspecto
+        return String(combinedData.idProspecto)
       }
       return null
     } catch (error) {
-      console.error('Failed to get order:', error)
+      console.error('Error al obtener los planes:', error)
+      return null
     }
   }
 

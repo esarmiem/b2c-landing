@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { format, parse } from 'date-fns'
+import { format, parse, differenceInDays } from 'date-fns'
 import { CalendarIcon, Info } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { DateRange } from 'react-day-picker'
@@ -47,7 +47,6 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
           ...prevData?.payloadOrder,
           salida: date.from ? format(date.from, 'dd/MM/yyyy') : '',
           llegada: date.to ? format(date.to, 'dd/MM/yyyy') : '',
-          numeroPregunta: 1,
           lenguaje: i18n.language,
           telefono: '+000000000000',
           email: 'dummy@dummy.com'
