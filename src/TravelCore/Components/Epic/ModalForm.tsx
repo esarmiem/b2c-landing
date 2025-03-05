@@ -105,4 +105,4 @@ export const ModalForm = ({ isOpen, toggleModal, onClick }: ModalProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}; // este componente no se usa
