@@ -130,6 +130,7 @@ const getBasePath = (args: AxiosHttpArgs): string | undefined => {
     const pathMap: Record<string, string> = {
       'mi-travelkit': import.meta.env.VITE_REACT_APP_API_URL,
       'isl-login': import.meta.env.VITE_REACT_APP_API_URL_ISL,
+      'plan-upgrades': import.meta.env.VITE_ISL_APP_SERVICE_UPGRADES,
       'epayco-ip': import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_IP,
       'epayco-payment': import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_PAYMENT
     }
