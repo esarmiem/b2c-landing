@@ -7,7 +7,8 @@
  * English:
  * Defines the base URL for the API, obtained from the environment variable VITE_REACT_APP_API_URL.
  */
-export const BASE_URL: string = import.meta.env.VITE_REACT_APP_API_URL || ''
+// export const BASE_URL: string = import.meta.env.VITE_REACT_APP_API_URL || ''
+export const BASE_URL = import.meta.env.NODE_ENV === 'production' ? '/mi-travelkit' : 'https://api.mitravelkit.com/api/v1'
 /**
  * SERVICE_AUTHENTICATION
  *

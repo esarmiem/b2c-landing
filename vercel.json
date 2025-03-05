@@ -1,10 +1,14 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/index.html" }
-    ],
-    "headers": [
+  "rewrites": [
+    { "source": "/mi-travelkit/:path*", "destination": "https://api.mitravelkit.com/api/v1/:path*" },
+    { "source": "/isl-login/:path*", "destination": "https://dtravelassist.com/apirest_v1/auth/:path*" },
+    { "source": "/epayco-ip/:path*", "destination": "https://apify-private.epayco.co/:path*" },
+    { "source": "/epayco-payment/:path*", "destination": "https://secure.epayco.co/create/transaction/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "*" },
@@ -13,4 +17,4 @@
       ]
     }
   ]
-  }
+}
