@@ -133,12 +133,13 @@ export const AUTH_API = {
    *                                 / A promise that resolves with the API response.
    */
   login: (): Promise<ApiResponse> => {
-    const loginData = { username: USER_NAME, password: PASSWORD }
+    const loginCredential = { username: USER_NAME, password: PASSWORD }
     return axiosHttp({
-      path: `${SERVICE_AUTHENTICATION}`,
+      pathISL: `${SERVICE_AUTHENTICATION}`,
       method: 'POST',
-      data: loginData,
+      data: loginCredential,
       session: null
     })
   }
 }
+//comentario de prueba
