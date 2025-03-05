@@ -58,4 +58,4 @@ export const ServiceCards: React.FC<ServiceCardsProps> = () => {
       </div>
     </section>
   );
-};
+}; //componente no esta en uso
