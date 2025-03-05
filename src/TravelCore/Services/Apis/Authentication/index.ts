@@ -135,7 +135,7 @@ export const AUTH_API = {
   login: (): Promise<ApiResponse> => {
     const loginData = { username: USER_NAME, password: PASSWORD }
     return axiosHttp({
-      pathISL: `${SERVICE_AUTHENTICATION}`,
+      path: `${SERVICE_AUTHENTICATION}`,
       method: 'POST',
       data: loginData,
       session: null
