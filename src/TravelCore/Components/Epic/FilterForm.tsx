@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Earth, Pencil, PlaneTakeoff, Users } from 'lucide-react'
-import { type MouseEvent, useEffect, useRef, useState } from 'react'
+import { type Dispatch, type MouseEvent, type SetStateAction, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OriginPopover } from '@/TravelCore/Components/Epic/OriginPopover'
 import { Popover, PopoverTrigger } from '@/components/ui/popover'
@@ -12,12 +12,26 @@ import { NumberTravelers } from '@/TravelCore/Components/Raw/NumberTravelers'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import { DestinationPopover } from '@/TravelCore/Components/Epic/DestinationPopover.tsx'
-import { format, parse } from 'date-fns'
+import { format, parse, isBefore, startOfDay } from 'date-fns'
 import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
+import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
+import { useMessageTranslations } from '@/TravelCore/Utils/validations/useMessageTranslations.ts'
 
-export const FilterForm = () => {
+interface FilterFormProps {
+  handleChange: (field: string, value: string) => void
+  setErrors: Dispatch<SetStateAction<{ [p: string]: string[] }>>
+  setIsLoading: Dispatch<SetStateAction<boolean>>
+  formData: { travelers: string }
+  errors: { [p: string]: string[] }
+  validationRules: { travelers: { requiredAge: boolean } }
+}
+
+export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoading, validationRules }: FilterFormProps) => {
+  const msg = useMessageTranslations()
   const { HandleGetOrder } = useHomeState()
+  const errorTraveler = errors?.travelers
+
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
   const countries = master?.countries?.data?.items as CountriesItems[]
@@ -39,24 +53,46 @@ export const FilterForm = () => {
   const departureDateRef = useRef<HTMLDivElement>(null)
   const returnDateRef = useRef<HTMLDivElement>(null)
 
+  // Función para deshabilitar fechas pasadas
+  const disablePastDates = (date: Date) => {
+    return isBefore(date, startOfDay(new Date()))
+  }
+
   // Properly parse dates from DD/MM/YYYY format
   const [departureDate, setDepartureDate] = useState<Date>(() => {
     if (!payloadOrder?.salida) return new Date()
-    return parse(payloadOrder?.salida ?? '', 'dd/MM/yyyy', new Date())
+
+    const parsedDate = parse(payloadOrder?.salida ?? '', 'dd/MM/yyyy', new Date())
+
+    // Si la fecha parseada es pasada, usar la fecha actual
+    if (isBefore(parsedDate, startOfDay(new Date()))) {
+      return new Date()
+    }
+
+    return parsedDate
   })
+
   const [returnDate, setReturnDate] = useState<Date>(() => {
     if (!payloadOrder?.llegada) return new Date()
-    return parse(payloadOrder?.llegada ?? '', 'dd/MM/yyyy', new Date())
+
+    const parsedDate = parse(payloadOrder?.llegada ?? '', 'dd/MM/yyyy', new Date())
+
+    // Si la fecha parseada es pasada, usar departureDate + 1 día
+    if (isBefore(parsedDate, startOfDay(new Date()))) {
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      return tomorrow
+    }
+
+    return parsedDate
   })
 
   // Handle outside clicks to close calendars
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Close departure calendar if clicked outside
       if (departureDateRef.current && !departureDateRef.current.contains(event.target as Node) && departureOpen) {
         setDepartureOpen(false)
       }
-      // Close return calendar if clicked outside
       if (returnDateRef.current && !returnDateRef.current.contains(event.target as Node) && returnOpen) {
         setReturnOpen(false)
       }
@@ -84,6 +120,7 @@ export const FilterForm = () => {
   // Save departure date to data context
   const handleDepartureDateChange = (date: Date | undefined) => {
     if (date && setData) {
+      handleChange('travelDate', format(date, 'dd/MM/yyyy'))
       setDepartureDate(date)
       setData(prevData => ({
         ...prevData,
@@ -92,6 +129,15 @@ export const FilterForm = () => {
           salida: format(date, 'dd/MM/yyyy')
         }
       }))
+
+      // Si la fecha de retorno es anterior a la fecha de salida, actualizarla también
+      if (returnDate && isBefore(returnDate, date)) {
+        // Establecer la fecha de retorno un día después de la fecha de salida
+        const newReturnDate = new Date(date)
+        newReturnDate.setDate(newReturnDate.getDate() + 1)
+
+        handleReturnDateChange(newReturnDate)
+      }
     }
   }
 
@@ -109,17 +155,42 @@ export const FilterForm = () => {
     }
   }
 
-  const handleChange = (field: string, value: string) => {
-    return console.log(field, value)
+  // Save initial payload to detect changes
+  const initialPayloadRef = useRef<dataOrder | null>(null)
+  const hasChanges = (current: dataOrder | undefined, initial: dataOrder | null): boolean => {
+    if (!current || !initial) return false
+
+    return (
+      current.pais !== initial.pais ||
+      current.destino !== initial.destino ||
+      current.salida !== initial.salida ||
+      current.llegada !== initial.llegada ||
+      current.cantidadPax !== initial.cantidadPax
+    )
   }
 
   const handleSave = async () => {
-    setIsEditing(!isEditing)
+    setIsEditing(true)
+
+    const validationResult = validateForm(formData, msg, validationRules)
+
+    if (!validationResult.isValid) {
+      setErrors(validationResult.errors)
+      return
+    }
 
     if (isEditing) {
-      await HandleGetOrder(payloadOrder as dataOrder)
-      console.log('actualizando Planes: ', payloadOrder)
+      if (hasChanges(payloadOrder as dataOrder, initialPayloadRef.current)) {
+        setIsLoading(true)
+        await HandleGetOrder(payloadOrder as dataOrder)
+        setIsLoading(false)
+      } else {
+        console.log('No se detectaron cambios, omitiendo actualización')
+      }
+    } else {
+      initialPayloadRef.current = { ...(payloadOrder as dataOrder) }
     }
+    setIsEditing(!isEditing)
   }
 
   return (
@@ -197,6 +268,8 @@ export const FilterForm = () => {
                   <Datepicker
                     mode="single"
                     selected={departureDate}
+                    defaultMonth={departureDate}
+                    disabled={disablePastDates}
                     onSelect={date => {
                       if (date) {
                         handleDepartureDateChange(date)
@@ -233,6 +306,11 @@ export const FilterForm = () => {
                 <Datepicker
                   mode="single"
                   selected={returnDate}
+                  defaultMonth={returnDate}
+                  disabled={date => {
+                    // Deshabilitar fechas pasadas y fechas anteriores a la fecha de salida
+                    return isBefore(date, startOfDay(new Date())) || isBefore(date, departureDate)
+                  }}
                   onSelect={date => {
                     if (date) {
                       handleReturnDateChange(date)
@@ -259,9 +337,11 @@ export const FilterForm = () => {
                   disabled={!isEditing}
                   type="button"
                   onClick={() => setTravelersOpen(prev => !prev)}
-                  className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''}`}
+                  className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''} ${errorTraveler && errorTraveler?.length > 0 ? 'text-red-500' : ''}`}
                 >
-                  {`${payloadOrder?.cantidadPax || 1} ${t('label-default-passengers')}`}
+                  {errorTraveler && errorTraveler?.length > 0
+                    ? errorTraveler
+                    : `${payloadOrder?.cantidadPax || 1} ${t('label-default-passengers')}`}
                 </button>
               </div>
             </PopoverTrigger>

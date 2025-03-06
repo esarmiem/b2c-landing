@@ -164,7 +164,7 @@ const useHomeState = () => {
 
       console.log('day difference: ', daysDifference)
 
-      // Determinate the question number based on the days difference
+      // Determine the question number based on the days difference
       const numerosPreguntas = []
       if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
       if (daysDifference >= 30 && daysDifference < 364) numerosPreguntas.push(2)
@@ -180,15 +180,17 @@ const useHomeState = () => {
         idProspecto: 0
       }
 
-      // Procesar cada pregunta secuencialmente en lugar de en paralelo
+      // Process each question sequentially instead of in parallel
       for (const numeroPregunta of numerosPreguntas) {
         let attempts = numeroPregunta === numerosPreguntas[0] ? 3 : 1
         let success = false
+        let delay = 1000 // Initial delay of 1 second
 
         while (attempts > 0 && !success) {
           try {
             if (attempts < 3 && numeroPregunta === numerosPreguntas[0]) {
-              await new Promise(resolve => setTimeout(resolve, 1000))
+              await new Promise(resolve => setTimeout(resolve, delay))
+              delay *= 2 // Exponential backoff
             }
 
             const response = await travelAssistance.getOrderPriceByAge({ ...orderPayload, numeroPregunta })

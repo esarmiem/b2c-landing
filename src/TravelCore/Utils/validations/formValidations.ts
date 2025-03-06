@@ -47,6 +47,8 @@ interface MsgForm {
     past: string
     format: string
   }
+  traveler: string
+  travelers: string
 }
 
 const VALIDATION_PATTERNS: Record<ValidationPattern, RegExp> = {
@@ -183,23 +185,28 @@ export const validateForm = (formData: Record<string, string>, msg: MsgForm, val
       const ages = value.split(',')
       ages.forEach((age, index) => {
         if (age === '' || age === '0') {
-          if (!errors[fieldName]) {
-            errors[fieldName] = []
-          }
-          if (!errors[fieldName].includes(msg.requiredAge)) {
-            errors[fieldName].push(`${msg.requiredAge} (Traveler ${index + 1})`)
-          }
-          hasErrors = true
+          hasErrors = true;
         }
       })
 
-      // Check if there is only one traveler and if they are at least 18 years old
-      if (ages.length === 1 && Number.parseInt(ages[0], 10) < 18) {
-        if (!errors[fieldName]) {
-          errors[fieldName] = []
+      // Si hay errores, recopilamos los índices de los viajeros sin edad
+      if (hasErrors) {
+        const travelersWithoutAge = ages
+          .map((age, index) => (age === '' || age === '0' ? index + 1 : null))
+          .filter(index => index !== null);
+
+        if (travelersWithoutAge.length > 0) {
+          if (!errors[fieldName]) {
+            errors[fieldName] = [];
+          }
+
+          // Usamos singular o plural según corresponda
+          if (travelersWithoutAge.length === 1) {
+            errors[fieldName].push(`${msg.requiredAge} (${msg.traveler} ${travelersWithoutAge[0]})`);
+          } else {
+            errors[fieldName].push(`${msg.requiredAge} (${msg.travelers} ${travelersWithoutAge.join(', ')})`);
+          }
         }
-        errors[fieldName].push(msg.minAge)
-        hasErrors = true
       }
     }
   }
@@ -208,8 +215,4 @@ export const validateForm = (formData: Record<string, string>, msg: MsgForm, val
     isValid: !hasErrors,
     errors
   }
-}
-
-export const validateSingleField = (value: string, msg: MsgForm, validationRules: ValidationRules): string[] => {
-  return validateField(value, msg, validationRules)
 }

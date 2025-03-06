@@ -21,7 +21,9 @@ export const useMessageTranslations = () => {
       invalid: t('validation.dateRange.invalid'),
       past: t('validation.dateRange.past'),
       format: t('validation.dateRange.format')
-    }
+    },
+    traveler: t('validation.traveler'),
+    travelers: t('validation.travelers'),
   }
 
   return msg

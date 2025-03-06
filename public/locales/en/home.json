@@ -81,6 +81,8 @@
     "and": "and",
     "characters": "characters",
     "match": "Fields do not match",
+    "traveler": "Traveler",
+    "travelers": "Travelers",
     "dateRange": {
       "invalid": "Invalid date range",
       "past": "The date must be in the future",
