@@ -14,6 +14,7 @@
   "billing-option-passport": "Pasaporte",
   "billing-document-number": "No. de documento",
   "billing-placeholder-document-number": "Número de documento",
+  "billing-phone": "Teléfono",
   "billing-email": "Correo electrónico",
   "billing-placeholder-email": "correo@ejemplo.com",
   "billing-country": "País de facturación",
@@ -26,5 +27,11 @@
   "billing-placeholder-address": "Calle 123 #45-67",
   "billing-additional-info": "Información adicional",
   "billing-placeholder-additional-info": "Apartamento, suite, unidad, etc.",
-  "billing-header-title": "Datos de facturación"
+  "billing-header-title": "Datos de facturación",
+  "title-goback": "Volver a la información de pasajeros",
+  "loading-title-wait": "Espere un momento por favor",
+  "loading-text-preparing-payment": "Estamos preparando los datos para el pago...",
+  "loading-text-adding-order": "Estamos agregando la orden de compra...",
+  "loading-title-one-moment": "Un momento más",
+  "loading-text-redirecting-payment": "Estamos redirigiendo a pasarela de pago..."
 }

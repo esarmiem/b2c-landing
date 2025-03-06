@@ -12,8 +12,9 @@
   "billing-option-cc": "Citizenship ID",
   "billing-option-ce": "Foreigner ID",
   "billing-option-passport": "Passport",
-  "billing-document-number": "Document number",
-  "billing-placeholder-document-number": "Document number",
+  "billing-document-number": "ID number",
+  "billing-placeholder-document-number": "ID number",
+  "billing-phone": "Phone",
   "billing-email": "Email",
   "billing-placeholder-email": "email@example.com",
   "billing-country": "Billing country",
@@ -26,5 +27,11 @@
   "billing-placeholder-address": "Street 123 #45-67",
   "billing-additional-info": "Additional information",
   "billing-placeholder-additional-info": "Apartment, suite, unit, etc.",
-  "billing-header-title": "Billing Information"
+  "billing-header-title": "Billing Information",
+  "title-goback": "Back to passenger information",
+  "loading-title-wait": "Please wait a moment",
+  "loading-text-preparing-payment": "We are preparing the payment data...",
+  "loading-text-adding-order": "We are adding the purchase order...",
+  "loading-title-one-moment": "One more moment",
+  "loading-text-redirecting-payment": "We are redirecting to the payment gateway..."
 }

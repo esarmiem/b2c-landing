@@ -4,12 +4,11 @@ import { useTranslation } from "react-i18next";
 import useData from "@/TravelCore/Hooks/useData.ts";
 import {calculateDaysBetweenDates} from "@/TravelCore/Utils/dates.ts";
 import {formatCurrency} from "@/TravelCore/Utils/format.ts"; // Importar useTranslation
+import payment from "../../../../Assets/payment-methods.webp"
 
 export function PurchaseDetails({ button }: { button: JSX.Element }) {
   const { t } = useTranslation(["traveler"]); // Obtener la función de traducción
   const { data } = useData() || {}
-
-  const paymentMethods = '../../../../Assets/payment-methods.webp';
 
   const orderData = data?.payloadOrder
   const savedResponseOrder = data?.responseOrder
@@ -26,7 +25,7 @@ export function PurchaseDetails({ button }: { button: JSX.Element }) {
             </div>
             <div className="flex flex-col p-0">
               <h1 className="font-medium text-xl">{t("label-purchase-details")}</h1>
-              <p className="text-sm mt-1">{orderData?.destino} , {calculateDaysBetweenDates(orderData?.salida || "", orderData?.llegada || "")} days {orderData?.cantidadPax || ""} people</p>
+              <p className="text-sm mt-1">{orderData?.destino} , {calculateDaysBetweenDates(orderData?.salida || "", orderData?.llegada || "")} {t("label-purchase-days")} {orderData?.cantidadPax || ""} {t("label-purchase-people")}</p>
             </div>
           </div>
 
@@ -81,7 +80,7 @@ export function PurchaseDetails({ button }: { button: JSX.Element }) {
 
       <div className="flex justify-center items-center p-4">
         <img
-          src={paymentMethods}
+          src={payment}
           alt="payment methods"
           className="w-full h-auto max-w-[1020px]"
         />

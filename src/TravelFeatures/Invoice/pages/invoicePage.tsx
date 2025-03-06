@@ -10,6 +10,8 @@ import { useCallback, useState } from 'react'
 import type { PaxForm, Billing, dataPreorder, dataIslOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { Order } from '@/TravelFeatures/Invoice/model/order_entity.ts'
 import useInvoiceState from '@/TravelFeatures/Invoice/adapterHelper'
+import { useTranslation } from "react-i18next";
+
 
 interface loading {
   isOpen: boolean
@@ -17,6 +19,7 @@ interface loading {
   text: string
 }
 export default function InvoicePage() {
+  const { t } = useTranslation(["invoice"]);
   const { data, setData } = useData() || {}
   const { mapperPreorder, mapperAddOrder, mapperPayment } = useInvoiceState()
   const [billingData, setBillingData] = useState<Billing>({
@@ -79,8 +82,8 @@ export default function InvoicePage() {
 
     setLoading({
       isOpen: true,
-      title: 'Espere un momento por favor',
-      text: 'Estamos preparando los datos para el pago...'
+      title: t("loading-title-wait"),
+      text: t("loading-text-preparing-payment")
     })
 
     setTimeout(async () => {
@@ -92,8 +95,8 @@ export default function InvoicePage() {
         console.log('Respuesta de checkPreOrder: ', respPre.data)
         setLoading({
           isOpen: true,
-          title: 'Espere un momento por favor',
-          text: 'Estamos agregando la orden de compra...'
+          title: t("loading-title-wait"),
+          text: t("loading-text-adding-order")
         })
         const mapAddOrder: dataIslOrder = mapperAddOrder(respPre.data)
 
@@ -102,8 +105,8 @@ export default function InvoicePage() {
           console.log('Respuesta de addOrder: ', respAdd.data)
           setLoading({
             isOpen: true,
-            title: 'Un momento más',
-            text: 'Estamos redirigiendo a pasarela de pago...'
+            title: t("loading-title-one-moment"),
+            text: t("loading-text-redirecting-payment")
           })
 
           const respIP = await order.getIP()
@@ -142,7 +145,7 @@ export default function InvoicePage() {
     <>
       <Breadcrumb />
       <main className="max-w-6xl mx-auto p-4 my-6">
-        <GoBack title="Volver a la informacion de pasajeros" url="/traveler" />
+        <GoBack title={t("title-goback")} url="/traveler" />
         <section className="grid md:grid-cols-[1fr_400px] gap-6 my-2">
           <section className="space-y-4 items-center">
             <HeaderBilling />
