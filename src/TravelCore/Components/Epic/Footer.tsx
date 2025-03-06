@@ -174,6 +174,17 @@ export const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
           <p>{t("label-text-trademark", { Year: currentYear })}</p>
+          <p>
+            {t("footer-powered-by")}
+            <Link
+              href="https://www.linkedin.com/company/alaskatech/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white text-red-500 font-semibold transition-colors duration-200 ml-1"
+            >
+              Alaska Tech
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

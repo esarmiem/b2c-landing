@@ -132,7 +132,7 @@ const activeCities = cities
                         />
                     </div>
                     {/*<PhoneNumberForm celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>*/}
-                    <PhoneNumberForm2 celType="Teléfono" value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>
+                    <PhoneNumberForm2 celType={t("billing-phone")} value={{phone: data.phone, countryCode: data.countryCode }} onChange={handleInputChange}/>
                     <div>
                         <label className="block font-semibold text-gray-500 text-sm mb-1">
                             {t("billing-email")}

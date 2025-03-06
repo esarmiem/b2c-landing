@@ -12,5 +12,6 @@
   "label-link-terms": "Términos y condiciones",
   "label-link-cookies": "Política de cookies",
   "label-link-conditions": "Condiciones generales",
-  "label-text-trademark": "TravelKit {{Year}} © Todos los derechos reservados."
+  "label-text-trademark": "TravelKit {{Year}} © Todos los derechos reservados.",
+  "footer-powered-by": "Hecho por"
 }
