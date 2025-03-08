@@ -126,5 +126,22 @@ const getBasePath = (args: AxiosHttpArgs): string | undefined => {
     }
   }
 
+  if (import.meta.env.NODE_ENV === 'production') {
+    const pathMap: Record<string, string> = {
+      'mi-travelkit': import.meta.env.VITE_REACT_APP_API_URL,
+      'isl-login': import.meta.env.VITE_REACT_APP_API_URL_ISL,
+      'plan-upgrades': import.meta.env.VITE_ISL_APP_SERVICE_UPGRADES,
+      'epayco-ip': import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_IP,
+      'epayco-payment': import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_PAYMENT
+    }
+
+    // Intenta determinar la ruta base basándose en el path
+    for (const [key, value] of Object.entries(pathMap)) {
+      if (args.path?.startsWith(key)) {
+        return value
+      }
+    }
+  }
+
   return BASE_URL
 }

@@ -31,6 +31,8 @@
   "label-email": "Correo electrónico",
   "placeholder-email": "correo@ejemplo.com",
   "label-purchase-details": "Detalles de tu compra",
+  "label-purchase-days": "días",
+  "label-purchase-people": "personas",
   "label-trip-details": "Europa, 6 días 2 personas",
   "label-number-of-travelers": "Número de viajeros:",
   "label-product-value-cop": "Valor del producto en pesos:",

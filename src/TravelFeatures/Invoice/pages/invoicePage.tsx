@@ -11,6 +11,8 @@ import type { PaxForm, Billing, dataPreorder, dataIslOrder } from '@/TravelCore/
 import { Order } from '@/TravelFeatures/Invoice/model/order_entity.ts'
 import useInvoiceState from '@/TravelFeatures/Invoice/adapterHelper'
 import {URL_EPAYCO_METHODS, SERVICE_METHODS_EPAYCO} from "@/TravelCore/Utils/constants.ts";
+import { useTranslation } from "react-i18next";
+
 
 interface loading {
   isOpen: boolean
@@ -18,6 +20,7 @@ interface loading {
   text: string
 }
 export default function InvoicePage() {
+  const { t } = useTranslation(["invoice"]);
   const { data, setData } = useData() || {}
   const { mapperPreorder, mapperAddOrder, mapperPayment } = useInvoiceState()
   const [billingData, setBillingData] = useState<Billing>({
@@ -80,8 +83,8 @@ export default function InvoicePage() {
 
     setLoading({
       isOpen: true,
-      title: 'Espere un momento por favor',
-      text: 'Estamos preparando los datos para el pago...'
+      title: t("loading-title-wait"),
+      text: t("loading-text-preparing-payment")
     })
 
     setTimeout(async () => {
@@ -93,8 +96,8 @@ export default function InvoicePage() {
         console.log('Respuesta de checkPreOrder: ', respPre.data)
         setLoading({
           isOpen: true,
-          title: 'Espere un momento por favor',
-          text: 'Estamos agregando la orden de compra...'
+          title: t("loading-title-wait"),
+          text: t("loading-text-adding-order")
         })
         const mapAddOrder: dataIslOrder = mapperAddOrder(respPre.data)
 
@@ -103,18 +106,19 @@ export default function InvoicePage() {
           console.log('Respuesta de addOrder: ', respAdd.data)
           setLoading({
             isOpen: true,
-            title: 'Un momento más',
-            text: 'Estamos redirigiendo a pasarela de pago...'
+            title: t("loading-title-one-moment"),
+            text: t("loading-text-redirecting-payment")
           })
 
           const respIP = await order.getIP()
           if (respIP && respIP.data) {
             console.log('Respuesta de la ip: ', respIP.data)
-            const { mapPayment, transactionId } = mapperPayment(respIP.data, respAdd.data)
+            const { mapPayment, transactionId } = mapperPayment(respIP.data.data, respAdd.data)
 
-            const payloadString = JSON.stringify(mapPayment);
-            const params = new URLSearchParams();
-            params.append("fname", payloadString);
+            const payloadString = JSON.stringify(mapPayment)
+            const params = new URLSearchParams()
+            params.append('fname', payloadString)
+
             const respPayment = await order.payment(params.toString(), transactionId)
             console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
             if (respPayment?.data.success && respPayment?.data?.data?.id_session != '') {
@@ -149,7 +153,7 @@ export default function InvoicePage() {
     <>
       <Breadcrumb />
       <main className="max-w-6xl mx-auto p-4 my-6">
-        <GoBack title="Volver a la informacion de pasajeros" url="/traveler" />
+        <GoBack title={t("title-goback")} url="/traveler" />
         <section className="grid md:grid-cols-[1fr_400px] gap-6 my-2">
           <section className="space-y-4 items-center">
             <HeaderBilling />
