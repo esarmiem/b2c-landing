@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { CircleCheck, Download, RefreshCcw, CircleX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@/TravelCore/Components/Raw/Link";
 import { useTranslation } from "react-i18next";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 
 // Payment Details Interface
 export interface PaymentDetails {
@@ -19,14 +22,20 @@ export interface PaymentDetails {
 }
 
 interface PaymentStatusProps {
-  payment: PaymentDetails;
-  onRetry: () => void;
-  onDownloadVoucher: () => Promise<void>;
+  payment: PaymentDetails
+  dataSummary: any
+  status: string
+  onRetry: () => void
+  voucher: any
+  pathResponse: string
 }
 
-export const PaymentStatus: React.FC<PaymentStatusProps> = ({ payment, onRetry, onDownloadVoucher }) => {
-  const { t } = useTranslation(["billingResult"]);
-  const isApproved = payment.status === "approved";
+export const PaymentStatus: React.FC<PaymentStatusProps> = ({ payment, dataSummary , status, onRetry, voucher, pathResponse }) => {
+  const { t } = useTranslation(["billingResult"])
+  const [copied, setCopied] = useState(false)
+  const isApproved = status !== "Rechazado" //"Cotizado|Pendiente|Pagado|Rechazado"
+
+  console.log(dataSummary)
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col gap-4 items-center justify-center py-6 px-2 sm:px-6 md:px-8 lg:px-12 xl:px-16">
@@ -95,17 +104,35 @@ export const PaymentStatus: React.FC<PaymentStatusProps> = ({ payment, onRetry, 
             </div>
           </div>
 
+          {(status === "Cotizado" || status === "Pendiente") && (
+            <div className="flex justify-center pt-4">
+              <div className="text-center">
+                <span>{pathResponse}</span>
+                <CopyToClipboard text={pathResponse} onCopy={() => setCopied(true)}>
+                  <span>Copy to clipboard</span>
+                </CopyToClipboard>
+                {copied ? (<span className="text-primary">{t("copied")}</span>) : null}
+              </div>
+            </div>
+          )}
+
+
           <div className="flex justify-center pt-4">
-            {isApproved ? (
-              <Button onClick={onDownloadVoucher} className="w-full max-w-md hover:bg-white hover:text-black hover:border-2 hover:border-black">
-                <Download className="w-4 h-4 mr-2" />
-                {t("label-download-voucher")}
-              </Button>
+            {isApproved && voucher ? (
+                <a
+                    href={voucher}
+                    target="__blank"
+                    className="w-full max-w-md hover:bg-white hover:text-black hover:border-2 hover:border-black"
+                >
+                  <Download className="w-4 h-4 mr-2"/>
+                  {t("label-download-voucher")}
+                </a>
+
             ) : (
-              <Button onClick={onRetry} className="w-full max-w-md text-xs md:text-base hover:bg-white hover:text-black hover:border-2 hover:border-black">
-                <RefreshCcw className="hidden md:flex w-4 h-4 mr-2" />
-                {t("label-retry-payment")}
-              </Button>
+                <Button onClick={onRetry} className="w-full max-w-md text-xs md:text-base hover:bg-white hover:text-black hover:border-2 hover:border-black">
+                  <RefreshCcw className="hidden md:flex w-4 h-4 mr-2"/>
+                  {t("label-retry-payment")}
+                </Button>
             )}
           </div>
         </CardContent>

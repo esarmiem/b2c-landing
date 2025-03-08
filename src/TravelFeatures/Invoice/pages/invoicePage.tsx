@@ -10,6 +10,7 @@ import { useCallback, useState } from 'react'
 import type { PaxForm, Billing, dataPreorder, dataIslOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { Order } from '@/TravelFeatures/Invoice/model/order_entity.ts'
 import useInvoiceState from '@/TravelFeatures/Invoice/adapterHelper'
+import {URL_EPAYCO_METHODS, SERVICE_METHODS_EPAYCO} from "@/TravelCore/Utils/constants.ts";
 
 interface loading {
   isOpen: boolean
@@ -112,11 +113,16 @@ export default function InvoicePage() {
             const { mapPayment, transactionId } = mapperPayment(respIP.data, respAdd.data)
 
             const payloadString = JSON.stringify(mapPayment);
-            const encodedPayload = encodeURIComponent(payloadString);
             const params = new URLSearchParams();
-            params.append("fname", encodedPayload);
+            params.append("fname", payloadString);
             const respPayment = await order.payment(params.toString(), transactionId)
-            console.log('respPayment: ', respPayment)
+            console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
+            if (respPayment?.data.success && respPayment?.data?.data?.id_session != '') {
+              const transaction = respPayment?.data?.data?.id_session
+              window.location.href = `${URL_EPAYCO_METHODS}/${SERVICE_METHODS_EPAYCO}?transaction=${transaction}`
+            } else {
+              alert("Ha ocurrido un error al procesar la orden con la pasarela de pago")
+            }
           }
         }
       }
