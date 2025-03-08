@@ -14,9 +14,11 @@ interface TravelFormProps {
   onChangeField?: (index: number, name: string, value: string) => void
   traveler: { id: number; age: string; phone: string }
   dataTraveler: PaxForm
+  onChange: (field: string, value: string) => void
+  errors?: { [p: string]: string[] }
 }
 
-export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: TravelFormProps) => {
+export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onChange, errors }: TravelFormProps) => {
   const { t } = useTranslation(['traveler'])
   const [ageError, setAgeError] = useState<string>('')
   const master = useMasters()
@@ -41,6 +43,7 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
   const handleInputChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
+      onChange(name, value)
       if (name === 'birthdate') {
         if (!calculateAndCompareAge(value, Number.parseInt(traveler.age))) {
           setAgeError('La fecha de nacimiento debe coincidir con la edad del pasajero.')
@@ -72,8 +75,11 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler }: Tra
       <div className="space-y-4 p-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor={`firstName-${traveler.id}`} className="block font-semibold text-gray-500 text-sm mb-1">
-              {t('label-first-name')}
+            <label
+              htmlFor={`firstName-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors && errors?.length > 0 ? 'text-red-500 ring-red-500' : ''}`}
+            >
+              {errors?.firstName && errors?.firstName.length > 0 ? errors?.firstName : t('label-first-name')}
             </label>
             <Input
               id={`firstName-${traveler.id}`}

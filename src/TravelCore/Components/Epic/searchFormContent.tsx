@@ -9,7 +9,7 @@ import { TravelButtonForm } from './TravelButtonForm'
 import { TravelersPopover } from './TravelersPopover'
 
 interface SearchFormContentProps {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onClick: () => void
 }
 
 export function SearchFormContent({ onClick }: SearchFormContentProps) {
@@ -50,7 +50,9 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
       setErrors(validationResult.errors)
       return
     }
-    onClick(event)
+
+    console.log('Form data being submitted:', formData)
+    onClick()
   }
 
   return (

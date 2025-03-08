@@ -35,6 +35,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
   const currentLanguage = i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
 
   // Inicialización de la cotización - solo cuando es necesario
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const shouldInitialize =
       !travelerQuotation || travelerQuotation.planId !== plan.IdPlan || travelerQuotation.travellers.length !== numberTravellers

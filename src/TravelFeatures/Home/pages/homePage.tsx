@@ -1,29 +1,26 @@
-import { Certifications } from '@/TravelCore/Components/Epic/Certifications.tsx'
-import { Features } from '@/TravelCore/Components/Epic/Features.tsx'
-import { HeroCarousel } from '@/TravelCore/Components/Epic/HeroCarousel.tsx'
-import { LoadingScreen } from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
-import { Stats } from '@/TravelCore/Components/Epic/Stats.tsx'
-import { Testimonials } from '@/TravelCore/Components/Epic/Testimonials.tsx'
-import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
-import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
-import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
+import {Certifications} from '@/TravelCore/Components/Epic/Certifications.tsx'
+import {Features} from '@/TravelCore/Components/Epic/Features.tsx'
+import {HeroCarousel} from '@/TravelCore/Components/Epic/HeroCarousel.tsx'
+import {LoadingScreen} from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
+import {Stats} from '@/TravelCore/Components/Epic/Stats.tsx'
+import {Testimonials} from '@/TravelCore/Components/Epic/Testimonials.tsx'
+import {TravelForm} from '@/TravelCore/Components/Epic/TravelForm.tsx'
+import {TravelSteps} from '@/TravelCore/Components/Epic/TravelSteps.tsx'
+import {WhatsAppButton} from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
 import useData from '@/TravelCore/Hooks/useData.ts'
-import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type {dataOrder} from '@/TravelCore/Utils/interfaces/Order.ts'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-/*
-import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx";
-*/
-import { useNavigate } from 'react-router-dom'
+import {useState} from 'react'
+import {useTranslation} from 'react-i18next'
+import slide1 from '../../../../Assets/slide1.webp'
+import slide2 from '../../../../Assets/slide2.webp'
+import slide4 from '../../../../Assets/slide4.webp'
+import slide5 from '../../../../Assets/slide5.webp'
+import {useNavigate} from 'react-router-dom'
+import slide6 from '../../../../Assets/slide6.webp'
+// import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx"
 
-import slide1 from '../../../../Assets/slide1.webp';
-import slide2 from '../../../../Assets/slide2.webp';
-import slide4 from '../../../../Assets/slide4.webp';
-import slide5 from '../../../../Assets/slide5.webp';
-import slide6 from '../../../../Assets/slide6.webp';
-
-const images = [slide1, slide2, slide4, slide5, slide6];
+const images = [slide1, slide2, slide4, slide5, slide6]
 
 export default function HomePage() {
   const { t } = useTranslation(['home'])
@@ -32,14 +29,11 @@ export default function HomePage() {
 
   const { HandleGetOrder, isDataOrderValid } = useHomeState()
   const [isLoadingOrders, setIsLoadingOrders] = useState(false)
-  /*
-      const [isOpenContactModal, setIsOpenContactModal] = useState(false);
-    */
+  //const [isOpenContactModal, setIsOpenContactModal] = useState(false)
 
-  /*  const handleSearch = () => {
-    //Llamar al modal
-    setIsOpenContactModal(true)
-  };*/
+  // const handleSearch = () => {
+  //   setIsOpenContactModal(true)
+  // }
 
   const handleGetQuote = async () => {
     setIsLoadingOrders(true)
@@ -50,7 +44,7 @@ export default function HomePage() {
 
       const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
 
-      if (resp && resp > 0) {
+      if (resp && Number(resp) > 0) {
         setTimeout(() => {
           navigate('/quote/travel')
         }, 1000)
@@ -77,9 +71,7 @@ export default function HomePage() {
       <Testimonials />
       <Stats />
       <WhatsAppButton />
-      {/*
-        <ModalForm isOpen={isOpenContactModal} toggleModal={() => setIsOpenContactModal(!isOpenContactModal)} onClick ={handleGetQuote} />
-*/}
+      {/*<ModalForm isOpen={isOpenContactModal} toggleModal={() => setIsOpenContactModal(!isOpenContactModal)} onClick ={handleGetQuote} />*/}
     </>
   )
 }
