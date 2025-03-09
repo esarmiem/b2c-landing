@@ -8,10 +8,9 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import type { TFunction } from 'i18next'
 import { Check, ChevronsUpDown, Info, MapPin, MapPinHouse } from 'lucide-react'
+import type { TFunction } from 'i18next'
 import { useEffect, useState } from 'react'
-import useSession from '@/TravelCore/Hooks/useSession.ts'
 
 interface DestinationSelectorProps {
   activeTooltip: string | null
@@ -26,8 +25,6 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
   const countries = master?.countries?.data?.items as CountriesItems[]
 
-  const { user_id } = useSession() || {}
-  console.log('user id', user_id)
   const { data, setData } = useData() || {}
   const payloadOrder = data?.payloadOrder
   const origin = countries?.find(country => country.codigoISO === (payloadOrder?.pais ? payloadOrder?.pais : 'CO'))?.descripcion

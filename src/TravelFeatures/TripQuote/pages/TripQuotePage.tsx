@@ -6,12 +6,12 @@ import useData from '@/TravelCore/Hooks/useData.ts'
 import { useState} from 'react'
 import { useTranslation } from 'react-i18next'
 import {validateForm} from "@/TravelCore/Utils/validations/formValidations.ts";
-import {useMessageTranslations} from "@/TravelCore/Utils/validations/useMessageTranslations.ts";
+import {useUtilsValidations} from "@/TravelCore/Utils/validations/useUtilsValidations.ts";
 import Loader from "@/TravelCore/Components/Raw/Loader.tsx";
 
 const TripQuotePage: React.FC = () => {
   const { t } = useTranslation(['products'])
-  const msg = useMessageTranslations()
+  const msg = useUtilsValidations()
   const [visibleCount, setVisibleCount] = useState(4)
   const { data } = useData() || {}
   const plans = data?.responseOrder?.planes || []

@@ -40,7 +40,9 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (date?.from && date?.to && setData) {
+      // Este onChange es el que recibe del componente padre y envía el valor formateado
       onChange(`${format(date.from, 'dd/MM/yyyy')} - ${format(date.to, 'dd/MM/yyyy')}`)
+
       setData(prevData => ({
         ...prevData,
         payloadOrder: {

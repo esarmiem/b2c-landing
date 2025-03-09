@@ -1,22 +1,18 @@
-import {Certifications} from '@/TravelCore/Components/Epic/Certifications.tsx'
-import {Features} from '@/TravelCore/Components/Epic/Features.tsx'
-import {HeroCarousel} from '@/TravelCore/Components/Epic/HeroCarousel.tsx'
-import {LoadingScreen} from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
-import {Stats} from '@/TravelCore/Components/Epic/Stats.tsx'
-import {Testimonials} from '@/TravelCore/Components/Epic/Testimonials.tsx'
-import {TravelForm} from '@/TravelCore/Components/Epic/TravelForm.tsx'
-import {TravelSteps} from '@/TravelCore/Components/Epic/TravelSteps.tsx'
-import {WhatsAppButton} from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
-import useData from '@/TravelCore/Hooks/useData.ts'
-import type {dataOrder} from '@/TravelCore/Utils/interfaces/Order.ts'
+import { Certifications } from '@/TravelCore/Components/Epic/Certifications.tsx'
+import { Features } from '@/TravelCore/Components/Epic/Features.tsx'
+import { HeroCarousel } from '@/TravelCore/Components/Epic/HeroCarousel.tsx'
+import { LoadingScreen } from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
+import { Stats } from '@/TravelCore/Components/Epic/Stats.tsx'
+import { Testimonials } from '@/TravelCore/Components/Epic/Testimonials.tsx'
+import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
+import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
+import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
-import {useState} from 'react'
-import {useTranslation} from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import slide1 from '../../../../Assets/slide1.webp'
 import slide2 from '../../../../Assets/slide2.webp'
 import slide4 from '../../../../Assets/slide4.webp'
 import slide5 from '../../../../Assets/slide5.webp'
-import {useNavigate} from 'react-router-dom'
 import slide6 from '../../../../Assets/slide6.webp'
 // import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx"
 
@@ -24,38 +20,13 @@ const images = [slide1, slide2, slide4, slide5, slide6]
 
 export default function HomePage() {
   const { t } = useTranslation(['home'])
-  const { data } = useData() || {}
-  const navigate = useNavigate()
+  const { isLoadingOrders } = useHomeState()
 
-  const { HandleGetOrder, isDataOrderValid } = useHomeState()
-  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
   //const [isOpenContactModal, setIsOpenContactModal] = useState(false)
 
   // const handleSearch = () => {
   //   setIsOpenContactModal(true)
   // }
-
-  const handleGetQuote = async () => {
-    setIsLoadingOrders(true)
-    try {
-      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
-        throw new Error('Invalid order data')
-      }
-
-      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
-
-      if (resp && Number(resp) > 0) {
-        setTimeout(() => {
-          navigate('/quote/travel')
-        }, 1000)
-      } else {
-        throw new Error('Invalid order response')
-      }
-    } catch (error) {
-      setIsLoadingOrders(false)
-      console.error('Error processing quote:', error)
-    }
-  }
 
   if (isLoadingOrders) {
     return <LoadingScreen message={t('label-title-loader')} subMessage={t('label-text-loader')} />
@@ -64,7 +35,7 @@ export default function HomePage() {
   return (
     <>
       <HeroCarousel images={images} />
-      <TravelForm onClick={handleGetQuote} />
+      <TravelForm />
       <TravelSteps />
       <Certifications />
       <Features />

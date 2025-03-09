@@ -183,7 +183,7 @@ export const validateForm = (formData: Record<string, string>, msg: MsgForm, val
 
     if (fieldName === 'travelers' && validationRules[fieldName].requiredAge) {
       const ages = value.split(',')
-      ages.forEach((age, index) => {
+      ages.forEach((age) => {
         if (age === '' || age === '0') {
           hasErrors = true;
         }

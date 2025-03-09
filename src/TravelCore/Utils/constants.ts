@@ -159,6 +159,37 @@ export const API_URL_EPAYCO_IP: string = import.meta.env.VITE_REACT_APP_API_URL_
  */
 export const API_URL_EPAYCO_PAYMENT: string = import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_PAYMENT || ''
 /**
+ * URL_EPAYCO_METHODS
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const URL_EPAYCO_METHODS: string = import.meta.env.VITE_REACT_APP_API_URL_EPAYCO_METHODS || ''
+/**
+ * SERVICE_METHODS_EPAYCO
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const SERVICE_METHODS_EPAYCO: string = import.meta.env.VITE_REACT_APP_SERVICE_METHODS_EPAYCO || ''
+/**
+ * SERVICE_TRANSACTION_EPAYCO
+ *
+ * Spanish:
+ * Define el endpoint para el servicio que agrega órdenes ISL, obtenido de la variable de entorno VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ *
+ * English:
+ * Defines the endpoint for the service that add ISL orders, obtained from the environment variable VITE_REACT_APP_SERVICE_ADD_ORDER_ISL.
+ */
+export const SERVICE_TRANSACTION_EPAYCO: string = import.meta.env.VITE_REACT_APP_SERVICE_TRANSACTION_EPAYCO || ''
+
+/**
  * PAY_PLATTFORM_KEY
  *
  * Spanish:
@@ -251,3 +282,6 @@ export const ISL_APP_SERVICE_UPGRADES = import.meta.env.VITE_ISL_APP_SERVICE_UPG
  * Defines the endpoint for the ISL authentication service, obtained from the environment variable VITE_REACT_APP_API_URL_ISL.
  */
 export const ISL_LOGIN = import.meta.env.VITE_REACT_APP_API_URL_ISL || ''
+export const SERVICE_EPAYCO_DETAILS = import.meta.env.VITE_REACT_APP_SERVICE_EPAYCO_DETAILS || ''
+export const SERVICE_DOWNLOAD_VOUCHER = import.meta.env.VITE_REACT_APP_SERVICE_DOWNLOAD_VOUCHER || ''
+export const SERVICE_PURCHASE_RESUMEN = import.meta.env.VITE_REACT_APP_SERVICE_PURCHASE_RESUMEN || ''

@@ -6,7 +6,8 @@ import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
 import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
 import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
 import { TravelAssistance } from '@/TravelFeatures/Home/model/travel_assistance_entity.ts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * AuthResponse
@@ -46,9 +47,11 @@ interface AuthResponse {
 const useHomeState = () => {
   // Obtener la función para establecer la sesión y la data del pedido.
   // Get the function to set the session and order data.
-  const { setSession } = useSession() || {}
-  const { setData } = useData() || {}
+  const navigate = useNavigate()
   const masterContext = useMasters()
+  const { setSession } = useSession() || {}
+  const { data, setData } = useData() || {}
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
 
   useEffect(() => {
     const initialize = async () => {
@@ -247,7 +250,30 @@ const useHomeState = () => {
     })
   }
 
-  return { HandleGetOrder, isDataOrderValid }
+  const handleGetQuote = async () => {
+    setIsLoadingOrders(true)
+    try {
+      console.log('Payload Order:', data?.payloadOrder)
+      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
+        throw new Error('Invalid order data')
+      }
+
+      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
+
+      if (resp && Number(resp) > 0) {
+        setTimeout(() => {
+          navigate('/quote/travel')
+        }, 1000)
+      } else {
+        throw new Error('Invalid order response')
+      }
+    } catch (error) {
+      setIsLoadingOrders(false)
+      console.error('Error processing quote:', error)
+    }
+  }
+
+  return { isLoadingOrders, handleGetQuote }
 }
 /**
  * index

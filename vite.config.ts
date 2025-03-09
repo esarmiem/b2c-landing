@@ -27,7 +27,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/epayco-ip/, '')
       },
       '/epayco-payment': {
-        target: 'https://secure.epayco.co/create/transaction',
+        target: 'https://secure.epayco.co',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/epayco-payment/, '')
       },

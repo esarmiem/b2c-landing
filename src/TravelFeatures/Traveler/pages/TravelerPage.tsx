@@ -13,7 +13,7 @@ import { Masters } from '@/TravelFeatures/Traveler/model/masters_entity.ts'
 import { type MouseEvent, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useMessageTranslations } from '@/TravelCore/Utils/validations/useMessageTranslations.ts'
+import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
 import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
 
 /**
@@ -108,54 +108,54 @@ export default function TravelForm() {
   }
   // console.log('emergency state: ', emergencyContact)
 
-  //Validations
-  const msg = useMessageTranslations()
-  const [formData, setFormData] = useState({ travelers: '' })
-  const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
-
-  const validationRules = {
-    // Traveler form validation rules
-    firstName: { required: true },
-    lastName: { required: true },
-    documentType: { required: true },
-    documentNumber: { required: true },
-    birthdate: { required: true },
-    gender: { required: true },
-    nationality: { required: true },
-    residenceCountry: { required: true },
-    phone: { required: true },
-    countryCode: { required: true },
-    email: { required: true, email: true },
-
-    // Emergency contact validation rules
-    firstNameEmergencyContact: { required: true },
-    lastNameEmergencyContact: { required: true },
-    phone1EmergencyContact: { required: true },
-    indicative1EmergencyContact: { required: true },
-    phone2EmergencyContact: { required: false },
-    indicative2EmergencyContact: { required: false }
-  }
-
-  const handleChangeValidator = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-
-    const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
-    setErrors(prev => ({
-      ...prev,
-      [field]: validationResult.errors[field] || []
-    }))
-  }
-
-  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    const validationResult = validateForm(formData, msg, validationRules)
-
-    if (!validationResult.isValid) {
-      setErrors(validationResult.errors)
-      return
-    }
-    handleSendTravelers()
-  }
+  // //Validations
+  // const msg = useUtilsValidations()
+  // const [formData, setFormData] = useState({ travelers: '' })
+  // const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
+  //
+  // const validationRules = {
+  //   // Traveler form validation rules
+  //   firstName: { required: true },
+  //   lastName: { required: true },
+  //   documentType: { required: true },
+  //   documentNumber: { required: true },
+  //   birthdate: { required: true },
+  //   gender: { required: true },
+  //   nationality: { required: true },
+  //   residenceCountry: { required: true },
+  //   phone: { required: true },
+  //   countryCode: { required: true },
+  //   email: { required: true, email: true },
+  //
+  //   // Emergency contact validation rules
+  //   firstNameEmergencyContact: { required: true },
+  //   lastNameEmergencyContact: { required: true },
+  //   phone1EmergencyContact: { required: true },
+  //   indicative1EmergencyContact: { required: true },
+  //   phone2EmergencyContact: { required: false },
+  //   indicative2EmergencyContact: { required: false }
+  // }
+  //
+  // const handleChangeValidator = (field: string, value: string) => {
+  //   setFormData(prev => ({ ...prev, [field]: value }))
+  //
+  //   const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
+  //   setErrors(prev => ({
+  //     ...prev,
+  //     [field]: validationResult.errors[field] || []
+  //   }))
+  // }
+  //
+  // const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+  //   event.preventDefault()
+  //   const validationResult = validateForm(formData, msg, validationRules)
+  //
+  //   if (!validationResult.isValid) {
+  //     setErrors(validationResult.errors)
+  //     return
+  //   }
+  //   handleSendTravelers()
+  // }
 
   return (
     <>
@@ -172,14 +172,14 @@ export default function TravelForm() {
                   traveler={traveler}
                   onChangeField={handleChangeTravelers}
                   dataTraveler={travelersData[traveler?.id]}
-                  onChange={handleChangeValidator}
-                  errors={errors}
+                  // onChange={handleChangeValidator}
+                  // errors={errors}
                 />
               ))}
               <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency} />
             </form>
           </section>
-          <PurchaseDetails button={<ContinuarButton onClick={handleSubmit} />} />
+          <PurchaseDetails button={<ContinuarButton onClick={handleSendTravelers} />} />
         </section>
       </main>
     </>

@@ -16,7 +16,7 @@ import { format, parse, isBefore, startOfDay } from 'date-fns'
 import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
 import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
-import { useMessageTranslations } from '@/TravelCore/Utils/validations/useMessageTranslations.ts'
+import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
 
 interface FilterFormProps {
   handleChange: (field: string, value: string) => void
@@ -28,7 +28,7 @@ interface FilterFormProps {
 }
 
 export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoading, validationRules }: FilterFormProps) => {
-  const msg = useMessageTranslations()
+  const msg = useUtilsValidations()
   const { HandleGetOrder } = useHomeState()
   const errorTraveler = errors?.travelers
 
