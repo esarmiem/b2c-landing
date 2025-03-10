@@ -57,12 +57,11 @@ const useHomeState = () => {
     const initialize = async () => {
       const isAuthenticated = await validateOrGetAuthentication()
       if (isAuthenticated) {
-        await getMasters()
+        getMasters()
       }
     }
     initialize()
   }, [])
-
   /**
    * validateOrGetAuthentication
    *
@@ -88,7 +87,6 @@ const useHomeState = () => {
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser
         }
-        //localStorage.setItem('token', response.data.payload.accessToken)
         setSession?.(sessionData)
         sessionStorage.setItem('token', response.data.payload.accessToken)
         return true
@@ -111,35 +109,35 @@ const useHomeState = () => {
    * (countries, arrivals, questions, medical conditions, etc.), it checks whether the data has already been loaded
    * in the context. If not, it fetches the data and updates the corresponding context.
    */
+
   const getMasters = async () => {
-      const masters = new Masters()
-      const masterDataMap = {
-        countries: masters.getCountries,
-        arrivals: masters.getArrivalDestinations,
-        questions: masters.getQuestions,
-        medicals: masters.getMedicalConditions,
-        documents: masters.getDocumentTypes,
-        products: masters.getProducts,
-        parameters: masters.getParameters
-      }
-
-      const loadDataPromises = Object.entries(masterDataMap).map(async ([key, fetchFn]) => {
-        const typedKey = key as StateKey
-
-        try {
-          if (masterContext && !masterContext[typedKey]?.data) {
-            const response = await fetchFn()
-            if (response?.data) {
-              masterContext[typedKey].setData(response.data)
-            }
-          }
-        } catch (error) {
-          console.error(`Failed to load master data for ${key}:`, error)
-        }
-      })
-
-      await Promise.all(loadDataPromises)
+    const masters = new Masters()
+    const masterDataMap = {
+      countries: masters.getCountries,
+      arrivals: masters.getArrivalDestinations,
+      questions: masters.getQuestions,
+      medicals: masters.getMedicalConditions,
+      documents: masters.getDocumentTypes,
+      products: masters.getProducts,
+      parameters: masters.getParameters
     }
+
+    const loadDataPromises = Object.entries(masterDataMap).map(async ([key, fetchFn]) => {
+      const typedKey = key as StateKey
+
+      try {
+        if (masterContext && !masterContext[typedKey]?.data) {
+          const response = await fetchFn()
+          if (response?.data) {
+            masterContext[typedKey].setData(response.data)
+          }
+        }
+      } catch (error) {
+        console.error(`Failed to load master data for ${key}:`, error)
+      }
+    })
+    await Promise.all(loadDataPromises)
+  }
   /**
    * HandleGetOrder
    *
@@ -194,10 +192,7 @@ const useHomeState = () => {
 
             return { success: false, data: null }
           } catch (requestError) {
-            console.error(
-              `Error en solicitud para numeroPregunta=${numeroPregunta}, intento ${4 - attempts}:`,
-              requestError
-            )
+            console.error(`Error en solicitud para numeroPregunta=${numeroPregunta}, intento ${4 - attempts}:`, requestError)
             attempts--
 
             if (attempts === 0) {
@@ -210,12 +205,10 @@ const useHomeState = () => {
         return { success: false, data: null }
       }
 
-      const results = await Promise.all(
-        numerosPreguntas.map(numeroPregunta => fetchPlanesByNumeroPregunta(numeroPregunta))
-      )
+      const results = await Promise.all(numerosPreguntas.map(numeroPregunta => fetchPlanesByNumeroPregunta(numeroPregunta)))
 
       // Procesar todos los resultados exitosos
-      results.forEach(result => {
+      for (const result of results) {
         if (result.success && result.data) {
           if (!combinedData.idProspecto && result.data.idProspecto) {
             combinedData.idProspecto = result.data.idProspecto
@@ -224,7 +217,7 @@ const useHomeState = () => {
           const newPlanes = result.data.planes.filter(p => !existingPlaneIds.has(p.IdPlan))
           combinedData.planes.push(...newPlanes)
         }
-      })
+      }
 
       if (combinedData.planes.length > 0 && combinedData.idProspecto) {
         setData?.(prevData => ({
@@ -289,8 +282,7 @@ const useHomeState = () => {
 
       const salida = payloadCompleto.salida ? new Date(payloadCompleto.salida.split('/').reverse().join('-')) : null
       const llegada = payloadCompleto.llegada ? new Date(payloadCompleto.llegada.split('/').reverse().join('-')) : null
-      const daysDifference =
-        salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
+      const daysDifference = salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
 
       const numerosPreguntas = []
       if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
@@ -305,6 +297,11 @@ const useHomeState = () => {
 
       payloadCompleto.numerosPreguntas = numerosPreguntas
       payloadCompleto.numeroPregunta = numerosPreguntas[0]
+
+      setData?.(prevData => ({
+        ...prevData,
+        payloadOrder: payloadCompleto
+      }))
 
       const isValid = isDataOrderValid(payloadCompleto as dataOrder)
       if (!isValid) {

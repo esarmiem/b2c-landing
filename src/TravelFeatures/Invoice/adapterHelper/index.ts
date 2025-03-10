@@ -193,7 +193,7 @@ export default function useInvoiceState() {
       epaycoMethod: 'GET',
       epaycoConfig: '{}',
       epaycoKey: PAY_PLATTFORM_KEY,
-      epaycoTest: 'false',
+      epaycoTest: 'true',
       epaycoImplementationType: 'handler',
       epaycoIp: responseIp
     }
