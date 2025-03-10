@@ -15,22 +15,16 @@ import { DestinationPopover } from '@/TravelCore/Components/Epic/DestinationPopo
 import { format, parse, isBefore, startOfDay } from 'date-fns'
 import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
-import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
-import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
 
 interface FilterFormProps {
   handleChange: (field: string, value: string) => void
-  setErrors: Dispatch<SetStateAction<{ [p: string]: string[] }>>
   setIsLoading: Dispatch<SetStateAction<boolean>>
-  formData: { travelers: string }
   errors: { [p: string]: string[] }
-  validationRules: { travelers: { requiredAge: boolean } }
+  validateFormData: () => boolean
 }
 
-export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoading, validationRules }: FilterFormProps) => {
-  const msg = useUtilsValidations()
+export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormData }: FilterFormProps) => {
   const { HandleGetOrder } = useHomeState()
-  const errorTraveler = errors?.travelers
 
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
@@ -172,13 +166,6 @@ export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoa
   const handleSave = async () => {
     setIsEditing(true)
 
-    const validationResult = validateForm(formData, msg, validationRules)
-
-    if (!validationResult.isValid) {
-      setErrors(validationResult.errors)
-      return
-    }
-
     if (isEditing) {
       if (hasChanges(payloadOrder as dataOrder, initialPayloadRef.current)) {
         setIsLoading(true)
@@ -191,6 +178,14 @@ export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoa
       initialPayloadRef.current = { ...(payloadOrder as dataOrder) }
     }
     setIsEditing(!isEditing)
+  }
+
+  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    if (!validateFormData()) {
+      return
+    }
+    handleSave()
   }
 
   return (
@@ -308,7 +303,6 @@ export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoa
                   selected={returnDate}
                   defaultMonth={returnDate}
                   disabled={date => {
-                    // Deshabilitar fechas pasadas y fechas anteriores a la fecha de salida
                     return isBefore(date, startOfDay(new Date())) || isBefore(date, departureDate)
                   }}
                   onSelect={date => {
@@ -337,10 +331,10 @@ export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoa
                   disabled={!isEditing}
                   type="button"
                   onClick={() => setTravelersOpen(prev => !prev)}
-                  className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''} ${errorTraveler && errorTraveler?.length > 0 ? 'text-red-500' : ''}`}
+                  className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''} ${errors?.travelers && errors.travelers.length > 0 ? 'text-red-500' : ''}`}
                 >
-                  {errorTraveler && errorTraveler?.length > 0
-                    ? errorTraveler
+                  {errors?.travelers && errors.travelers.length > 0
+                    ? errors.travelers[0]
                     : `${payloadOrder?.cantidadPax || 1} ${t('label-default-passengers')}`}
                 </button>
               </div>
@@ -352,7 +346,7 @@ export const FilterForm = ({ handleChange, formData, errors, setErrors, setIsLoa
         {/* Botón Modificar */}
         <button
           type="button"
-          onClick={handleSave}
+          onClick={handleSubmit}
           className={`px-4 py-2 ${isEditing ? 'text-white bg-red-800' : 'text-red-700 bg-white hover:bg-red-50'} rounded-md transition-colors border border-red-200
           hover:cursor-pointer active:text-red-900 active:border-red-900 flex items-center gap-2 w-full sm:w-auto`}
         >

@@ -26,7 +26,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
         <Button variant="outline" className="justify-between rounded-full overflow-hidden whitespace-nowrap flex-col h-auto items-start">
           <div className="hidden md:flex items-center gap-2">
             <span className={`text-sm text-muted-foreground ${errors && errors?.length > 0 ? 'text-red-500' : ''}`}>
-              {errors && errors?.length > 0 ? errors : t('placeholder-count-travelers')}
+              {errors && errors?.length > 0 ? errors[0] : t('placeholder-count-travelers')}
             </span>
             <TooltipProvider>
               <Tooltip open={activeTooltip === 'travelers'} onOpenChange={open => setActiveTooltip(open ? 'travelers' : null)}>
@@ -52,7 +52,7 @@ export const TravelersPopover = ({ errors, onChange }: TravelersPopoverProps) =>
               className={`items-center gap-2 hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500 flex sm:hidden' : ''}`}
             >
               <Info className={`h-4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
-              {errors && errors?.length > 0 ? errors : ''}
+              {errors && errors?.length > 0 ? errors[0] : ''}
             </span>
           </div>
         </Button>

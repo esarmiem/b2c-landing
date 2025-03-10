@@ -3,15 +3,13 @@ import CardProduct from '@/TravelCore/Components/Epic/CardProduct.tsx'
 import DropdownFiltersProducts from '@/TravelCore/Components/Epic/DropdownFiltersProducts'
 import { FilterForm } from '@/TravelCore/Components/Epic/FilterForm'
 import useData from '@/TravelCore/Hooks/useData.ts'
-import { useState} from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {validateForm} from "@/TravelCore/Utils/validations/formValidations.ts";
-import {useUtilsValidations} from "@/TravelCore/Utils/validations/useUtilsValidations.ts";
-import Loader from "@/TravelCore/Components/Raw/Loader.tsx";
+import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
+import Loader from '@/TravelCore/Components/Raw/Loader.tsx'
 
 const TripQuotePage: React.FC = () => {
   const { t } = useTranslation(['products'])
-  const msg = useUtilsValidations()
   const [visibleCount, setVisibleCount] = useState(4)
   const { data } = useData() || {}
   const plans = data?.responseOrder?.planes || []
@@ -28,19 +26,12 @@ const TripQuotePage: React.FC = () => {
   }
 
   // Validaciones
-  const [formData, setFormData] = useState({travelers: ''})
-  const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
+  const validationRules = { travelers: { requiredAge: true } }
 
-  const validationRules = {travelers: { requiredAge: true }}
+  const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-
-    const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
-    setErrors(prev => ({
-      ...prev,
-      [field]: validationResult.errors[field] || []
-    }))
+    handleChangeValidate(field, value)
   }
 
   // clases condicionales para el contenedor basado en el tipo de vista
@@ -54,16 +45,14 @@ const TripQuotePage: React.FC = () => {
   return (
     <>
       <div className="relative">
-        {
-          isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-400 bg-opacity-50 z-50">
-              <Loader />
-            </div>
-          )
-        }
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-400 bg-opacity-50 z-50">
+            <Loader />
+          </div>
+        )}
         <div className={`${isLoading ? 'pointer-events-none blur-sm' : ''}`}>
           <Breadcrumb />
-          <FilterForm formData={formData} validationRules={validationRules} errors={errors} setErrors={setErrors} handleChange={handleChange} setIsLoading={setIsLoading} />
+          <FilterForm errors={errors} validateFormData={validateFormData} handleChange={handleChange} setIsLoading={setIsLoading} />
           <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
             <div className="flex justify-between items-center">
               <h3 className="font-display tracking-tight font-bold text-slate-900 md:text-3xl">{t('label-trip-assistance')}</h3>
@@ -109,7 +98,7 @@ const TripQuotePage: React.FC = () => {
           </div>
         </div>
       </div>
-      </>
+    </>
   )
 }
 
