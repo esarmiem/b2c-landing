@@ -1,21 +1,8 @@
 import { PaymentStatus } from "@/TravelCore/Components/Epic/PaymentStatus"
 import { useSearchParams } from "react-router-dom";
-import {useEffect, useState} from "react";
-import {Payment} from "@/TravelFeatures/Invoice/model/payment_entity.ts";
-import {RESPONSE_PAY_PLATTFORM_URL} from "@/TravelCore/Utils/constants.ts";
-
-// Simulated payment data
-const paymentData = {
-  orderNumber: "1234567890",
-  organizationId: "AB-123456789XYZ",
-  invoiceNumber: "98765",
-  product: "asistencia de viaje internacional",
-  pricePerPersonCOP: 713120.76,
-  pricePerPersonUSD: 162,
-  totalPriceCOP: 1426241.52,
-  totalPriceUSD: 324,
-  status: "declined" as const, // 'declined' or 'approved' para ver una u otra pantalla by: elder
-}
+import { useEffect, useState } from "react";
+import { Payment } from "@/TravelFeatures/Invoice/model/payment_entity.ts";
+import { RESPONSE_PAY_PLATTFORM_URL } from "@/TravelCore/Utils/constants.ts";
 
 export const BillingResultPage: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -25,30 +12,50 @@ export const BillingResultPage: React.FC = () => {
     const [dataSummary, setDataSummary] = useState<any>(null)
     const [status, setStatus] = useState<string>("loading")
     const [pathResponse, setPathResponse] = useState<string>("")
+    const [paymentDetails, setPaymentDetails] = useState({
+      orderNumber: "",
+      organizationId: "",
+      invoiceNumber: "",
+      product: "asistencia de viaje internacional",
+    })
 
     useEffect(() => {
         const ref = searchParams.get("ref_payco") || searchParams.get("x_extra1") || ""
         setRefEpayco(ref)
-        if (ref !== null || ref !== "")
+        if (ref !== null && ref !== "")
             getPaymentDetails(ref)
-    }, [])
+    }, [searchParams])
 
     const getPaymentDetails = async (ref: string) => {
-        const payment = new Payment()
-        const respDetails = await payment.getPaymentDetails(ref)
-        if (respDetails?.data?.result?.data?.x_extra1) {
-            setIdSale(respDetails?.data?.result?.data?.x_extra1)
-            setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${refEPayco}`)
+        try {
+            const payment = new Payment()
+            const respDetails = await payment.getPaymentDetails(ref)
+            
+            if (respDetails?.data?.result?.data?.x_extra1) {
+                const idSale = respDetails?.data?.result?.data?.x_extra1
+                setIdSale(idSale)
+                setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${refEPayco}`)
 
-            const respSummary = await payment.purchaseSummary(respDetails?.data?.result?.data?.x_extra1)
-            setDataSummary(adapterPurchaseSummaryResp(respSummary))
+                // Actualizar detalles de pago con datos de la respuesta
+                setPaymentDetails({
+                    orderNumber: respDetails?.data?.result?.data?.x_id_invoice || "",
+                    organizationId: respDetails?.data?.result?.data?.x_business_nit || "",
+                    invoiceNumber: respDetails?.data?.result?.data?.x_id_invoice || "",
+                    product: "asistencia de viaje internacional",
+                })
 
-            const respDownloader = await payment.downloadVoucher(respDetails?.data?.result?.data?.x_extra1)
-            setDataVoucher(respDownloader)
+                const respSummary = await payment.purchaseSummary(idSale)
+                const adaptedData = adapterPurchaseSummaryResp(respSummary)
+                setDataSummary(adaptedData)
+
+                const respDownloader = await payment.downloadVoucher(idSale)
+                setDataVoucher(respDownloader)
+            }
+        } catch (error) {
+            console.error("Error fetching payment details:", error)
+            setStatus("Rechazado")
         }
     }
-
-console.log('respuesta: ', searchParams, refEPayco)
   
     const handleRetry = () => {
       // Implement retry logic here
@@ -56,7 +63,9 @@ console.log('respuesta: ', searchParams, refEPayco)
     };
 
     const adapterPurchaseSummaryResp = (originalObject: any) => {
-        setStatus(originalObject?.venta?.estado)
+        // Actualiza el estado global
+        setStatus(originalObject?.venta?.estado || "Rechazado")
+        
         return {
             travelersNumber: originalObject?.venta?.numeroViajeros,
             valueCOP: originalObject?.venta?.valorProductoPesos,
@@ -70,27 +79,27 @@ console.log('respuesta: ', searchParams, refEPayco)
                     valueCOP: item.valorCOP,
                     passengers: item.pasajeros,
                 };
-            }),
-            totalUpgrades: originalObject?.venta?.totalUpgradesPesos,
-            totalOrderCOP: originalObject?.venta?.totalVentaPesos,
-            totalOrderUSD: originalObject?.venta?.totalVentaDolares,
+            }) || [],
+            totalUpgrades: originalObject?.venta?.totalUpgradesPesos || 0,
+            totalOrderCOP: originalObject?.venta?.totalVentaPesos || 0,
+            totalOrderUSD: originalObject?.venta?.totalVentaDolares || 0,
             status: originalObject?.venta?.estado,
             USDdiscount: {
-                percentage: originalObject?.DescripcionDescuentosDolares?.porcentaje,
-                discountValue: originalObject?.DescripcionDescuentosDolares?.valorDescuento,
-                totalValue: originalObject?.DescripcionDescuentosDolares?.valorTotal
+                percentage: originalObject?.DescripcionDescuentosDolares?.porcentaje || 0,
+                discountValue: originalObject?.DescripcionDescuentosDolares?.valorDescuento || 0,
+                totalValue: originalObject?.DescripcionDescuentosDolares?.valorTotal || 0
             },
             COPdiscount: {
-                percentage: originalObject?.DescripcionDescuentosPesos?.porcentaje,
-                discountValue: originalObject?.DescripcionDescuentosPesos?.valorDescuento,
-                totalValue: originalObject?.DescripcionDescuentosPesos?.valorTotal
+                percentage: originalObject?.DescripcionDescuentosPesos?.porcentaje || 0,
+                discountValue: originalObject?.DescripcionDescuentosPesos?.valorDescuento || 0,
+                totalValue: originalObject?.DescripcionDescuentosPesos?.valorTotal || 0
             }
         }
     }
 
     return (
       <PaymentStatus 
-        payment={paymentData}
+        payment={paymentDetails}
         dataSummary={dataSummary}
         status={status}
         onRetry={handleRetry}
@@ -98,6 +107,6 @@ console.log('respuesta: ', searchParams, refEPayco)
         pathResponse={pathResponse}
       />
     );
-  };
+};
   
-  export default BillingResultPage;
+export default BillingResultPage;
