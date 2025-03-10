@@ -37,7 +37,13 @@ export const useUtilsValidations = (validationRules: FormValidationRules) => {
   const handleChangeValidate = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
 
-    const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field] })
+    const fieldRule = validationRules[field]
+    if (!fieldRule) {
+      console.warn(`No validation rule found for field: ${field}`)
+      return
+    }
+
+    const validationResult = validateForm({ [field]: value }, msg, { [field]: fieldRule })
     setErrors(prev => ({
       ...prev,
       [field]: validationResult.errors[field] || []

@@ -14,7 +14,7 @@ import { type MouseEvent, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
-import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
+import Loader from '@/TravelCore/Components/Raw/Loader.tsx'
 
 /**
  * TravelForm
@@ -44,7 +44,9 @@ export default function TravelForm() {
   const masterContext = useMasters()
   const { data, setData } = useData() || {}
   const navigate = useNavigate()
-  const [travelersData, setTravelersData] = useState<PaxForm[]>([])
+
+  const travelers = createTravelers(data?.payloadOrder?.cantidadPax ?? 0, data?.payloadOrder?.edades ?? '')
+  const [travelersData, setTravelersData] = useState<PaxForm[]>(Array(travelers.length).fill({}))
   const [emergencyContact, setEmergencyContact] = useState<EmergencyContactType>({
     firstName: '',
     lastName: '',
@@ -53,112 +55,140 @@ export default function TravelForm() {
     indicative1: '',
     indicative2: ''
   })
-
-  useEffect(() => {
-    if (data) {
-      setTravelersData(data.travelersData || [])
-      setEmergencyContact(
-        data.emergencyContactData || { firstName: '', lastName: '', phone1: '', phone2: '', indicative1: '', indicative2: '' }
-      )
-      console.log('rescatando el estado', travelersData, data.travelersData)
-    }
-  }, [data])
-
-  const travelers = createTravelers(data?.payloadOrder?.cantidadPax ?? 0, data?.payloadOrder?.edades ?? '')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSendTravelers = async () => {
-    setData?.((prevData: any) => ({
-      ...prevData,
-      travelersData: travelersData.filter(item => item !== undefined),
-      emergencyContactData: emergencyContact
-    }))
+    setIsLoading(true)
+    try {
+      setData?.((prevData: any) => ({
+        ...prevData,
+        travelersData: travelersData.filter(item => item !== undefined),
+        emergencyContactData: emergencyContact
+      }))
 
-    const masters = new Masters()
-    const resp = await masters.getCitiesByCountry({ countryId: travelersData.filter(item => item !== undefined)[0].residenceCountry })
-    console.log('resp cities', resp)
-
-    if (resp?.data) {
-      if (masterContext) {
-        masterContext['cities'].setData(resp.data)
+      const masters = new Masters()
+      const resp = await masters.getCitiesByCountry({ countryId: travelersData.filter(item => item !== undefined)[0].residenceCountry })
+      if (resp?.data) {
+        if (masterContext) {
+          masterContext.cities.setData(resp.data)
+        }
+        navigate('/invoice')
       }
-      navigate('/invoice')
-      // setTimeout(() => {
-      //   console.log('redirigiendo a /invoice')
-      // }, 1000)
+    } catch (error) {
+      console.error('Error sending travelers data:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleChangeTravelers = useCallback((index: number, name: string, value: string) => {
-    console.log('index', index)
-    setTravelersData(prevData => {
-      const updatedTravelers = [...prevData]
-      updatedTravelers[index] = {
-        ...updatedTravelers[index],
-        [name]: value
+  //Validations
+  const validationRules = Object.assign(
+    {},
+    ...Array.from({ length: travelers.length }, (_, i) => ({
+      [`firstName${i + 1}`]: { required: true },
+      [`lastName${i + 1}`]: { required: true },
+      [`documentType${i + 1}`]: { required: true },
+      [`documentNumber${i + 1}`]: { required: true },
+      [`birthdate${i + 1}`]: { required: true },
+      [`gender${i + 1}`]: { required: true },
+      [`nationality${i + 1}`]: { required: true },
+      [`residenceCountry${i + 1}`]: { required: true },
+      [`phone${i + 1}`]: { required: true },
+      [`email${i + 1}`]: { required: true, email: true }
+    })),
+    {
+      firstNameEmergencyContact: { required: true },
+      lastNameEmergencyContact: { required: true },
+      phone1EmergencyContact: { required: true }
+    }
+  )
+
+  const { errors, handleChangeValidate, validateFormData, setFormData } = useUtilsValidations(validationRules)
+
+  useEffect(() => {
+    if (data) {
+      if (data.travelersData && data.travelersData.length > 0) {
+        setTravelersData(data.travelersData)
+
+        // Actualizar también el formData con los datos existentes
+        const newFormData: { [key: string]: string } = {}
+        for (const [index, traveler] of data.travelersData.entries()) {
+          for (const [key, value] of Object.entries(traveler)) {
+            if (typeof value === 'string' || typeof value === 'number') {
+              newFormData[`${key}${index + 1}`] = String(value)
+            }
+          }
+        }
+        setFormData(newFormData)
       }
-      return updatedTravelers
-    })
-  }, [])
+
+      if (data.emergencyContactData) {
+        setEmergencyContact(data.emergencyContactData)
+
+        // Actualizar también el formData con los datos de emergencyContact
+        const emergencyContactFormData: { [key: string]: string } = {}
+        for (const [key, value] of Object.entries(data.emergencyContactData)) {
+          if (typeof value === 'string' || typeof value === 'number') {
+            emergencyContactFormData[`${key}EmergencyContact`] = String(value)
+          }
+        }
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          ...emergencyContactFormData
+        }))
+      }
+    }
+  }, [data, setFormData])
+
+  const handleChangeTravelers = useCallback(
+    (index: number, name: string, value: string) => {
+      // Actualizar el estado local de travelersData
+      setTravelersData(prevData => {
+        const updatedTravelers = [...prevData]
+        if (!updatedTravelers[index]) {
+          updatedTravelers[index] = {}
+        }
+        updatedTravelers[index] = {
+          ...updatedTravelers[index],
+          [name.replace(/\d+$/, '')]: value // Eliminar cualquier número del final del nombre
+        }
+        return updatedTravelers
+      })
+
+      handleChangeValidate(name, value)
+    },
+    [handleChangeValidate]
+  )
 
   const handleChangeEmergency = (name: string, value: any) => {
     setEmergencyContact(prevData => ({
       ...prevData,
       [name]: value
     }))
-  }
-  // console.log('emergency state: ', emergencyContact)
 
-  // //Validations
-  // const msg = useUtilsValidations()
-  // const [formData, setFormData] = useState({ travelers: '' })
-  // const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
-  //
-  // const validationRules = {
-  //   // Traveler form validation rules
-  //   firstName: { required: true },
-  //   lastName: { required: true },
-  //   documentType: { required: true },
-  //   documentNumber: { required: true },
-  //   birthdate: { required: true },
-  //   gender: { required: true },
-  //   nationality: { required: true },
-  //   residenceCountry: { required: true },
-  //   phone: { required: true },
-  //   countryCode: { required: true },
-  //   email: { required: true, email: true },
-  //
-  //   // Emergency contact validation rules
-  //   firstNameEmergencyContact: { required: true },
-  //   lastNameEmergencyContact: { required: true },
-  //   phone1EmergencyContact: { required: true },
-  //   indicative1EmergencyContact: { required: true },
-  //   phone2EmergencyContact: { required: false },
-  //   indicative2EmergencyContact: { required: false }
-  // }
-  //
-  // const handleChangeValidator = (field: string, value: string) => {
-  //   setFormData(prev => ({ ...prev, [field]: value }))
-  //
-  //   const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
-  //   setErrors(prev => ({
-  //     ...prev,
-  //     [field]: validationResult.errors[field] || []
-  //   }))
-  // }
-  //
-  // const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-  //   event.preventDefault()
-  //   const validationResult = validateForm(formData, msg, validationRules)
-  //
-  //   if (!validationResult.isValid) {
-  //     setErrors(validationResult.errors)
-  //     return
-  //   }
-  //   handleSendTravelers()
-  // }
+    handleChangeValidate(`${name}EmergencyContact`, value)
+  }
+
+  const handleChange = (field: string, value: string) => {
+    handleChangeValidate(field, value)
+  }
+
+  const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    if (!validateFormData()) {
+      return
+    }
+    handleSendTravelers()
+  }
 
   return (
-    <>
+    <div className="relative">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-100">
+          <Loader />
+        </div>
+      )}
       <Breadcrumb />
       <main className="max-w-6xl mx-auto p-4 my-6 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
         <GoBack title={t('label-back-to-coverages')} url="quote/travel" />
@@ -172,16 +202,16 @@ export default function TravelForm() {
                   traveler={traveler}
                   onChangeField={handleChangeTravelers}
                   dataTraveler={travelersData[traveler?.id]}
-                  // onChange={handleChangeValidator}
-                  // errors={errors}
+                  onChange={handleChange}
+                  errors={errors}
                 />
               ))}
-              <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency} />
+              <EmergencyContact data={emergencyContact} onChangeField={handleChangeEmergency} errors={errors} onChange={handleChange} />
             </form>
           </section>
-          <PurchaseDetails button={<ContinuarButton onClick={handleSendTravelers} />} />
+          <PurchaseDetails button={<ContinuarButton onClick={handleSubmit} />} />
         </section>
       </main>
-    </>
+    </div>
   )
 }

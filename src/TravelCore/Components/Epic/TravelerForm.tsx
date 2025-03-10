@@ -1,4 +1,5 @@
-import React, { memo, useState } from 'react'
+import type React from 'react'
+import { memo, useState, useCallback } from 'react'
 import { SquareUser } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
@@ -26,8 +27,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
   const documentType = master?.documents.data?.items as DocumentTypeItems[]
   const activeCountries = countries
     .filter(country => country.estaActivo)
-    .slice() // Crear una copia superficial para no modificar el array original
-    .sort((a, b) => a.descripcion.localeCompare(b.descripcion)) // Ordenar alfabéticamente
+    .slice()
+    .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
   const activeDocumentType = documentType.filter(type => type.estaActivo)
   const countryOptions = activeCountries.map(country => (
     <SelectItem key={country.idPais} value={country.idPais.toString()}>
@@ -40,27 +41,39 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
     </SelectItem>
   ))
 
-  const handleInputChange = React.useCallback(
+  const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
+
+      // Primero validamos
       onChange(name, value)
-      if (name === 'birthdate') {
+
+      // Luego actualizamos el estado del padre
+      const fieldName = name.replace(/\d+$/, '') // Eliminar cualquier número del final
+      onChangeField?.(traveler.id, fieldName, value)
+
+      // Lógica específica para birthdate
+      if (name.includes('birthdate')) {
         if (!calculateAndCompareAge(value, Number.parseInt(traveler.age))) {
           setAgeError('La fecha de nacimiento debe coincidir con la edad del pasajero.')
         } else {
           setAgeError('')
         }
       }
-      onChangeField?.(traveler.id, name, value)
     },
-    [traveler.id, traveler.age, onChangeField]
+    [traveler.id, traveler.age, onChangeField, onChange]
   )
 
-  const handleSelectChange = React.useCallback(
+  const handleSelectChange = useCallback(
     (name: string, value: string) => {
-      onChangeField?.(traveler.id, name, value)
+      // Primero validamos
+      onChange(name, value)
+
+      // Luego actualizamos el estado del padre
+      const fieldName = name.replace(/\d+$/, '') // Eliminar cualquier número del final
+      onChangeField?.(traveler.id, fieldName, value)
     },
-    [traveler.id, onChangeField]
+    [traveler.id, onChangeField, onChange]
   )
 
   return (
@@ -77,87 +90,136 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
           <div>
             <label
               htmlFor={`firstName-${traveler.id}`}
-              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors && errors?.length > 0 ? 'text-red-500 ring-red-500' : ''}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`firstName${traveler.id + 1}`] && errors[`firstName${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
             >
-              {errors?.firstName && errors?.firstName.length > 0 ? errors?.firstName : t('label-first-name')}
+              {t('label-first-name')}
             </label>
             <Input
               id={`firstName-${traveler.id}`}
-              name="firstName"
-              value={dataTraveler?.firstName ?? ''}
+              name={`firstName${traveler.id + 1}`}
+              value={dataTraveler?.firstName || ''}
               placeholder={t('placeholder-first-name')}
-              className="rounded-3xl border-gray-300 p-6"
+              className={`rounded-3xl border-gray-300 p-6 ${errors?.[`firstName${traveler.id + 1}`] && errors[`firstName${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
               onChange={handleInputChange}
             />
+            {errors?.[`firstName${traveler.id + 1}`] && errors[`firstName${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`firstName${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div>
-            <label htmlFor={`lastName-${traveler.id}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`lastName-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`lastName${traveler.id + 1}`] && errors[`lastName${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-last-name')}
             </label>
             <Input
               id={`lastName-${traveler.id}`}
-              name="lastName"
+              name={`lastName${traveler.id + 1}`}
               value={dataTraveler?.lastName || ''}
               placeholder={t('placeholder-last-name')}
-              className="rounded-3xl border-gray-300 p-6"
+              className={`rounded-3xl border-gray-300 p-6 ${errors?.[`lastName${traveler.id + 1}`] && errors[`lastName${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
               onChange={handleInputChange}
             />
+            {errors?.[`lastName${traveler.id + 1}`] && errors[`lastName${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`lastName${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div>
-            <label htmlFor={`documentType-${traveler.id}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`documentType-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`documentType${traveler.id + 1}`] && errors[`documentType${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-document-type')}
             </label>
             <Select
-              name="documentType"
+              name={`documentType${traveler.id + 1}`}
               value={dataTraveler?.documentType || ''}
-              onValueChange={value => handleSelectChange('documentType', value)}
+              onValueChange={value => handleSelectChange(`documentType${traveler.id + 1}`, value)}
             >
-              <SelectTrigger className="rounded-3xl border-gray-300 p-6">
+              <SelectTrigger
+                className={`rounded-3xl border-gray-300 p-6 ${errors?.[`documentType${traveler.id + 1}`] && errors[`documentType${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
+              >
                 <SelectValue placeholder={t('placeholder-select-document-type')} />
               </SelectTrigger>
               <SelectContent>{documentTypeOptions}</SelectContent>
             </Select>
+            {errors?.[`documentType${traveler.id + 1}`] && errors[`documentType${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`documentType${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div>
-            <label htmlFor={`documentNumber-${traveler.id}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`documentNumber-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`documentNumber${traveler.id + 1}`] && errors[`documentNumber${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-document-number')}
             </label>
             <Input
               id={`documentNumber-${traveler.id}`}
-              name="documentNumber"
+              name={`documentNumber${traveler.id + 1}`}
               value={dataTraveler?.documentNumber || ''}
               placeholder={t('placeholder-document-number')}
-              className="rounded-3xl border-gray-300 p-6"
+              className={`rounded-3xl border-gray-300 p-6 ${errors?.[`documentNumber${traveler.id + 1}`] && errors[`documentNumber${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
               onChange={handleInputChange}
             />
+            {errors?.[`documentNumber${traveler.id + 1}`] && errors[`documentNumber${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`documentNumber${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div>
-            <label htmlFor={`birthdate-${traveler.id}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`birthdate-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`birthdate${traveler.id + 1}`] && errors[`birthdate${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-birthdate')}
             </label>
             <Input
               id={`birthdate-${traveler.id}`}
-              name="birthdate"
+              name={`birthdate${traveler.id + 1}`}
               value={dataTraveler?.birthdate || ''}
               type="date"
-              className="rounded-3xl border-gray-300 p-6"
+              className={`rounded-3xl border-gray-300 p-6 ${errors?.[`birthdate${traveler.id + 1}`] && errors[`birthdate${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
               onChange={handleInputChange}
             />
             <span className="text-xs text-red-500">{ageError}</span>
+            {errors?.[`birthdate${traveler.id + 1}`] && errors[`birthdate${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`birthdate${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor={`age-${traveler.age}`} className="block font-semibold text-gray-500 text-sm mb-1">
+              <label
+                htmlFor={`age-${traveler.age}`}
+                className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`age${traveler.id + 1}`] && errors[`age${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+              >
                 {t('label-age')}
               </label>
-              <Input name="age" value={traveler?.age} disabled className="rounded-3xl border-gray-300 p-6" />
+              <Input
+                name={`age${traveler.id + 1}`}
+                value={traveler?.age}
+                disabled
+                className={`rounded-3xl border-gray-300 p-6 ${errors?.[`age${traveler.id + 1}`] && errors[`age${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
+              />
+              {errors?.[`age${traveler.id + 1}`] && errors[`age${traveler.id + 1}`].length > 0 && (
+                <span className="text-xs text-red-500">{errors[`age${traveler.id + 1}`]}</span>
+              )}
             </div>
             <div>
-              <label htmlFor={`age-${dataTraveler?.gender}`} className="block font-semibold text-gray-500 text-sm mb-1">
+              <label
+                htmlFor={`gender-${traveler.id}`}
+                className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`gender${traveler.id + 1}`] && errors[`gender${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+              >
                 {t('label-gender')}
               </label>
-              <Select name="gender" value={dataTraveler?.gender || ''} onValueChange={value => handleSelectChange('gender', value)}>
-                <SelectTrigger className="rounded-3xl border-gray-300 p-6">
+              <Select
+                name={`gender${traveler.id + 1}`}
+                value={dataTraveler?.gender || ''}
+                onValueChange={value => handleSelectChange(`gender${traveler.id + 1}`, value)}
+              >
+                <SelectTrigger
+                  className={`rounded-3xl border-gray-300 p-6 ${errors?.[`gender${traveler.id + 1}`] && errors[`gender${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
+                >
                   <SelectValue placeholder={t('placeholder-select-gender')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -165,55 +227,84 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
                   <SelectItem value="f">{t('option-female')}</SelectItem>
                 </SelectContent>
               </Select>
+              {errors?.[`gender${traveler.id + 1}`] && errors[`gender${traveler.id + 1}`].length > 0 && (
+                <span className="text-xs text-red-500">{errors[`gender${traveler.id + 1}`]}</span>
+              )}
             </div>
           </div>
           <div>
-            <label htmlFor={`age-${dataTraveler?.nationality}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`nationality-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`nationality${traveler.id + 1}`] && errors[`nationality${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-nationality')}
             </label>
             <Select
-              name="nationality"
+              name={`nationality${traveler.id + 1}`}
               value={dataTraveler?.nationality?.toString() || ''}
-              onValueChange={value => handleSelectChange('nationality', value)}
+              onValueChange={value => handleSelectChange(`nationality${traveler.id + 1}`, value)}
             >
-              <SelectTrigger className="rounded-3xl border-gray-300 p-6">
+              <SelectTrigger
+                className={`rounded-3xl border-gray-300 p-6 ${errors?.[`nationality${traveler.id + 1}`] && errors[`nationality${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
+              >
                 <SelectValue placeholder={t('placeholder-select-nationality')} />
               </SelectTrigger>
               <SelectContent>{countryOptions}</SelectContent>
             </Select>
+            {errors?.[`nationality${traveler.id + 1}`] && errors[`nationality${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`nationality${traveler.id + 1}`]}</span>
+            )}
           </div>
           <div>
-            <label htmlFor={`age-${dataTraveler?.residenceCountry}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`residenceCountry-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`residenceCountry${traveler.id + 1}`] && errors[`residenceCountry${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-residence-country')}
             </label>
             <Select
-              name="residenceCountry"
+              name={`residenceCountry${traveler.id + 1}`}
               value={dataTraveler?.residenceCountry?.toString() || ''}
-              onValueChange={value => handleSelectChange('residenceCountry', value)}
+              onValueChange={value => handleSelectChange(`residenceCountry${traveler.id + 1}`, value)}
             >
-              <SelectTrigger className="rounded-3xl border-gray-300 p-6">
+              <SelectTrigger
+                className={`rounded-3xl border-gray-300 p-6 ${errors?.[`residenceCountry${traveler.id + 1}`] && errors[`residenceCountry${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
+              >
                 <SelectValue placeholder={t('placeholder-select-residence-country')} />
               </SelectTrigger>
               <SelectContent>{countryOptions}</SelectContent>
             </Select>
+            {errors?.[`residenceCountry${traveler.id + 1}`] && errors[`residenceCountry${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`residenceCountry${traveler.id + 1}`]}</span>
+            )}
           </div>
           <PhoneNumberForm2
             celType={traveler?.phone}
             value={{ phone: dataTraveler?.phone, countryCode: dataTraveler?.countryCode }}
             onChange={handleInputChange}
+            errors={errors}
+            errorsChange={onChange}
+            fieldId={`phone${traveler.id + 1}`}
           />
           <div>
-            <label htmlFor={`age-${dataTraveler?.email}`} className="block font-semibold text-gray-500 text-sm mb-1">
+            <label
+              htmlFor={`email-${traveler.id}`}
+              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.[`email${traveler.id + 1}`] && errors[`email${traveler.id + 1}`].length > 0 ? 'text-red-500' : ''}`}
+            >
               {t('label-email')}
             </label>
             <Input
-              name="email"
+              id={`email-${traveler.id}`}
+              name={`email${traveler.id + 1}`}
               value={dataTraveler?.email || ''}
               type="email"
               placeholder={t('placeholder-email')}
-              className="rounded-3xl border-gray-300 p-6"
+              className={`rounded-3xl border-gray-300 p-6 ${errors?.[`email${traveler.id + 1}`] && errors[`email${traveler.id + 1}`].length > 0 ? 'border-red-500' : ''}`}
               onChange={handleInputChange}
             />
+            {errors?.[`email${traveler.id + 1}`] && errors[`email${traveler.id + 1}`].length > 0 && (
+              <span className="text-xs text-red-500">{errors[`email${traveler.id + 1}`]}</span>
+            )}
           </div>
         </div>
       </div>

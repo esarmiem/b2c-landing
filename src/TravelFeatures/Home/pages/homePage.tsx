@@ -1,14 +1,11 @@
 import { Certifications } from '@/TravelCore/Components/Epic/Certifications.tsx'
 import { Features } from '@/TravelCore/Components/Epic/Features.tsx'
 import { HeroCarousel } from '@/TravelCore/Components/Epic/HeroCarousel.tsx'
-import { LoadingScreen } from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
 import { Stats } from '@/TravelCore/Components/Epic/Stats.tsx'
 import { Testimonials } from '@/TravelCore/Components/Epic/Testimonials.tsx'
 import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
 import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
 import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
-import useHomeState from '@/TravelFeatures/Home/stateHelper'
-import { useTranslation } from 'react-i18next'
 import slide1 from '../../../../Assets/slide1.webp'
 import slide2 from '../../../../Assets/slide2.webp'
 import slide4 from '../../../../Assets/slide4.webp'
@@ -19,18 +16,11 @@ import slide6 from '../../../../Assets/slide6.webp'
 const images = [slide1, slide2, slide4, slide5, slide6]
 
 export default function HomePage() {
-  const { t } = useTranslation(['home'])
-  const { isLoadingOrders } = useHomeState()
-
   //const [isOpenContactModal, setIsOpenContactModal] = useState(false)
 
   // const handleSearch = () => {
   //   setIsOpenContactModal(true)
   // }
-
-  if (isLoadingOrders) {
-    return <LoadingScreen message={t('label-title-loader')} subMessage={t('label-text-loader')} />
-  }
 
   return (
     <>

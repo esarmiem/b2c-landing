@@ -6,8 +6,7 @@ import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
 import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
 import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
 import { TravelAssistance } from '@/TravelFeatures/Home/model/travel_assistance_entity.ts'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 /**
  * AuthResponse
@@ -47,11 +46,9 @@ interface AuthResponse {
 const useHomeState = () => {
   // Obtener la función para establecer la sesión y la data del pedido.
   // Get the function to set the session and order data.
-  const navigate = useNavigate()
   const masterContext = useMasters()
   const { setSession } = useSession() || {}
-  const { data, setData } = useData() || {}
-  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
+  const { setData } = useData() || {}
 
   useEffect(() => {
     const initialize = async () => {
@@ -165,8 +162,6 @@ const useHomeState = () => {
       const llegada = orderPayload.llegada ? new Date(orderPayload.llegada.split('/').reverse().join('-')) : null
       const daysDifference = salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
 
-      console.log('day difference: ', daysDifference)
-
       // Determine the question number based on the days difference
       const numerosPreguntas = []
       if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
@@ -187,13 +182,13 @@ const useHomeState = () => {
       for (const numeroPregunta of numerosPreguntas) {
         let attempts = numeroPregunta === numerosPreguntas[0] ? 3 : 1
         let success = false
-        let delay = 1000 // Initial delay of 1 second
+        let delay = 1000
 
         while (attempts > 0 && !success) {
           try {
             if (attempts < 3 && numeroPregunta === numerosPreguntas[0]) {
               await new Promise(resolve => setTimeout(resolve, delay))
-              delay *= 2 // Exponential backoff
+              delay *= 2
             }
 
             const response = await travelAssistance.getOrderPriceByAge({ ...orderPayload, numeroPregunta })
@@ -250,30 +245,7 @@ const useHomeState = () => {
     })
   }
 
-  const handleGetQuote = async () => {
-    setIsLoadingOrders(true)
-    try {
-      console.log('Payload Order:', data?.payloadOrder)
-      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
-        throw new Error('Invalid order data')
-      }
-
-      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
-
-      if (resp && Number(resp) > 0) {
-        setTimeout(() => {
-          navigate('/quote/travel')
-        }, 1000)
-      } else {
-        throw new Error('Invalid order response')
-      }
-    } catch (error) {
-      setIsLoadingOrders(false)
-      console.error('Error processing quote:', error)
-    }
-  }
-
-  return { isLoadingOrders, handleGetQuote }
+  return { HandleGetOrder, isDataOrderValid }
 }
 /**
  * index

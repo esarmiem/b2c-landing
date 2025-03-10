@@ -183,28 +183,26 @@ export const validateForm = (formData: Record<string, string>, msg: MsgForm, val
 
     if (fieldName === 'travelers' && validationRules[fieldName].requiredAge) {
       const ages = value.split(',')
-      ages.forEach((age) => {
+      for (const age of ages) {
         if (age === '' || age === '0') {
-          hasErrors = true;
+          hasErrors = true
         }
-      })
+      }
 
       // Si hay errores, recopilamos los índices de los viajeros sin edad
       if (hasErrors) {
-        const travelersWithoutAge = ages
-          .map((age, index) => (age === '' || age === '0' ? index + 1 : null))
-          .filter(index => index !== null);
+        const travelersWithoutAge = ages.map((age, index) => (age === '' || age === '0' ? index + 1 : null)).filter(index => index !== null)
 
         if (travelersWithoutAge.length > 0) {
           if (!errors[fieldName]) {
-            errors[fieldName] = [];
+            errors[fieldName] = []
           }
 
           // Usamos singular o plural según corresponda
           if (travelersWithoutAge.length === 1) {
-            errors[fieldName].push(`${msg.requiredAge} (${msg.traveler} ${travelersWithoutAge[0]})`);
+            errors[fieldName].push(`${msg.requiredAge} (${msg.traveler} ${travelersWithoutAge[0]})`)
           } else {
-            errors[fieldName].push(`${msg.requiredAge} (${msg.travelers} ${travelersWithoutAge.join(', ')})`);
+            errors[fieldName].push(`${msg.requiredAge} (${msg.travelers} ${travelersWithoutAge.join(', ')})`)
           }
         }
       }
