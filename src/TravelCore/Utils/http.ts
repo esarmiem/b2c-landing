@@ -54,12 +54,13 @@ interface AxiosHttpArgs {
 const getDefaultHeaders = (session?: Session): Record<string, string> => {
   const defaultHeaders: Record<string, string> = {}
 
-  if (session && session.token) {
-    defaultHeaders.Authorization = 'Bearer ' + session.token
-    //defaultHeaders.apiKey = API_KEY;
-  }
+  // if (session && session.token) {
+  //   defaultHeaders.Authorization = 'Bearer ' + session.token
+  //   //defaultHeaders.apiKey = API_KEY;
+  // }
 
   //defaultHeaders['apiKey'] = API_KEY;
+  defaultHeaders.Authorization = `Bearer ${sessionStorage.getItem('token')}`
   defaultHeaders['Accept'] = 'application/json'
   defaultHeaders['Content-Type'] = 'application/json'
   defaultHeaders['Access-Control-Allow-Origin'] = '*'
