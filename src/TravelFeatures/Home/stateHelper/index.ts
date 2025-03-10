@@ -6,7 +6,8 @@ import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
 import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
 import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
 import { TravelAssistance } from '@/TravelFeatures/Home/model/travel_assistance_entity.ts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * AuthResponse
@@ -46,9 +47,11 @@ interface AuthResponse {
 const useHomeState = () => {
   // Obtener la función para establecer la sesión y la data del pedido.
   // Get the function to set the session and order data.
+  const navigate = useNavigate()
   const masterContext = useMasters()
   const { setSession } = useSession() || {}
-  const { setData } = useData() || {}
+  const { setData, data } = useData() || {}
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
 
   useEffect(() => {
     const initialize = async () => {
@@ -85,7 +88,7 @@ const useHomeState = () => {
           role: JSON.stringify(response.data.user.role),
           user_id: response.data.user.idUser
         }
-
+        //localStorage.setItem('token', response.data.payload.accessToken)
         setSession?.(sessionData)
         sessionStorage.setItem('token', response.data.payload.accessToken)
         return true
@@ -109,34 +112,34 @@ const useHomeState = () => {
    * in the context. If not, it fetches the data and updates the corresponding context.
    */
   const getMasters = async () => {
-    const masters = new Masters()
-    const masterDataMap = {
-      countries: masters.getCountries,
-      arrivals: masters.getArrivalDestinations,
-      questions: masters.getQuestions,
-      medicals: masters.getMedicalConditions,
-      documents: masters.getDocumentTypes,
-      products: masters.getProducts,
-      parameters: masters.getParameters
-    }
+      const masters = new Masters()
+      const masterDataMap = {
+        countries: masters.getCountries,
+        arrivals: masters.getArrivalDestinations,
+        questions: masters.getQuestions,
+        medicals: masters.getMedicalConditions,
+        documents: masters.getDocumentTypes,
+        products: masters.getProducts,
+        parameters: masters.getParameters
+      }
 
-    try {
       const loadDataPromises = Object.entries(masterDataMap).map(async ([key, fetchFn]) => {
         const typedKey = key as StateKey
 
-        if (masterContext && !masterContext[typedKey]?.data) {
-          const response = await fetchFn()
-          if (response?.data) {
-            masterContext[typedKey].setData(response.data)
+        try {
+          if (masterContext && !masterContext[typedKey]?.data) {
+            const response = await fetchFn()
+            if (response?.data) {
+              masterContext[typedKey].setData(response.data)
+            }
           }
+        } catch (error) {
+          console.error(`Failed to load master data for ${key}:`, error)
         }
       })
 
       await Promise.all(loadDataPromises)
-    } catch (error) {
-      console.error('Failed to load master data:', error)
     }
-  }
   /**
    * HandleGetOrder
    *
@@ -157,65 +160,72 @@ const useHomeState = () => {
   const HandleGetOrder = async (orderPayload: dataOrder): Promise<string | null> => {
     const travelAssistance = new TravelAssistance()
     try {
-      // Calculate the difference in days between the departure and arrival dates
-      const salida = orderPayload.salida ? new Date(orderPayload.salida.split('/').reverse().join('-')) : null
-      const llegada = orderPayload.llegada ? new Date(orderPayload.llegada.split('/').reverse().join('-')) : null
-      const daysDifference = salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
+      const numerosPreguntas = orderPayload.numerosPreguntas || []
 
-      // Determine the question number based on the days difference
-      const numerosPreguntas = []
-      if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
-      if (daysDifference >= 30 && daysDifference < 364) numerosPreguntas.push(2)
-      if (daysDifference >= 90 && daysDifference <= 364) numerosPreguntas.push(3)
-      if (daysDifference === 364) numerosPreguntas.push(4)
-
-      // There are no valid questions
       if (numerosPreguntas.length === 0) return null
 
-      // Create a combined data object
       const combinedData = {
         planes: [] as Plan[],
         idProspecto: 0
       }
 
-      // Process each question sequentially instead of in parallel
-      for (const numeroPregunta of numerosPreguntas) {
-        let attempts = numeroPregunta === numerosPreguntas[0] ? 3 : 1
-        let success = false
+      const fetchPlanesByNumeroPregunta = async (numeroPregunta: number) => {
+        let attempts = numeroPregunta === numerosPreguntas[0] ? 2 : 1
         let delay = 1000
 
-        while (attempts > 0 && !success) {
+        while (attempts > 0) {
           try {
-            if (attempts < 3 && numeroPregunta === numerosPreguntas[0]) {
+            if (attempts < 2 && numeroPregunta === numerosPreguntas[0]) {
               await new Promise(resolve => setTimeout(resolve, delay))
               delay *= 2
             }
 
-            const response = await travelAssistance.getOrderPriceByAge({ ...orderPayload, numeroPregunta })
+            const response = await travelAssistance.getOrderPriceByAge({
+              ...orderPayload,
+              numeroPregunta
+            })
 
             if (response?.data?.planes && response.data.planes.length > 0) {
-              // Save the prospect ID in the first response
-              if (!combinedData.idProspecto && response.data.idProspecto) {
-                combinedData.idProspecto = response.data.idProspecto
+              return {
+                success: true,
+                data: response.data
               }
-
-              // Add plans that are not already in the combined data
-              const existingPlaneIds = new Set(combinedData.planes.map(p => p.IdPlan))
-              const newPlanes = response.data.planes.filter(p => !existingPlaneIds.has(p.IdPlan))
-              combinedData.planes.push(...newPlanes)
-              success = true
             }
+
+            return { success: false, data: null }
           } catch (requestError) {
-            console.error(`Error en solicitud para numeroPregunta=${numeroPregunta}, intento ${4 - attempts}:`, requestError)
+            console.error(
+              `Error en solicitud para numeroPregunta=${numeroPregunta}, intento ${4 - attempts}:`,
+              requestError
+            )
             attempts--
+
             if (attempts === 0) {
               console.log(`Todos los intentos fallaron para numeroPregunta=${numeroPregunta}`)
+              return { success: false, data: null }
             }
           }
         }
+
+        return { success: false, data: null }
       }
 
-      // Verify that the combined data is valid
+      const results = await Promise.all(
+        numerosPreguntas.map(numeroPregunta => fetchPlanesByNumeroPregunta(numeroPregunta))
+      )
+
+      // Procesar todos los resultados exitosos
+      results.forEach(result => {
+        if (result.success && result.data) {
+          if (!combinedData.idProspecto && result.data.idProspecto) {
+            combinedData.idProspecto = result.data.idProspecto
+          }
+          const existingPlaneIds = new Set(combinedData.planes.map(p => p.IdPlan))
+          const newPlanes = result.data.planes.filter(p => !existingPlaneIds.has(p.IdPlan))
+          combinedData.planes.push(...newPlanes)
+        }
+      })
+
       if (combinedData.planes.length > 0 && combinedData.idProspecto) {
         setData?.(prevData => ({
           ...prevData,
@@ -231,22 +241,97 @@ const useHomeState = () => {
   }
 
   const isDataOrderValid = (order: dataOrder): boolean => {
-    return Object.values(order).every(value => {
+    const requiredProps = [
+      'pais',
+      'cantidadPax',
+      'edades',
+      'destino',
+      'idUser',
+      'lenguaje',
+      'llegada',
+      'salida',
+      'telefono',
+      'email',
+      'numeroPregunta'
+    ]
+
+    for (const prop of requiredProps) {
+      if (!(prop in order)) {
+        console.log(`Falta la propiedad requerida: ${prop}`)
+        return false
+      }
+
+      const value = order[prop as keyof dataOrder]
+
       if (value === null || value === undefined) {
+        console.log(`Propiedad inválida - ${prop}: null o undefined`)
         return false
       }
+
       if (typeof value === 'string' && value.trim() === '') {
+        console.log(`Propiedad inválida - ${prop}: cadena vacía`)
         return false
       }
-      if (Object.keys(order).length !== 11) {
-        return false
-      }
-      return true
-    })
+    }
+
+    return true
   }
 
-  return { HandleGetOrder, isDataOrderValid }
+  const handleGetQuote = async () => {
+    setIsLoadingOrders(true)
+    try {
+      if (!data?.payloadOrder) {
+        console.error('No existe payload de orden')
+        throw new Error('Payload order is missing')
+      }
+
+      const payloadCompleto = { ...data.payloadOrder }
+
+      const salida = payloadCompleto.salida ? new Date(payloadCompleto.salida.split('/').reverse().join('-')) : null
+      const llegada = payloadCompleto.llegada ? new Date(payloadCompleto.llegada.split('/').reverse().join('-')) : null
+      const daysDifference =
+        salida && llegada ? Math.floor((llegada.getTime() - salida.getTime()) / (1000 * 60 * 60 * 24)) : 0
+
+      const numerosPreguntas = []
+      if (daysDifference >= 3 && daysDifference < 120) numerosPreguntas.push(1)
+      if (daysDifference >= 30 && daysDifference < 364) numerosPreguntas.push(2)
+      if (daysDifference >= 90 && daysDifference <= 364) numerosPreguntas.push(3)
+      if (daysDifference === 364) numerosPreguntas.push(4)
+
+      if (numerosPreguntas.length === 0) {
+        console.error('No hay números de pregunta válidos para estas fechas')
+        throw new Error('No valid question numbers for these dates')
+      }
+
+      payloadCompleto.numerosPreguntas = numerosPreguntas
+      payloadCompleto.numeroPregunta = numerosPreguntas[0]
+
+      const isValid = isDataOrderValid(payloadCompleto as dataOrder)
+      if (!isValid) {
+        console.error('Datos de orden inválidos:', payloadCompleto)
+        throw new Error('Invalid order data structure')
+      }
+
+      const resp = await HandleGetOrder(payloadCompleto as dataOrder)
+      console.log('Response from HandleGetOrder:', resp)
+
+      if (resp && Number(resp) > 0) {
+        setTimeout(() => {
+          navigate('/quote/travel')
+        }, 1000)
+      } else {
+        console.error('Respuesta inválida:', resp)
+        throw new Error(`Invalid order response: ${resp}`)
+      }
+    } catch (error) {
+      setIsLoadingOrders(false)
+      console.error('Error processing quote:', error)
+    }
+  }
+
+  return { isLoadingOrders, handleGetQuote }
 }
+
 /**
  * index
  *

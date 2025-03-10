@@ -226,6 +226,7 @@ export interface dataOrder {
   lenguaje: string
   llegada: string
   numeroPregunta: number
+  numerosPreguntas?: number[]
   pais: string
   salida: string
   telefono: string

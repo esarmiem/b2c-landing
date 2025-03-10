@@ -7,40 +7,12 @@ import { DestinationSelector } from './DestinationSelector'
 import { TravelButtonForm } from './TravelButtonForm'
 import { TravelersPopover } from './TravelersPopover'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
-import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
-import useData from '@/TravelCore/Hooks/useData.ts'
-import { useNavigate } from 'react-router-dom'
 import { LoadingScreen } from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
 
 export function SearchFormContent() {
   const { t } = useTranslation(['home'])
-  const { data } = useData() || {}
-  const navigate = useNavigate()
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
-  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
-  const { HandleGetOrder, isDataOrderValid } = useHomeState()
-
-  const handleGetQuote = async () => {
-    setIsLoadingOrders(true)
-    try {
-      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
-        throw new Error('Invalid order data')
-      }
-
-      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
-
-      if (resp && Number(resp) > 0) {
-        setTimeout(() => {
-          navigate('/quote/travel')
-        }, 1000)
-      } else {
-        throw new Error('Invalid order response')
-      }
-    } catch (error) {
-      setIsLoadingOrders(false)
-      console.error('Error processing quote:', error)
-    }
-  }
+  const { isLoadingOrders, handleGetQuote } = useHomeState()
 
   const validationRules = {
     destination: { required: true },

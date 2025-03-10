@@ -83,6 +83,7 @@ export const COUNTRIES_API = {
    *                                       / A promise that resolves with the API response.
    */
   getCountries: (data: FilterData): Promise<countriesResponse> => {
+    //const token = localStorage.getItem("token")
     return axiosHttp({
       path: `${SERVICE_COUNTRIES}?isActive=${data.isActive}`,
       method: "GET",

@@ -24,7 +24,7 @@ interface FilterFormProps {
 }
 
 export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormData }: FilterFormProps) => {
-  const { HandleGetOrder } = useHomeState()
+  const { handleGetQuote } = useHomeState()
 
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
@@ -169,7 +169,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
     if (isEditing) {
       if (hasChanges(payloadOrder as dataOrder, initialPayloadRef.current)) {
         setIsLoading(true)
-        await HandleGetOrder(payloadOrder as dataOrder)
+        await handleGetQuote()
         setIsLoading(false)
       } else {
         console.log('No se detectaron cambios, omitiendo actualización')
