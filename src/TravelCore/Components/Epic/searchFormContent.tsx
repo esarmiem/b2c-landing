@@ -1,5 +1,4 @@
-import { validateForm } from '@/TravelCore/Utils/validations/formValidations.ts'
-import { useMessageTranslations } from '@/TravelCore/Utils/validations/useMessageTranslations.ts'
+import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
 import type { MouseEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,21 +6,41 @@ import { DateSelector } from './DateSelector'
 import { DestinationSelector } from './DestinationSelector'
 import { TravelButtonForm } from './TravelButtonForm'
 import { TravelersPopover } from './TravelersPopover'
+import useHomeState from '@/TravelFeatures/Home/stateHelper'
+import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
+import useData from '@/TravelCore/Hooks/useData.ts'
+import { useNavigate } from 'react-router-dom'
+import { LoadingScreen } from '@/TravelCore/Components/Epic/LoadingScreen.tsx'
 
-interface SearchFormContentProps {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
-}
-
-export function SearchFormContent({ onClick }: SearchFormContentProps) {
+export function SearchFormContent() {
   const { t } = useTranslation(['home'])
-  const msg = useMessageTranslations()
+  const { data } = useData() || {}
+  const navigate = useNavigate()
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    destination: '',
-    travelDate: '',
-    travelers: ''
-  })
-  const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false)
+  const { HandleGetOrder, isDataOrderValid } = useHomeState()
+
+  const handleGetQuote = async () => {
+    setIsLoadingOrders(true)
+    try {
+      if (!data?.payloadOrder || !isDataOrderValid(data?.payloadOrder as dataOrder)) {
+        throw new Error('Invalid order data')
+      }
+
+      const resp = await HandleGetOrder(data.payloadOrder as dataOrder)
+
+      if (resp && Number(resp) > 0) {
+        setTimeout(() => {
+          navigate('/quote/travel')
+        }, 1000)
+      } else {
+        throw new Error('Invalid order response')
+      }
+    } catch (error) {
+      setIsLoadingOrders(false)
+      console.error('Error processing quote:', error)
+    }
+  }
 
   const validationRules = {
     destination: { required: true },
@@ -32,25 +51,22 @@ export function SearchFormContent({ onClick }: SearchFormContentProps) {
     travelers: { requiredAge: true }
   }
 
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+  const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)
 
-    const validationResult = validateForm({ [field]: value }, msg, { [field]: validationRules[field as keyof typeof validationRules] })
-    setErrors(prev => ({
-      ...prev,
-      [field]: validationResult.errors[field] || []
-    }))
+  const handleChange = (field: string, value: string) => {
+    handleChangeValidate(field, value)
   }
 
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    const validationResult = validateForm(formData, msg, validationRules)
-
-    if (!validationResult.isValid) {
-      setErrors(validationResult.errors)
+    if (!validateFormData()) {
       return
     }
-    onClick(event)
+    handleGetQuote()
+  }
+
+  if (isLoadingOrders) {
+    return <LoadingScreen message={t('label-title-loader')} subMessage={t('label-text-loader')} />
   }
 
   return (

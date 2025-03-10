@@ -81,6 +81,8 @@
     "and": "y",
     "characters": "caracteres",
     "match": "Los campos no coinciden",
+    "traveler": "Viajero",
+    "travelers": "Viajeros",
     "dateRange": {
       "invalid": "Rango de fechas inválido",
       "past": "La fecha debe ser futura",

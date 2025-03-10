@@ -17,5 +17,10 @@ export const formatCurrency = (value: string, currency: 'COP' | 'USD'): string =
     options.maximumFractionDigits = 0
   }
 
+  if (currency === 'USD') {
+    // Para dólares, mostramos el signo de dólar antes del valor
+    options.minimumFractionDigits = 2
+  }
+
   return new Intl.NumberFormat(currency === 'COP' ? 'es-CO' : 'en-US', options as Intl.NumberFormatOptions).format(valueNumber)
 }
