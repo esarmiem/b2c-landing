@@ -36,6 +36,17 @@ export const BillingResultPage: React.FC = () => {
                 setIdSale(idSale)
                 setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${refEPayco}`)
 
+                // Map ePayco status to our internal status
+                const ePaycoStatus = respDetails?.data?.result?.data?.x_response || "Rechazado"
+                let mappedStatus = "Rechazado"
+                
+                // Map the ePayco status to our application status
+                if (ePaycoStatus === "Aprobada" || ePaycoStatus === "Aceptada") {
+                    mappedStatus = "Aprobado"
+                } else if (ePaycoStatus === "Pendiente") {
+                    mappedStatus = "Pendiente"
+                }
+                
                 // Actualizar detalles de pago con datos de la respuesta
                 setPaymentDetails({
                     orderNumber: respDetails?.data?.result?.data?.x_id_invoice || "",
@@ -44,12 +55,16 @@ export const BillingResultPage: React.FC = () => {
                     product: "asistencia de viaje internacional",
                 })
 
+                // Si no hay un estado en la respuesta de ePayco, usar el mappedStatus
                 const respSummary = await payment.purchaseSummary(idSale)
-                const adaptedData = adapterPurchaseSummaryResp(respSummary)
+                const adaptedData = adapterPurchaseSummaryResp(respSummary, mappedStatus)
                 setDataSummary(adaptedData)
 
-                const respDownloader = await payment.downloadVoucher(idSale)
-                setDataVoucher(respDownloader)
+                // Solo intentar descargar el voucher si el estado es Aprobado
+                if (mappedStatus === "Aprobado") {
+                    const respDownloader = await payment.downloadVoucher(idSale)
+                    setDataVoucher(respDownloader)
+                }
             }
         } catch (error) {
             console.error("Error fetching payment details:", error)
@@ -58,32 +73,41 @@ export const BillingResultPage: React.FC = () => {
     }
   
     const handleRetry = () => {
-      // Implement retry logic here
-      console.log("Retrying payment...");
+      // Si estamos en estado pendiente, solo recargamos la página para verificar el estado
+      if (status === "Pendiente") {
+        window.location.reload()
+      } else {
+        // Si el pago fue rechazado, implementar lógica para reintentar el pago
+        console.log("Retrying payment...");
+        // Aquí puedes redirigir al usuario a la página de pago o implementar
+        // tu lógica específica para reintentar el pago
+      }
     };
 
-    const adapterPurchaseSummaryResp = (originalObject: any) => {
+    const adapterPurchaseSummaryResp = (originalObject: any, mappedStatus?: string) => {
         // Actualiza el estado global
-        setStatus(originalObject?.venta?.estado || "Rechazado")
+        // Prioriza el estado del objeto si existe, si no usa el mappedStatus o "Rechazado" por defecto
+        const paymentStatus = originalObject?.venta?.estado || mappedStatus || "Rechazado"
+        setStatus(paymentStatus)
         
         return {
-            travelersNumber: originalObject?.venta?.numeroViajeros,
-            valueCOP: originalObject?.venta?.valorProductoPesos,
-            value: originalObject?.venta?.valorProductoDolares,
-            passengerValueCOP: originalObject?.venta?.valorViajeroPesos,
-            passengerValue: originalObject?.venta?.valorViajeroDolares,
+            travelersNumber: originalObject?.venta?.numeroViajeros || 0,
+            valueCOP: originalObject?.venta?.valorProductoPesos || 0,
+            value: originalObject?.venta?.valorProductoDolares || 0,
+            passengerValueCOP: originalObject?.venta?.valorViajeroPesos || 0,
+            passengerValue: originalObject?.venta?.valorViajeroDolares || 0,
             upgrades: originalObject?.detalleUpgrades?.map((item: any) => {
                 return {
-                    name: item.upgrade,
-                    value: item.valorUSD,
-                    valueCOP: item.valorCOP,
-                    passengers: item.pasajeros,
+                    name: item.upgrade || "",
+                    value: item.valorUSD || 0,
+                    valueCOP: item.valorCOP || 0,
+                    passengers: item.pasajeros || 0,
                 };
             }) || [],
             totalUpgrades: originalObject?.venta?.totalUpgradesPesos || 0,
             totalOrderCOP: originalObject?.venta?.totalVentaPesos || 0,
             totalOrderUSD: originalObject?.venta?.totalVentaDolares || 0,
-            status: originalObject?.venta?.estado,
+            status: paymentStatus,
             USDdiscount: {
                 percentage: originalObject?.DescripcionDescuentosDolares?.porcentaje || 0,
                 discountValue: originalObject?.DescripcionDescuentosDolares?.valorDescuento || 0,
