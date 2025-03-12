@@ -16,5 +16,6 @@
     "label-payment-not-processed": "Pago no procesado",
     "label-download-voucher": "Descargar Voucher",
     "label-retry-payment": "Intenta nuevamente o elige otro método de pago",
-    "label-back-to-home": "Volver al inicio"
+    "label-back-to-home": "Volver al inicio",
+    "label-loading-payment-result": "Estamos validando los datos del pago. Espere un poco!"
   }

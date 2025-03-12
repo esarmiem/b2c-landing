@@ -16,5 +16,7 @@
     "label-payment-not-processed": "Payment not processed",
     "label-download-voucher": "Download Voucher",
     "label-retry-payment": "Try again or choose another payment method",
-    "label-back-to-home": "Back to home"
-  }
+    "label-back-to-home": "Back to home",
+    "label-loading-payment-result": "We're validating your payment details. Please wait a moment!"
+
+}
