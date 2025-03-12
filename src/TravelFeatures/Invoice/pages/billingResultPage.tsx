@@ -1,21 +1,8 @@
 import { PaymentStatus } from "@/TravelCore/Components/Epic/PaymentStatus"
 import { useSearchParams } from "react-router-dom";
-import {useEffect, useState} from "react";
-import {Payment} from "@/TravelFeatures/Invoice/model/payment_entity.ts";
-import {RESPONSE_PAY_PLATTFORM_URL} from "@/TravelCore/Utils/constants.ts";
-
-// Simulated payment data
-const paymentData = {
-  orderNumber: "1234567890",
-  organizationId: "AB-123456789XYZ",
-  invoiceNumber: "98765",
-  product: "asistencia de viaje internacional",
-  pricePerPersonCOP: 713120.76,
-  pricePerPersonUSD: 162,
-  totalPriceCOP: 1426241.52,
-  totalPriceUSD: 324,
-  status: "declined" as const, // 'declined' or 'approved' para ver una u otra pantalla by: elder
-}
+import { useEffect, useState } from "react";
+import { Payment } from "@/TravelFeatures/Invoice/model/payment_entity.ts";
+import { RESPONSE_PAY_PLATTFORM_URL } from "@/TravelCore/Utils/constants.ts";
 
 export const BillingResultPage: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -29,34 +16,35 @@ export const BillingResultPage: React.FC = () => {
     useEffect(() => {
         const ref = searchParams.get("ref_payco") || searchParams.get("x_extra1") || ""
         setRefEpayco(ref)
-        if (ref !== null || ref !== "")
+        if (ref !== null && ref !== "")
             getPaymentDetails(ref)
-    }, [])
+    }, [searchParams])
 
     const getPaymentDetails = async (ref: string) => {
         const payment = new Payment()
         const respDetails = await payment.getPaymentDetails(ref)
         if (respDetails?.data?.result?.data?.x_extra1) {
-            setIdSale(respDetails?.data?.result?.data?.x_extra1)
+            const idSale = respDetails?.data?.result?.data?.x_extra1
+            setIdSale(idSale)
             setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${refEPayco}`)
 
-            const respSummary = await payment.purchaseSummary(respDetails?.data?.result?.data?.x_extra1)
-            setDataSummary(adapterPurchaseSummaryResp(respSummary))
+            const respSummary = await payment.purchaseSummary(idSale)
+            const adaptedSummary = adapterPurchaseSummaryResp(respSummary)
+            setDataSummary(adaptedSummary)
 
-            const respDownloader = await payment.downloadVoucher(respDetails?.data?.result?.data?.x_extra1)
+            const respDownloader = await payment.downloadVoucher(idSale)
             setDataVoucher(respDownloader)
         }
     }
 
-console.log('respuesta: ', searchParams, refEPayco)
-  
     const handleRetry = () => {
-      // Implement retry logic here
-      console.log("Retrying payment...");
+        // Implement retry logic here
+        console.log("Retrying payment...");
     };
 
     const adapterPurchaseSummaryResp = (originalObject: any) => {
-        setStatus(originalObject?.venta?.estado)
+        const estadoPago = originalObject?.venta?.estado
+        setStatus(estadoPago)
         return {
             travelersNumber: originalObject?.venta?.numeroViajeros,
             valueCOP: originalObject?.venta?.valorProductoPesos,
@@ -74,7 +62,7 @@ console.log('respuesta: ', searchParams, refEPayco)
             totalUpgrades: originalObject?.venta?.totalUpgradesPesos,
             totalOrderCOP: originalObject?.venta?.totalVentaPesos,
             totalOrderUSD: originalObject?.venta?.totalVentaDolares,
-            status: originalObject?.venta?.estado,
+            status: estadoPago,
             USDdiscount: {
                 percentage: originalObject?.DescripcionDescuentosDolares?.porcentaje,
                 discountValue: originalObject?.DescripcionDescuentosDolares?.valorDescuento,
@@ -88,16 +76,29 @@ console.log('respuesta: ', searchParams, refEPayco)
         }
     }
 
+    // Construir los datos de pago a partir de dataSummary en lugar de usar paymentData estático
+    const paymentData = dataSummary ? {
+        orderNumber: searchParams.get("x_id_invoice") || "",
+        organizationId: searchParams.get("x_extra2") || "",
+        invoiceNumber: searchParams.get("x_id_invoice") || "",
+        product: "asistencia de viaje internacional",
+        pricePerPersonCOP: dataSummary.passengerValueCOP,
+        pricePerPersonUSD: dataSummary.passengerValue,
+        totalPriceCOP: dataSummary.totalOrderCOP,
+        totalPriceUSD: dataSummary.totalOrderUSD,
+        status: dataSummary.status,
+    } : null;
+
     return (
-      <PaymentStatus 
-        payment={paymentData}
-        dataSummary={dataSummary}
-        status={status}
-        onRetry={handleRetry}
-        voucher={dataVoucher?.voucher}
-        pathResponse={pathResponse}
-      />
+        <PaymentStatus 
+            payment={paymentData}
+            dataSummary={dataSummary}
+            status={status}
+            onRetry={handleRetry}
+            voucher={dataVoucher?.voucher}
+            pathResponse={pathResponse}
+        />
     );
-  };
-  
-  export default BillingResultPage;
+};
+
+export default BillingResultPage;
