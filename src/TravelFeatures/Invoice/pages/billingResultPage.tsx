@@ -2,7 +2,7 @@ import { PaymentStatus } from "@/TravelCore/Components/Epic/PaymentStatus"
 import { useSearchParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Payment} from "@/TravelFeatures/Invoice/model/payment_entity.ts";
-import {RESPONSE_PAY_PLATTFORM_URL} from "@/TravelCore/Utils/constants.ts";
+import {RESPONSE_PAY_PLATTFORM_URL, SERVICE_METHODS_EPAYCO, URL_EPAYCO_METHODS} from "@/TravelCore/Utils/constants.ts";
 
 // Simulated payment data
 const paymentData = {
@@ -29,6 +29,8 @@ export const BillingResultPage: React.FC = () => {
     useEffect(() => {
         const ref = searchParams.get("ref_payco") || searchParams.get("x_extra1") || ""
         setRefEpayco(ref)
+        setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${ref}`)
+
         if (ref !== null || ref !== "")
             getPaymentDetails(ref)
     }, [])
@@ -38,24 +40,29 @@ export const BillingResultPage: React.FC = () => {
         const respDetails = await payment.getPaymentDetails(ref)
         if (respDetails?.data?.result?.data?.x_extra1) {
             setIdSale(respDetails?.data?.result?.data?.x_extra1)
-            setPathResponse(`${RESPONSE_PAY_PLATTFORM_URL}?x_extra1=${refEPayco}`)
 
             const respSummary = await payment.purchaseSummary(respDetails?.data?.result?.data?.x_extra1)
-            setDataSummary(adapterPurchaseSummaryResp(respSummary))
+            console.log('respSummary', respSummary.data)
+                setDataSummary(adapterPurchaseSummaryResp(respSummary.data))
+            if (respSummary?.data && respSummary?.data?.estado === "Pagado"){
 
-            const respDownloader = await payment.downloadVoucher(respDetails?.data?.result?.data?.x_extra1)
-            setDataVoucher(respDownloader)
+                const respDownloader = await payment.downloadVoucher(respDetails?.data?.result?.data?.x_extra1)
+                setDataVoucher(respDownloader)
+            }
+
         }
     }
 
 console.log('respuesta: ', searchParams, refEPayco)
   
     const handleRetry = () => {
-      // Implement retry logic here
-      console.log("Retrying payment...");
+        //Se puede validar que no cambie de equipo para no perder el id transaccion
+        const transaction: string = data?.epaycoTx || ""
+        window.location.href = `${URL_EPAYCO_METHODS}/${SERVICE_METHODS_EPAYCO}?transaction=${transaction}`
     };
 
     const adapterPurchaseSummaryResp = (originalObject: any) => {
+        console.log('adapterPurchaseSummaryResp', originalObject)
         setStatus(originalObject?.venta?.estado)
         return {
             travelersNumber: originalObject?.venta?.numeroViajeros,

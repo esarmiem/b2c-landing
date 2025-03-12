@@ -139,6 +139,10 @@ export default function InvoicePage() {
             console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
             if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
               const transaction = respPayment?.data?.data?.id_session
+              setData?.((prevData: any) => ({
+                ...prevData,
+                epaycoTx: transaction
+              }))
               window.location.href = `${URL_EPAYCO_METHODS}/${SERVICE_METHODS_EPAYCO}?transaction=${transaction}`
             } else {
               alert('Ha ocurrido un error al procesar la orden con la pasarela de pago')
@@ -148,10 +152,6 @@ export default function InvoicePage() {
       }
     }, 500)
 
-    /*setTimeout(() => {
-            console.log('redirigiendo a /invoice')
-            //navigate('/invoice/billingResult'); // Navegar a la siguiente pantalla
-        }, 1000);*/
   }
 
   const validationRules = {
