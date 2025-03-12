@@ -54,7 +54,9 @@ export const BillingResultPage: React.FC = () => {
     }
 
 console.log('respuesta: ', searchParams, refEPayco)
-  
+
+
+
     const handleRetry = () => {
         //Se puede validar que no cambie de equipo para no perder el id transaccion
         const transaction: string = data?.epaycoTx || ""
