@@ -300,7 +300,10 @@ const useHomeState = () => {
 
       setData?.(prevData => ({
         ...prevData,
-        payloadOrder: payloadCompleto
+        payloadOrder: {
+          ...prevData?.payloadOrder,
+          numeroPregunta: payloadCompleto.numeroPregunta
+        }
       }))
 
       const isValid = isDataOrderValid(payloadCompleto as dataOrder)

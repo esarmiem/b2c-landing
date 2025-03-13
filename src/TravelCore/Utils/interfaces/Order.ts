@@ -279,6 +279,7 @@ export interface TravellerQuotation {
 
 export type Quotation = {
   planId: number
+  queryId: string
   totalAllTravelersPesos: string
   totalAllTravelersDolar: string
   travellers: TravellerQuotation[]
