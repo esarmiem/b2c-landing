@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
-//import { PhoneNumberForm } from "@/TravelCore/Components/Epic/PhoneNumberForm.tsx";
 import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2.tsx'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -210,7 +209,7 @@ export function BillingForm({ onCheck, onChangeField, data, onChange, errors }: 
               <SelectTrigger
                 className={`rounded-3xl border-gray-300 p-6 ${errors?.billingCountry && errors.billingCountry.length > 0 ? 'border-red-500' : ''}`}
               >
-                <SelectValue placeholder={t('billing-placeholder-country')} />
+                <SelectValue placeholder={<span className="text-gray-500">{t('billing-placeholder-country')}</span>} />
               </SelectTrigger>
               <SelectContent>{countriesOptions}</SelectContent>
             </Select>
@@ -227,7 +226,7 @@ export function BillingForm({ onCheck, onChangeField, data, onChange, errors }: 
               <SelectTrigger
                 className={`rounded-3xl border-gray-300 p-6 ${errors?.billingCity && errors.billingCity.length > 0 ? 'border-red-500' : ''}`}
               >
-                <SelectValue placeholder={t('billing-placeholder-city')} />
+                <SelectValue placeholder={<span className="text-gray-500">{t('billing-placeholder-city')}</span>} />
               </SelectTrigger>
               <SelectContent>{citiesOptions}</SelectContent>
             </Select>

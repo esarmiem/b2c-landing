@@ -60,6 +60,7 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
   // }
 
   //defaultHeaders['apiKey'] = API_KEY;
+  console.log(sessionStorage.getItem('token'))
   defaultHeaders.Authorization = `Bearer ${sessionStorage.getItem('token')}`
   defaultHeaders['Accept'] = 'application/json'
   defaultHeaders['Content-Type'] = 'application/json'
