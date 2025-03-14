@@ -53,12 +53,12 @@ const TripQuotePage: React.FC = () => {
         <div className={`${isLoading ? 'pointer-events-none blur-sm' : ''}`}>
           <Breadcrumb />
           <FilterForm errors={errors} validateFormData={validateFormData} handleChange={handleChange} setIsLoading={setIsLoading} />
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
             <div className="flex justify-between items-center">
               <h3 className="font-display tracking-tight font-bold text-slate-900 md:text-3xl">{t('label-trip-assistance')}</h3>
               <DropdownFiltersProducts setViewType={setViewType} setSelectedSort={setSelectedSort} selectedSort={selectedSort} />
             </div>
-            <div className="max-w-6xl mx-auto py-4">
+            <div className="max-w-7xl mx-auto py-4">
               <div className={containerClasses}>
                 {plans
                   .sort((a, b) => {
