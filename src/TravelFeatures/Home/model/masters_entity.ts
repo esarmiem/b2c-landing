@@ -1,4 +1,4 @@
-import { MastersServices } from "@/TravelCore/Services/Apis/Masters";
+import { MastersServices } from '@/TravelCore/Services/Apis/Masters'
 /**
  * Masters
  *
@@ -27,8 +27,8 @@ export class Masters {
    */
   async getParameters(): Promise<any> {
     return await MastersServices.parametersApi.getParameters({
-      isActive: true,
-    });
+      isActive: true
+    })
   }
   /**
    * getCountries
@@ -43,7 +43,8 @@ export class Masters {
    *                         / A promise that resolves with the countries API response.
    */
   async getCountries(): Promise<any> {
-    return await MastersServices.countriesApi.getCountries({ isActive: true });
+    console.log('session token', sessionStorage.getItem('token'))
+    return await MastersServices.countriesApi.getCountries({ isActive: true })
   }
   /**
    * getArrivalDestinations
@@ -59,8 +60,8 @@ export class Masters {
    */
   async getArrivalDestinations(): Promise<any> {
     return await MastersServices.arrivalsApi.getArrivalDestinations({
-      isActive: true,
-    });
+      isActive: true
+    })
   }
   /**
    * getQuestions
@@ -75,7 +76,7 @@ export class Masters {
    *                         / A promise that resolves with the questions API response.
    */
   async getQuestions(): Promise<any> {
-    return await MastersServices.questionsApi.getQuestions({ isActive: true });
+    return await MastersServices.questionsApi.getQuestions({ isActive: true })
   }
   /**
    * getMedicalConditions
@@ -91,8 +92,8 @@ export class Masters {
    */
   async getMedicalConditions(): Promise<any> {
     return await MastersServices.medicalConditionsApi.getMedicalConditions({
-      isActive: true,
-    });
+      isActive: true
+    })
   }
   /**
    * getDocumentTypes
@@ -108,8 +109,8 @@ export class Masters {
    */
   async getDocumentTypes(): Promise<any> {
     return await MastersServices.documentTypeApi.getDocumentTypes({
-      isActive: true,
-    });
+      isActive: true
+    })
   }
   /**
    * getProducts
@@ -124,6 +125,6 @@ export class Masters {
    *                         / A promise that resolves with the products API response.
    */
   async getProducts(): Promise<any> {
-    return await MastersServices.productsApi.getProducts({ isActive: true });
+    return await MastersServices.productsApi.getProducts({ isActive: true })
   }
 }

@@ -1,14 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Luggage } from 'lucide-react'
-import type { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SearchFormContent } from './searchFormContent'
 
-interface TravelFormProps {
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
-}
-
-export function TravelForm({ onClick }: TravelFormProps) {
+export function TravelForm() {
   const { t } = useTranslation(['home'])
 
   return (
@@ -55,7 +50,7 @@ export function TravelForm({ onClick }: TravelFormProps) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">
-          <SearchFormContent onClick={onClick} />
+          <SearchFormContent />
         </TabsContent>
         <TabsContent value="tab2">
           <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">{t('content-tab-comms')}</div>

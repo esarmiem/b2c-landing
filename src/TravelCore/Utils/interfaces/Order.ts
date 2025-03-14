@@ -226,6 +226,7 @@ export interface dataOrder {
   lenguaje: string
   llegada: string
   numeroPregunta: number
+  numerosPreguntas?: number[]
   pais: string
   salida: string
   telefono: string
@@ -278,6 +279,7 @@ export interface TravellerQuotation {
 
 export type Quotation = {
   planId: number
+  queryId: string
   totalAllTravelersPesos: string
   totalAllTravelersDolar: string
   travellers: TravellerQuotation[]

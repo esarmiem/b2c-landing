@@ -21,6 +21,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
   const numberTravellers = data?.payloadOrder?.cantidadPax || 1
+  const payloadOrder = data?.payloadOrder || {}
 
   const [isLoading, setIsLoading] = useState(false)
   const [currentTraveler, setCurrentTraveler] = useState(1)
@@ -34,10 +35,21 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
   const currentLanguage = i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
 
+  // Crear un identificador único para la consulta actual
+  const createQueryId = useCallback(() => {
+    const { salida, llegada, pais, destino, cantidadPax } = payloadOrder
+    return `${plan.IdPlan}-${cantidadPax || 1}-${salida || ''}-${llegada || ''}-${pais || ''}-${destino || ''}`
+  }, [plan.IdPlan, payloadOrder])
+
   // Inicialización de la cotización - solo cuando es necesario
   useEffect(() => {
+    const currentQueryId = createQueryId()
+
     const shouldInitialize =
-      !travelerQuotation || travelerQuotation.planId !== plan.IdPlan || travelerQuotation.travellers.length !== numberTravellers
+      !travelerQuotation ||
+      travelerQuotation.planId !== plan.IdPlan ||
+      travelerQuotation.travellers.length !== numberTravellers ||
+      travelerQuotation.queryId !== currentQueryId
 
     if (shouldInitialize && setData) {
       const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
@@ -53,6 +65,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
       const initialQuotation: Quotation = {
         planId: plan.IdPlan,
+        queryId: currentQueryId,
         totalAllTravelersPesos: plan.ValorPesos || '0',
         totalAllTravelersDolar: plan.Valor || '0',
         travellers: initialTravellers
@@ -63,7 +76,19 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
         travelerQuotation: initialQuotation
       }))
     }
-  }, [travelerQuotation, numberTravellers, plan.IdPlan, plan.ValorPesos, plan.Valor, setData])
+  }, [
+    travelerQuotation,
+    numberTravellers,
+    plan.IdPlan,
+    plan.ValorPesos,
+    plan.Valor,
+    setData,
+    createQueryId,
+    payloadOrder.salida,
+    payloadOrder.llegada,
+    payloadOrder.pais,
+    payloadOrder.destino
+  ])
 
   // Obtener TRM una sola vez
   useEffect(() => {
@@ -180,6 +205,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
         ...prevData,
         travelerQuotation: {
           planId: plan.IdPlan,
+          queryId: travelerQuotation.queryId,
           totalAllTravelersPesos: newTotalPesos,
           totalAllTravelersDolar: newTotalDolar,
           travellers: newTravellers

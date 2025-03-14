@@ -129,7 +129,9 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
                 </div>
               )}
               <h2 className="font-bold text-2xl my-3">{plan.Categoria}</h2>
-              <p className={`my-0 ${recommended ? 'text-white' : 'text-neutral-800'}`}>{plan.nombre}</p>
+              <p className={`h-12 flex items-center justify-center leading-tight line-clamp-2 ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>
+  {plan.nombre}
+</p>
               <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
                 {price} <span className="text-xs">{i18n.language === 'es' ? 'COP' : 'USD'}</span>

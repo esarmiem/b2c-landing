@@ -50,5 +50,8 @@
   "emergency-placeholder-last-name": "Enter your last name",
   "emergency-phone": "Phone",
   "emergency-phone-optional": "Phone 2 (Optional)",
-  "phone-number-placeholder": "Phone number"
+  "phone-number-placeholder": "Phone number",
+  "travelers": "Travelers",
+    "traveler": "Traveler",
+  "days": "Days"
 }

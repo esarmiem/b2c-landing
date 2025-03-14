@@ -16,5 +16,15 @@
     "label-payment-not-processed": "Payment not processed",
     "label-download-voucher": "Download Voucher",
     "label-retry-payment": "Try again or choose another payment method",
-    "label-back-to-home": "Back to home"
-  }
+    "label-back-to-home": "Back to home",
+    "label-loading-payment-result": "We're validating your payment details. Please wait a moment!",
+    "label-payment-pending": "The transaction is pending confirmation by the bank",
+    "label-payment-pending-message": "With the following link, you can check the status of the transaction at any time and verify if it was approved or declined.",
+    "label-copy-url-message": "We recommend copying this URL to check it later.",
+    "label-copy-url": "Copy URL",
+    "label-please-wait": "Please wait a moment",
+    "label-payment-approved-subtitle": "Your payment has been approved",
+    "label-payment-declined-subtitle": "Your payment has been declined",
+    "copied": "Copied"
+
+}

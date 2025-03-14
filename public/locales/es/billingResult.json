@@ -16,5 +16,14 @@
     "label-payment-not-processed": "Pago no procesado",
     "label-download-voucher": "Descargar Voucher",
     "label-retry-payment": "Intenta nuevamente o elige otro método de pago",
-    "label-back-to-home": "Volver al inicio"
+    "label-back-to-home": "Volver al inicio",
+    "label-loading-payment-result": "Estamos validando los datos del pago. Espere un poco!",
+    "label-payment-pending": "La transacción está pendiente de ser confirmada por el banco",
+    "label-payment-pending-message": "Con el siguiente link podrás consultar el estado de la transacción en cualquier momento y validar si fue aprobada o rechazada.",
+    "label-copy-url-message": "Le recomendamos copiar esta URL para consultarlo después.",
+    "label-copy-url": "Copiar URL",
+    "label-please-wait": "Espere un momento",
+    "label-payment-approved-subtitle": "Su pago ha sido aprobado",
+    "label-payment-declined-subtitle": "Su pago ha sido rechazado",
+    "copied": "Copiado"
   }
