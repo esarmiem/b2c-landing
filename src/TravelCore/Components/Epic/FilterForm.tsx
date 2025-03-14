@@ -265,7 +265,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
                 {formatDate(departureDate)}
               </button>
               {departureOpen && (
-                <div className="absolute z-50 bg-white rounded-md shadow-lg mt-1">
+                <div className="absolute z-50 bg-white rounded-md shadow-lg mt-1 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0">
                   <Datepicker
                     mode="single"
                     selected={departureDate}
@@ -303,7 +303,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
               {formatDate(returnDate)}
             </button>
             {returnOpen && (
-              <div className="absolute z-50 bg-white rounded-md shadow-lg mt-1">
+              <div className="absolute z-50 bg-white rounded-md shadow-lg mt-1 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0">
                 <Datepicker
                   mode="single"
                   selected={returnDate}
