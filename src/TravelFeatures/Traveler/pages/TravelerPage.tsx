@@ -146,7 +146,7 @@ export default function TravelForm() {
       setTravelersData(prevData => {
         const updatedTravelers = [...prevData]
         if (!updatedTravelers[index]) {
-          updatedTravelers[index] = {}
+          updatedTravelers[index] = {} as PaxForm
         }
         updatedTravelers[index] = {
           ...updatedTravelers[index],

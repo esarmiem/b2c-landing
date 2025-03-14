@@ -52,8 +52,8 @@ interface AxiosHttpArgs {
  * @returns {Record<string, string>} Los encabezados HTTP por defecto. / The default HTTP headers.
  */
 const getDefaultHeaders = (session?: Session): Record<string, string> => {
+  console.log(session?.user_id)
   const defaultHeaders: Record<string, string> = {}
-
   // if (session && session.token) {
   //   defaultHeaders.Authorization = 'Bearer ' + session.token
   //   //defaultHeaders.apiKey = API_KEY;

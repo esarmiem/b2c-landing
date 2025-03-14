@@ -184,8 +184,7 @@ export default function useInvoiceState() {
     const savedResponseOrder = data?.responseOrder
     const savedSelectedPlan = data?.selectedPlan
     const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedSelectedPlan)
-    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos
-    const totalSalesDollars = data?.travelerQuotation?.totalAllTravelersDolar
+    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos || ''
     const uuid = uuidv4()
 
     const payment: EpaycoData = {
@@ -206,7 +205,7 @@ export default function useInvoiceState() {
       epaycoExtra2: 'es',
       epaycoExtra3: true,
       epaycoExtra4: uuid,
-      epaycoExtra5: savedBilling?.address,
+      epaycoExtra5: savedBilling?.address || '',
       epaycoMethod: 'GET',
       epaycoConfig: '{}',
       epaycoKey: PAY_PLATTFORM_KEY,

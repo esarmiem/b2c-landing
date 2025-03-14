@@ -23,7 +23,7 @@ export const BillingResultPage: React.FC = () => {
   const [dataSummary, setDataSummary] = useState<any>(null)
   const [status, setStatus] = useState<string>('loading')
   const [pathResponse, setPathResponse] = useState<string>('')
-  const [transaction, setTransaction] = useState<string>('')
+  const [_, setTransaction] = useState<string>('')
   const { setSession } = useSession() || {}
   const { mapperPayment } = useInvoiceState()
   const { setData } = useData() || {}
