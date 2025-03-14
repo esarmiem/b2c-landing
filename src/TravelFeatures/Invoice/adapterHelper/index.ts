@@ -86,6 +86,16 @@ export default function useInvoiceState() {
     const savedResponseOrder = data?.responseOrder
     const savedSelectedPlan = data?.selectedPlan
     const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedSelectedPlan)
+    const managementUpgrades = data?.travelerQuotation?.travellers?.map(traveler => traveler?.upgrades) || []
+    const upgrades = managementUpgrades.map(upgrade => upgrade?.map(item => item?.id).join(';')).join(';')
+    const totalUpgrades = data?.travelerQuotation?.travellers?.reduce(
+      (total: number, traveler) => total + Number.parseFloat(traveler.valorUpgradesPesos),
+      0
+    )
+    const countries = master?.countries.data?.items
+    const origen = countries?.find(country => country?.codigoISO === savedOrder?.pais)?.idPais
+    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos
+    const totalSalesDollars = data?.travelerQuotation?.totalAllTravelersDolar
 
     const order: dataIslOrder = {
       ValorTotalSinDescuentoDolares: selectedPlan?.DescripcionDescuentosDolares?.valorTotal || 0,
@@ -98,26 +108,26 @@ export default function useInvoiceState() {
       idCliente: preResponse?.idCliente || 0,
       idDestino: savedOrder?.destino || 0,
       //idOrigen: parseInt(savedOrder?.pais || "0"),
-      idOrigen: 46,
+      idOrigen: origen || 46,
       idProducto: savedOrder?.numeroPregunta || 0,
       idProspecto: savedResponseOrder?.idProspecto || 0,
       idUser: savedOrder?.idUser || '0',
       idplan: savedSelectedPlan || 0,
       moneda: 'COP',
-      nombrecontacto: savedTravelers?.firstName + ' ' + savedTravelers?.lastName,
+      nombrecontacto: `${savedTravelers?.firstName} ${savedTravelers?.lastName}`,
       numeroViajeros: savedOrder?.cantidadPax || 0,
       paisdestino: savedOrder?.destino || 0,
       paisorigen: savedOrder?.pais || '',
       pax: mapperArrayPax(data?.travelersData, data?.emergencyContactData),
       referencia: preResponse?.mensaje?.referencia || '',
-      telefonocontacto: savedTravelers?.countryCode?.replace('+', '') || '' + savedTravelers?.phone || '' || '',
-      totalUpgradesPesos: 0,
-      totalVenta: Number.parseInt(selectedPlan?.ValorPesos || '0'),
-      totalVentaDolares: Number.parseInt(selectedPlan?.Valor || '0'),
-      totalVentaPesos: Number.parseInt(selectedPlan?.ValorPesos || '0'),
-      upgrades: '1;2',
-      valorProductoDolares: selectedPlan?.Valor || '',
-      valorProductoPesos: selectedPlan?.ValorPesos || '',
+      telefonocontacto: savedTravelers?.countryCode?.replace('+', '') || `${savedTravelers?.phone}` || '' || '',
+      totalUpgradesPesos: totalUpgrades || 0,
+      totalVenta: Number.parseInt(totalSalesPesos || '0'),
+      totalVentaDolares: Number.parseInt(totalSalesDollars || '0'),
+      totalVentaPesos: Number.parseInt(totalSalesPesos || '0'),
+      upgrades: upgrades || '1;2',
+      valorProductoDolares: totalSalesDollars || '',
+      valorProductoPesos: totalSalesPesos || '',
       valorViajeroDolares: selectedPlan?.ValorPax || '',
       valorViajeroPesos: selectedPlan?.ValorPaxPesos || ''
     }
@@ -129,6 +139,8 @@ export default function useInvoiceState() {
     const savedOrder = data?.payloadOrder
     const savedResponseOrder = data?.responseOrder
     const savedSelectedPlan = data?.selectedPlan
+    const managementUpgrades = data?.travelerQuotation?.travellers?.map(traveler => traveler?.upgrades) || []
+    const upgrades = managementUpgrades.map(upgrade => upgrade?.map(item => item?.id).join(';')).join(';')
 
     console.log('savedTravelers', savedTravelers)
 
@@ -149,15 +161,15 @@ export default function useInvoiceState() {
       idplan: savedSelectedPlan || 0,
       informacionAdicionalCliente: '',
       moneda: 'COP',
-      nombreCliente: savedTravelers?.firstName + ' ' + savedTravelers?.lastName,
-      nombrecontacto: savedTravelers?.firstName + ' ' + savedTravelers?.lastName,
+      nombreCliente: `${savedTravelers?.firstName} ${savedTravelers?.lastName}`,
+      nombrecontacto: `${savedTravelers?.firstName} ${savedTravelers?.lastName}`,
       numeroDocumentoCliente: savedTravelers?.documentNumber || '',
       paisdestino: savedOrder?.destino || 0,
       paisorigen: savedOrder?.pais || '',
       referencia: uuidv4(),
       telefonoCliente: Number.parseInt(savedTravelers?.phone || '0'), //savedTravelers?.countryCode + savedTravelers?.phone,
       telefonocontacto: savedTravelers?.phone || '', //savedTravelers?.countryCode?.replace("+", "") + savedTravelers?.phone,
-      upgrades: '1;2'
+      upgrades: upgrades || '1;2'
     }
     return preOrder
   }
@@ -172,24 +184,29 @@ export default function useInvoiceState() {
     const savedResponseOrder = data?.responseOrder
     const savedSelectedPlan = data?.selectedPlan
     const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedSelectedPlan)
+    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos
+    const totalSalesDollars = data?.travelerQuotation?.totalAllTravelersDolar
+    const uuid = uuidv4()
 
     const payment: EpaycoData = {
       epaycoName: selectedPlan?.Categoria || '',
       epaycoDescription: selectedPlan?.nombre || '',
       epaycoInvoice: responseAddOrder?.codigo || '',
       epaycoCurrency: 'COP',
-      epaycoAmount: selectedPlan?.ValorPesos || '',
+      epaycoAmount: totalSalesPesos || '',
       epaycoLang: 'es',
       epaycoExternal: 'true',
       epaycoConfirmation: CONFIRM_PAY_PLATTFORM_URL,
       epaycoResponse: RESPONSE_PAY_PLATTFORM_URL,
-      epaycoNameBilling: savedBilling?.firstName || '' + ' ' + savedBilling?.lastName || '',
+      epaycoNameBilling: savedBilling?.firstName || ` ${savedBilling?.lastName}` || '',
       epaycoAddressBilling: savedBilling?.address || '',
       epaycoTypeDocBilling: savedBilling?.documentType || '',
       epaycoNumberDocBilling: savedBilling?.documentNumber || '',
       epaycoExtra1: responseAddOrder?.idVenta || '',
       epaycoExtra2: 'es',
       epaycoExtra3: true,
+      epaycoExtra4: uuid,
+      epaycoExtra5: savedBilling?.address,
       epaycoMethod: 'GET',
       epaycoConfig: '{}',
       epaycoKey: PAY_PLATTFORM_KEY,
@@ -197,8 +214,8 @@ export default function useInvoiceState() {
       epaycoImplementationType: 'handler',
       epaycoIp: responseIp
     }
-    return { mapPayment: payment, transactionId: uuidv4() }
+    return { mapPayment: payment, transactionId: uuid }
   }
-
+  window.localStorage.setItem('payment', JSON.stringify(mapperPayment))
   return { mapperPreorder, mapperAddOrder, mapperPayment }
 }

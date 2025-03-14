@@ -373,3 +373,250 @@ export interface Product {
   name: string
   price: number
 }
+
+interface JsonSol {
+  pax: Array<{
+    edad: number
+    sexo: {
+      label: string
+      value: string
+    }
+    email: string
+    idPais: number
+    nombre: string
+    apellidos: string
+    apellidosContactoEmergencia: string
+    document: string
+    idNacionalidad: number
+    idTipoDocumento: number
+    medical: string
+    nacimientos: string
+    nombresContactoEmergencia: string
+    telefono1ContactoEmergencia: string
+    telefonos: string
+  }>
+  idUser: string
+  idplan: number
+  moneda: string
+  idOrigen: number
+  upgrades: string
+  idCliente: number
+  idDestino: number
+  emailcontacto: string
+  fechallegada: string
+  fechasalida: string
+  nombrecontacto: string
+  numeroViajeros: number
+  paisdestino: string
+  paisorigen: string
+  referencia: string
+  telefonocontacto: string
+  totalUpgradesPesos: number
+  totalVenta: number
+  totalVentaDolares: number
+  totalVentaPesos: number
+  valorProductoDolares: string
+  valorProductoPesos: string
+  valorViajeroDolares: string
+  valorViajeroPesos: string
+  consideracionesgenerales: string
+  detalleUpgrades?: any[]
+}
+
+export interface ResSummaryData {
+  idVentaItem: number
+  idProducto: number
+  idVenta: number
+  idUser: number
+  fechaInicio: string
+  fechaFin: string
+  DescripcionDescuentosDolares: {
+    valorDescuento: number
+    valorTotal: string
+    porcentaje: string
+  }
+  DescripcionDescuentosPesos: {
+    valorDescuento: number
+    valorTotal: string
+    porcentaje: string
+  }
+  JsonSol: JsonSol
+  ValorTotalSinDescuentoDolares: number | string
+  ValorTotalSinDescuentoPesos: number | string
+  consideracionesgenerales: string
+  detalleUpgrades: any[]
+  emailcontacto: string
+  fechallegada: string
+  fechasalida: string
+  idCliente: number
+  idDestino: number | number[]
+  idOrigen: number
+  idProspecto: number
+  idUser: string | number
+  idplan: number
+  moneda: string
+  nombrecontacto: string
+  numeroViajeros: number
+  paisdestino: string
+  paisorigen: string
+  pax: Array<{
+    edad: number
+    sexo: {
+      label: string
+      value: string
+    }
+    email: string
+    idPais: number
+    nombre: string
+    apellidos: string
+    apellidosContactoEmergencia: string
+    document: string
+    idNacionalidad: number
+    idTipoDocumento: number
+    medical: string
+    nacimientos: string
+    nombresContactoEmergencia: string
+    telefono1ContactoEmergencia: string
+    telefonos: string
+  }>
+  referencia: string
+  telefonocontacto: string
+  totalUpgradesPesos: number | string
+  totalVenta: number
+  totalVentaDolares: number | string
+  totalVentaPesos: number | string
+  upgrades: string
+  valorProductoDolares: string
+  valorProductoPesos: string
+  valorViajeroDolares: string
+  valorViajeroPesos: string
+  VentaDolares: string
+  VentaPesos: string
+  estado: string
+  porcentajeDescuento: string
+  producto: {
+    idProducto: number
+    nombre: string
+    descripcionInterna: string
+    tipo: string
+    estaActivo: boolean
+    idPregunta: number
+    porcentajeDescuento: string
+    tiempoMaximo: string
+    tiempoMinimo: string
+  }
+  venta: {
+    idVenta: number
+    pasajeros: Array<any>
+    cupon: null | any
+    idPais: number
+    idCliente: number
+    voucher: null | any
+    codVoucher: string
+    estado: string
+    fechaCreacion: string
+    idUser: number
+    numeroViajeros: number
+    totalUpgradesPesos: string
+    totalVentaDolares: string
+    totalVentaPesos: string
+    valorProductoDolares: string
+    valorProductoPesos: string
+    valorViajeroDolares: string
+    valorViajeroPesos: string
+  }
+}
+
+export interface EpaycoDetails {
+  result: {
+    success: boolean
+    title_response: string
+    text_response: string
+    last_action: string
+    data: {
+      x_cust_id_cliente: number
+      x_ref_payco: number
+      x_id_factura: string
+      x_id_invoice: string
+      x_description: string
+      x_mpd_points: number
+      x_amount: number
+      x_amount_country: number
+      x_amount_ok: number
+      x_tax: number
+      x_tax_ico: number
+      x_amount_base: number
+      x_currency_code: string
+      x_bank_name: string
+      x_cardnumber: string
+      x_quotas: string
+      x_respuesta: string
+      x_response: string
+      x_approval_code: string
+      x_transaction_id: string
+      x_fecha_transaccion: string
+      x_transaction_date: string
+      x_cod_respuesta: number
+      x_cod_response: number
+      x_response_reason_text: string
+      x_cod_transaction_state: number
+      x_transaction_state: string
+      x_errorcode: string
+      x_franchise: string
+      x_business: string
+      x_customer_doctype: string
+      x_customer_document: string
+      x_customer_name: string
+      x_customer_lastname: string
+      x_customer_email: string
+      x_customer_phone: string
+      x_customer_movil: string
+      x_customer_ind_pais: string
+      x_customer_country: string
+      x_customer_city: string
+      x_customer_address: string
+      x_customer_ip: string
+      x_signature: string
+      x_test_request: string
+      x_transaction_cycle: null | string
+      x_extra1: string
+      x_extra2: string
+      x_extra3: string
+      x_extra4: string
+      x_extra5: string
+      x_extra6: string
+      x_extra7: string
+      x_extra8: string
+      x_extra9: string
+      x_extra10: string
+      x_type_payment: string
+      x_secondary_step: string
+    }
+  }
+}
+
+export interface EpaycoData {
+  epaycoName: string
+  epaycoDescription: string
+  epaycoInvoice: string
+  epaycoCurrency: string
+  epaycoAmount: string
+  epaycoLang: string
+  epaycoExternal: string
+  epaycoConfirmation: string
+  epaycoResponse: string
+  epaycoNameBilling: string
+  epaycoAddressBilling: string
+  epaycoTypeDocBilling: string
+  epaycoNumberDocBilling: string
+  epaycoExtra1: string
+  epaycoExtra2: string
+  epaycoExtra3: boolean
+  epaycoExtra4: string
+  epaycoMethod: string
+  epaycoConfig: string
+  epaycoKey: string
+  epaycoTest: string
+  epaycoImplementationType: string
+  epaycoIp: string
+}
