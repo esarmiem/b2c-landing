@@ -117,6 +117,10 @@ export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgra
         }
       }
     })
+    if (!Array.isArray(response.data)) {
+      console.error('Expected an array but got:', response.data)
+      return []
+    }
     return response.data
   } catch (error) {
     console.error('Error fetching product updates:', error)

@@ -34,5 +34,6 @@
   "loading-text-preparing-payment": "We are preparing the payment data...",
   "loading-text-adding-order": "We are adding the purchase order...",
   "loading-title-one-moment": "One more moment",
-  "loading-text-redirecting-payment": "We are redirecting to the payment gateway..."
+  "loading-text-redirecting-payment": "We are redirecting to the payment gateway...",
+    "no-cities": "There are no cities for the selected billing country"
 }

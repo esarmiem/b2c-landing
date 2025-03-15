@@ -277,12 +277,20 @@ export interface TravellerQuotation {
   upgrades: { id: string; name: string }[]
 }
 
+export interface DescriptionDescuentos {
+  porcentaje: string
+  valorDescuento: string
+  valorTotal: number
+}
+
 export type Quotation = {
   planId: number
   queryId: string
   totalAllTravelersPesos: string
   totalAllTravelersDolar: string
   travellers: TravellerQuotation[]
+  descriptionDescuentosDolares?: DescriptionDescuentos | undefined
+  descriptionDescuentosPesos?: DescriptionDescuentos | undefined
 }
 /**
  * dataPreorder

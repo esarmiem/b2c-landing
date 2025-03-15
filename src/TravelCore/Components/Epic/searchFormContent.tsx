@@ -20,7 +20,7 @@ export function SearchFormContent() {
       required: true,
       isDateRange: true
     },
-    travelers: { requiredAge: true }
+    travelers: { requiredAge: true, minAge: true }
   }
 
   const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)

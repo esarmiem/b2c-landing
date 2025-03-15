@@ -10,9 +10,11 @@ import ModalUpgrades from './ModalUpgrades'
 interface CardProductProps {
   plan: Plan
   viewType: 'list' | 'grid'
+  isNewlyVisible?: boolean 
 }
 
-const CardProduct = ({ plan, viewType }: CardProductProps) => {
+const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProps) => {
+  const animationClass = isNewlyVisible ? 'animate-fadeIn' : '';
   const { t } = useTranslation(['products'])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { i18n } = useTranslation()
@@ -65,7 +67,7 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
   return (
     <>
       {viewType === 'list' ? (
-        <div className="flex border-2 border-neutral-800 rounded-3xl overflow-hidden">
+        <div className={`flex border-2 border-neutral-800 rounded-3xl overflow-hidden ${animationClass}`}>
           <div
             className={`w-1/2 flex flex-col text-center justify-around ${
               recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'
@@ -120,7 +122,7 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
           </div>
         </div>
       ) : (
-        <div className="rounded-3xl border-2 border-neutral-800 overflow-hidden grid">
+        <div className={`rounded-3xl border-2 border-neutral-800 overflow-hidden grid ${animationClass}`}>
           <section>
             <div className={`relative text-center px-1 py-8 ${recommended ? 'bg-red-800 text-white' : 'bg-zinc-100 text-neutral-800'}`}>
               {recommended && (
@@ -129,9 +131,11 @@ const CardProduct = ({ plan, viewType }: CardProductProps) => {
                 </div>
               )}
               <h2 className="font-bold text-2xl my-3">{plan.Categoria}</h2>
-              <p className={`h-12 flex items-center justify-center leading-tight line-clamp-2 ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>
-  {plan.nombre}
-</p>
+              <p
+                className={`h-12 flex items-center justify-center leading-tight line-clamp-2 ${recommended ? 'text-red-100' : 'text-neutral-800'}`}
+              >
+                {plan.nombre}
+              </p>
               <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
                 {price} <span className="text-xs">{i18n.language === 'es' ? 'COP' : 'USD'}</span>

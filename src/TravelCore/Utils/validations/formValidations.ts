@@ -8,6 +8,7 @@ export interface ValidationRange {
 export interface ValidationRules {
   required?: boolean
   requiredAge?: boolean
+  minAge?: boolean
   pattern?: ValidationPattern
   minLength?: number
   maxLength?: number
@@ -102,6 +103,11 @@ export const validateField = (value: string, msg: MsgForm, validations: Validati
 
   if (validations.requiredAge && !value) {
     errors.push(msg.requiredAge)
+    return errors
+  }
+
+  if (validations.minAge && Number(value) < 18) {
+    errors.push(msg.minAge)
     return errors
   }
 

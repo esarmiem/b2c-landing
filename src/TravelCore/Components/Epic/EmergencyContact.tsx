@@ -1,8 +1,8 @@
-import React from 'react'
-import { Input } from '@/components/ui/input.tsx'
-import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2.tsx'
+import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
+import { Input } from '@/components/ui/input'
+import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2'
 import { useTranslation } from 'react-i18next'
-import type { EmergencyContactType } from '@/TravelCore/Utils/interfaces/Order.ts'
+import type { EmergencyContactType } from '@/TravelCore/Utils/interfaces/Order'
 
 interface TravelFormProps {
   onChangeField?: (name: string, value: string) => void
@@ -11,15 +11,87 @@ interface TravelFormProps {
   errors?: { [p: string]: string[] }
 }
 
-export const EmergencyContact = React.memo(({ data, onChangeField, onChange, errors }: TravelFormProps) => {
-  const { t } = useTranslation(['traveler'], { useSuspense: false })
-  const namePhone = [
-    { id: 1, phone: t('emergency-phone'), value: data?.phone1, indicative: data?.indicative1 },
-    { id: 2, phone: t('emergency-phone-optional'), value: data?.phone2, indicative: data?.indicative2 }
-  ]
+const TextField = memo(
+  ({
+    label,
+    name,
+    value,
+    placeholder,
+    errors,
+    errorKey,
+    onChange
+  }: {
+    label: string
+    name: string
+    value: string
+    placeholder: string
+    errors?: { [p: string]: string[] }
+    errorKey: string
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  }) => {
+    const hasError = errors?.[errorKey] && errors[errorKey].length > 0
 
-  const handleInputChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    return (
+      <div>
+        <label htmlFor={name} className={`block font-semibold text-gray-500 text-sm mb-1 ${hasError ? 'text-red-500' : ''}`}>
+          {label}
+        </label>
+        <Input
+          id={name}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          className={`rounded-3xl border-gray-300 p-6 ${hasError ? 'border-red-500' : ''}`}
+          onChange={onChange}
+        />
+        {hasError && <span className="text-xs text-red-500">{errors[errorKey]}</span>}
+      </div>
+    )
+  }
+)
+
+const PhoneField = memo(
+  ({
+    phone,
+    onChange,
+    errors,
+    errorsChange,
+    fieldId
+  }: {
+    phone: { id: number; phone: string; value: string; indicative: string }
+    onChange: (phoneId: number, value: string) => void
+    errors?: { [p: string]: string[] }
+    errorsChange: (field: string, value: string) => void
+    fieldId: string
+  }) => {
+    const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => onChange(phone.id, e.target.value), [onChange, phone.id])
+
+    return (
+      <PhoneNumberForm2
+        celType={phone.phone}
+        value={{ countryCode: phone.indicative, phone: phone.value }}
+        onChange={handleChange}
+        errors={errors}
+        errorsChange={errorsChange}
+        fieldId={fieldId}
+      />
+    )
+  }
+)
+
+export const EmergencyContact = memo(({ data, onChangeField, onChange, errors }: TravelFormProps) => {
+  const { t } = useTranslation(['traveler'], { useSuspense: false })
+
+  const namePhone = useMemo(
+    () => [
+      { id: 1, phone: t('emergency-phone'), value: data?.phone1, indicative: data?.indicative1 },
+      { id: 2, phone: t('emergency-phone-optional'), value: data?.phone2, indicative: data?.indicative2 }
+    ],
+    [t, data?.phone1, data?.phone2, data?.indicative1, data?.indicative2]
+  )
+
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
       onChangeField?.(name, value)
       onChange(name, value)
@@ -27,12 +99,11 @@ export const EmergencyContact = React.memo(({ data, onChangeField, onChange, err
     [onChangeField, onChange]
   )
 
-  const handlePhoneChange = React.useCallback(
-    (phoneId: number, value: any) => {
-      const fieldName = value.target.name
-      const fieldValue = value.target.value
-      onChangeField?.(fieldName + phoneId, fieldValue)
-      onChange(fieldName + phoneId, fieldValue)
+  const handlePhoneChange = useCallback(
+    (phoneId: number, value: string) => {
+      const fieldName = `phone${phoneId}`
+      onChangeField?.(fieldName, value)
+      onChange(fieldName, value)
     },
     [onChangeField, onChange]
   )
@@ -42,56 +113,35 @@ export const EmergencyContact = React.memo(({ data, onChangeField, onChange, err
       <div className="px-4 py-1">
         <h2 className="text-2xl font-extrabold text-[#B91C1C]">{t('emergency-contact-title')}</h2>
       </div>
-
       <div className="space-y-4 px-4">
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="firstNameEmergencyContact"
-              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.firstNameEmergencyContact && errors?.firstNameEmergencyContact.length > 0 ? 'text-red-500' : ''}`}
-            >
-              {t('emergency-first-name')}
-            </label>
-            <Input
-              name="firstName"
-              placeholder={t('emergency-placeholder-first-name')}
-              className={`rounded-3xl border-gray-300 p-6 ${errors?.firstNameEmergencyContact && errors?.firstNameEmergencyContact.length > 0 ? 'border-red-500' : ''}`}
-              value={data?.firstName}
-              onChange={handleInputChange}
-            />
-            {errors?.firstNameEmergencyContact && errors.firstNameEmergencyContact.length > 0 && (
-              <span className="text-xs text-red-500">{errors.firstNameEmergencyContact}</span>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="lastNameEmergencyContact"
-              className={`block font-semibold text-gray-500 text-sm mb-1 ${errors?.lastNameEmergencyContact && errors?.lastNameEmergencyContact.length > 0 ? 'text-red-500' : ''}`}
-            >
-              {t('emergency-last-name')}
-            </label>
-            <Input
-              name="lastName"
-              placeholder={t('emergency-placeholder-last-name')}
-              className={`rounded-3xl border-gray-300 p-6 ${errors?.lastNameEmergencyContact && errors?.lastNameEmergencyContact.length > 0 ? 'border-red-500' : ''}`}
-              value={data?.lastName}
-              onChange={handleInputChange}
-            />
-            {errors?.lastNameEmergencyContact && errors.lastNameEmergencyContact.length > 0 && (
-              <span className="text-xs text-red-500">{errors.lastNameEmergencyContact}</span>
-            )}
-          </div>
+          <TextField
+            label={t('label-first-name')}
+            name="firstName"
+            value={data.firstName}
+            placeholder={t('placeholder-first-name')}
+            errors={errors}
+            errorKey="firstNameEmergencyContact"
+            onChange={handleInputChange}
+          />
+          <TextField
+            label={t('label-last-name')}
+            name="lastName"
+            value={data.lastName}
+            placeholder={t('placeholder-last-name')}
+            errors={errors}
+            errorKey="lastNameEmergencyContact"
+            onChange={handleInputChange}
+          />
           {namePhone.map(phone => (
-            <div key={phone.id}>
-              <PhoneNumberForm2
-                celType={phone.phone}
-                value={{ countryCode: phone.indicative, phone: phone.value }}
-                onChange={val => handlePhoneChange(phone.id, val)}
-                errors={errors}
-                errorsChange={onChange}
-                fieldId={`phone${phone.id}EmergencyContact`}
-              />
-            </div>
+            <PhoneField
+              key={phone.id}
+              phone={phone}
+              onChange={handlePhoneChange}
+              errors={errors}
+              errorsChange={onChange}
+              fieldId={`phone${phone.id}EmergencyContact`}
+            />
           ))}
         </div>
       </div>

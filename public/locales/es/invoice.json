@@ -34,5 +34,6 @@
   "loading-text-preparing-payment": "Estamos preparando los datos para el pago...",
   "loading-text-adding-order": "Estamos agregando la orden de compra...",
   "loading-title-one-moment": "Un momento más",
-  "loading-text-redirecting-payment": "Estamos redirigiendo a pasarela de pago..."
+  "loading-text-redirecting-payment": "Estamos redirigiendo a pasarela de pago...",
+  "no-cities": "No existen ciudades para el pais de facturación seleccionado"
 }

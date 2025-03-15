@@ -53,5 +53,10 @@
   "phone-number-placeholder": "Phone number",
   "travelers": "Travelers",
     "traveler": "Traveler",
-  "days": "Days"
+  "days": "Days",
+  "label-total-without-descuentos": "Product value before:",
+  "label-discount": "Discount",
+  "label-value-in-cop": "Values in Pesos - COP",
+  "label-value-in-usd": "Values in Dollars - USD",
+  "label-product-value-single": "Product value now:"
 }
