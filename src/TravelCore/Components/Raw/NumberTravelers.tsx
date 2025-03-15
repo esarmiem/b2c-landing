@@ -86,7 +86,7 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
   }
 
   return (
-    <PopoverContent className="w-auto" align="start" side="bottom">
+    <PopoverContent className="w-auto ml-7 lg:ml-0" align="center" side="bottom">
       <div className="flex flex-col max-h-[320px]">
         <div className="flex-1 overflow-y-auto pr-2">
           <div className="space-y-4">
