@@ -53,5 +53,11 @@
   "phone-number-placeholder": "Número de teléfono",
   "travelers": "Viajeros",
   "traveler": "Viajero",
-  "days": "Días"
+  "days": "Días",
+  "label-total-without-descuentos": "Valor del producto antes:",
+  "label-discount": "Descuento",
+  "label-value-in-cop": "Valores en Pesos - COP",
+    "label-value-in-usd": "Valores en Dólares - USD",
+  "label-product-value-single": "Valor del producto ahora:"
+
 }

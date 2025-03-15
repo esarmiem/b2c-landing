@@ -44,6 +44,7 @@ export default function InvoicePage() {
 
   const handleChangeReuseInfo = (check: boolean) => {
     const firstTraveler: PaxForm[] = data?.travelersData || []
+    console.log('firstTraveler: ', firstTraveler)
     if (check && firstTraveler.length > 0) {
       const newBillingData = {
         billingCountry: firstTraveler?.[0].residenceCountry?.toString() || '',
@@ -92,7 +93,7 @@ export default function InvoicePage() {
   }
 
   const handleSendBilling = async () => {
-    setData?.((prevData: any) => ({
+    setData?.(prevData => ({
       ...prevData,
       billingData: billingData
     }))
@@ -139,7 +140,7 @@ export default function InvoicePage() {
             console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
             if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
               const transaction = respPayment?.data?.data?.id_session
-              setData?.((prevData: any) => ({
+              setData?.(prevData => ({
                 ...prevData,
                 epaycoTx: transaction
               }))
@@ -151,7 +152,6 @@ export default function InvoicePage() {
         }
       }
     }, 500)
-
   }
 
   const validationRules = {

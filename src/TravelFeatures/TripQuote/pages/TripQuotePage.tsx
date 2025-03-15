@@ -26,7 +26,7 @@ const TripQuotePage: React.FC = () => {
   }
 
   // Validaciones
-  const validationRules = { travelers: { requiredAge: true } }
+  const validationRules = { travelers: { requiredAge: true, minAge: true } }
 
   const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)
 

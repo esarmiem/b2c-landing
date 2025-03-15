@@ -31,6 +31,10 @@ export function PurchaseDetails({ button }: { button: JSX.Element }) {
     0
   )
   const totalAllTravelers = upgradesData?.totalAllTravelersPesos
+  const discountPesos = upgradesData?.descriptionDescuentosPesos
+  const discountDollars = upgradesData?.descriptionDescuentosDolares
+  const discountValidatePesos = discountPesos && discountPesos.porcentaje !== '0'
+  const discountValidateDollars = discountDollars && discountDollars.porcentaje !== '0'
 
   return (
     <section className="space-y-4">
@@ -51,24 +55,72 @@ export function PurchaseDetails({ button }: { button: JSX.Element }) {
           <div className="p-4 space-y-4 mb-4">
             <div className="space-y-2 md:mb-16 sm:mb-8">
               <div className="flex justify-between border-b border-gray-200">
-                <span className="text-sm text-gray-600">{t('label-number-of-travelers')}</span>
+                <span className="text-sm font-bold text-gray-950">{t('label-number-of-travelers')}</span>
                 <span className="text-sm font-semibold">{orderData?.cantidadPax || ''}</span>
               </div>
-              <div className="flex justify-between border-b border-gray-200">
-                <span className="text-sm text-gray-600">{t('label-product-value-cop')}</span>
-                <span className="text-sm font-semibold">{formatCurrency(selectedPlan?.ValorPesos || '', 'COP')} COP</span>
-              </div>
-              <div className="flex justify-between border-b border-gray-200">
-                <span className="text-sm text-gray-600">{t('label-product-value-usd')}</span>
-                <span className="text-sm font-semibold text-red-700">{formatCurrency(selectedPlan?.Valor || '', 'USD')} USD</span>
-              </div>
+              <section className={`${discountValidatePesos ? 'border-b-2 border-y-gray-950 space-y-2 md:mb-16 sm:mb-8' : ''}`}>
+                <>
+                  {discountValidatePesos && (
+                    <>
+                      <span className="text-sm font-bold">{t('label-value-in-cop')}</span>
+                      <div className="flex justify-between border-b border-gray-200">
+                        <span className="text-sm text-gray-600">{t('label-total-without-descuentos')}</span>
+                        <span className="text-sm font-semibold line-through text-red-700">
+                          {formatCurrency(discountPesos.valorTotal.toString(), 'COP')} COP
+                        </span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-200">
+                        <span className="text-sm text-gray-600">{`${t('label-discount')} ${discountPesos.porcentaje}%`}</span>
+                        <span className="text-sm font-semibold">- {formatCurrency(discountPesos.valorDescuento, 'COP')} COP</span>
+                      </div>
+                    </>
+                  )}
+                  <div className="flex justify-between border-b border-gray-200">
+                    <span className="text-sm text-gray-600">
+                      {discountValidatePesos ? t('label-product-value-single') : t('label-product-value-cop')}
+                    </span>
+                    <span className={`text-sm font-semibold ${discountValidatePesos ? 'text-green-500' : ''}`}>
+                      {formatCurrency(selectedPlan?.ValorPesos || '', 'COP')} COP
+                    </span>
+                  </div>
+                </>
+              </section>
+              <section className={`${discountValidateDollars ? 'border-b-2 border-y-gray-950 space-y-2 md:mb-16 sm:mb-8' : ''}`}>
+                <>
+                  {discountValidateDollars && (
+                    <>
+                      <span className="text-sm font-bold">{t('label-value-in-usd')}</span>
+                      <div className="flex justify-between border-b border-gray-200">
+                        <span className="text-sm text-gray-600">{t('label-total-without-descuentos')}</span>
+                        <span className="text-sm font-semibold line-through text-red-700">
+                          {formatCurrency(discountDollars.valorTotal.toString(), 'USD')} USD
+                        </span>
+                      </div>
+                      <div className="flex justify-between border-b border-gray-200">
+                        <span className="text-sm text-gray-600">{`${t('label-discount')} ${discountDollars.porcentaje}%`}</span>
+                        <span className="text-sm font-semibold">- {formatCurrency(discountDollars.valorDescuento, 'USD')} USD</span>
+                      </div>
+                    </>
+                  )}
+                  <div className="flex justify-between border-b border-gray-200">
+                    <span className="text-sm text-gray-600">
+                      {discountValidateDollars ? t('label-product-value-single') : t('label-product-value-usd')}
+                    </span>
+                    <span className={`text-sm font-semibold ${discountValidateDollars ? 'text-green-500' : ''}`}>
+                      {formatCurrency(selectedPlan?.Valor || '', 'USD')} USD
+                    </span>
+                  </div>
+                </>
+              </section>
               <div className="flex justify-between border-b border-gray-200">
                 <span className="text-sm text-gray-600">{t('label-price-per-traveler-cop')}</span>
                 <span className="text-sm font-semibold">{formatCurrency(selectedPlan?.ValorPaxPesos || '', 'COP')} COP</span>
               </div>
               <div className="flex justify-between border-b border-gray-200">
                 <span className="text-sm text-gray-600">{t('label-price-per-traveler-usd')}</span>
-                <span className="text-sm font-semibold text-red-700">{formatCurrency(selectedPlan?.ValorPax || '', 'USD')} USD</span>
+                <span className={`text-sm font-semibold ${discountValidateDollars ? '' : 'text-red-700'}`}>
+                  {formatCurrency(selectedPlan?.ValorPax || '', 'USD')} USD
+                </span>
               </div>
             </div>
 
@@ -76,17 +128,17 @@ export function PurchaseDetails({ button }: { button: JSX.Element }) {
               <h1 className="font-bold text-red-700">{t('label-upgrades-summary')}</h1>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">{t('label-total-upgrades')}</span>
-                <span className="text-sm text-gray-600">{formatCurrency(totalUpgradesPesos?.toString() ?? '', 'COP')}</span>
+                <span className="text-sm text-gray-600">{formatCurrency(totalUpgradesPesos?.toString() ?? '', 'COP')} COP</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-gray-600">{t('label-total-usd')}</span>
-                <span className="text-sm text-gray-600">{formatCurrency(totalUpgradesDolar?.toString() ?? '', 'USD')}</span>
+                <span className="text-sm text-gray-600">{formatCurrency(totalUpgradesDolar?.toString() ?? '', 'USD')} USD</span>
               </div>
             </div>
             <div className="pt-3 border-t border-gray-200">
               <div className="flex justify-between text-lg">
                 <span className="font-semibold">{t('label-total')}</span>
-                <span className="font-semibold">{formatCurrency(totalAllTravelers ?? '', 'COP')}</span>
+                <span className="font-semibold">{formatCurrency(totalAllTravelers ?? '', 'COP')} COP</span>
               </div>
             </div>
           </div>

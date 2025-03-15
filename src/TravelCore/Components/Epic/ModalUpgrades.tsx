@@ -3,7 +3,7 @@ import useData from '@/TravelCore/Hooks/useData'
 import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
 import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
 import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Check, HandHeart, Plus, UserRoundCog } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -63,12 +63,30 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
         upgrades: []
       }))
 
+      const initialDescriptionDescuentosDollars: DescriptionDescuentos | undefined = plan.DescripcionDescuentosDolares
+        ? {
+            porcentaje: plan.DescripcionDescuentosDolares.porcentaje,
+            valorDescuento: plan.DescripcionDescuentosDolares.valorDescuento,
+            valorTotal: plan.DescripcionDescuentosDolares.valorTotal
+          }
+        : undefined
+
+      const initialDescriptionDescuentosPesos: DescriptionDescuentos | undefined = plan.DescripcionDescuentosPesos
+        ? {
+            porcentaje: plan.DescripcionDescuentosPesos.porcentaje,
+            valorDescuento: plan.DescripcionDescuentosPesos.valorDescuento,
+            valorTotal: plan.DescripcionDescuentosPesos.valorTotal
+          }
+        : undefined
+
       const initialQuotation: Quotation = {
         planId: plan.IdPlan,
         queryId: currentQueryId,
         totalAllTravelersPesos: plan.ValorPesos || '0',
         totalAllTravelersDolar: plan.Valor || '0',
-        travellers: initialTravellers
+        travellers: initialTravellers,
+        descriptionDescuentosDolares: initialDescriptionDescuentosDollars,
+        descriptionDescuentosPesos: initialDescriptionDescuentosPesos
       }
 
       setData(prevData => ({
@@ -103,11 +121,9 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
     }
   }, [fetchTRM, TRM])
 
-  // Función para cargar upgrades
   const loadProductUpgrades = useCallback(async () => {
     if (!isOpen || isLoading) return
 
-    // Verificamos si ya hemos cargado para este producto e idioma
     if (
       fetchedRef.current &&
       productIdRef.current === plan.IdPlan &&
@@ -118,21 +134,37 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
     }
 
     setIsLoading(true)
-    try {
-      const response = await getProductUpdates({
-        id_plan: plan.IdPlan.toString(),
-        language: currentLanguage
-      })
+    const maxRetries = 3
+    let attempts = 0
+    let success = false
 
-      setProductUpgrades(response)
+    while (attempts < maxRetries && !success) {
+      try {
+        const response = await getProductUpdates({
+          id_plan: plan.IdPlan.toString(),
+          language: currentLanguage
+        })
 
-      fetchedRef.current = true
-      productIdRef.current = plan.IdPlan
-      languageRef.current = currentLanguage
-    } catch (error) {
-      console.error('Error loading upgrades:', error)
-    } finally {
-      setIsLoading(false)
+        if (!Array.isArray(response)) {
+          console.error('Expected an array but got:', response)
+          setProductUpgrades([])
+          return
+        }
+
+        setProductUpgrades(response)
+        fetchedRef.current = true
+        productIdRef.current = plan.IdPlan
+        languageRef.current = currentLanguage
+        success = true
+      } catch (error) {
+        attempts++
+        console.error(`Error loading upgrades (attempt ${attempts}):`, error)
+        if (attempts >= maxRetries) {
+          console.error('Max retries reached. Could not load upgrades.')
+        }
+      } finally {
+        setIsLoading(false)
+      }
     }
   }, [isOpen, isLoading, plan.IdPlan, currentLanguage, productUpgrades.length])
 
@@ -208,7 +240,9 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
           queryId: travelerQuotation.queryId,
           totalAllTravelersPesos: newTotalPesos,
           totalAllTravelersDolar: newTotalDolar,
-          travellers: newTravellers
+          travellers: newTravellers,
+          descriptionDescuentosDolares: travelerQuotation.descriptionDescuentosDolares,
+          descriptionDescuentosPesos: travelerQuotation.descriptionDescuentosPesos
         }
       }))
     },
