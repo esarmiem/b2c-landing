@@ -13,7 +13,6 @@ import {
   Package2,
   DollarSign,
   Send,
-  Shield,
   Clock
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
