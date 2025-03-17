@@ -278,7 +278,7 @@ export const PaymentStatus: React.FC<PaymentStatusProps> = ({
                     <>
                       <div className="grid grid-cols-2 gap-2 items-center">
                         <div className="flex items-center">
-                          <Shield className="w-4 h-4 text-green-500 mr-1" />
+                          <DollarSign className="w-4 h-4 text-gray-500 mr-1" />
                           <span className="text-gray-600">
                             {t('label-discount')} ({dataSummary.COPdiscount.percentage}%)
                           </span>
