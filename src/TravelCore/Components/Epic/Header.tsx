@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
               rel="noopener noreferrer"
               className="text-sm font-medium text-white hover:text-white relative z-10"
             >
-              {t('label-link-sales')}: +57 317 5032 200
+              {t('label-link-sales')}: +57 317 503 2200
             </Link>
           </div>
 
