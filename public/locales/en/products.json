@@ -43,5 +43,7 @@
   "label-traveler": "Traveler",
   "label-coverage": "COVERAGES",
   "label-ideal-for": "Ideal for",
-  "label-benefits": "BENEFITS"
+  "label-benefits": "BENEFITS",
+  "button-more-options": "More Options",
+  "button-minus-options": "Less Options"
 }
