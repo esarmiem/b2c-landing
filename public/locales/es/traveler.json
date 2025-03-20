@@ -21,6 +21,8 @@
   "placeholder-select-gender": "Seleccione",
   "option-male": "Masculino",
   "option-female": "Femenino",
+  "option-binary": "No binario",
+  "option-noresponse": "Prefiero no responder",
   "label-nationality": "Nacionalidad",
   "placeholder-select-nationality": "Seleccione",
   "option-colombia": "Colombia",

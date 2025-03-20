@@ -95,7 +95,7 @@ const TripQuotePage: React.FC = () => {
                   className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-400 active:scale-95"
                   onClick={toggleVisibility}
                 >
-                  {visibleCount === plans.length ? 'Ver menos' : 'Ver más opciones'}
+                  {visibleCount === plans.length ? t('button-minus-options') : t('button-more-options')}
                 </button>
                 )}
               </div>

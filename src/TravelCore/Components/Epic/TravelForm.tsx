@@ -1,10 +1,10 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Luggage } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { SearchFormContent } from './searchFormContent'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Luggage } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { SearchFormContent } from "./searchFormContent";
 
 export function TravelForm() {
-  const { t } = useTranslation(['home'])
+  const { t } = useTranslation(["home"]);
 
   return (
     <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
@@ -14,18 +14,18 @@ export function TravelForm() {
       >
         <TabsList className="grid md:w-[500px] md:h-[50px] gap-2 grid-cols-2 md:grid-cols-2 pt-0 lg:ml-6 mb-3 md:mb-0 md:-mt-20 -mt-10 rounded-lg bg-red-700">
           <TabsTrigger
-            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
+            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0 data-[state=active]:border-2 data-[state=active]:border-zinc-400"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab1"
           >
             <Luggage className="mr-2 h-4 w-4 hidden md:block" />
-            {t('label-tab-travel-assist')}
+            {t("label-tab-travel-assist")}
           </TabsTrigger>
           <TabsTrigger
-            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0"
+            className="text-gray-400 text-xs md:text-sm data-[state=active]:text-white data-[state=active]:bg-red-700 md:data-[state=active]:-mt-2 data-[state=inactive]:pt-0 data-[state=active]:border-2 data-[state=active]:border-zinc-400"
             //rounded-sm text-white text-xs data-[state=active]:py-2 data-[state=inactive]:pt-4 h-6 data-[state=inactive]:mt-2
             value="tab2"
-            disabled
+            //disabled
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@ export function TravelForm() {
               <path d="M12 6v4" />
               <path d="M16 6v4" />
             </svg>
-            {t('label-tab-comms')}
+            {t("label-tab-comms")}
             {/* agregar atributo disabled a tab2 para desactivar elder*/}
           </TabsTrigger>
         </TabsList>
@@ -53,9 +53,15 @@ export function TravelForm() {
           <SearchFormContent />
         </TabsContent>
         <TabsContent value="tab2">
-          <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">{t('content-tab-comms')}</div>
+          <div className="text-center text-white bg-red-700 rounded-lg md:rounded-full shadow-lg p-4 -mt-7">
+            {t("content-tab-comms")
+              .split("\n")
+              .map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

@@ -184,6 +184,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
                 <>
                   <SelectItem value="m">{t('option-male')}</SelectItem>
                   <SelectItem value="f">{t('option-female')}</SelectItem>
+                  <SelectItem value="b">{t('option-binary')}</SelectItem>
+                  <SelectItem value="n">{t('option-noresponse')}</SelectItem>
                 </>
               }
               errors={errors}

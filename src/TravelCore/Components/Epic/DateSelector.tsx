@@ -4,6 +4,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { format, parse } from 'date-fns'
+import { es } from 'date-fns/locale'
 import { CalendarIcon, Info } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { DateRange } from 'react-day-picker'
@@ -36,6 +37,9 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
       : undefined
 
   const [date, setDate] = useState<DateRange | undefined>(initialDateRange)
+  
+  // Determinar si estamos usando español basado en el lenguaje actual
+  const isSpanish = i18n.language.startsWith('es')
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -88,10 +92,10 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
                 {date?.from ? (
                   date.to ? (
                     <>
-                      {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                      {format(date.from, 'LLL dd, y', { locale: isSpanish ? es : undefined })} - {format(date.to, 'LLL dd, y', { locale: isSpanish ? es : undefined })}
                     </>
                   ) : (
-                    format(date.from, 'LLL dd, y')
+                    format(date.from, 'LLL dd, y', { locale: isSpanish ? es : undefined })
                   )
                 ) : (
                   <span>{t('label-between-dates')}</span>
@@ -101,14 +105,22 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
             <span
               className={`items-center gap-2 hidden text-ellipsis overflow-hidden ${errors && errors?.length > 0 ? 'text-red-500 flex sm:hidden' : ''}`}
             >
-              <Info className={`h - 4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
+              <Info className={`h-4 w-4 text-muted-foreground cursor-help ${errors && errors?.length > 0 ? 'text-red-500' : ''}`} />
               {errors && errors?.length > 0 ? errors : ''}
             </span>
           </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar initialFocus mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} numberOfMonths={2} />
+        <Calendar 
+          initialFocus 
+          mode="range" 
+          defaultMonth={date?.from} 
+          selected={date} 
+          onSelect={setDate} 
+          numberOfMonths={2}
+          locale={isSpanish ? es : undefined}
+        />
       </PopoverContent>
     </Popover>
   )
