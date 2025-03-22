@@ -108,13 +108,12 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
   const formatDate = (date: Date | undefined): string => {
     if (!date) return t('label-default-from-date')
     const locale = i18n.language === 'es' ? 'es' : 'en'
-    return dayjs(date).locale(locale).format('D [de] MMMM YYYY')
+    return dayjs(date).locale(locale).format('MMMM D, YYYY')
   }
 
   // Save departure date to data context
   const handleDepartureDateChange = (date: Date | undefined) => {
     if (date && setData) {
-      handleChange('travelDate', format(date, 'dd/MM/yyyy'))
       setDepartureDate(date)
       setData(prevData => ({
         ...prevData,
@@ -139,6 +138,8 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
   const handleReturnDateChange = (date: Date | undefined) => {
     if (date && setData) {
       setReturnDate(date)
+      const rangeDate = `${format(departureDate, 'dd/MM/yyyy')} - ${format(date, 'dd/MM/yyyy')}`
+      handleChange('travelDate', rangeDate)
       setData(prevData => ({
         ...prevData,
         payloadOrder: {
@@ -182,17 +183,37 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
 
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+
+    // If we're not in editing mode, always allow opening the form
+    if (!isEditing) {
+      handleSave()
+      return
+    }
+
+    // Only validate when trying to save changes
     if (!validateFormData()) {
       return
     }
+
     handleSave()
   }
-
   const handleOpenChange = (open: boolean) => {
     if (isEditing) {
       setTravelersOpen(open)
     }
   }
+
+  useEffect(() => {
+    if (departureDate && returnDate) {
+      const diffTime = returnDate.getTime() - departureDate.getTime()
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+      if (diffDays < 3) {
+        const rangeDate = `${format(departureDate, 'dd/MM/yyyy')} - ${format(returnDate, 'dd/MM/yyyy')}`
+        handleChange('travelDate', rangeDate)
+      }
+    }
+  }, [departureDate, returnDate])
 
   return (
     <div className="max-w-7xl mx-auto p-4 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
@@ -257,7 +278,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
                 disabled={!isEditing}
                 type="button"
                 onClick={() => {
-                  setReturnOpen(false) // Close return calendar if open
+                  setReturnOpen(false)
                   setDepartureOpen(prev => !prev)
                 }}
                 className={`actionable flex text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''}`}
@@ -290,7 +311,9 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
 
           {/*Hasta*/}
           <div className="leading-4 space-y-0.5" ref={returnDateRef}>
-            <div className="text-base font-bold text-red-700">{t('label-to')}</div>
+            <div className="text-base font-bold text-red-700">
+              {errors?.travelDate && errors?.travelDate?.length > 0 ? errors?.travelDate[0] : t('label-to')}
+            </div>
             <button
               disabled={!isEditing}
               type="button"
@@ -298,7 +321,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
                 setDepartureOpen(false) // Close departure calendar if open
                 setReturnOpen(prev => !prev)
               }}
-              className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''}`}
+              className={`actionable text-sm mt-0 px-2 ${isEditing ? 'bg-zinc-200 cursor-pointer' : ''} ${errors?.travelDate && errors?.travelDate?.length > 0 ? 'text-red-500' : ''}`}
             >
               {formatDate(returnDate)}
             </button>

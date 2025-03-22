@@ -26,7 +26,10 @@ const TripQuotePage: React.FC = () => {
   }
 
   // Validaciones
-  const validationRules = { travelers: { requiredAge: true, minAge: true } }
+  const validationRules = {
+    travelDate: { isDateRange: true, minDateRange: 3 },
+    travelers: { requiredAge: true, minAge: true }
+  }
 
   const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)
 
@@ -80,23 +83,18 @@ const TripQuotePage: React.FC = () => {
                   })
                   .slice(0, visibleCount)
                   .map(plan => (
-                    <CardProduct 
-                      key={plan.Id} 
-                      viewType={viewType} 
-                      plan={plan} 
-                      isNewlyVisible={visibleCount > 4 && plan.Id > 4} 
-                    />
+                    <CardProduct key={plan.Id} viewType={viewType} plan={plan} isNewlyVisible={visibleCount > 4 && plan.Id > 4} />
                   ))}
               </div>
               <div className="mx-auto my-3 p-4 align-middle text-center">
                 {plans.length > 4 && (
                   <button
-                  type="button"
-                  className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-400 active:scale-95"
-                  onClick={toggleVisibility}
-                >
-                  {visibleCount === plans.length ? t('button-minus-options') : t('button-more-options')}
-                </button>
+                    type="button"
+                    className="bg-transparent hover:bg-zinc-500 text-zinc-700 font-semibold hover:text-white py-2 px-4 border border-zinc-500 hover:border-transparent rounded transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-400 active:scale-95"
+                    onClick={toggleVisibility}
+                  >
+                    {visibleCount === plans.length ? t('button-minus-options') : t('button-more-options')}
+                  </button>
                 )}
               </div>
             </div>

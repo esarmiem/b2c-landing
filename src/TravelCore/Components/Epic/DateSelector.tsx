@@ -37,14 +37,13 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
       : undefined
 
   const [date, setDate] = useState<DateRange | undefined>(initialDateRange)
-  
+
   // Determinar si estamos usando español basado en el lenguaje actual
   const isSpanish = i18n.language.startsWith('es')
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (date?.from && date?.to && setData) {
-      // Este onChange es el que recibe del componente padre y envía el valor formateado
       onChange(`${format(date.from, 'dd/MM/yyyy')} - ${format(date.to, 'dd/MM/yyyy')}`)
 
       setData(prevData => ({
@@ -92,7 +91,8 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
                 {date?.from ? (
                   date.to ? (
                     <>
-                      {format(date.from, 'LLL dd, y', { locale: isSpanish ? es : undefined })} - {format(date.to, 'LLL dd, y', { locale: isSpanish ? es : undefined })}
+                      {format(date.from, 'LLL dd, y', { locale: isSpanish ? es : undefined })} -{' '}
+                      {format(date.to, 'LLL dd, y', { locale: isSpanish ? es : undefined })}
                     </>
                   ) : (
                     format(date.from, 'LLL dd, y', { locale: isSpanish ? es : undefined })
@@ -112,12 +112,12 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar 
-          initialFocus 
-          mode="range" 
-          defaultMonth={date?.from} 
-          selected={date} 
-          onSelect={setDate} 
+        <Calendar
+          initialFocus
+          mode="range"
+          defaultMonth={date?.from}
+          selected={date}
+          onSelect={setDate}
           numberOfMonths={2}
           locale={isSpanish ? es : undefined}
         />

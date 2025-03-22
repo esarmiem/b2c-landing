@@ -16,6 +16,7 @@ export interface ValidationRules {
   match?: string
   custom?: (value: string) => string | undefined
   isDateRange?: boolean
+  minDateRange?: number
 }
 
 export interface FormValidationRules {
@@ -47,6 +48,7 @@ interface MsgForm {
     invalid: string
     past: string
     format: string
+    minDays: (days: number) => string
   }
   traveler: string
   travelers: string
@@ -61,9 +63,35 @@ const VALIDATION_PATTERNS: Record<ValidationPattern, RegExp> = {
   lettersOnly: /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/
 }
 
+const getDaysDifference = (startDateStrOrRange: string, endDateStr?: string): number => {
+  let startDay: number
+  let startMonth: number
+  let startYear: number
+  let endDay: number
+  let endMonth: number
+  let endYear: number
+  console.log('entrando al validador de fechas')
+  console.log('startDateStrOrRange', startDateStrOrRange)
+  console.log('fecha final ', endDateStr)
+  if (startDateStrOrRange.includes(' - ') && !endDateStr) {
+    const [startDatePart, endDatePart] = startDateStrOrRange.split(' - ')
+    ;[startDay, startMonth, startYear] = startDatePart.split('/').map(Number)
+    ;[endDay, endMonth, endYear] = endDatePart.split('/').map(Number)
+  } else {
+    ;[startDay, startMonth, startYear] = startDateStrOrRange.split('/').map(Number)
+    ;[endDay, endMonth, endYear] = (endDateStr || '').split('/').map(Number)
+  }
+
+  const startDate = new Date(startYear, startMonth - 1, startDay)
+  const endDate = new Date(endYear, endMonth - 1, endDay)
+  const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
+  console.log('diffTime', diffTime)
+
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+}
+
 const validateDateRange = (dateRange: string): boolean => {
   if (!dateRange) return false
-
   const dates = dateRange.split(' - ')
   if (dates.length !== 2) return false
 
@@ -95,7 +123,6 @@ const validateDateFormat = (dateString: string): boolean => {
 
 export const validateField = (value: string, msg: MsgForm, validations: ValidationRules = {}): string[] => {
   const errors: string[] = []
-
   if (validations.required && !value) {
     errors.push(msg.required)
     return errors
@@ -133,6 +160,14 @@ export const validateField = (value: string, msg: MsgForm, validations: Validati
       if (isDateInPast(startDate)) {
         errors.push(msg.dateRange.past)
         return errors
+      }
+
+      if (validations.minDateRange && msg.dateRange.minDays) {
+        const daysDifference = getDaysDifference(value)
+        if (daysDifference < validations.minDateRange) {
+          errors.push(msg.dateRange.minDays(validations.minDateRange))
+          return errors
+        }
       }
     }
 
@@ -174,12 +209,17 @@ export const validateField = (value: string, msg: MsgForm, validations: Validati
   return errors
 }
 
-export const validateForm = (formData: Record<string, string>, msg: MsgForm, validationRules: FormValidationRules): ValidationResult => {
+export const validateForm = (
+  formData: Record<string, string | null | undefined>,
+  msg: MsgForm,
+  validationRules: FormValidationRules
+): ValidationResult => {
   const errors: Record<string, string[]> = {}
   let hasErrors = false
 
   for (const fieldName of Object.keys(validationRules)) {
-    const value = formData[fieldName]
+    // Manejo de valores null o undefined
+    const value = formData[fieldName] || ''
     const fieldErrors = validateField(value, msg, validationRules[fieldName])
 
     if (fieldErrors.length > 0) {
@@ -188,15 +228,19 @@ export const validateForm = (formData: Record<string, string>, msg: MsgForm, val
     }
 
     if (fieldName === 'travelers' && validationRules[fieldName].requiredAge) {
-      const ages = value.split(',')
+      // Si value es null o undefined, lo tratamos como string vacío
+      const valueStr = value || ''
+      const ages = valueStr.split(',')
+      let travelersHasErrors = false
+
       for (const age of ages) {
         if (age === '' || age === '0') {
+          travelersHasErrors = true
           hasErrors = true
         }
       }
 
-      // Si hay errores, recopilamos los índices de los viajeros sin edad
-      if (hasErrors) {
+      if (travelersHasErrors) {
         const travelersWithoutAge = ages.map((age, index) => (age === '' || age === '0' ? index + 1 : null)).filter(index => index !== null)
 
         if (travelersWithoutAge.length > 0) {

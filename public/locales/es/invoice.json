@@ -2,7 +2,7 @@
   "label-back-to-passenger-info": "Volver a la información de pasajeros",
   "button-proceed-to-payment": "Proceder al pago",
   "billing-select-passenger-title": "Selecciona uno de los pasajeros como titular de los datos de facturación:",
-  "billing-use-passenger-info": "Usar la misma información del Pasajero 1 para la facturación",
+  "billing-use-passenger-info": "Usar la misma información del Pasajero para la facturación",
   "billing-first-name": "Nombre(s)",
   "billing-placeholder-first-name": "Ingrese su nombre",
   "billing-last-name": "Apellidos",
@@ -35,5 +35,7 @@
   "loading-text-adding-order": "Estamos agregando la orden de compra...",
   "loading-title-one-moment": "Un momento más",
   "loading-text-redirecting-payment": "Estamos redirigiendo a pasarela de pago...",
-  "no-cities": "No existen ciudades para el pais de facturación seleccionado"
+  "no-cities": "No existen ciudades para el pais de facturación seleccionado",
+  "label-traveler": "Viajero",
+  "label-new-info": "Ingrese información por teclado"
 }
