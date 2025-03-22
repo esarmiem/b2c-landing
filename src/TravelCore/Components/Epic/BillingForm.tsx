@@ -112,7 +112,7 @@ export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data,
   const billingCountryHandler = useMemo(() => createSelectHandler('billingCountry'), [createSelectHandler])
   const billingCityHandler = useMemo(() => createSelectHandler('billingCity'), [createSelectHandler])
 
-  const numberTravellers = travelers?.length ?? 1
+  const numberTravellers = travelers?.length
 
   return (
     <>
