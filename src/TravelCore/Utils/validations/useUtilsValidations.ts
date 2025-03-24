@@ -28,7 +28,8 @@ export const useUtilsValidations = (validationRules: FormValidationRules) => {
     dateRange: {
       invalid: t('validation.dateRange.invalid'),
       past: t('validation.dateRange.past'),
-      format: t('validation.dateRange.format')
+      format: t('validation.dateRange.format'),
+      minDays: (days: number): string => `${t('validation.dateRange.minDays')} ${days} ${t('validation.days')}`
     },
     traveler: t('validation.traveler'),
     travelers: t('validation.travelers')

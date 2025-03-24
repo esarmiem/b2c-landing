@@ -86,7 +86,9 @@
     "dateRange": {
       "invalid": "Rango de fechas inválido",
       "past": "La fecha debe ser futura",
-      "format": "El formato de fecha debe ser DD/MM/YYYY"
-    }
+      "format": "El formato de fecha debe ser DD/MM/YYYY",
+      "minDays": "Estadía mínima:"
+    },
+    "days": "días"
   }
 }

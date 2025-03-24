@@ -42,7 +42,58 @@ export default function InvoicePage() {
     text: ''
   })
 
-  const handleChangeReuseInfo = (check: boolean) => {
+  const handleChangeReuseInfo = (index: number) => {
+    const travelers: PaxForm[] = data?.travelersData || []
+    console.log('selectedTraveler: ', travelers[index])
+    if (index >= 0 && index < travelers.length) {
+      const selectedTraveler = travelers[index]
+      const newBillingData = {
+        billingCountry: selectedTraveler?.residenceCountry?.toString() || '',
+        countryCode: selectedTraveler?.countryCode || '',
+        documentNumber: selectedTraveler?.documentNumber || '',
+        documentType: selectedTraveler?.documentType || '',
+        email: selectedTraveler?.email || '',
+        firstName: selectedTraveler?.firstName || '',
+        lastName: selectedTraveler?.lastName || '',
+        phone: selectedTraveler?.phone || '',
+        additional: '',
+        address: '',
+        billingCity: ''
+      }
+
+      setBillingData(newBillingData)
+
+      for (const [field, value] of Object.entries(newBillingData)) {
+        if (validationRules[field as keyof typeof validationRules]) {
+          handleChangeValidate(field, value)
+        }
+      }
+    } else {
+      const emptyBillingData = {
+        billingCountry: '',
+        countryCode: '',
+        documentNumber: '',
+        documentType: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        additional: '',
+        address: '',
+        billingCity: ''
+      }
+
+      setBillingData(emptyBillingData)
+
+      for (const field of Object.keys(emptyBillingData)) {
+        if (validationRules[field as keyof typeof validationRules]) {
+          handleChangeValidate(field, '')
+        }
+      }
+    }
+  }
+
+  const handleChangeReuseInfoForOneTraveler = (check: boolean) => {
     const firstTraveler: PaxForm[] = data?.travelersData || []
     console.log('firstTraveler: ', firstTraveler)
     if (check && firstTraveler.length > 0) {
@@ -206,9 +257,11 @@ export default function InvoicePage() {
               <BillingForm
                 onChangeField={handleChangeBilling}
                 data={billingData}
-                onCheck={handleChangeReuseInfo}
+                onCheck={handleChangeReuseInfoForOneTraveler}
+                selectTraveler={handleChangeReuseInfo}
                 errors={errors}
                 onChange={handleChange}
+                travelers={data?.travelersData}
               />
             </form>
           </section>

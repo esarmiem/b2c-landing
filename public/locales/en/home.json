@@ -86,7 +86,9 @@
     "dateRange": {
       "invalid": "Invalid date range",
       "past": "The date must be in the future",
-      "format": "Date format must be DD/MM/YYYY"
-    }
+      "format": "Date format must be DD/MM/YYYY",
+      "minDays": "Minimum stay:"
+    },
+    "days": "days"
   }
 }
