@@ -100,9 +100,16 @@ interface PayloadUpgrades {
  */
 export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => {
   const authISL = await AUTH_ISL_API.loginISL()
+  const token = authISL?.data?.result?.token
+
+  if (!token) {
+    console.error('Token is not defined or does not exist')
+    throw new Error('Authentication token is missing')
+  }
+
   const queryParams = new URLSearchParams({
     request: 'get_upgrade',
-    token: authISL?.data?.result?.token,
+    token: token,
     id_plan: payload.id_plan.toString(),
     language: payload.language
   }).toString()
