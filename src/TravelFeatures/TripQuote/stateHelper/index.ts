@@ -3,17 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades.ts'
+import useManagementUpgrades from './useManagementUpgrades'
 
-export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
+export const index = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
   const numberTravellers = data?.payloadOrder?.cantidadPax || 1
+
   const payloadOrder = data?.payloadOrder || {}
 
   const [currentTraveler, setCurrentTraveler] = useState(1)
-  const { productUpgrades, isLoading, trm: TRM } = useProductUpgrades(plan.IdPlan, isOpen)
+  const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(plan.IdPlan, isOpen)
 
   // Crear un identificador único para la consulta actual
   const createQueryId = useCallback(() => {
@@ -98,12 +99,12 @@ export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
 
       const newTravellers = [...travelerQuotation.travellers]
       const travelerIndex = currentTraveler - 1
-      const upgrade = productUpgrades?.find(u => u.id_raider === id_raider)
+      const upgrade = productUpgrades?.find((u: { id_raider: string; cost_raider?: string }) => u.id_raider === id_raider)
 
       if (!upgrade) return
 
       const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
-      const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
+      const existingUpgradeIndex = currentUpgrades.findIndex((u: { id: string }) => u.id === id_raider)
 
       if (existingUpgradeIndex === -1) {
         currentUpgrades.push({ id: id_raider, name: name_raider })
@@ -113,7 +114,7 @@ export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
 
       // Corregir cálculos
       const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
+        const foundUpgrade = productUpgrades?.find((u: { id_raider: string }) => u.id_raider === upgrade.id)
         const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
         return total + Number.parseInt(cost, 10)
       }, 0)

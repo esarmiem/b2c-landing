@@ -2,8 +2,8 @@ import Loader from '@/TravelCore/Components/Raw/Loader'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { Plan } from '@/TravelCore/Utils/interfaces/Order'
-import { useModalUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useModalUpgrades.ts'
+import type { Plan, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import { index } from '@/TravelFeatures/TripQuote/stateHelper'
 
 interface ModalUpgradesProps {
   isOpen: boolean
@@ -28,7 +28,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
     totalTravelerPlanWithUpgrades,
     totalAllTravelers,
     i18n
-  } = useModalUpgrades(isOpen, plan)
+  } = index(isOpen, plan)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -76,7 +76,7 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
           {!isLoading &&
             hasUpgrades &&
-            productUpgrades?.map(upgrade => (
+            productUpgrades?.map((upgrade: Upgrade) => (
               <button
                 type="button"
                 key={upgrade.id_raider}
