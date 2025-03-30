@@ -1,13 +1,9 @@
 import Loader from '@/TravelCore/Components/Raw/Loader'
-import useData from '@/TravelCore/Hooks/useData'
-import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
-import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
-import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Check, HandHeart, Plus, UserRoundCog } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import type { Plan } from '@/TravelCore/Utils/interfaces/Order'
+import { useModalUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useModalUpgrades.ts'
 
 interface ModalUpgradesProps {
   isOpen: boolean
@@ -17,260 +13,22 @@ interface ModalUpgradesProps {
 
 const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
   const { t } = useTranslation(['products'])
-  const { i18n } = useTranslation()
-  const { data, setData } = useData() || {}
-  const travelerQuotation = data?.travelerQuotation
-  const numberTravellers = data?.payloadOrder?.cantidadPax || 1
-  const payloadOrder = data?.payloadOrder || {}
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [currentTraveler, setCurrentTraveler] = useState(1)
-  const [productUpgrades, setProductUpgrades] = useState<Upgrade[]>([])
-  const [TRM, setTRM] = useState<number>(0)
-  const { fetchTRM } = useTRMToday()
-
-  const fetchedRef = useRef(false)
-  const productIdRef = useRef<string | number | null>(null)
-  const languageRef = useRef<string | null>(null)
-
-  const currentLanguage = i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
-
-  // Crear un identificador único para la consulta actual
-  const createQueryId = useCallback(() => {
-    const { salida, llegada, pais, destino, cantidadPax } = payloadOrder
-    return `${plan.IdPlan}-${cantidadPax || 1}-${salida || ''}-${llegada || ''}-${pais || ''}-${destino || ''}`
-  }, [plan.IdPlan, payloadOrder])
-
-  // Inicialización de la cotización - solo cuando es necesario
-  useEffect(() => {
-    const currentQueryId = createQueryId()
-
-    const shouldInitialize =
-      !travelerQuotation ||
-      travelerQuotation.planId !== plan.IdPlan ||
-      travelerQuotation.travellers.length !== numberTravellers ||
-      travelerQuotation.queryId !== currentQueryId
-
-    if (shouldInitialize && setData) {
-      const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
-        id: index + 1,
-        totalPlanTravelerPesos: plan.ValorPaxPesos || '0',
-        totalPlanTravelerDolar: plan.ValorPax || '0',
-        totalPlanWhitUpgradesPerTravelerPeso: plan.ValorPaxPesos || '0',
-        totalPlanWhitUpgradesPerTravelerDolar: plan.ValorPax || '0',
-        valorUpgradesPesos: '0',
-        valorUpgradesDolar: '0',
-        upgrades: []
-      }))
-
-      const initialDescriptionDescuentosDollars: DescriptionDescuentos | undefined = plan.DescripcionDescuentosDolares
-        ? {
-            porcentaje: plan.DescripcionDescuentosDolares.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosDolares.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosDolares.valorTotal
-          }
-        : undefined
-
-      const initialDescriptionDescuentosPesos: DescriptionDescuentos | undefined = plan.DescripcionDescuentosPesos
-        ? {
-            porcentaje: plan.DescripcionDescuentosPesos.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosPesos.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosPesos.valorTotal
-          }
-        : undefined
-
-      const initialQuotation: Quotation = {
-        planId: plan.IdPlan,
-        queryId: currentQueryId,
-        totalAllTravelersPesos: plan.ValorPesos || '0',
-        totalAllTravelersDolar: plan.Valor || '0',
-        travellers: initialTravellers,
-        descriptionDescuentosDolares: initialDescriptionDescuentosDollars,
-        descriptionDescuentosPesos: initialDescriptionDescuentosPesos
-      }
-
-      setData(prevData => ({
-        ...prevData,
-        travelerQuotation: initialQuotation
-      }))
-    }
-  }, [
-    travelerQuotation,
+  const {
+    isLoading,
+    productUpgrades,
+    hasUpgrades,
     numberTravellers,
-    plan.IdPlan,
-    plan.ValorPesos,
-    plan.Valor,
-    setData,
-    createQueryId,
-    payloadOrder.salida,
-    payloadOrder.llegada,
-    payloadOrder.pais,
-    payloadOrder.destino
-  ])
-
-  // Obtener TRM una sola vez
-  useEffect(() => {
-    if (TRM === 0) {
-      fetchTRM()
-        .then(trmData => {
-          setTRM(trmData)
-        })
-        .catch(error => {
-          console.error('Error al consultar la TRM:', error)
-        })
-    }
-  }, [fetchTRM, TRM])
-
-  const loadProductUpgrades = useCallback(async () => {
-    if (!isOpen || isLoading) return
-
-    if (
-      fetchedRef.current &&
-      productIdRef.current === plan.IdPlan &&
-      languageRef.current === currentLanguage &&
-      productUpgrades.length > 0
-    ) {
-      return
-    }
-
-    setIsLoading(true)
-    const maxRetries = 3
-    let attempts = 0
-    let success = false
-
-    while (attempts < maxRetries && !success) {
-      try {
-        const response = await getProductUpdates({
-          id_plan: plan.IdPlan.toString(),
-          language: currentLanguage
-        })
-
-        if (!Array.isArray(response)) {
-          console.error('Expected an array but got:', response)
-          setProductUpgrades([])
-          return
-        }
-
-        setProductUpgrades(response)
-        fetchedRef.current = true
-        productIdRef.current = plan.IdPlan
-        languageRef.current = currentLanguage
-        success = true
-      } catch (error) {
-        attempts++
-        console.error(`Error loading upgrades (attempt ${attempts}):`, error)
-        if (attempts >= maxRetries) {
-          console.error('Max retries reached. Could not load upgrades.')
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-  }, [isOpen, isLoading, plan.IdPlan, currentLanguage, productUpgrades.length])
-
-  useEffect(() => {
-    if (isOpen) {
-      if (productIdRef.current !== plan.IdPlan || languageRef.current !== currentLanguage) {
-        fetchedRef.current = false
-      }
-
-      loadProductUpgrades()
-    }
-    return () => {
-      if (!isOpen) fetchedRef.current = false
-    }
-  }, [isOpen, loadProductUpgrades, plan.IdPlan, currentLanguage])
-
-  const toggleUpgrade = useCallback(
-    (id_raider: string, name_raider: string) => {
-      if (!travelerQuotation || !setData) return
-
-      const newTravellers = [...travelerQuotation.travellers]
-      const travelerIndex = currentTraveler - 1
-      const upgrade = productUpgrades?.find(u => u.id_raider === id_raider)
-
-      if (!upgrade) return
-
-      const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
-      const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
-
-      if (existingUpgradeIndex === -1) {
-        currentUpgrades.push({ id: id_raider, name: name_raider })
-      } else {
-        currentUpgrades.splice(existingUpgradeIndex, 1)
-      }
-
-      // Corregir cálculos
-      const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
-        const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
-        return total + Number.parseInt(cost, 10)
-      }, 0)
-
-      const upgradesCostInDollars = Number((upgradesCost / TRM).toFixed(2))
-      const totalPlanTravelerDolar = Number(plan.ValorPax || 0)
-      const totalPlanTravelerPesos = Number(plan.ValorPaxPesos || 0)
-      const totalPlanWhitUpgradesPerTravelerPeso = totalPlanTravelerPesos + upgradesCost
-      const totalPlanWhitUpgradesPerTravelerDolar = totalPlanTravelerDolar + upgradesCostInDollars
-
-      newTravellers[travelerIndex] = {
-        ...newTravellers[travelerIndex],
-        upgrades: currentUpgrades,
-        valorUpgradesPesos: upgradesCost.toString(),
-        valorUpgradesDolar: upgradesCostInDollars.toString(),
-        totalPlanTravelerPesos: totalPlanTravelerPesos.toString(),
-        totalPlanTravelerDolar: totalPlanTravelerDolar.toString(),
-        totalPlanWhitUpgradesPerTravelerPeso: totalPlanWhitUpgradesPerTravelerPeso.toString(),
-        totalPlanWhitUpgradesPerTravelerDolar: totalPlanWhitUpgradesPerTravelerDolar.toString()
-      }
-
-      // Calcular totales
-      const newTotalPesos = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerPeso), 0)
-        .toString()
-
-      const newTotalDolar = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerDolar), 0)
-        .toString()
-
-      setData(prevData => ({
-        ...prevData,
-        travelerQuotation: {
-          planId: plan.IdPlan,
-          queryId: travelerQuotation.queryId,
-          totalAllTravelersPesos: newTotalPesos,
-          totalAllTravelersDolar: newTotalDolar,
-          travellers: newTravellers,
-          descriptionDescuentosDolares: travelerQuotation.descriptionDescuentosDolares,
-          descriptionDescuentosPesos: travelerQuotation.descriptionDescuentosPesos
-        }
-      }))
-    },
-    [travelerQuotation, setData, currentTraveler, productUpgrades, TRM, plan]
-  )
-
-  const currentTravellerData = travelerQuotation?.travellers[currentTraveler - 1]
-  const allTravellers = travelerQuotation?.travellers
-
-  const totalTravelersPerPlan =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.totalPlanTravelerPesos || '0', 'COP')
-      : formatCurrency(currentTravellerData?.totalPlanTravelerDolar || '0', 'USD')
-
-  const totalTravelerUpgrades =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.valorUpgradesPesos || '0', 'COP')
-      : formatCurrency(currentTravellerData?.valorUpgradesDolar || '0', 'USD')
-
-  const totalTravelerPlanWithUpgrades =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerPeso || '0', 'COP')
-      : formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerDolar || '0', 'USD')
-
-  const totalAllTravelers =
-    i18n.language === 'es'
-      ? formatCurrency(travelerQuotation?.totalAllTravelersPesos || '0', 'COP')
-      : formatCurrency(travelerQuotation?.totalAllTravelersDolar || '0', 'USD')
+    currentTraveler,
+    setCurrentTraveler,
+    currentTravellerData,
+    allTravellers,
+    toggleUpgrade,
+    totalTravelersPerPlan,
+    totalTravelerUpgrades,
+    totalTravelerPlanWithUpgrades,
+    totalAllTravelers,
+    i18n
+  } = useModalUpgrades(isOpen, plan)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -301,41 +59,54 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
 
         <div className="space-y-3 max-h-60 overflow-y-auto">
           {isLoading && (
-            <div className="w-full flex items-center justify-center">
+            <div
+              className={`space-y-3 ${isLoading ? 'w-full max-h-60 flex items-center justify-center overflow-hidden' : 'max-h-60 overflow-y-auto'}`}
+            >
               <Loader />
             </div>
           )}
-          {productUpgrades?.map(upgrade => (
-            <button
-              type="button"
-              key={upgrade.id_raider}
-              className={`w-full flex items-center justify-between p-3 rounded-lg border transition ${
-                currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider)
-                  ? 'bg-green-100 border-green-500'
-                  : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-              onClick={() => toggleUpgrade(upgrade.id_raider, upgrade.name_raider)}
-            >
-              <div className="flex items-center text-start gap-3 w-full">
-                <span className="text-xl">
-                  <HandHeart />
-                </span>
-                <div className="w-full">
-                  <p className="font-medium text-sm">{t(upgrade.name_raider)}</p>
-                  <p className="text-xs text-gray-500">
-                    {upgrade.cost_raider} {t('label-cop-per-person')}
-                  </p>
+
+          {!isLoading && !hasUpgrades && (
+            <div className="w-full flex flex-col items-center justify-center py-6 text-center">
+              <Package2 className="w-12 h-12 text-gray-400 mb-2" />
+              <p className="text-lg font-medium text-gray-700">{t('label-no-upgrades-available')}</p>
+              <p className="text-sm text-gray-500 mt-1">{t('label-no-upgrades-description')}</p>
+            </div>
+          )}
+
+          {!isLoading &&
+            hasUpgrades &&
+            productUpgrades?.map(upgrade => (
+              <button
+                type="button"
+                key={upgrade.id_raider}
+                className={`w-full flex items-center justify-between p-3 rounded-lg border transition ${
+                  currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider)
+                    ? 'bg-green-100 border-green-500'
+                    : 'bg-gray-100 hover:bg-gray-200'
+                }`}
+                onClick={() => toggleUpgrade(upgrade.id_raider, upgrade.name_raider)}
+              >
+                <div className="flex items-center text-start gap-3 w-full">
+                  <span className="text-xl">
+                    <HandHeart />
+                  </span>
+                  <div className="w-full">
+                    <p className="font-medium text-sm">{t(upgrade.name_raider)}</p>
+                    <p className="text-xs text-gray-500">
+                      {upgrade.cost_raider} {t('label-cop-per-person')}
+                    </p>
+                  </div>
+                  <span className="text-xl">
+                    {currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider) ? (
+                      <Check className="text-green-600" />
+                    ) : (
+                      <Plus className="text-gray-600" />
+                    )}
+                  </span>
                 </div>
-                <span className="text-xl">
-                  {currentTravellerData?.upgrades.some(u => u.id === upgrade.id_raider) ? (
-                    <Check className="text-green-600" />
-                  ) : (
-                    <Plus className="text-gray-600" />
-                  )}
-                </span>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
         </div>
 
         <div className="mt-4 border-t pt-4 space-y-2">

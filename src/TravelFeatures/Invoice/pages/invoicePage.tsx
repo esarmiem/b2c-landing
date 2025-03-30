@@ -1,3 +1,6 @@
+import { type MouseEvent, useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import 'react/jsx-runtime'
 import { Breadcrumb } from '@/TravelCore/Components/Epic/Breadcrumb.tsx'
 import { GoBack } from '@/TravelCore/Components/Raw/GoBack.tsx'
 import { HeaderBilling } from '@/TravelCore/Components/Epic/HeaderBilling.tsx'
@@ -6,12 +9,10 @@ import { PurchaseDetails } from '@/TravelCore/Components/Epic/PurchaseDetails.ts
 import { ProcessButton } from '@/TravelCore/Components/Epic/ProcessButton.tsx'
 import { ModalLoadingProcess } from '@/TravelCore/Components/Epic/LoadingProcess.tsx'
 import useData from '@/TravelCore/Hooks/useData.ts'
-import { type MouseEvent, useCallback, useState } from 'react'
 import type { PaxForm, Billing, dataPreorder, dataIslOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { Order } from '@/TravelFeatures/Invoice/model/order_entity.ts'
 import useInvoiceState from '@/TravelFeatures/Invoice/adapterHelper'
 import { URL_EPAYCO_METHODS, SERVICE_METHODS_EPAYCO } from '@/TravelCore/Utils/constants.ts'
-import { useTranslation } from 'react-i18next'
 import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations.ts'
 
 interface loading {
@@ -44,7 +45,6 @@ export default function InvoicePage() {
 
   const handleChangeReuseInfo = (index: number) => {
     const travelers: PaxForm[] = data?.travelersData || []
-    console.log('selectedTraveler: ', travelers[index])
     if (index >= 0 && index < travelers.length) {
       const selectedTraveler = travelers[index]
       const newBillingData = {
@@ -95,7 +95,6 @@ export default function InvoicePage() {
 
   const handleChangeReuseInfoForOneTraveler = (check: boolean) => {
     const firstTraveler: PaxForm[] = data?.travelersData || []
-    console.log('firstTraveler: ', firstTraveler)
     if (check && firstTraveler.length > 0) {
       const newBillingData = {
         billingCountry: firstTraveler?.[0].residenceCountry?.toString() || '',
@@ -144,7 +143,7 @@ export default function InvoicePage() {
   }
 
   const handleSendBilling = async () => {
-    setData?.(prevData => ({
+    setData?.((prevData: any) => ({
       ...prevData,
       billingData: billingData
     }))
@@ -191,7 +190,7 @@ export default function InvoicePage() {
             console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
             if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
               const transaction = respPayment?.data?.data?.id_session
-              setData?.(prevData => ({
+              setData?.((prevData: any) => ({
                 ...prevData,
                 epaycoTx: transaction
               }))

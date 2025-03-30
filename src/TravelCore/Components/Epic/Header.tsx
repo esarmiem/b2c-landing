@@ -4,9 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '../Raw/Link'
 import { DropdownHeader } from './DropdownHeader'
 import { MenuSheet } from './MenuSheet'
+import { useEffect } from 'react'
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const { t, i18n } = useTranslation(['header'])
+
+  useEffect(() => {
+    if (i18n.language === 'es') {
+      document.getElementById('es-button')?.classList.add('bg-red-500')
+    } else if (i18n.language === 'en') {
+      document.getElementById('en-button')?.classList.add('bg-red-500')
+    }
+  }, [i18n.language])
 
   return (
     <header className="sticky top-0 w-full bg-white z-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
@@ -54,6 +63,7 @@ export const Header: React.FC = () => {
           <div className="gap-2 hidden items-center lg:flex">
             <Button
               variant="travelkit"
+              id="es-button"
               size="sm"
               className={`${i18n.language === 'es' ? 'bg-red-500' : ''} text-white`}
               onClick={() => i18n.changeLanguage('es')}
@@ -63,6 +73,7 @@ export const Header: React.FC = () => {
             </Button>
             <Button
               variant="travelkit"
+              id="en-button"
               size="sm"
               className={`${i18n.language === 'en' ? 'bg-red-500' : ''} text-white`}
               onClick={() => i18n.changeLanguage('en')}

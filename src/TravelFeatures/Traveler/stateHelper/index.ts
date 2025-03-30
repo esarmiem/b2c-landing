@@ -211,7 +211,6 @@ export const useTravelForm = () => {
 
         if (resp?.data && masterContext) {
           masterContext.cities.setData(resp.data)
-          console.log('aquiiiii')
           navigate('/invoice')
           return true
         }

@@ -10,11 +10,11 @@ import ModalUpgrades from './ModalUpgrades'
 interface CardProductProps {
   plan: Plan
   viewType: 'list' | 'grid'
-  isNewlyVisible?: boolean 
+  isNewlyVisible?: boolean
 }
 
 const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProps) => {
-  const animationClass = isNewlyVisible ? 'animate-fadeIn' : '';
+  const animationClass = isNewlyVisible ? 'animate-fadeIn' : ''
   const { t } = useTranslation(['products'])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { i18n } = useTranslation()
@@ -41,7 +41,6 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
     details: plan.cobertura.map((detail: Cobertura) => detail.name)
   }
 
-  // Funciones de callback para evitar recreaciones
   const openModal = useCallback(() => {
     if (setData) {
       setData(prevData => ({

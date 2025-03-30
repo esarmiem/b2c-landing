@@ -45,5 +45,7 @@
   "label-ideal-for": "Ideal for",
   "label-benefits": "BENEFITS",
   "button-more-options": "More Options",
-  "button-minus-options": "Less Options"
+  "button-minus-options": "Less Options",
+  "label-no-upgrades-available": "No upgrades available",
+  "label-no-upgrades-description": "For this product"
 }
