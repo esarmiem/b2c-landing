@@ -21,6 +21,7 @@ import {
 } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
+import { AxiosError } from 'axios'
 
 /**
  * ApiResponse
@@ -98,23 +99,38 @@ interface PayloadUpgrades {
  * @returns {Promise<any>} La respuesta de la API, extraída de la propiedad "data".
  *                         / The API response, extracted from the "data" property.
  */
+
+interface ApiErrorResponse {
+  status: string;
+  result: {
+    error_id: string;
+    error_msg: string;
+    error_notes?: string;
+  };
+}
+
 export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgrade[]> => {
-  const authISL = await AUTH_ISL_API.loginISL()
-  const token = authISL?.data?.result?.token
-
-  if (!token) {
-    console.error('Token is not defined or does not exist')
-    throw new Error('Authentication token is missing')
-  }
-
-  const queryParams = new URLSearchParams({
-    request: 'get_upgrade',
-    token: token,
-    id_plan: payload.id_plan.toString(),
-    language: payload.language
-  }).toString()
-  const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`
   try {
+    if (!payload.id_plan || !payload.language) {
+      throw new Error('Invalid payload: id_plan and language are required');
+    }
+
+    const authISL = await AUTH_ISL_API.loginISL();
+    const token = authISL?.data?.result?.token;
+
+    if (!token) {
+      throw new Error('Authentication failed: Unable to obtain token');
+    }
+
+    const queryParams = new URLSearchParams({
+      request: 'get_upgrade',
+      token: token,
+      id_plan: payload.id_plan.toString(),
+      language: payload.language
+    }).toString();
+
+    const url = `${ISL_APP_SERVICE_UPGRADES}?${queryParams}`;
+
     const response = await axiosHttp({
       method: 'GET',
       pathISL: url,
@@ -123,17 +139,39 @@ export const getProductUpdates = async (payload: PayloadUpgrades): Promise<Upgra
           'Content-Type': 'application/json'
         }
       }
-    })
-    if (!Array.isArray(response.data)) {
-      console.error('Expected an array but got:', response.data)
-      return []
+    });
+
+    if (response.data.status === 'error') {
+      const errorData = response.data as ApiErrorResponse;
+      throw new Error(`API Error: ${errorData.result.error_msg} (${errorData.result.error_id})`);
     }
-    return response.data
+
+    if (!Array.isArray(response.data)) {
+      throw new Error(`Unexpected response format: Expected array, got ${typeof response.data}`);
+    }
+
+    const validUpgrades = response.data.filter(upgrade =>
+      upgrade && typeof upgrade === 'object'
+    ) as Upgrade[];
+
+    return validUpgrades;
+
   } catch (error) {
-    console.error('Error fetching product updates:', error)
-    throw error
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        console.error('API Error:', {
+          status: error.response.status,
+          data: error.response.data
+        });
+      } else if (error.request) {
+        console.error('Network Error: No response received');
+      }
+    }
+    throw error instanceof Error
+      ? error
+      : new Error('Unknown error occurred while fetching product updates');
   }
-}
+};
 
 /**
  * ASSISTANCE_API

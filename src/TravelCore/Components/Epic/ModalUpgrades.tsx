@@ -1,13 +1,14 @@
-import Loader from '@/TravelCore/Components/Raw/Loader'
-import useData from '@/TravelCore/Hooks/useData'
-import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
-import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
-import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Check, HandHeart, Plus, UserRoundCog } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { HandHeart, Check, Plus, UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { formatCurrency } from '@/TravelCore/Utils/format'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import type { Plan } from '@/TravelCore/Utils/interfaces/Order'
+import { useState, useCallback, memo, useEffect } from 'react'
+import useData from '@/TravelCore/Hooks/useData'
+import { useTravelerQuotation } from '@/TravelFeatures/TripQuote/stateHelper'
+import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades.ts'
+import Loader from '@/TravelCore/Components/Raw/Loader'
+import { useQuotationReset } from '@/TravelFeatures/TripQuote/stateHelper/useQuotationReset.ts'
 
 interface ModalUpgradesProps {
   isOpen: boolean
@@ -15,183 +16,32 @@ interface ModalUpgradesProps {
   plan: Plan
 }
 
-const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
+const ModalUpgrades = memo(({ isOpen, onClose, plan }: ModalUpgradesProps) => {
   const { t } = useTranslation(['products'])
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
+
+  const { productUpgrades, isLoading, trm } = useProductUpgrades(plan.IdPlan, isOpen)
   const travelerQuotation = data?.travelerQuotation
   const numberTravellers = data?.payloadOrder?.cantidadPax || 1
-  const payloadOrder = data?.payloadOrder || {}
+  const { toggleTravelerUpgrade } = useTravelerQuotation(travelerQuotation)
 
-  const [isLoading, setIsLoading] = useState(false)
   const [currentTraveler, setCurrentTraveler] = useState(1)
-  const [productUpgrades, setProductUpgrades] = useState<Upgrade[]>([])
-  const [TRM, setTRM] = useState<number>(0)
-  const { fetchTRM } = useTRMToday()
 
-  const fetchedRef = useRef(false)
-  const productIdRef = useRef<string | number | null>(null)
-  const languageRef = useRef<string | null>(null)
-
-  const currentLanguage = i18n.language === 'es' ? 'spa' : i18n.language === 'en' ? 'eng' : ''
-
-  // Crear un identificador único para la consulta actual
-  const createQueryId = useCallback(() => {
-    const { salida, llegada, pais, destino, cantidadPax } = payloadOrder
-    return `${plan.IdPlan}-${cantidadPax || 1}-${salida || ''}-${llegada || ''}-${pais || ''}-${destino || ''}`
-  }, [plan.IdPlan, payloadOrder])
-
-  // Inicialización de la cotización - solo cuando es necesario
-  useEffect(() => {
-    const currentQueryId = createQueryId()
-
-    const shouldInitialize =
-      !travelerQuotation ||
-      travelerQuotation.planId !== plan.IdPlan ||
-      travelerQuotation.travellers.length !== numberTravellers ||
-      travelerQuotation.queryId !== currentQueryId
-
-    if (shouldInitialize && setData) {
-      const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
-        id: index + 1,
-        totalPlanTravelerPesos: plan.ValorPaxPesos || '0',
-        totalPlanTravelerDolar: plan.ValorPax || '0',
-        totalPlanWhitUpgradesPerTravelerPeso: plan.ValorPaxPesos || '0',
-        totalPlanWhitUpgradesPerTravelerDolar: plan.ValorPax || '0',
-        valorUpgradesPesos: '0',
-        valorUpgradesDolar: '0',
-        upgrades: []
-      }))
-
-      const initialDescriptionDescuentosDollars: DescriptionDescuentos | undefined = plan.DescripcionDescuentosDolares
-        ? {
-            porcentaje: plan.DescripcionDescuentosDolares.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosDolares.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosDolares.valorTotal
-          }
-        : undefined
-
-      const initialDescriptionDescuentosPesos: DescriptionDescuentos | undefined = plan.DescripcionDescuentosPesos
-        ? {
-            porcentaje: plan.DescripcionDescuentosPesos.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosPesos.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosPesos.valorTotal
-          }
-        : undefined
-
-      const initialQuotation: Quotation = {
-        planId: plan.IdPlan,
-        queryId: currentQueryId,
-        totalAllTravelersPesos: plan.ValorPesos || '0',
-        totalAllTravelersDolar: plan.Valor || '0',
-        travellers: initialTravellers,
-        descriptionDescuentosDolares: initialDescriptionDescuentosDollars,
-        descriptionDescuentosPesos: initialDescriptionDescuentosPesos
-      }
-
-      setData(prevData => ({
-        ...prevData,
-        travelerQuotation: initialQuotation
-      }))
-    }
-  }, [
-    travelerQuotation,
-    numberTravellers,
-    plan.IdPlan,
-    plan.ValorPesos,
-    plan.Valor,
-    setData,
-    createQueryId,
-    payloadOrder.salida,
-    payloadOrder.llegada,
-    payloadOrder.pais,
-    payloadOrder.destino
-  ])
-
-  // Obtener TRM una sola vez
-  useEffect(() => {
-    if (TRM === 0) {
-      fetchTRM()
-        .then(trmData => {
-          setTRM(trmData)
-        })
-        .catch(error => {
-          console.error('Error al consultar la TRM:', error)
-        })
-    }
-  }, [fetchTRM, TRM])
-
-  const loadProductUpgrades = useCallback(async () => {
-    if (!isOpen || isLoading) return
-
-    if (
-      fetchedRef.current &&
-      productIdRef.current === plan.IdPlan &&
-      languageRef.current === currentLanguage &&
-      productUpgrades.length > 0
-    ) {
-      return
-    }
-
-    setIsLoading(true)
-    const maxRetries = 3
-    let attempts = 0
-    let success = false
-
-    while (attempts < maxRetries && !success) {
-      try {
-        const response = await getProductUpdates({
-          id_plan: plan.IdPlan.toString(),
-          language: currentLanguage
-        })
-
-        if (!Array.isArray(response)) {
-          console.error('Expected an array but got:', response)
-          setProductUpgrades([])
-          return
-        }
-
-        setProductUpgrades(response)
-        fetchedRef.current = true
-        productIdRef.current = plan.IdPlan
-        languageRef.current = currentLanguage
-        success = true
-      } catch (error) {
-        attempts++
-        console.error(`Error loading upgrades (attempt ${attempts}):`, error)
-        if (attempts >= maxRetries) {
-          console.error('Max retries reached. Could not load upgrades.')
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-  }, [isOpen, isLoading, plan.IdPlan, currentLanguage, productUpgrades.length])
+  const { resetQuotation } = useQuotationReset(plan)
 
   useEffect(() => {
     if (isOpen) {
-      if (productIdRef.current !== plan.IdPlan || languageRef.current !== currentLanguage) {
-        fetchedRef.current = false
-      }
-
-      loadProductUpgrades()
+      resetQuotation()
     }
-    return () => {
-      if (!isOpen) fetchedRef.current = false
-    }
-  }, [isOpen, loadProductUpgrades, plan.IdPlan, currentLanguage])
+  }, [isOpen, plan.IdPlan])
 
   const toggleUpgrade = useCallback(
     (id_raider: string, name_raider: string) => {
       if (!travelerQuotation || !setData) return
 
-      const newTravellers = [...travelerQuotation.travellers]
       const travelerIndex = currentTraveler - 1
-      const upgrade = productUpgrades?.find(u => u.id_raider === id_raider)
-
-      if (!upgrade) return
-
-      const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
+      const currentUpgrades = [...travelerQuotation.travellers[travelerIndex].upgrades]
       const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
 
       if (existingUpgradeIndex === -1) {
@@ -200,53 +50,16 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
         currentUpgrades.splice(existingUpgradeIndex, 1)
       }
 
-      // Corregir cálculos
-      const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
-        const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
-        return total + Number.parseInt(cost, 10)
-      }, 0)
+      const updatedQuotation = toggleTravelerUpgrade(currentTraveler, currentUpgrades, productUpgrades, trm, plan)
 
-      const upgradesCostInDollars = Number((upgradesCost / TRM).toFixed(2))
-      const totalPlanTravelerDolar = Number(plan.ValorPax || 0)
-      const totalPlanTravelerPesos = Number(plan.ValorPaxPesos || 0)
-      const totalPlanWhitUpgradesPerTravelerPeso = totalPlanTravelerPesos + upgradesCost
-      const totalPlanWhitUpgradesPerTravelerDolar = totalPlanTravelerDolar + upgradesCostInDollars
-
-      newTravellers[travelerIndex] = {
-        ...newTravellers[travelerIndex],
-        upgrades: currentUpgrades,
-        valorUpgradesPesos: upgradesCost.toString(),
-        valorUpgradesDolar: upgradesCostInDollars.toString(),
-        totalPlanTravelerPesos: totalPlanTravelerPesos.toString(),
-        totalPlanTravelerDolar: totalPlanTravelerDolar.toString(),
-        totalPlanWhitUpgradesPerTravelerPeso: totalPlanWhitUpgradesPerTravelerPeso.toString(),
-        totalPlanWhitUpgradesPerTravelerDolar: totalPlanWhitUpgradesPerTravelerDolar.toString()
+      if (updatedQuotation && setData) {
+        setData(prevData => ({
+          ...prevData,
+          travelerQuotation: updatedQuotation
+        }))
       }
-
-      // Calcular totales
-      const newTotalPesos = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerPeso), 0)
-        .toString()
-
-      const newTotalDolar = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerDolar), 0)
-        .toString()
-
-      setData(prevData => ({
-        ...prevData,
-        travelerQuotation: {
-          planId: plan.IdPlan,
-          queryId: travelerQuotation.queryId,
-          totalAllTravelersPesos: newTotalPesos,
-          totalAllTravelersDolar: newTotalDolar,
-          travellers: newTravellers,
-          descriptionDescuentosDolares: travelerQuotation.descriptionDescuentosDolares,
-          descriptionDescuentosPesos: travelerQuotation.descriptionDescuentosPesos
-        }
-      }))
     },
-    [travelerQuotation, setData, currentTraveler, productUpgrades, TRM, plan]
+    [travelerQuotation, currentTraveler, toggleTravelerUpgrade, productUpgrades, trm, plan, setData]
   )
 
   const currentTravellerData = travelerQuotation?.travellers[currentTraveler - 1]
@@ -298,10 +111,9 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
           </div>
           <DialogDescription className="text-gray-600">{t('label-select-additional-benefits')}</DialogDescription>
         </DialogHeader>
-
         <div className="space-y-3 max-h-60 overflow-y-auto">
           {isLoading && (
-            <div className="w-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center">
               <Loader />
             </div>
           )}
@@ -377,6 +189,6 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
       </DialogContent>
     </Dialog>
   )
-}
+})
 
 export default ModalUpgrades
