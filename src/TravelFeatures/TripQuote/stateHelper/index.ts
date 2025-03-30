@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades'
+import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades.ts'
 
-export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
+export const index = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
@@ -114,7 +114,7 @@ export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
 
       // Corregir cálculos
       const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
+        const foundUpgrade = productUpgrades?.find((u: { id_raider: string }) => u.id_raider === upgrade.id)
         const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
         return total + Number.parseInt(cost, 10)
       }, 0)
