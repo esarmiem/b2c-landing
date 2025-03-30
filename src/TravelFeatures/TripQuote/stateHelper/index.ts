@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades.ts'
+import { useProductUpgrades } from './useProductUpgrades.ts'
 
 export const index = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
@@ -104,7 +104,7 @@ export const index = (isOpen: boolean, plan: Plan) => {
       if (!upgrade) return
 
       const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
-      const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
+      const existingUpgradeIndex = currentUpgrades.findIndex((u: { id: string }) => u.id === id_raider)
 
       if (existingUpgradeIndex === -1) {
         currentUpgrades.push({ id: id_raider, name: name_raider })
