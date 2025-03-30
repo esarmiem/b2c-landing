@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import useProductUpgrades from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades'
+import useManagementUpgrades from './useManagementUpgrades'
 
 export const index = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
@@ -14,7 +14,7 @@ export const index = (isOpen: boolean, plan: Plan) => {
   const payloadOrder = data?.payloadOrder || {}
 
   const [currentTraveler, setCurrentTraveler] = useState(1)
-  const { productUpgrades, isLoading, trm: TRM } = useProductUpgrades(plan.IdPlan, isOpen)
+  const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(plan.IdPlan, isOpen)
 
   // Crear un identificador único para la consulta actual
   const createQueryId = useCallback(() => {
