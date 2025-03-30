@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import { useProductUpgrades } from './useProductUpgrades'
+import useProductUpgrades from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades'
 
 export const index = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
