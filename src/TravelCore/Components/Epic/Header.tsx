@@ -1,15 +1,14 @@
-import {Button} from '@/components/ui/button'
-import {Globe2, Headset} from 'lucide-react'
-import {useTranslation} from 'react-i18next'
-import {Link} from '../Raw/Link'
-import {DropdownHeader} from './DropdownHeader'
-import {MenuSheet} from './MenuSheet'
-import {useEffect} from "react";
+import { Button } from '@/components/ui/button'
+import { Globe2, Headset } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { Link } from '../Raw/Link'
+import { DropdownHeader } from './DropdownHeader'
+import { MenuSheet } from './MenuSheet'
+import { useEffect } from 'react'
 
 export const Header = () => {
   const { t, i18n } = useTranslation(['header'])
 
-  console.log("idioma actual", i18n.language)
   useEffect(() => {
     if (i18n.language === 'es') {
       document.getElementById('es-button')?.classList.add('bg-red-500')

@@ -313,8 +313,6 @@ const useHomeState = () => {
       }
 
       const resp = await HandleGetOrder(payloadCompleto as dataOrder)
-      console.log('Response from HandleGetOrder:', resp)
-
       if (resp && Number(resp) > 0) {
         setTimeout(() => {
           navigate('/quote/travel')

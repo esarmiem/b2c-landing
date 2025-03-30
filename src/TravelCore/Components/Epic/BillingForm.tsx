@@ -66,7 +66,6 @@ export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data,
       setCitiesByCountry(filtered)
       filtered.length > 0 ? setIsCities(false) : setIsCities(true)
     } else {
-      // Si no hay país seleccionado, inicializar con array vacío
       setCitiesByCountry([])
     }
   }, [data.billingCountry, activeCities])

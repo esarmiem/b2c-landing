@@ -45,7 +45,6 @@ export default function InvoicePage() {
 
   const handleChangeReuseInfo = (index: number) => {
     const travelers: PaxForm[] = data?.travelersData || []
-    console.log('selectedTraveler: ', travelers[index])
     if (index >= 0 && index < travelers.length) {
       const selectedTraveler = travelers[index]
       const newBillingData = {

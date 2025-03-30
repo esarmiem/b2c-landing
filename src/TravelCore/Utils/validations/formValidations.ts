@@ -70,9 +70,7 @@ const getDaysDifference = (startDateStrOrRange: string, endDateStr?: string): nu
   let endDay: number
   let endMonth: number
   let endYear: number
-  console.log('entrando al validador de fechas')
-  console.log('startDateStrOrRange', startDateStrOrRange)
-  console.log('fecha final ', endDateStr)
+
   if (startDateStrOrRange.includes(' - ') && !endDateStr) {
     const [startDatePart, endDatePart] = startDateStrOrRange.split(' - ')
     ;[startDay, startMonth, startYear] = startDatePart.split('/').map(Number)
@@ -85,7 +83,6 @@ const getDaysDifference = (startDateStrOrRange: string, endDateStr?: string): nu
   const startDate = new Date(startYear, startMonth - 1, startDay)
   const endDate = new Date(endYear, endMonth - 1, endDay)
   const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
-  console.log('diffTime', diffTime)
 
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 }
