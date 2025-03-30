@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
 import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades.ts'
+import { useProductUpgrades } from '@/TravelFeatures/TripQuote/stateHelper/useProductUpgrades'
 
 export const useModalUpgrades = (isOpen: boolean, plan: Plan) => {
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
   const numberTravellers = data?.payloadOrder?.cantidadPax || 1
+
   const payloadOrder = data?.payloadOrder || {}
 
   const [currentTraveler, setCurrentTraveler] = useState(1)
