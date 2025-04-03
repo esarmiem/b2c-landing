@@ -130,7 +130,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://drive.google.com/file/d/1oKMS44nDpyFyrZex0wm4K-dVgBffdd-i/view?usp=drive_link"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
@@ -140,7 +140,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://drive.google.com/file/d/1oKMS44nDpyFyrZex0wm4K-dVgBffdd-i/view?usp=drive_link"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
@@ -150,22 +150,12 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="javascript:void(0)"
+                  href="https://drive.google.com/file/d/1Rup3OXde4VZtEUgBzdBdw6_yFPz6q8fc/view?usp=drive_link"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors duration-200"
                 >
                   {t("label-link-cookies")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="javascript:void(0)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors duration-200"
-                >
-                  {t("label-link-conditions")}
                 </Link>
               </li>
             </ul>
