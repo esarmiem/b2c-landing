@@ -25,7 +25,7 @@ const TripQuotePage = () => {
 
   const validationRules = {
     travelDate: { isDateRange: true, minDateRange: 3 },
-    travelers: { requiredAge: true, minAge: true }
+    travelers: { requiredAge: true }
   }
 
   const { errors, handleChangeValidate, validateFormData } = useUtilsValidations(validationRules)

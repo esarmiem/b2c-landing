@@ -13,7 +13,7 @@ import Layout from '../Styles/Layout'
 
 const HomePage = lazy(() => import('../../TravelFeatures/Home/pages/homePage.tsx'))
 const TripQuotePage = lazy(() => import('../../TravelFeatures/TripQuote/pages/TripQuotePage.tsx'))
-const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'))
+// const CommsQuotePage = lazy(() => import('../../TravelFeatures/CommsQuote/pages/commsQuotePage.tsx'))
 const InvoicePage = lazy(() => import('../../TravelFeatures/Invoice/pages/invoicePage.tsx'))
 const BillingResultPage = lazy(() => import('../../TravelFeatures/Invoice/pages/billingResultPage.tsx'))
 const TravelerPage = lazy(() => import('../../TravelFeatures/Traveler/pages/TravelerPage.tsx'))
@@ -42,11 +42,11 @@ export default function Router(): ReactElement | null {
         {
           path: 'travel',
           element: <TripQuotePage />
-        },
-        {
-          path: 'comms',
-          element: <CommsQuotePage />
         }
+        // {
+        //   path: 'comms',
+        //   element: <CommsQuotePage />
+        // }
       ]
     },
     {
