@@ -2,16 +2,20 @@ import { useState, useEffect } from 'react'
 import { getProductUpdates } from '@/TravelCore/Services/Apis/Order'
 import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
 import type { Upgrade } from '@/TravelCore/Utils/interfaces/Order'
-import i18n from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 const useManagementUpgrades = (planId: number, isOpen: boolean) => {
+  const { i18n } = useTranslation()
   const [productUpgrades, setProductUpgrades] = useState<Upgrade[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const [trm, setTrm] = useState(0)
   const { fetchTRM } = useTRMToday()
 
-  const currentLanguage = i18n?.language === 'es' ? 'spa' : i18n?.language === 'en' ? 'eng' : ''
+  const spanish = i18n.language.startsWith('es')
+  const english = i18n.language.startsWith('en')
+
+  const currentLanguage = spanish ? 'spa' : english ? 'eng' : ''
 
   useEffect(() => {
     if (!isOpen) return

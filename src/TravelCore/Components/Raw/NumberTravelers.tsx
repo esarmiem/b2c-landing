@@ -1,10 +1,10 @@
-import { PopoverContent } from '@/components/ui/popover.tsx'
-import { Button } from '@/components/ui/button.tsx'
+import { PopoverContent } from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import { Separator } from '@/components/ui/separator.tsx'
-import { Input } from '@/components/ui/input.tsx'
+import { Separator } from '@/components/ui/separator'
+import { Input } from '@/components/ui/input'
 import { useEffect, useMemo, useState } from 'react'
-import useData from '@/TravelCore/Hooks/useData.ts'
+import useData from '@/TravelCore/Hooks/useData'
 import { useTranslation } from 'react-i18next'
 
 interface TravelerAge {
@@ -23,22 +23,20 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
   const payloadOrder = data?.payloadOrder
   const [travelers, setTravelers] = useState(payloadOrder?.cantidadPax || 1)
 
-  // Age Management
   const initialAges = useMemo(() => {
     if (payloadOrder?.edades) {
       return payloadOrder.edades.split(',').map((age, index) => ({
         id: index + 1,
-        age: age.trim() || '0'
+        age: age.trim() || ''
       }))
     }
-    return [{ id: 1, age: '0' }]
+    return [{ id: 1, age: '' }]
   }, [payloadOrder?.edades])
   const [ages, setAges] = useState<TravelerAge[]>(initialAges)
-  const formattedAges = ages.map(age => age.age).join(',')
+  const formattedAges = ages.map(age => age.age || '0').join(',')
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (payloadOrder?.edades || ages.some(age => age.age !== '' && age.age !== '0')) {
+    if (payloadOrder?.edades || ages.some(age => age.age !== '')) {
       onChange?.(formattedAges)
     }
 
@@ -54,7 +52,6 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
     }
   }, [travelers, ages, formattedAges, payloadOrder?.edades])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (payloadOrder?.cantidadPax && !travelers) {
       setTravelers(payloadOrder.cantidadPax)
@@ -64,7 +61,7 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
   const handleAddTraveler = () => {
     if (travelers < 9) {
       setTravelers(travelers + 1)
-      setAges([...ages, { id: ages.length + 1, age: '0' }])
+      setAges([...ages, { id: ages.length + 1, age: '' }])
     }
   }
 
@@ -83,6 +80,10 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
 
   const handleAgeChange = (id: number, value: string) => {
     setAges(ages.map(age => (age.id === id ? { ...age, age: value } : age)))
+  }
+
+  const handleFocus = (id: number) => {
+    setAges(ages.map(age => (age.id === id && age.age === '0' ? { ...age, age: '' } : age)))
   }
 
   return (
@@ -120,7 +121,9 @@ export function NumberTravelers({ onChange, setIsOpen }: NumberTravelersProps) {
                     <Input
                       type="text"
                       value={traveler.age}
+                      placeholder="0"
                       onChange={e => handleAgeChange(traveler.id, e.target.value)}
+                      onFocus={() => handleFocus(traveler.id)}
                       onKeyPress={e => {
                         if (!/^[0-9]$/.test(e.key)) {
                           e.preventDefault()

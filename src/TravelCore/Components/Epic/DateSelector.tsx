@@ -48,6 +48,7 @@ export function DateSelector({ activeTooltip, setActiveTooltip, t, errors, onCha
 
       setData(prevData => ({
         ...prevData,
+        responseOrder: undefined,
         payloadOrder: {
           ...prevData?.payloadOrder,
           salida: date.from ? format(date.from, 'dd/MM/yyyy') : '',

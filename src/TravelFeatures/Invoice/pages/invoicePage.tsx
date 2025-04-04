@@ -45,6 +45,7 @@ export default function InvoicePage() {
 
   const handleChangeReuseInfo = (index: number) => {
     const travelers: PaxForm[] = data?.travelersData || []
+
     if (index >= 0 && index < travelers.length) {
       const selectedTraveler = travelers[index]
       const newBillingData = {
@@ -143,7 +144,7 @@ export default function InvoicePage() {
   }
 
   const handleSendBilling = async () => {
-    setData?.((prevData: any) => ({
+    setData?.(prevData => ({
       ...prevData,
       billingData: billingData
     }))
@@ -190,7 +191,7 @@ export default function InvoicePage() {
             console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
             if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
               const transaction = respPayment?.data?.data?.id_session
-              setData?.((prevData: any) => ({
+              setData?.(prevData => ({
                 ...prevData,
                 epaycoTx: transaction
               }))

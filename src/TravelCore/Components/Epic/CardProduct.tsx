@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ModalProductDetails from './ModalProductDetails'
 import ModalUpgrades from './ModalUpgrades'
+import { index } from '@/TravelFeatures/TripQuote/stateHelper/index.ts'
 
 interface CardProductProps {
   plan: Plan
@@ -20,14 +21,29 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
   const { i18n } = useTranslation()
   const { setData } = useData() || {}
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const {
+    isLoading,
+    productUpgrades,
+    hasUpgrades,
+    numberTravellers,
+    currentTraveler,
+    setCurrentTraveler,
+    currentTravellerData,
+    allTravellers,
+    toggleUpgrade,
+    totalTravelersPerPlan,
+    totalTravelerUpgrades,
+    totalTravelerPlanWithUpgrades,
+    totalAllTravelers
+  } = index(isModalOpen, plan)
 
-  const rawPrice = i18n.language === 'es' ? plan.ValorPesos : plan.Valor
-  const price = i18n.language === 'es' ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
+  const rawPrice = i18n.language.startsWith('es') ? plan.ValorPesos : plan.Valor
+  const price = i18n.language.startsWith('es') ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
   const recommended = plan.DescripcionDescuentosDolares.porcentaje !== '0'
 
   const originalPrice = (() => {
     if (!recommended) return ''
-    return i18n.language === 'es'
+    return i18n.language.startsWith('es')
       ? formatCurrency(plan.DescripcionDescuentosPesos.valorTotal.toString(), 'COP')
       : formatCurrency(plan.DescripcionDescuentosDolares.valorTotal.toString(), 'USD')
   })()
@@ -82,11 +98,11 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
               <p className={` ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>{plan.nombre}</p>
               <p className="font-bold">{t('label-total-price')}</p>
               <p className={`mt-1 text-4xl font-bold ${recommended ? 'text-neutral-100' : 'text-red-600'}`}>
-                {price} <span className="text-lg">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                {price} <span className="text-lg">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
               </p>
               {recommended && (
                 <p className="line-through font-semibold text-lg text-black">
-                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                  {originalPrice} <span className="text-sm">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
                 </p>
               )}
             </div>
@@ -137,11 +153,11 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
               </p>
               <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
-                {price} <span className="text-xs">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                {price} <span className="text-xs">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
               </h3>
               {recommended && (
                 <span className={`${recommended ? 'text-black' : 'text-neutral-400'} font-semibold line-through text-lg`}>
-                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                  {originalPrice} <span className="text-sm">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
                 </span>
               )}
             </div>
@@ -179,7 +195,25 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
           </section>
         </div>
       )}
-      {isModalOpen && <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} plan={plan} />}
+      {isModalOpen && (
+        <ModalUpgrades
+          isLoading={isLoading}
+          productUpgrades={productUpgrades}
+          hasUpgrades={hasUpgrades}
+          numberTravellers={numberTravellers}
+          currentTraveler={currentTraveler}
+          setCurrentTraveler={setCurrentTraveler}
+          currentTravellerData={currentTravellerData}
+          allTravellers={allTravellers}
+          toggleUpgrade={toggleUpgrade}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          totalTravelersPerPlan={totalTravelersPerPlan}
+          totalTravelerUpgrades={totalTravelerUpgrades}
+          totalTravelerPlanWithUpgrades={totalTravelerPlanWithUpgrades}
+          totalAllTravelers={totalAllTravelers}
+        />
+      )}
       {isDetailsModalOpen && <ModalProductDetails isOpen={isDetailsModalOpen} onClose={closeDetailsModal} product={productDetails} />}
     </>
   )

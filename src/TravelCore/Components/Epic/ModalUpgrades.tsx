@@ -2,33 +2,46 @@ import Loader from '@/TravelCore/Components/Raw/Loader'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { Plan, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
-import { index } from '@/TravelFeatures/TripQuote/stateHelper'
+import type { TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 
 interface ModalUpgradesProps {
   isOpen: boolean
   onClose: () => void
-  plan: Plan
+  isLoading: boolean
+  productUpgrades: Upgrade[]
+  hasUpgrades: boolean
+  numberTravellers: number
+  currentTraveler: number
+  setCurrentTraveler: (traveler: number) => void
+  currentTravellerData: TravellerQuotation | undefined
+  allTravellers: TravellerQuotation[] | undefined
+  toggleUpgrade: (id_raider: string, name_raider: string) => void
+  totalTravelersPerPlan: string
+  totalTravelerUpgrades: string
+  totalTravelerPlanWithUpgrades: string
+  totalAllTravelers: string
 }
 
-const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
+const ModalUpgrades = ({
+  isOpen,
+  onClose,
+  isLoading,
+  productUpgrades,
+  hasUpgrades,
+  numberTravellers,
+  currentTraveler,
+  setCurrentTraveler,
+  currentTravellerData,
+  allTravellers,
+  toggleUpgrade,
+  totalTravelersPerPlan,
+  totalTravelerUpgrades,
+  totalTravelerPlanWithUpgrades,
+  totalAllTravelers
+}: ModalUpgradesProps) => {
   const { t } = useTranslation(['products'])
-  const {
-    isLoading,
-    productUpgrades,
-    hasUpgrades,
-    numberTravellers,
-    currentTraveler,
-    setCurrentTraveler,
-    currentTravellerData,
-    allTravellers,
-    toggleUpgrade,
-    totalTravelersPerPlan,
-    totalTravelerUpgrades,
-    totalTravelerPlanWithUpgrades,
-    totalAllTravelers,
-    i18n
-  } = index(isOpen, plan)
+  const { i18n } = useTranslation()
+  const spanish = i18n.language.startsWith('es')
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -114,28 +127,28 @@ const ModalUpgrades = ({ isOpen, onClose, plan }: ModalUpgradesProps) => {
             <p className="text-sm font-medium">{t('label-product-value-per-traveler')}</p>
             <p className="font-bold text-red-950">
               {totalTravelersPerPlan}
-              {i18n.language === 'es' ? 'COP' : 'USD'}
+              {spanish ? 'COP' : 'USD'}
             </p>
           </div>
           <div className="flex justify-between">
             <p className="text-sm font-bold text-red-500">{t('label-upgrades')}</p>
             <p className="font-bold text-red-500">
               {totalTravelerUpgrades}
-              {i18n.language === 'es' ? 'COP' : 'USD'}
+              {spanish ? 'COP' : 'USD'}
             </p>
           </div>
           <div className={`flex justify-between ${numberTravellers === 1 ? 'hidden' : ''}`}>
             <p className="text-sm font-medium">{t('label-product-value-per-traveler-upgrades')}</p>
             <p className="font-bold text-red-950">
               {totalTravelerPlanWithUpgrades}
-              {i18n.language === 'es' ? 'COP' : 'USD'}
+              {spanish ? 'COP' : 'USD'}
             </p>
           </div>
           <div className="flex justify-between text-lg font-bold border-t pt-2">
             <p>{t('label-total')}</p>
             <p className="text-red-950">
               {totalAllTravelers}
-              {i18n.language === 'es' ? 'COP' : 'USD'}
+              {spanish ? 'COP' : 'USD'}
             </p>
           </div>
         </div>

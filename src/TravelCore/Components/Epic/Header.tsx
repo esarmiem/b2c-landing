@@ -4,18 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '../Raw/Link'
 import { DropdownHeader } from './DropdownHeader'
 import { MenuSheet } from './MenuSheet'
-import { useEffect } from 'react'
 
 export const Header = () => {
   const { t, i18n } = useTranslation(['header'])
-
-  useEffect(() => {
-    if (i18n.language === 'es') {
-      document.getElementById('es-button')?.classList.add('bg-red-500')
-    } else if (i18n.language === 'en') {
-      document.getElementById('en-button')?.classList.add('bg-red-500')
-    }
-  }, [i18n.language])
+  const spanish = i18n.language.startsWith('es')
+  const english = i18n.language.startsWith('en')
 
   return (
     <header className="sticky top-0 w-full bg-white z-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
@@ -65,7 +58,7 @@ export const Header = () => {
               variant="travelkit"
               id="es-button"
               size="sm"
-              className={`${i18n.language === 'es' ? 'bg-red-500' : ''} text-white`}
+              className={`${spanish ? 'bg-red-500' : ''} text-white`}
               onClick={() => i18n.changeLanguage('es')}
             >
               <Globe2 className="mr-2 h-4 w-4" />
@@ -75,7 +68,7 @@ export const Header = () => {
               variant="travelkit"
               id="en-button"
               size="sm"
-              className={`${i18n.language === 'en' ? 'bg-red-500' : ''} text-white`}
+              className={`${english ? 'bg-red-500' : ''} text-white`}
               onClick={() => i18n.changeLanguage('en')}
             >
               <Globe2 className="mr-2 h-4 w-4" />
