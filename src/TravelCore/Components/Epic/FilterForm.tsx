@@ -170,6 +170,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
     if (isEditing) {
       if (hasChanges(payloadOrder as dataOrder, initialPayloadRef.current)) {
         setIsLoading(true)
+        if (setData) setData(prevData => ({ ...prevData, responseOrder: undefined }))
         await handleGetQuote()
         setIsLoading(false)
       } else {

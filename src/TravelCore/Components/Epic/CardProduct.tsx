@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ModalProductDetails from './ModalProductDetails'
 import ModalUpgrades from './ModalUpgrades'
+import { index } from '@/TravelFeatures/TripQuote/stateHelper/index.ts'
 
 interface CardProductProps {
   plan: Plan
@@ -20,6 +21,21 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
   const { i18n } = useTranslation()
   const { setData } = useData() || {}
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const {
+    isLoading,
+    productUpgrades,
+    hasUpgrades,
+    numberTravellers,
+    currentTraveler,
+    setCurrentTraveler,
+    currentTravellerData,
+    allTravellers,
+    toggleUpgrade,
+    totalTravelersPerPlan,
+    totalTravelerUpgrades,
+    totalTravelerPlanWithUpgrades,
+    totalAllTravelers
+  } = index(isModalOpen, plan)
 
   const rawPrice = i18n.language === 'es' ? plan.ValorPesos : plan.Valor
   const price = i18n.language === 'es' ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
@@ -179,7 +195,25 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
           </section>
         </div>
       )}
-      {isModalOpen && <ModalUpgrades isOpen={isModalOpen} onClose={closeModal} plan={plan} />}
+      {isModalOpen && (
+        <ModalUpgrades
+          isLoading={isLoading}
+          productUpgrades={productUpgrades}
+          hasUpgrades={hasUpgrades}
+          numberTravellers={numberTravellers}
+          currentTraveler={currentTraveler}
+          setCurrentTraveler={setCurrentTraveler}
+          currentTravellerData={currentTravellerData}
+          allTravellers={allTravellers}
+          toggleUpgrade={toggleUpgrade}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          totalTravelersPerPlan={totalTravelersPerPlan}
+          totalTravelerUpgrades={totalTravelerUpgrades}
+          totalTravelerPlanWithUpgrades={totalTravelerPlanWithUpgrades}
+          totalAllTravelers={totalAllTravelers}
+        />
+      )}
       {isDetailsModalOpen && <ModalProductDetails isOpen={isDetailsModalOpen} onClose={closeDetailsModal} product={productDetails} />}
     </>
   )

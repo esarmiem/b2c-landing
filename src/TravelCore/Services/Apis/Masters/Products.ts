@@ -1,7 +1,7 @@
-import { axiosHttp } from "@/TravelCore/Utils/http.ts";
-import { SERVICE_PRODUCTS } from "@/TravelCore/Utils/constants.ts";
-import { GET_TOKEN } from "@/TravelCore/Utils/storage.ts";
-import { ProductsData } from "@/TravelCore/Utils/interfaces/Products.ts";
+import { axiosHttp } from '@/TravelCore/Utils/http.ts'
+import { SERVICE_PRODUCTS } from '@/TravelCore/Utils/constants.ts'
+import { GET_TOKEN } from '@/TravelCore/Utils/storage.ts'
+import type { ProductsData } from '@/TravelCore/Utils/interfaces/Products.ts'
 
 /**
  * ApiResponse
@@ -15,8 +15,8 @@ import { ProductsData } from "@/TravelCore/Utils/interfaces/Products.ts";
  * It includes data of type ProductsData and an error message, if any.
  */
 interface ApiResponse {
-  data: ProductsData;
-  error: string | null;
+  data: ProductsData
+  error: string | null
 }
 
 /**
@@ -31,7 +31,7 @@ interface ApiResponse {
  * It contains the `isActive` property to filter results.
  */
 interface FilterData {
-  isActive: boolean;
+  isActive: boolean
 }
 
 /**
@@ -65,8 +65,8 @@ export const PRODUCTS_API = {
   getProducts: (data: FilterData): Promise<ApiResponse> => {
     return axiosHttp({
       path: `${SERVICE_PRODUCTS}?isActive=${data.isActive}`,
-      method: "GET",
-      session: { token: GET_TOKEN },
-    });
-  },
-};
+      method: 'GET',
+      session: { token: GET_TOKEN }
+    })
+  }
+}

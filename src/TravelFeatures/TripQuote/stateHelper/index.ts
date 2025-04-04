@@ -1,30 +1,92 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
+import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
 import useManagementUpgrades from './useManagementUpgrades'
 
-export const index = (isOpen: boolean, plan: Plan) => {
+// Interfaces adicionales que no están en las proporcionadas
+interface QuotationManagerResult {
+  isLoading: boolean
+  productUpgrades: Upgrade[]
+  hasUpgrades: boolean
+  numberTravellers: number
+  currentTraveler: number
+  setCurrentTraveler: (traveler: number) => void
+  currentTravellerData: TravellerQuotation | undefined
+  allTravellers: TravellerQuotation[] | undefined
+  toggleUpgrade: (id_raider: string, name_raider: string) => void
+  totalTravelersPerPlan: string
+  totalTravelerUpgrades: string
+  totalTravelerPlanWithUpgrades: string
+  totalAllTravelers: string
+}
+
+export const index = (isOpen: boolean, plan: Plan): QuotationManagerResult => {
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
-  const numberTravellers = data?.payloadOrder?.cantidadPax || 1
-
   const payloadOrder = data?.payloadOrder || {}
+  const numberTravellers = payloadOrder?.cantidadPax || 1
 
-  const [currentTraveler, setCurrentTraveler] = useState(1)
+  const [currentTraveler, setCurrentTraveler] = useState<number>(1)
   const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(plan.IdPlan, isOpen)
 
   // Crear un identificador único para la consulta actual
-  const createQueryId = useCallback(() => {
+  const currentQueryId = useMemo(() => {
     const { salida, llegada, pais, destino, cantidadPax } = payloadOrder
     return `${plan.IdPlan}-${cantidadPax || 1}-${salida || ''}-${llegada || ''}-${pais || ''}-${destino || ''}`
   }, [plan.IdPlan, payloadOrder])
 
+  // Función para crear la cotización inicial
+  const createInitialQuotation = useCallback((): Quotation => {
+    const planValuePesos = plan.ValorPaxPesos || '0'
+    const planValueDollar = plan.ValorPax || '0'
+
+    const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
+      id: index + 1,
+      totalPlanTravelerPesos: planValuePesos,
+      totalPlanTravelerDolar: planValueDollar,
+      totalPlanWhitUpgradesPerTravelerPeso: planValuePesos,
+      totalPlanWhitUpgradesPerTravelerDolar: planValueDollar,
+      valorUpgradesPesos: '0',
+      valorUpgradesDolar: '0',
+      upgrades: []
+    }))
+
+    // Usar directamente las propiedades de plan para los descuentos
+    const initialDescriptionDescuentosDollars: DescriptionDescuentos | undefined = plan.DescripcionDescuentosDolares
+      ? { ...plan.DescripcionDescuentosDolares }
+      : undefined
+
+    const initialDescriptionDescuentosPesos: DescriptionDescuentos | undefined = plan.DescripcionDescuentosPesos
+      ? { ...plan.DescripcionDescuentosPesos }
+      : undefined
+
+    return {
+      planId: plan.IdPlan,
+      queryId: currentQueryId,
+      totalAllTravelersPesos: plan.ValorPesos || '0',
+      totalAllTravelersDolar: plan.Valor || '0',
+      travellers: initialTravellers,
+      descriptionDescuentosDolares: initialDescriptionDescuentosDollars,
+      descriptionDescuentosPesos: initialDescriptionDescuentosPesos
+    }
+  }, [
+    plan.IdPlan,
+    plan.ValorPaxPesos,
+    plan.ValorPax,
+    plan.ValorPesos,
+    plan.Valor,
+    plan.DescripcionDescuentosDolares,
+    plan.DescripcionDescuentosPesos,
+    numberTravellers,
+    currentQueryId
+  ])
+
   // Inicialización de la cotización - solo cuando es necesario
   useEffect(() => {
-    const currentQueryId = createQueryId()
+    if (!isOpen || !setData) return
 
     const shouldInitialize =
       !travelerQuotation ||
@@ -32,66 +94,36 @@ export const index = (isOpen: boolean, plan: Plan) => {
       travelerQuotation.travellers.length !== numberTravellers ||
       travelerQuotation.queryId !== currentQueryId
 
-    if (shouldInitialize && setData) {
-      const initialTravellers: TravellerQuotation[] = Array.from({ length: numberTravellers }, (_, index) => ({
-        id: index + 1,
-        totalPlanTravelerPesos: plan.ValorPaxPesos || '0',
-        totalPlanTravelerDolar: plan.ValorPax || '0',
-        totalPlanWhitUpgradesPerTravelerPeso: plan.ValorPaxPesos || '0',
-        totalPlanWhitUpgradesPerTravelerDolar: plan.ValorPax || '0',
-        valorUpgradesPesos: '0',
-        valorUpgradesDolar: '0',
-        upgrades: []
-      }))
-
-      const initialDescriptionDescuentosDollars: DescriptionDescuentos | undefined = plan.DescripcionDescuentosDolares
-        ? {
-            porcentaje: plan.DescripcionDescuentosDolares.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosDolares.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosDolares.valorTotal
-          }
-        : undefined
-
-      const initialDescriptionDescuentosPesos: DescriptionDescuentos | undefined = plan.DescripcionDescuentosPesos
-        ? {
-            porcentaje: plan.DescripcionDescuentosPesos.porcentaje,
-            valorDescuento: plan.DescripcionDescuentosPesos.valorDescuento,
-            valorTotal: plan.DescripcionDescuentosPesos.valorTotal
-          }
-        : undefined
-
-      const initialQuotation: Quotation = {
-        planId: plan.IdPlan,
-        queryId: currentQueryId,
-        totalAllTravelersPesos: plan.ValorPesos || '0',
-        totalAllTravelersDolar: plan.Valor || '0',
-        travellers: initialTravellers,
-        descriptionDescuentosDolares: initialDescriptionDescuentosDollars,
-        descriptionDescuentosPesos: initialDescriptionDescuentosPesos
-      }
+    if (shouldInitialize) {
+      const initialQuotation = createInitialQuotation()
 
       setData(prevData => ({
         ...prevData,
         travelerQuotation: initialQuotation
       }))
     }
-  }, [
-    travelerQuotation,
-    numberTravellers,
-    plan.IdPlan,
-    plan.ValorPesos,
-    plan.Valor,
-    setData,
-    createQueryId,
-    payloadOrder.salida,
-    payloadOrder.llegada,
-    payloadOrder.pais,
-    payloadOrder.destino,
-    plan.ValorPaxPesos,
-    plan.ValorPax,
-    plan.DescripcionDescuentosDolares,
-    plan.DescripcionDescuentosPesos
-  ])
+  }, [isOpen, travelerQuotation, plan.IdPlan, numberTravellers, currentQueryId, setData, createInitialQuotation])
+
+  // Función para calcular costos de upgrades
+  const calculateUpgradeCosts = useCallback(
+    (upgrades: TravellerQuotation['upgrades']) => {
+      const upgradesCostPesos = upgrades.reduce((total, upgrade) => {
+        const foundUpgrade = productUpgrades?.find(u => u.id_raider === upgrade.id)
+        // Limpiar el valor de cost_raider para asegurar que sea un número
+        const costString = foundUpgrade?.cost_raider || '0'
+        const cost = Number.parseFloat(costString.replace(/[.,]/g, ''))
+        return total + cost
+      }, 0)
+
+      const upgradesCostDollars = TRM ? Number((upgradesCostPesos / TRM).toFixed(2)) : 0
+
+      return {
+        pesos: upgradesCostPesos,
+        dollars: upgradesCostDollars
+      }
+    },
+    [productUpgrades, TRM]
+  )
 
   const toggleUpgrade = useCallback(
     (id_raider: string, name_raider: string) => {
@@ -99,12 +131,14 @@ export const index = (isOpen: boolean, plan: Plan) => {
 
       const newTravellers = [...travelerQuotation.travellers]
       const travelerIndex = currentTraveler - 1
-      const upgrade = productUpgrades?.find((u: { id_raider: string; cost_raider?: string }) => u.id_raider === id_raider)
 
-      if (!upgrade) return
+      if (travelerIndex < 0 || travelerIndex >= newTravellers.length) return
 
-      const currentUpgrades = [...newTravellers[travelerIndex].upgrades]
-      const existingUpgradeIndex = currentUpgrades.findIndex((u: { id: string }) => u.id === id_raider)
+      const traveler = newTravellers[travelerIndex]
+      const currentUpgrades = [...traveler.upgrades]
+
+      // Agregar o quitar el upgrade
+      const existingUpgradeIndex = currentUpgrades.findIndex(u => u.id === id_raider)
 
       if (existingUpgradeIndex === -1) {
         currentUpgrades.push({ id: id_raider, name: name_raider })
@@ -112,80 +146,90 @@ export const index = (isOpen: boolean, plan: Plan) => {
         currentUpgrades.splice(existingUpgradeIndex, 1)
       }
 
-      // Corregir cálculos
-      const upgradesCost = currentUpgrades.reduce((total, upgrade) => {
-        const foundUpgrade = productUpgrades?.find((u: { id_raider: string }) => u.id_raider === upgrade.id)
-        const cost = foundUpgrade?.cost_raider.replace(/[.,]/g, '') || '0'
-        return total + Number.parseInt(cost, 10)
-      }, 0)
+      // Calcular costos
+      const upgradeCosts = calculateUpgradeCosts(currentUpgrades)
 
-      const upgradesCostInDollars = Number((upgradesCost / TRM).toFixed(2))
-      const totalPlanTravelerDolar = Number(plan.ValorPax || 0)
-      const totalPlanTravelerPesos = Number(plan.ValorPaxPesos || 0)
-      const totalPlanWhitUpgradesPerTravelerPeso = totalPlanTravelerPesos + upgradesCost
-      const totalPlanWhitUpgradesPerTravelerDolar = totalPlanTravelerDolar + upgradesCostInDollars
+      // Valores del plan base
+      const basePlanPesos = Number.parseFloat(traveler.totalPlanTravelerPesos)
+      const basePlanDollars = Number.parseFloat(traveler.totalPlanTravelerDolar)
 
+      // Calcular totales con upgrades
+      const totalWithUpgradesPesos = basePlanPesos + upgradeCosts.pesos
+      const totalWithUpgradesDollars = basePlanDollars + upgradeCosts.dollars
+
+      // Actualizar viajero actual
       newTravellers[travelerIndex] = {
-        ...newTravellers[travelerIndex],
+        ...traveler,
         upgrades: currentUpgrades,
-        valorUpgradesPesos: upgradesCost.toString(),
-        valorUpgradesDolar: upgradesCostInDollars.toString(),
-        totalPlanTravelerPesos: totalPlanTravelerPesos.toString(),
-        totalPlanTravelerDolar: totalPlanTravelerDolar.toString(),
-        totalPlanWhitUpgradesPerTravelerPeso: totalPlanWhitUpgradesPerTravelerPeso.toString(),
-        totalPlanWhitUpgradesPerTravelerDolar: totalPlanWhitUpgradesPerTravelerDolar.toString()
+        valorUpgradesPesos: upgradeCosts.pesos.toString(),
+        valorUpgradesDolar: upgradeCosts.dollars.toString(),
+        totalPlanWhitUpgradesPerTravelerPeso: totalWithUpgradesPesos.toString(),
+        totalPlanWhitUpgradesPerTravelerDolar: totalWithUpgradesDollars.toString()
       }
 
-      // Calcular totales
+      // Calcular totales generales
       const newTotalPesos = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerPeso), 0)
+        .reduce((sum, traveler) => sum + Number.parseFloat(traveler.totalPlanWhitUpgradesPerTravelerPeso), 0)
         .toString()
 
       const newTotalDolar = newTravellers
-        .reduce((sum, traveler) => sum + Number(traveler.totalPlanWhitUpgradesPerTravelerDolar), 0)
+        .reduce((sum, traveler) => sum + Number.parseFloat(traveler.totalPlanWhitUpgradesPerTravelerDolar), 0)
         .toString()
 
+      // Actualizar datos
       setData(prevData => ({
         ...prevData,
         travelerQuotation: {
-          planId: plan.IdPlan,
-          queryId: travelerQuotation.queryId,
+          ...travelerQuotation,
           totalAllTravelersPesos: newTotalPesos,
           totalAllTravelersDolar: newTotalDolar,
-          travellers: newTravellers,
-          descriptionDescuentosDolares: travelerQuotation.descriptionDescuentosDolares,
-          descriptionDescuentosPesos: travelerQuotation.descriptionDescuentosPesos
+          travellers: newTravellers
         }
       }))
     },
-    [travelerQuotation, setData, currentTraveler, productUpgrades, TRM, plan]
+    [travelerQuotation, setData, currentTraveler, calculateUpgradeCosts]
   )
 
-  const currentTravellerData = travelerQuotation?.travellers[currentTraveler - 1]
+  const currentTravellerData = useMemo(() => {
+    if (!travelerQuotation?.travellers || travelerQuotation.travellers.length === 0) return undefined
+    const index = currentTraveler - 1
+    return index >= 0 && index < travelerQuotation.travellers.length ? travelerQuotation.travellers[index] : undefined
+  }, [travelerQuotation, currentTraveler])
+
   const allTravellers = travelerQuotation?.travellers
+  const hasUpgrades = Boolean(productUpgrades?.length)
 
-  const hasUpgrades = productUpgrades && productUpgrades.length > 0
+  // Función para formatear valores según el idioma
+  const formatValue = useCallback((value: string | undefined, currency: 'COP' | 'USD'): string => {
+    return formatCurrency(value || '0', currency)
+  }, [])
 
-  // Formateo de valores monetarios
-  const totalTravelersPerPlan =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.totalPlanTravelerPesos || '0', 'COP')
-      : formatCurrency(currentTravellerData?.totalPlanTravelerDolar || '0', 'USD')
+  // Valores formateados para la interfaz
+  const formattedValues = useMemo(() => {
+    const isSpanish = i18n.language.startsWith('es')
+    const currency = isSpanish ? 'COP' : 'USD'
 
-  const totalTravelerUpgrades =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.valorUpgradesPesos || '0', 'COP')
-      : formatCurrency(currentTravellerData?.valorUpgradesDolar || '0', 'USD')
-
-  const totalTravelerPlanWithUpgrades =
-    i18n.language === 'es'
-      ? formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerPeso || '0', 'COP')
-      : formatCurrency(currentTravellerData?.totalPlanWhitUpgradesPerTravelerDolar || '0', 'USD')
-
-  const totalAllTravelers =
-    i18n.language === 'es'
-      ? formatCurrency(travelerQuotation?.totalAllTravelersPesos || '0', 'COP')
-      : formatCurrency(travelerQuotation?.totalAllTravelersDolar || '0', 'USD')
+    return {
+      totalTravelersPerPlan: formatValue(
+        isSpanish ? currentTravellerData?.totalPlanTravelerPesos : currentTravellerData?.totalPlanTravelerDolar,
+        currency
+      ),
+      totalTravelerUpgrades: formatValue(
+        isSpanish ? currentTravellerData?.valorUpgradesPesos : currentTravellerData?.valorUpgradesDolar,
+        currency
+      ),
+      totalTravelerPlanWithUpgrades: formatValue(
+        isSpanish
+          ? currentTravellerData?.totalPlanWhitUpgradesPerTravelerPeso
+          : currentTravellerData?.totalPlanWhitUpgradesPerTravelerDolar,
+        currency
+      ),
+      totalAllTravelers: formatValue(
+        isSpanish ? travelerQuotation?.totalAllTravelersPesos : travelerQuotation?.totalAllTravelersDolar,
+        currency
+      )
+    }
+  }, [currentTravellerData, travelerQuotation, i18n.language, formatValue])
 
   return {
     isLoading,
@@ -197,10 +241,9 @@ export const index = (isOpen: boolean, plan: Plan) => {
     currentTravellerData,
     allTravellers,
     toggleUpgrade,
-    totalTravelersPerPlan,
-    totalTravelerUpgrades,
-    totalTravelerPlanWithUpgrades,
-    totalAllTravelers,
-    i18n
+    totalTravelersPerPlan: formattedValues.totalTravelersPerPlan,
+    totalTravelerUpgrades: formattedValues.totalTravelerUpgrades,
+    totalTravelerPlanWithUpgrades: formattedValues.totalTravelerPlanWithUpgrades,
+    totalAllTravelers: formattedValues.totalAllTravelers
   }
 }

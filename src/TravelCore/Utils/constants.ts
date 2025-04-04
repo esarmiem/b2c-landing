@@ -78,6 +78,7 @@ export const SERVICE_DOCUMENT_TYPE: string = import.meta.env.VITE_REACT_APP_SERV
  * Defines the endpoint for the products service, obtained from the environment variable VITE_REACT_APP_SERVICE_PRODUCTS.
  */
 export const SERVICE_PRODUCTS: string = import.meta.env.VITE_REACT_APP_SERVICE_PRODUCTS || ''
+
 /**
  * SERVICE_PARAMETERS
  *
