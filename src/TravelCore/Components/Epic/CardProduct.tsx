@@ -37,13 +37,13 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
     totalAllTravelers
   } = index(isModalOpen, plan)
 
-  const rawPrice = i18n.language === 'es' ? plan.ValorPesos : plan.Valor
-  const price = i18n.language === 'es' ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
+  const rawPrice = i18n.language.startsWith('es') ? plan.ValorPesos : plan.Valor
+  const price = i18n.language.startsWith('es') ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
   const recommended = plan.DescripcionDescuentosDolares.porcentaje !== '0'
 
   const originalPrice = (() => {
     if (!recommended) return ''
-    return i18n.language === 'es'
+    return i18n.language.startsWith('es')
       ? formatCurrency(plan.DescripcionDescuentosPesos.valorTotal.toString(), 'COP')
       : formatCurrency(plan.DescripcionDescuentosDolares.valorTotal.toString(), 'USD')
   })()
@@ -98,11 +98,11 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
               <p className={` ${recommended ? 'text-red-100' : 'text-neutral-800'}`}>{plan.nombre}</p>
               <p className="font-bold">{t('label-total-price')}</p>
               <p className={`mt-1 text-4xl font-bold ${recommended ? 'text-neutral-100' : 'text-red-600'}`}>
-                {price} <span className="text-lg">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                {price} <span className="text-lg">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
               </p>
               {recommended && (
                 <p className="line-through font-semibold text-lg text-black">
-                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                  {originalPrice} <span className="text-sm">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
                 </p>
               )}
             </div>
@@ -153,11 +153,11 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
               </p>
               <p className="font-bold">Precio Total</p>
               <h3 className={`text-4xl font-bold ${recommended ? 'text-white' : 'text-red-600'}`}>
-                {price} <span className="text-xs">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                {price} <span className="text-xs">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
               </h3>
               {recommended && (
                 <span className={`${recommended ? 'text-black' : 'text-neutral-400'} font-semibold line-through text-lg`}>
-                  {originalPrice} <span className="text-sm">{i18n.language === 'es' ? 'COP' : 'USD'}</span>
+                  {originalPrice} <span className="text-sm">{i18n.language.startsWith('es') ? 'COP' : 'USD'}</span>
                 </span>
               )}
             </div>
