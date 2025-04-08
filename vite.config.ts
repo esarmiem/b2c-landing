@@ -37,7 +37,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: './useHomeState.html',
+        main: './index.html',
       },
     },
   },
