@@ -23,9 +23,10 @@ const useManagementUpgrades = (planId: number | undefined, isOpen: boolean) => {
     const loadData = async () => {
       setIsLoading(true)
       try {
-        if (trm === 0) {
-          const trmData = await fetchTRM()
-          setTrm(trmData)
+        let currentTrm = trm
+        if (currentTrm === 0) {
+          currentTrm = await fetchTRM()
+          setTrm(currentTrm)
         }
 
         if (!planId) {
@@ -48,7 +49,7 @@ const useManagementUpgrades = (planId: number | undefined, isOpen: boolean) => {
     }
 
     loadData()
-  }, [isOpen, planId, currentLanguage, trm])
+  }, [isOpen, planId, currentLanguage])
 
   return {
     productUpgrades,
