@@ -11,6 +11,7 @@ import { calculateAndCompareAge } from '@/TravelCore/Utils/dates.ts'
 import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2'
 import { TextField } from '@/TravelCore/Components/Epic/TextFieldComponent.tsx'
 import { SelectField } from '@/TravelCore/Components/Epic/SelectFieldComponent.tsx'
+import { SearchCountryComponent } from '@/TravelCore/Components/Epic/SearchCountryComponent'
 
 interface TravelFormProps {
   onChangeField?: (index: number, name: string, value: string) => void
@@ -193,24 +194,26 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
             />
           </div>
 
-          <SelectField
+          <SearchCountryComponent
             label={t('label-nationality')}
             name={`nationality${travelerId}`}
             value={dataTraveler?.nationality?.toString() || ''}
             placeholder={t('placeholder-select-nationality')}
-            options={countryOptions}
+            options={master?.countries?.data?.items?.filter(country => country.estaActivo) || []}
             errors={errors}
             onValueChange={createSelectHandler(`nationality${travelerId}`)}
+            type="country"
           />
 
-          <SelectField
+          <SearchCountryComponent
             label={t('label-residence-country')}
             name={`residenceCountry${travelerId}`}
             value={dataTraveler?.residenceCountry?.toString() || ''}
             placeholder={t('placeholder-select-residence-country')}
-            options={countryOptions}
+            options={master?.countries?.data?.items?.filter(country => country.estaActivo) || []}
             errors={errors}
             onValueChange={createSelectHandler(`residenceCountry${travelerId}`)}
+            type="country"
           />
 
           <PhoneNumberForm2

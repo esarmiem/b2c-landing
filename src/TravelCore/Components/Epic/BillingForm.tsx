@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import useMasters from '@/TravelCore/Hooks/useMasters'
 import { TextField } from '@/TravelCore/Components/Epic/TextFieldComponent.tsx'
 import { SelectField } from '@/TravelCore/Components/Epic/SelectFieldComponent.tsx'
+import { SearchCountryComponent } from '@/TravelCore/Components/Epic/SearchCountryComponent'
 import { CheckboxField } from '@/TravelCore/Components/Epic/CheckboxField.tsx'
 import { PhoneFieldWrapper } from '@/TravelCore/Components/Epic/PhoneFieldWrapper.tsx'
 import type { CitiesItems } from '@/TravelCore/Utils/interfaces/Cities.ts'
@@ -206,26 +207,27 @@ export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data,
         </div>
         <div className="grid gap-4">
           <div className="space-y-2">
-            <SelectField
+            <SearchCountryComponent
               label={t('billing-country')}
               name="billingCountry"
               value={data.billingCountry || ''}
               placeholder={t('billing-placeholder-country')}
-              options={countriesOptions}
+              options={master?.countries?.data?.items?.filter(country => country.estaActivo) || []}
               errors={errors}
               onValueChange={billingCountryHandler}
+              type="country"
             />
-          </div>
-          <div className="space-y-2">
-            <SelectField
+
+            <SearchCountryComponent
               label={t('billing-city')}
               name="billingCity"
               value={data.billingCity || ''}
               placeholder={t('billing-placeholder-city')}
-              options={citiesOptions}
+              options={citiesByCountry || []}
               errors={errors}
               onValueChange={billingCityHandler}
-              isCities={isCities}
+              type="city"
+              disabled={!data.billingCountry}
             />
           </div>
           <div className="space-y-2">
