@@ -11,7 +11,6 @@ import { PhoneFieldWrapper } from '@/TravelCore/Components/Epic/PhoneFieldWrappe
 import type { CitiesItems } from '@/TravelCore/Utils/interfaces/Cities.ts'
 import type { DocumentTypeItems } from '@/TravelCore/Utils/interfaces/Document.ts'
 import type { Billing, PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
-import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries.ts'
 
 interface BillingFormProps {
   onCheck?: (value: boolean) => void
@@ -26,16 +25,14 @@ interface BillingFormProps {
 export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data, onChange, errors, travelers }: BillingFormProps) => {
   const { t } = useTranslation(['invoice'])
   const master = useMasters()
-  const [isCities, setIsCities] = useState(false)
   const [usePassengerInfo, setUsePassengerInfo] = useState(false)
   const [citiesByCountry, setCitiesByCountry] = useState<CitiesItems[]>([])
   const [currentTraveler, setCurrentTraveler] = useState<number | null>(null)
 
   // Extraer y procesar datos maestros
-  const { documentTypeOptions, countriesOptions, activeCities } = useMemo(() => {
+  const { documentTypeOptions, activeCities } = useMemo(() => {
     const cities = (master?.cities?.data ?? []) as CitiesItems[]
     const documentType = (master?.documents?.data?.items ?? []) as DocumentTypeItems[]
-    const countries = (master?.countries?.data?.items ?? []) as CountriesItems[]
 
     const activeCities = cities
       .filter(city => city.estaActivo)
@@ -43,7 +40,6 @@ export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data,
       .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
 
     const activeDocumentType = documentType.filter(type => type.estaActivo)
-    const activeCountries = countries.filter(country => country.estaActivo)
 
     const documentTypeOptions = activeDocumentType.map(type => (
       <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
@@ -51,34 +47,27 @@ export const BillingForm = memo(({ onCheck, selectTraveler, onChangeField, data,
       </SelectItem>
     ))
 
-    const countriesOptions = activeCountries.map(country => (
-      <SelectItem key={country.idPais} value={country.idPais.toString()}>
-        {country.descripcion}
-      </SelectItem>
-    ))
-
-    return { documentTypeOptions, countriesOptions, activeCities }
-  }, [master?.cities?.data, master?.documents?.data?.items, master?.countries?.data?.items])
+    return { documentTypeOptions, activeCities }
+  }, [master?.cities?.data, master?.documents?.data?.items])
 
   // Efecto para filtrar ciudades cuando cambia el país seleccionado
   useEffect(() => {
     if (activeCities && data.billingCountry) {
       const filtered = activeCities.filter(city => city.idPais === Number.parseInt(data.billingCountry || '0'))
       setCitiesByCountry(filtered)
-      filtered.length > 0 ? setIsCities(false) : setIsCities(true)
     } else {
       setCitiesByCountry([])
     }
   }, [data.billingCountry, activeCities])
 
-  // Opciones de ciudades como useMemo separado
-  const citiesOptions = useMemo(() => {
-    return (citiesByCountry || []).map(city => (
-      <SelectItem key={city.idCiudad} value={city.idCiudad.toString()}>
-        {city.descripcion}
-      </SelectItem>
-    ))
-  }, [citiesByCountry])
+  // Eliminar este useMemo ya que no se usa
+  // const citiesOptions = useMemo(() => {
+  //   return (citiesByCountry || []).map(city => (
+  //     <SelectItem key={city.idCiudad} value={city.idCiudad.toString()}>
+  //       {city.descripcion}
+  //     </SelectItem>
+  //   ))
+  // }, [citiesByCountry])
 
   const handleInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
