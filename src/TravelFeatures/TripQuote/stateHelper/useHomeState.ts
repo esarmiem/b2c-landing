@@ -5,7 +5,6 @@ import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrad
 import useData from '@/TravelCore/Hooks/useData'
 import useManagementUpgrades from './useManagementUpgrades'
 
-// Interfaces adicionales que no están en las proporcionadas
 interface QuotationManagerResult {
   isLoading: boolean
   productUpgrades: Upgrade[]
@@ -22,15 +21,16 @@ interface QuotationManagerResult {
   totalAllTravelers: string
 }
 
-export const index = (isOpen: boolean, plan: Plan): QuotationManagerResult => {
+export const useHomeState = (isOpen: boolean, plan: Plan): QuotationManagerResult => {
   const { i18n } = useTranslation()
   const { data, setData } = useData() || {}
   const travelerQuotation = data?.travelerQuotation
   const payloadOrder = data?.payloadOrder || {}
   const numberTravellers = payloadOrder?.cantidadPax || 1
+  const planId = data?.selectedPlan
 
   const [currentTraveler, setCurrentTraveler] = useState<number>(1)
-  const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(plan.IdPlan, isOpen)
+  const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(planId, isOpen)
 
   // Crear un identificador único para la consulta actual
   const currentQueryId = useMemo(() => {

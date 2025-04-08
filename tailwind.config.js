@@ -2,7 +2,7 @@
 export default {
 	darkMode: ["class"],
 	content: [
-	  "./index.html",
+	  "./useHomeState.html",
 	  "./src/**/*.{js,ts,jsx,tsx}",
 	],
 	theme: {

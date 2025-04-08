@@ -2,19 +2,21 @@ import useData from '@/TravelCore/Hooks/useData.ts'
 import { formatCurrency } from '@/TravelCore/Utils/format.ts'
 import type { Cobertura, Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
 import { CircleCheck } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ModalProductDetails from './ModalProductDetails'
 import ModalUpgrades from './ModalUpgrades'
-import { index } from '@/TravelFeatures/TripQuote/stateHelper/index.ts'
+import { useHomeState } from '@/TravelFeatures/TripQuote/stateHelper/useHomeState.ts'
 
 interface CardProductProps {
   plan: Plan
   viewType: 'list' | 'grid'
   isNewlyVisible?: boolean
+  setIsGoTraveler: (value: boolean) => void
+  isGoTraveler: boolean
 }
 
-const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProps) => {
+const CardProduct = ({ plan, viewType, isNewlyVisible = false, setIsGoTraveler, isGoTraveler }: CardProductProps) => {
   const animationClass = isNewlyVisible ? 'animate-fadeIn' : ''
   const { t } = useTranslation(['products'])
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -35,7 +37,7 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
     totalTravelerUpgrades,
     totalTravelerPlanWithUpgrades,
     totalAllTravelers
-  } = index(isModalOpen, plan)
+  } = useHomeState(isModalOpen, plan)
 
   const rawPrice = i18n.language.startsWith('es') ? plan.ValorPesos : plan.Valor
   const price = i18n.language.startsWith('es') ? formatCurrency(rawPrice, 'COP') : formatCurrency(rawPrice, 'USD')
@@ -78,6 +80,12 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
   const closeDetailsModal = useCallback(() => {
     setIsDetailsModalOpen(false)
   }, [])
+
+  useEffect(() => {
+    if (isGoTraveler) {
+      closeModal()
+    }
+  }, [isGoTraveler, closeModal])
 
   return (
     <>
@@ -212,6 +220,7 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false }: CardProductProp
           totalTravelerUpgrades={totalTravelerUpgrades}
           totalTravelerPlanWithUpgrades={totalTravelerPlanWithUpgrades}
           totalAllTravelers={totalAllTravelers}
+          setIsGoTraveler={setIsGoTraveler}
         />
       )}
       {isDetailsModalOpen && <ModalProductDetails isOpen={isDetailsModalOpen} onClose={closeDetailsModal} product={productDetails} />}

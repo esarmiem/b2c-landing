@@ -1,15 +1,3 @@
-// import useData from '@/TravelCore/Hooks/useData.ts'
-// import useMasters from '@/TravelCore/Hooks/useMasters.ts'
-// import useSession from '@/TravelCore/Hooks/useSession.ts'
-// import type { dataOrder, Plan } from '@/TravelCore/Utils/interfaces/Order.ts'
-// import type { StateKey } from '@/TravelCore/Utils/interfaces/context.ts'
-// import { Auth } from '@/TravelFeatures/Home/model/auth_entity.ts'
-// import { Masters } from '@/TravelFeatures/Home/model/masters_entity.ts'
-// import { TravelAssistance } from '@/TravelFeatures/Home/model/travel_assistance_entity.ts'
-// import { useEffect, useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
-// import { useGetProductsDateRange } from '../stateHelper/useGetProductsDateRange.ts'
-//
 // /**
 //  * AuthResponse
 //  *
@@ -28,7 +16,7 @@
 // }
 //
 // /**
-//  * index
+//  * useHomeState
 //  *
 //  * Spanish:
 //  * Hook personalizado para gestionar el estado de la página de inicio. Este hook se encarga de:
@@ -425,7 +413,7 @@
 // }
 //
 // /**
-//  * index
+//  * useHomeState
 //  *
 //  * Spanish:
 //  * Hook personalizado para gestionar el estado de la página de inicio. Este hook se encarga de:

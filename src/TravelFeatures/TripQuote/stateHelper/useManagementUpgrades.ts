@@ -4,7 +4,7 @@ import { useTRMToday } from '@/TravelCore/Hooks/useTRMToday'
 import type { Upgrade } from '@/TravelCore/Utils/interfaces/Order'
 import { useTranslation } from 'react-i18next'
 
-const useManagementUpgrades = (planId: number, isOpen: boolean) => {
+const useManagementUpgrades = (planId: number | undefined, isOpen: boolean) => {
   const { i18n } = useTranslation()
   const [productUpgrades, setProductUpgrades] = useState<Upgrade[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -26,6 +26,11 @@ const useManagementUpgrades = (planId: number, isOpen: boolean) => {
         if (trm === 0) {
           const trmData = await fetchTRM()
           setTrm(trmData)
+        }
+
+        if (!planId) {
+          setProductUpgrades([])
+          return
         }
 
         const upgrades = await getProductUpdates({

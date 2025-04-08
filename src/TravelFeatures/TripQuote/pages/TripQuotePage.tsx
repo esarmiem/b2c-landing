@@ -3,18 +3,22 @@ import CardProduct from '@/TravelCore/Components/Epic/CardProduct'
 import DropdownFiltersProducts from '@/TravelCore/Components/Epic/DropdownFiltersProducts'
 import { FilterForm } from '@/TravelCore/Components/Epic/FilterForm'
 import useData from '@/TravelCore/Hooks/useData'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUtilsValidations } from '@/TravelCore/Utils/validations/useUtilsValidations'
 import Loader from '@/TravelCore/Components/Raw/Loader'
 import { Calendar, AlertCircle, ArrowLeftRight } from 'lucide-react'
+import { useResetData } from '@/TravelFeatures/Home/stateHelper/useResetData.ts'
 
 const TripQuotePage = () => {
   const { t } = useTranslation(['products'])
-  const [visibleCount, setVisibleCount] = useState(4)
   const { data } = useData() || {}
   const plans = data?.responseOrder?.planes || []
+  const isReset = data?.isReset
+  const { resetData } = useResetData()
+  const [visibleCount, setVisibleCount] = useState(4)
 
+  const [isGoTraveler, setIsGoTraveler] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [viewType, setViewType] = useState<'list' | 'grid'>('grid')
   const [selectedSort, setSelectedSort] = useState<'highPrice' | 'lowPrice' | 'highCoverage' | 'popular'>('popular')
@@ -33,6 +37,12 @@ const TripQuotePage = () => {
   const handleChange = (field: string, value: string) => {
     handleChangeValidate(field, value)
   }
+
+  useEffect(() => {
+    if (isReset === true) {
+      resetData()
+    }
+  }, [])
 
   const containerClasses =
     viewType === 'list'
@@ -62,6 +72,11 @@ const TripQuotePage = () => {
         <DropdownFiltersProducts setViewType={setViewType} setSelectedSort={setSelectedSort} selectedSort={selectedSort} />
       </div>
       <div className="max-w-7xl mx-auto py-4">
+        {isGoTraveler && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <Loader />
+          </div>
+        )}
         <div className={containerClasses}>
           {plans
             .sort((a, b) => {
@@ -83,7 +98,14 @@ const TripQuotePage = () => {
             })
             .slice(0, visibleCount)
             .map(plan => (
-              <CardProduct key={plan.Id} viewType={viewType} plan={plan} isNewlyVisible={visibleCount > 4 && plan.Id > 4} />
+              <CardProduct
+                key={plan.Id}
+                viewType={viewType}
+                plan={plan}
+                isNewlyVisible={visibleCount > 4 && plan.Id > 4}
+                setIsGoTraveler={setIsGoTraveler}
+                isGoTraveler={isGoTraveler}
+              />
             ))}
         </div>
         {plans.length > 4 && (
