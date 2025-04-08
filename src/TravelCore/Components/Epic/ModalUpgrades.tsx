@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import { useNavigate } from 'react-router-dom'
 
 interface ModalUpgradesProps {
   isOpen: boolean
@@ -20,6 +21,7 @@ interface ModalUpgradesProps {
   totalTravelerUpgrades: string
   totalTravelerPlanWithUpgrades: string
   totalAllTravelers: string
+  setIsGoTraveler: (value: boolean) => void
 }
 
 const ModalUpgrades = ({
@@ -37,11 +39,18 @@ const ModalUpgrades = ({
   totalTravelersPerPlan,
   totalTravelerUpgrades,
   totalTravelerPlanWithUpgrades,
-  totalAllTravelers
+  totalAllTravelers,
+  setIsGoTraveler
 }: ModalUpgradesProps) => {
   const { t } = useTranslation(['products'])
   const { i18n } = useTranslation()
   const spanish = i18n.language.startsWith('es')
+  const navigate = useNavigate()
+
+  const handleContinue = () => {
+    setIsGoTraveler(true)
+    navigate('/traveler')
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -153,11 +162,15 @@ const ModalUpgrades = ({
           </div>
         </div>
 
-        <a href="/traveler" className="w-full rounded-full">
-          <button type="button" className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600">
+        <div className="w-full rounded-full">
+          <button
+            type="button"
+            className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600"
+            onClick={handleContinue}
+          >
             {t('button-continue')}
           </button>
-        </a>
+        </div>
       </DialogContent>
     </Dialog>
   )

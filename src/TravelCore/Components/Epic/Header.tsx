@@ -4,21 +4,30 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '../Raw/Link'
 import { DropdownHeader } from './DropdownHeader'
 import { MenuSheet } from './MenuSheet'
+import useData from '@/TravelCore/Hooks/useData.ts'
 
 export const Header = () => {
   const { t, i18n } = useTranslation(['header'])
   const spanish = i18n.language.startsWith('es')
   const english = i18n.language.startsWith('en')
+  const { setData } = useData() || {}
+
+  const setIsReset = () => {
+    setData?.(prevData => ({
+      ...prevData,
+      isReset: true
+    }))
+  }
 
   return (
     <header className="sticky top-0 w-full bg-white z-50 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       {/* OLD NAVBAR TRANSPARENTEEE <header className="fixed top-0 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 z-50"></header> */}
       <div className="flex h-14 items-top justify-between">
-        <div className="flex items-center">
+        <button type="button" className="flex items-center" onClick={() => setIsReset()}>
           <Link href="/" className="font-extrabold text-2xl md:text-3xl text-red-600 hover:text-red-600">
             TRAVELKIT
           </Link>
-        </div>
+        </button>
         <div className="flex items-top gap-6">
           <div className="items-center hidden lg:flex bg-red-700 p-3 pt-4 mb-2 rounded-bl-3xl relative overflow-hidden before:absolute before:right-0 before:top-0 before:h-full before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:before:-translate-x-[900%] before:ease hover:shadow-red-500 transition-all">
             <Headset className="h-4 w-4 mr-2 text-white hover:font-semibold relative z-10" />

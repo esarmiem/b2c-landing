@@ -6,21 +6,28 @@ import { Testimonials } from '@/TravelCore/Components/Epic/Testimonials.tsx'
 import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
 import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
 import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
+import { useEffect } from 'react'
+import { useResetData } from '@/TravelFeatures/Home/stateHelper/useResetData.ts'
+import useData from '@/TravelCore/Hooks/useData.ts'
 import slide1 from '../../../../Assets/slide1.webp'
 import slide2 from '../../../../Assets/slide2.webp'
 import slide4 from '../../../../Assets/slide4.webp'
 import slide5 from '../../../../Assets/slide5.webp'
 import slide6 from '../../../../Assets/slide6.webp'
-// import {ModalForm} from "@/TravelCore/Components/Epic/ModalForm.tsx"
 
 const images = [slide1, slide2, slide4, slide5, slide6]
 
 export default function HomePage() {
-  //const [isOpenContactModal, setIsOpenContactModal] = useState(false)
+  const { data } = useData() || {}
+  const isReset = data?.isReset
+  const { resetData, resetResponseOrder } = useResetData()
 
-  // const handleSearch = () => {
-  //   setIsOpenContactModal(true)
-  // }
+  useEffect(() => {
+    if (isReset === true) {
+      resetData()
+      resetResponseOrder()
+    }
+  }, [])
 
   return (
     <>
@@ -32,7 +39,6 @@ export default function HomePage() {
       <Testimonials />
       <Stats />
       <WhatsAppButton />
-      {/*<ModalForm isOpen={isOpenContactModal} toggleModal={() => setIsOpenContactModal(!isOpenContactModal)} onClick ={handleGetQuote} />*/}
     </>
   )
 }

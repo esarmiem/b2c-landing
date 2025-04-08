@@ -1,7 +1,7 @@
 import type { MASTER_CONST_STORAGE_KEYS } from '@/TravelCore/Utils/ConstStorageKeys.ts'
 import type { Data, EmergencyContactType, PaxForm, Quotation, dataOrder } from '@/TravelCore/Utils/interfaces/Order.ts'
 import type { Dispatch, SetStateAction } from 'react'
-import {Billing} from "@/TravelCore/Utils/interfaces/Order.ts";
+import type { Billing } from '@/TravelCore/Utils/interfaces/Order.ts'
 
 /**
  * GenericItem
@@ -79,6 +79,7 @@ export interface GlobalData {
   emergencyContactData?: EmergencyContactType
   travelerQuotation?: Quotation
   TRM?: number
+  isReset?: boolean
 }
 
 //type for MasterContext
