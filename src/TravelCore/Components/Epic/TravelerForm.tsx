@@ -5,12 +5,12 @@ import { SelectItem } from '@/components/ui/select.tsx'
 import { useTranslation } from 'react-i18next'
 import type { PaxForm } from '@/TravelCore/Utils/interfaces/Order.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters'
-import type { CountriesItems } from '@/TravelCore/Utils/interfaces/countries.ts'
 import type { DocumentTypeItems } from '@/TravelCore/Utils/interfaces/Document.ts'
 import { calculateAndCompareAge } from '@/TravelCore/Utils/dates.ts'
 import { PhoneNumberForm2 } from '@/TravelCore/Components/Epic/PhoneNumberForm2'
 import { TextField } from '@/TravelCore/Components/Epic/TextFieldComponent.tsx'
 import { SelectField } from '@/TravelCore/Components/Epic/SelectFieldComponent.tsx'
+import { SearchCountryComponent } from '@/TravelCore/Components/Epic/SearchCountryComponent'
 
 interface TravelFormProps {
   onChangeField?: (index: number, name: string, value: string) => void
@@ -26,23 +26,9 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
   const master = useMasters()
 
   // Memoizamos toda la preparación de datos que no cambian con cada render
-  const { countryOptions, documentTypeOptions } = useMemo(() => {
-    const countries = master?.countries.data?.items as CountriesItems[]
+  const { documentTypeOptions } = useMemo(() => {
     const documentType = master?.documents.data?.items as DocumentTypeItems[]
-
-    const activeCountries =
-      countries
-        ?.filter(country => country.estaActivo)
-        .slice()
-        .sort((a, b) => a.descripcion.localeCompare(b.descripcion)) || []
-
     const activeDocumentType = documentType?.filter(type => type.estaActivo) || []
-
-    const countryOptions = activeCountries.map(country => (
-      <SelectItem key={country.idPais} value={country.idPais.toString()}>
-        {country.codigoISO} - {country.descripcion}
-      </SelectItem>
-    ))
 
     const documentTypeOptions = activeDocumentType.map(type => (
       <SelectItem key={type.idTipoDocumento} value={type.abreviacion}>
@@ -50,8 +36,8 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
       </SelectItem>
     ))
 
-    return { countryOptions, documentTypeOptions }
-  }, [master?.countries.data?.items, master?.documents.data?.items])
+    return { documentTypeOptions }
+  }, [master?.documents.data?.items])
 
   const handleInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -193,24 +179,26 @@ export const TravelerForm = memo(({ traveler, onChangeField, dataTraveler, onCha
             />
           </div>
 
-          <SelectField
+          <SearchCountryComponent
             label={t('label-nationality')}
             name={`nationality${travelerId}`}
             value={dataTraveler?.nationality?.toString() || ''}
             placeholder={t('placeholder-select-nationality')}
-            options={countryOptions}
+            options={master?.countries?.data?.items?.filter(country => country.estaActivo) || []}
             errors={errors}
             onValueChange={createSelectHandler(`nationality${travelerId}`)}
+            type="country"
           />
 
-          <SelectField
+          <SearchCountryComponent
             label={t('label-residence-country')}
             name={`residenceCountry${travelerId}`}
             value={dataTraveler?.residenceCountry?.toString() || ''}
             placeholder={t('placeholder-select-residence-country')}
-            options={countryOptions}
+            options={master?.countries?.data?.items?.filter(country => country.estaActivo) || []}
             errors={errors}
             onValueChange={createSelectHandler(`residenceCountry${travelerId}`)}
+            type="country"
           />
 
           <PhoneNumberForm2

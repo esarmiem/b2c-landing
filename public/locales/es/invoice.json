@@ -37,5 +37,7 @@
   "loading-text-redirecting-payment": "Estamos redirigiendo a pasarela de pago...",
   "no-cities": "No existen ciudades para el pais de facturación seleccionado",
   "label-traveler": "Viajero",
-  "label-new-info": "Ingrese información por teclado"
+  "label-new-info": "Ingrese información por teclado",
+  "country-search": "Buscar",
+  "not-found": "No hay ciudades disponibles"
 }
