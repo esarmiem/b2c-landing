@@ -37,5 +37,7 @@
   "loading-text-redirecting-payment": "We are redirecting to the payment gateway...",
     "no-cities": "There are no cities for the selected billing country",
   "label-traveler": "Traveler",
-  "label-new-info": "Enter information by keyboard"
+  "label-new-info": "Enter information by keyboard",
+  "country-search": "Search",
+  "not-found": "No cities found"
 }
