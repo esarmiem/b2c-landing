@@ -280,7 +280,7 @@ export const ASSISTANCE_API = {
       pathEpayco: `${API_URL_EPAYCO_IP}/${SERVICE_GET_IP_EPAYCO}`,
       method: 'GET',
       data: null,
-      session: { token: GET_TOKEN }
+      session: null
     })
   },
   /**
