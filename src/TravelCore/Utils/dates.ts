@@ -40,7 +40,7 @@ export const calculateDaysBetweenDates = (departure: string, arrival: string): n
   const differenceMs = arrivalDate.getTime() - departureDate.getTime()
 
   // Convert the difference from milliseconds to days
-  const daysDifference = Math.ceil(differenceMs / (1000 * 60 * 60 * 24))
+  const daysDifference = Math.ceil(differenceMs / (1000 * 60 * 60 * 24)) + 1
 
   return daysDifference
 }
