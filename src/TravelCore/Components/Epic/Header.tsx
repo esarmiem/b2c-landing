@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '../Raw/Link'
 import { DropdownHeader } from './DropdownHeader'
 import { MenuSheet } from './MenuSheet'
-import useData from '@/TravelCore/Hooks/useData.ts'
+import { useResetData } from "@/TravelFeatures/Home/stateHelper/useResetData.ts";
 
 export const Header = () => {
   const { t, i18n } = useTranslation(['header'])
   const spanish = i18n.language.startsWith('es')
   const english = i18n.language.startsWith('en')
-  const { setData } = useData() || {}
+  const { resetData, resetResponseOrder, resetMasterData } = useResetData() || {}
 
   const setIsReset = () => {
-    setData?.(prevData => ({
-      ...prevData,
-      isReset: true
-    }))
+    resetData()
+    resetResponseOrder()
+    resetMasterData()
   }
 
   return (

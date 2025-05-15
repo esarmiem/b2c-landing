@@ -6,9 +6,6 @@ import { Testimonials } from '@/TravelCore/Components/Epic/Testimonials.tsx'
 import { TravelForm } from '@/TravelCore/Components/Epic/TravelForm.tsx'
 import { TravelSteps } from '@/TravelCore/Components/Epic/TravelSteps.tsx'
 import { WhatsAppButton } from '@/TravelCore/Components/Epic/WhatsAppButton.tsx'
-import { useEffect } from 'react'
-import { useResetData } from '@/TravelFeatures/Home/stateHelper/useResetData.ts'
-import useData from '@/TravelCore/Hooks/useData.ts'
 import slide1 from '../../../../Assets/slide1.webp'
 import slide2 from '../../../../Assets/slide2.webp'
 import slide4 from '../../../../Assets/slide4.webp'
@@ -18,16 +15,6 @@ import slide6 from '../../../../Assets/slide6.webp'
 const images = [slide1, slide2, slide4, slide5, slide6]
 
 export default function HomePage() {
-  const { data } = useData() || {}
-  const isReset = data?.isReset
-  const { resetData, resetResponseOrder } = useResetData()
-
-  useEffect(() => {
-    if (isReset === true) {
-      resetData()
-      resetResponseOrder()
-    }
-  }, [])
 
   return (
     <>

@@ -50,7 +50,7 @@ export function DestinationSelector({ activeTooltip, setActiveTooltip, t, onChan
     if (payloadOrder?.destino) {
       onChange(selectDestination || '')
     }
-  }, [payloadOrder?.destino])
+  }, [payloadOrder?.destino && selectDestination])
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!payloadOrder?.pais) {

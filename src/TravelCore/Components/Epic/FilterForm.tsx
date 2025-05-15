@@ -15,6 +15,7 @@ import { DestinationPopover } from '@/TravelCore/Components/Epic/DestinationPopo
 import { format, parse, isBefore, startOfDay } from 'date-fns'
 import type { dataOrder } from '@/TravelCore/Utils/interfaces/Order'
 import useHomeState from '@/TravelFeatures/Home/stateHelper'
+import { useMasterData } from '@/TravelFeatures/Home/stateHelper/useMasterData.ts'
 
 interface FilterFormProps {
   handleChange: (field: string, value: string) => void
@@ -25,6 +26,7 @@ interface FilterFormProps {
 
 export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormData }: FilterFormProps) => {
   const { handleGetQuote } = useHomeState()
+  const { reloadMasters } = useMasterData()
 
   const master = useMasters()
   const arrivals = master?.arrivals.data?.items as ArrivalsItems[]
@@ -168,6 +170,7 @@ export const FilterForm = ({ handleChange, errors, setIsLoading, validateFormDat
     setIsEditing(true)
 
     if (isEditing) {
+      await reloadMasters()
       if (hasChanges(payloadOrder as dataOrder, initialPayloadRef.current)) {
         setIsLoading(true)
         if (setData) setData(prevData => ({ ...prevData, responseOrder: undefined }))

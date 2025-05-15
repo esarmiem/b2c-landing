@@ -93,7 +93,6 @@ export const useOrderManagement = () => {
       }
 
       const results = await Promise.all(numerosPreguntas.map(numeroPregunta => fetchPlanesByNumeroPregunta(numeroPregunta)))
-
       // Procesar todos los resultados exitosos
       for (const result of results) {
         if (result.success && result.data) {
