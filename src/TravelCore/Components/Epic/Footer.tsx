@@ -33,7 +33,7 @@ export const Footer = () => {
                 <Facebook className="h-9 w-9 sm:h-5 sm:w-5" />
               </Link>
               <Link
-                href="https://wa.me/573175032200"
+                href="https://wa.me/573180388933"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white text-gray-300 transition-colors duration-200 h-9 w-9 sm:h-5 sm:w-5"

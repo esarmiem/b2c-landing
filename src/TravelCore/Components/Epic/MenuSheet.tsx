@@ -175,13 +175,13 @@ export const MenuSheet = () => {
                   {t("label-title-sidebar-sales")}:
                 </p>
                 <Link
-                  href="https://wa.me/573175032200"
+                  href="https://wa.me/573180388933"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white hover:text-red-600 flex items-center gap-2 mt-1"
                 >
                   <Phone className="h-4 w-4" />
-                  +57 317 503 2200
+                  +57 318 038 8933
                 </Link>
               </div>
               <div>

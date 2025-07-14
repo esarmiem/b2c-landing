@@ -31,12 +31,12 @@ export const Header = () => {
           <div className="items-center hidden lg:flex bg-red-700 p-3 pt-4 mb-2 rounded-bl-3xl relative overflow-hidden before:absolute before:right-0 before:top-0 before:h-full before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:before:-translate-x-[900%] before:ease hover:shadow-red-500 transition-all">
             <Headset className="h-4 w-4 mr-2 text-white hover:font-semibold relative z-10" />
             <Link
-              href="https://wa.me/573175032200"
+              href="https://wa.me/573180388933"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium text-white hover:text-white relative z-10"
             >
-              {t('label-link-sales')}: +57 317 503 2200
+              {t('label-link-sales')}: +57 318 038 8933
             </Link>
           </div>
 

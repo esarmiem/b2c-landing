@@ -4,7 +4,7 @@ import { Link } from "../Raw/Link";
 
 export const WhatsAppButton = () => {
   const { t } = useTranslation(["home"]); 
-  const phoneNumber = '573175032200';
+  const phoneNumber = '573180388933';
   const message = t("whatsapp-message"); 
 
   const handleClick = (e: { preventDefault: () => void; currentTarget: any; clientX: number; clientY: number; }) => {
