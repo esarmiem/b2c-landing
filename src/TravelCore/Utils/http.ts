@@ -64,7 +64,6 @@ const getDefaultHeaders = (session?: Session): Record<string, string> => {
   defaultHeaders.Authorization = `Bearer ${sessionStorage.getItem('token')}`
   defaultHeaders['Accept'] = 'application/json'
   defaultHeaders['Content-Type'] = 'application/json'
-  defaultHeaders['Access-Control-Allow-Origin'] = '*'
   return defaultHeaders
 }
 
