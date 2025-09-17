@@ -28,7 +28,7 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false, setIsGoTraveler, 
     // productUpgrades,
     // hasUpgrades,
     numberTravellers,
-    currentTraveler,
+    // currentTraveler,
     setCurrentTraveler,
     // currentTravellerData,
     allTravellers,
@@ -209,7 +209,7 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false, setIsGoTraveler, 
           // productUpgrades={productUpgrades}
           // hasUpgrades={hasUpgrades}
           numberTravellers={numberTravellers}
-          currentTraveler={currentTraveler}
+          // currentTraveler={currentTraveler}
           setCurrentTraveler={setCurrentTraveler}
           // currentTravellerData={currentTravellerData}
           allTravellers={allTravellers}

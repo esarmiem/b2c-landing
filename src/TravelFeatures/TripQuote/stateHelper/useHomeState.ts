@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '@/TravelCore/Utils/format'
-import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import type { DescriptionDescuentos, Plan, Quotation, TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import useData from '@/TravelCore/Hooks/useData'
-import useManagementUpgrades from './useManagementUpgrades'
+// import useManagementUpgrades from './useManagementUpgrades'
 
 interface QuotationManagerResult {
   // isLoading: boolean
@@ -27,7 +27,7 @@ export const useHomeState = (isOpen: boolean, plan: Plan): QuotationManagerResul
   const travelerQuotation = data?.travelerQuotation
   const payloadOrder = data?.payloadOrder || {}
   const numberTravellers = payloadOrder?.cantidadPax || 1
-  const planId = data?.selectedPlan
+  // const planId = data?.selectedPlan
 
   const [currentTraveler, setCurrentTraveler] = useState<number>(1)
   // const { productUpgrades, isLoading, trm: TRM } = useManagementUpgrades(planId, isOpen)

@@ -1,8 +1,9 @@
 //import Loader from '@/TravelCore/Components/Raw/Loader'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
+// import { Check, HandHeart, Plus, UserRoundCog, Package2 } from 'lucide-react'
+import { UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { TravellerQuotation, Upgrade } from '@/TravelCore/Utils/interfaces/Order'
+import type { TravellerQuotation } from '@/TravelCore/Utils/interfaces/Order'
 import { useNavigate } from 'react-router-dom'
 
 interface ModalUpgradesProps {
@@ -12,7 +13,7 @@ interface ModalUpgradesProps {
   // productUpgrades: Upgrade[]
   // hasUpgrades: boolean
   numberTravellers: number
-  currentTraveler: number
+  // currentTraveler: number
   setCurrentTraveler: (traveler: number) => void
   // currentTravellerData: TravellerQuotation | undefined
   allTravellers: TravellerQuotation[] | undefined
@@ -31,7 +32,7 @@ const ModalUpgrades = ({
   // productUpgrades,
   // hasUpgrades,
   numberTravellers,
-  currentTraveler,
+  // currentTraveler,
   setCurrentTraveler,
   // currentTravellerData,
   allTravellers,
