@@ -49,5 +49,7 @@
   "label-no-upgrades-available": "No upgrades available",
   "label-no-upgrades-description": "For this product",
   "plan-no-available": "No plan available",
-  "plan-no-available-description": "We're sorry, but we couldn't find any plans that match the selected date range. Please try adjusting your travel dates."
+  "plan-no-available-description": "We're sorry, but we couldn't find any plans that match the selected date range. Please try adjusting your travel dates.",
+  "summary": "Summary",
+  "travelers_attended": "travelers confirmed"
 }

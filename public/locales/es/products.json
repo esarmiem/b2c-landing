@@ -49,5 +49,7 @@
   "label-no-upgrades-available": "No hay upgrades disponibles",
   "label-no-upgrades-description": "Para este producto",
   "plan-no-available": "No hay planes disponibles",
-  "plan-no-available-description": "Lo sentimos, no encontramos planes que coincidan con el rango de fechas seleccionado. Por favor, intenta ajustando las fechas de tu viaje."
+  "plan-no-available-description": "Lo sentimos, no encontramos planes que coincidan con el rango de fechas seleccionado. Por favor, intenta ajustando las fechas de tu viaje.",
+  "summary": "Resumen",
+  "travelers_attended": "viajeros confirmados"
 }

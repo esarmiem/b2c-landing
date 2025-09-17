@@ -24,18 +24,18 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false, setIsGoTraveler, 
   const { setData } = useData() || {}
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const {
-    isLoading,
-    productUpgrades,
-    hasUpgrades,
+    // isLoading,
+    // productUpgrades,
+    // hasUpgrades,
     numberTravellers,
     currentTraveler,
     setCurrentTraveler,
-    currentTravellerData,
+    // currentTravellerData,
     allTravellers,
-    toggleUpgrade,
+    // toggleUpgrade,
     totalTravelersPerPlan,
-    totalTravelerUpgrades,
-    totalTravelerPlanWithUpgrades,
+    // totalTravelerUpgrades,
+    // totalTravelerPlanWithUpgrades,
     totalAllTravelers
   } = useHomeState(isModalOpen, plan)
 
@@ -205,20 +205,20 @@ const CardProduct = ({ plan, viewType, isNewlyVisible = false, setIsGoTraveler, 
       )}
       {isModalOpen && (
         <ModalUpgrades
-          isLoading={isLoading}
-          productUpgrades={productUpgrades}
-          hasUpgrades={hasUpgrades}
+          // isLoading={isLoading}
+          // productUpgrades={productUpgrades}
+          // hasUpgrades={hasUpgrades}
           numberTravellers={numberTravellers}
           currentTraveler={currentTraveler}
           setCurrentTraveler={setCurrentTraveler}
-          currentTravellerData={currentTravellerData}
+          // currentTravellerData={currentTravellerData}
           allTravellers={allTravellers}
-          toggleUpgrade={toggleUpgrade}
+          // toggleUpgrade={toggleUpgrade}
           isOpen={isModalOpen}
           onClose={closeModal}
           totalTravelersPerPlan={totalTravelersPerPlan}
-          totalTravelerUpgrades={totalTravelerUpgrades}
-          totalTravelerPlanWithUpgrades={totalTravelerPlanWithUpgrades}
+          // totalTravelerUpgrades={totalTravelerUpgrades}
+          // totalTravelerPlanWithUpgrades={totalTravelerPlanWithUpgrades}
           totalAllTravelers={totalAllTravelers}
           setIsGoTraveler={setIsGoTraveler}
         />
