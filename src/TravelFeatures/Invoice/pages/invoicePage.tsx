@@ -156,51 +156,57 @@ export default function InvoicePage() {
     })
 
     setTimeout(async () => {
-      const mapPreorder: dataPreorder = mapperPreorder(billingData)
+      try {
+        const mapPreorder: dataPreorder = mapperPreorder(billingData)
 
-      const order = new Order()
-      const respPre = await order.checkPreOrder(mapPreorder)
-      if (respPre?.data) {
-        console.log('Respuesta de checkPreOrder: ', respPre.data)
-        setLoading({
-          isOpen: true,
-          title: t('loading-title-wait'),
-          text: t('loading-text-adding-order')
-        })
-        const mapAddOrder: dataIslOrder = mapperAddOrder(respPre.data)
-
-        const respAdd = await order.addOrder(mapAddOrder)
-        if (respAdd?.data) {
-          console.log('Respuesta de addOrder: ', respAdd.data)
+        const order = new Order()
+        const respPre = await order.checkPreOrder(mapPreorder)
+        if (respPre?.data) {
+          console.log('Respuesta de checkPreOrder: ', respPre.data)
           setLoading({
             isOpen: true,
-            title: t('loading-title-one-moment'),
-            text: t('loading-text-redirecting-payment')
+            title: t('loading-title-wait'),
+            text: t('loading-text-adding-order')
           })
+          const mapAddOrder: dataIslOrder = mapperAddOrder(respPre.data)
 
-          const respIP = await order.getIP()
-          if (respIP?.data) {
-            console.log('Respuesta de la ip: ', respIP.data)
-            const { mapPayment, transactionId } = mapperPayment(respIP.data.data, respAdd.data)
+          const respAdd = await order.addOrder(mapAddOrder)
+          if (respAdd?.data) {
+            console.log('Respuesta de addOrder: ', respAdd.data)
+            setLoading({
+              isOpen: true,
+              title: t('loading-title-one-moment'),
+              text: t('loading-text-redirecting-payment')
+            })
 
-            const payloadString = JSON.stringify(mapPayment)
-            const params = new URLSearchParams()
-            params.append('fname', payloadString)
+            const respIP = await order.getIP()
+            if (respIP?.data) {
+              console.log('Respuesta de la ip: ', respIP.data)
+              const { mapPayment, transactionId } = mapperPayment(respIP.data.data, respAdd.data)
 
-            const respPayment = await order.payment(params.toString(), transactionId)
-            console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
-            if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
-              const transaction = respPayment?.data?.data?.id_session
-              setData?.(prevData => ({
-                ...prevData,
-                epaycoTx: transaction
-              }))
-              window.location.href = `${URL_EPAYCO_METHODS}/${SERVICE_METHODS_EPAYCO}?transaction=${transaction}`
-            } else {
-              alert('Ha ocurrido un error al procesar la orden con la pasarela de pago')
+              const payloadString = JSON.stringify(mapPayment)
+              const params = new URLSearchParams()
+              params.append('fname', payloadString)
+
+              const respPayment = await order.payment(params.toString(), transactionId)
+              console.log('respPayment: ', respPayment, respPayment?.data, respPayment?.data?.data?.id_session)
+              if (respPayment?.data.success && respPayment?.data?.data?.id_session !== '') {
+                const transaction = respPayment?.data?.data?.id_session
+                setData?.(prevData => ({
+                  ...prevData,
+                  epaycoTx: transaction
+                }))
+                window.location.href = `${URL_EPAYCO_METHODS}/${SERVICE_METHODS_EPAYCO}?transaction=${transaction}`
+              } else {
+                alert('Ha ocurrido un error al procesar la orden con la pasarela de pago')
+              }
             }
           }
         }
+      } catch (error) {
+        console.error('Error en el proceso de pago:', error)
+        setLoading({ isOpen: false, title: '', text: '' })
+        alert(`Error al preparar el pago: ${error instanceof Error ? error.message : 'Error desconocido'}`)
       }
     }, 500)
   }

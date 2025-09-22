@@ -16,8 +16,7 @@ import {
   SERVICE_ADD_ORDER_ISL,
   SERVICE_CHECK_PREORDER_ISL,
   SERVICE_GET_IP_EPAYCO,
-  SERVICE_GET_ORDER_PRICE_EDAD,
-  SERVICE_TRANSACTION_EPAYCO
+  SERVICE_GET_ORDER_PRICE_EDAD
 } from '../../../Utils/constants.ts'
 import { axiosHttp } from '../../../Utils/http.ts'
 import { GET_TOKEN } from '../../../Utils/storage.ts'
@@ -245,7 +244,6 @@ export const ASSISTANCE_API = {
    * English:
    * Performs a POST request to check a preorder in the ISL system.
    * It sends the preorder data as JSON and uses a session token for authentication.
-   *
    * @param {dataPreorder} data - Datos de la preorden que se deben verificar.
    *                              / Preorder data that needs to be checked.
    * @returns {Promise<ApiOrderResponse>} Una promesa que se resuelve con la respuesta de la API.
@@ -301,7 +299,7 @@ export const ASSISTANCE_API = {
    */
   paymentEpayco: (data: string, transactionId: string): Promise<any> => {
     return axiosHttp({
-      pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${SERVICE_TRANSACTION_EPAYCO}/${PAY_PLATTFORM_KEY}/${transactionId}`,
+      pathEpaycoPayment: `${API_URL_EPAYCO_PAYMENT}/${PAY_PLATTFORM_KEY}/${transactionId}`,
       method: 'POST',
       data: data,
       headers: {

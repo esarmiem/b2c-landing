@@ -184,24 +184,43 @@ export default function useInvoiceState() {
     const savedResponseOrder = data?.responseOrder
     const savedSelectedPlan = data?.selectedPlan
     const selectedPlan = savedResponseOrder?.planes.find(plan => plan.IdPlan === savedSelectedPlan)
-    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos || ''
+    const totalSalesPesos = data?.travelerQuotation?.totalAllTravelersPesos
+
+    // --- Validaciones ---
+    if (!totalSalesPesos || Number(totalSalesPesos) <= 0) {
+      throw new Error('El monto total de la venta es inválido.');
+    }
+    if (!responseAddOrder?.codigo) {
+      throw new Error('No se pudo obtener el código de la factura (invoice).');
+    }
+    if (!responseAddOrder?.idVenta) {
+      throw new Error('No se pudo obtener el ID de la venta.');
+    }
+    if (!selectedPlan) {
+      throw new Error('No se pudo encontrar el plan seleccionado.');
+    }
+     if (!responseIp) {
+      throw new Error('No se pudo obtener la IP del cliente.');
+    }
+
     const uuid = uuidv4()
+    const billingName = `${savedBilling?.firstName || ''} ${savedBilling?.lastName || ''}`.trim();
 
     const payment: EpaycoData = {
       epaycoName: selectedPlan?.Categoria || '',
       epaycoDescription: selectedPlan?.nombre || '',
-      epaycoInvoice: responseAddOrder?.codigo || '',
+      epaycoInvoice: responseAddOrder?.codigo,
       epaycoCurrency: 'COP',
-      epaycoAmount: totalSalesPesos || '',
+      epaycoAmount: totalSalesPesos,
       epaycoLang: 'es',
       epaycoExternal: 'true',
       epaycoConfirmation: CONFIRM_PAY_PLATTFORM_URL,
       epaycoResponse: RESPONSE_PAY_PLATTFORM_URL,
-      epaycoNameBilling: savedBilling?.firstName || ` ${savedBilling?.lastName}` || '',
+      epaycoNameBilling: billingName,
       epaycoAddressBilling: savedBilling?.address || '',
       epaycoTypeDocBilling: savedBilling?.documentType || '',
       epaycoNumberDocBilling: savedBilling?.documentNumber || '',
-      epaycoExtra1: responseAddOrder?.idVenta || '',
+      epaycoExtra1: responseAddOrder?.idVenta,
       epaycoExtra2: 'es',
       epaycoExtra3: true,
       epaycoExtra4: uuid,
@@ -215,6 +234,6 @@ export default function useInvoiceState() {
     }
     return { mapPayment: payment, transactionId: uuid }
   }
-  window.localStorage.setItem('payment', JSON.stringify(mapperPayment))
+
   return { mapperPreorder, mapperAddOrder, mapperPayment }
 }
