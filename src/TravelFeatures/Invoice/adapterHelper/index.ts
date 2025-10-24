@@ -1,6 +1,5 @@
 import useData from '@/TravelCore/Hooks/useData.ts'
 import useMasters from '@/TravelCore/Hooks/useMasters.ts'
-
 import type {
   CheckPreorderISLResponse,
   dataIslOrder,
@@ -214,8 +213,8 @@ export default function useInvoiceState() {
       epaycoAmount: totalSalesPesos,
       epaycoLang: 'es',
       epaycoExternal: 'true',
-      epaycoConfirmation: CONFIRM_PAY_PLATTFORM_URL,
-      epaycoResponse: RESPONSE_PAY_PLATTFORM_URL,
+      epaycoConfirmation: encodeURIComponent(CONFIRM_PAY_PLATTFORM_URL),
+      epaycoResponse: encodeURIComponent(RESPONSE_PAY_PLATTFORM_URL),
       epaycoNameBilling: billingName,
       epaycoAddressBilling: savedBilling?.address || '',
       epaycoTypeDocBilling: savedBilling?.documentType || '',
